@@ -1,0 +1,6 @@
+name: InvadedLandsEvents
+authors: [nicbo, smakina]
+version: 1.0
+main: me.nicbo.InvadedLandsEvents.EventsMain
+description: Remake of the invadedlands events
+#depend:
