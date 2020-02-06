@@ -1,15 +1,7 @@
 package me.nicbo.InvadedLandsEvents.events.sumo;
 
-import me.nicbo.InvadedLandsEvents.events.InvadedEvent;
-
-public class Sumo1v1 extends InvadedEvent {
-    @Override
-    public void start() {
-
-    }
-
-    @Override
-    public void stop() {
-
+public class Sumo1v1 extends Sumo {
+    public Sumo1v1() {
+        super("1v1 Sumo");
     }
 }
