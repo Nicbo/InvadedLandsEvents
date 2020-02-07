@@ -1,0 +1,16 @@
+event-world: event
+
+events:
+  wool-shuffle:
+    spec-location:
+      x:
+      y:
+      z:
+      yaw:
+      pitch:
+    start-location:
+      x:
+      y:
+      z:
+      yaw:
+      pitch:

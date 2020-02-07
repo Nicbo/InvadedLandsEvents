@@ -1,8 +1,10 @@
 package me.nicbo.InvadedLandsEvents.events;
 
+import me.nicbo.InvadedLandsEvents.EventsMain;
+
 public class Spleef extends InvadedEvent {
-    public Spleef() {
-        super("Spleef");
+    public Spleef(EventsMain plugin) {
+        super("Spleef", plugin.getConfig());
     }
 
     @Override

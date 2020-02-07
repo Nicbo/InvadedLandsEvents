@@ -10,33 +10,36 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public final class EventManager {
-    private static InvadedEvent currentEvent;
+    private EventsMain plugin;
+    private InvadedEvent currentEvent;
 
-    private EventManager() {}
+    public EventManager(EventsMain plugin) {
+        this.plugin = plugin;
+    }
 
-    public static boolean hostEvent(String name, String host) {
+    public boolean hostEvent(String name, String host) {
         switch (name.toLowerCase()) {
             case "brackets":
-                currentEvent = new Brackets();
+                currentEvent = new Brackets(plugin);
                 break;
             case "koth":
-                currentEvent= new KOTH();
+                currentEvent= new KOTH(plugin);
                 break;
             case "lms":
-                currentEvent = new LMS();
+                currentEvent = new LMS(plugin);
                 break;
             case "oitc":
-                currentEvent = new OITC();
+                currentEvent = new OITC(plugin);
                 break;
             case "rod":
-                currentEvent = new RoD();
+                currentEvent = new RoD(plugin);
                 break;
             case "rr":
             case "redrover":
-                currentEvent = new RedRover();
+                currentEvent = new RedRover(plugin);
                 break;
             case "spleef":
-                currentEvent = new Spleef();
+                currentEvent = new Spleef(plugin);
                 break;
             case "sumo1v1":
                 currentEvent = new Sumo1v1();
@@ -48,14 +51,14 @@ public final class EventManager {
                 currentEvent = new Sumo3v3();
                 break;
             case "tdm":
-                currentEvent = new TDM();
+                currentEvent = new TDM(plugin);
                 break;
             case "tnttag":
-                currentEvent = new TNTTag();
+                currentEvent = new TNTTag(plugin);
                 break;
             case "wd":
             case "waterdrop":
-                currentEvent = new Waterdrop();
+                currentEvent = new Waterdrop(plugin);
                 break;
             default:
                 return false;
@@ -64,7 +67,7 @@ public final class EventManager {
         return true;
     }
 
-    private static void startCountDown(String host) {
+    private void startCountDown(String host) {
         String name = currentEvent.getName();
 
         new BukkitRunnable() {
@@ -81,26 +84,22 @@ public final class EventManager {
                 }
                 time--;
             }
-        }.runTaskTimerAsynchronously(EventsMain.getInstance(), 0, 20);
+        }.runTaskTimerAsynchronously(plugin, 0, 20);
     }
 
-    private static boolean isInventoryEmpty(Inventory inv) {
+    private boolean isInventoryEmpty(Inventory inv) {
         return true; // <- is inv empty?
     }
 
-    public static EventStatus joinEvent(Player player) {
+    public EventStatus joinEvent(Player player) {
         return EventStatus.NONE; // -> do logic and  when  called can getdescription and send msg based on it else join event <- english good
     }
 
-    public static EventStatus specEvent(Player player) {
+    public EventStatus specEvent(Player player) {
         return EventStatus.NONE; // same as above
     }
 
-    public static EventStatus leaveEvent(Player player) {
+    public EventStatus leaveEvent(Player player) {
         return EventStatus.NONE; // ||
     }
-    /*
-    TODO:
-        - STATIC BAD MAKE ME NOT STATIC PLS AND THANKS
-     */
 }

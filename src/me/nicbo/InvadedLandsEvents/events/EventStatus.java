@@ -1,10 +1,10 @@
 package me.nicbo.InvadedLandsEvents.events;
 
 public enum EventStatus {
-    NONE("d1"),
-    STARTED("d3"),
-    ENDING("d4"),
-    INEVENT("d2");
+    NONE("There is no event active right now"),
+    STARTED("The event has already started"),
+    ENDING("The event is ending"),
+    INEVENT("You are already in the event");
 
     final String description;
 
@@ -15,9 +15,4 @@ public enum EventStatus {
     public String getDescription() {
         return description;
     }
-
-    /*
-    TODO:
-        - Descriptions for attempt to join event or in event etc.
-     */
 }

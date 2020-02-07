@@ -1,8 +1,10 @@
 package me.nicbo.InvadedLandsEvents.events;
 
+import me.nicbo.InvadedLandsEvents.EventsMain;
+
 public class RoD extends InvadedEvent {
-    public RoD() {
-        super("Race of Death");
+    public RoD(EventsMain plugin) {
+        super("Race of Death", plugin.getConfig());
     }
 
     @Override
