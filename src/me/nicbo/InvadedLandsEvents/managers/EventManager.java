@@ -5,6 +5,8 @@ import me.nicbo.InvadedLandsEvents.events.*;
 import me.nicbo.InvadedLandsEvents.events.sumo.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public final class EventManager {
@@ -81,4 +83,24 @@ public final class EventManager {
             }
         }.runTaskTimerAsynchronously(EventsMain.getInstance(), 0, 20);
     }
+
+    private static boolean isInventoryEmpty(Inventory inv) {
+        return true; // <- is inv empty?
+    }
+
+    public static EventStatus joinEvent(Player player) {
+        return EventStatus.NONE; // -> do logic and  when  called can getdescription and send msg based on it else join event <- english good
+    }
+
+    public static EventStatus specEvent(Player player) {
+        return EventStatus.NONE; // same as above
+    }
+
+    public static EventStatus leaveEvent(Player player) {
+        return EventStatus.NONE; // ||
+    }
+    /*
+    TODO:
+        - STATIC BAD MAKE ME NOT STATIC PLS AND THANKS
+     */
 }

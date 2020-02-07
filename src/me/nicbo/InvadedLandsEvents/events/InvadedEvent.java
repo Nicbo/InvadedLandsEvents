@@ -19,8 +19,25 @@ public abstract class InvadedEvent {
     public String getName() {
         return name;
     }
+
+    public void joinEvent(Player player) {
+        players.add(player);
+    }
+
+    public void leaveEvent(Player player) {
+        players.remove(player);
+    }
+
+    public void joinSpectators(Player player) {
+        spectators.add(player);
+    }
+
+    public void leaveSpectators(Player player) {
+        spectators.remove(player);
+    }
+
     /*
     TODO:
-        - Add what every event is using Arraylist of players, countdown for starting event, itemstack for event preview?
+        - Scoreboards/Teams
      */
 }
