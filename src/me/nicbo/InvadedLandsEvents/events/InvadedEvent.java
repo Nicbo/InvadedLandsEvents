@@ -2,11 +2,14 @@ package me.nicbo.InvadedLandsEvents.events;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
 
 import java.util.ArrayList;
 
-public abstract class InvadedEvent {
+public abstract class InvadedEvent implements Listener {
     private String name;
+    private boolean started;
+    protected boolean ending;
     protected FileConfiguration config;
     protected ArrayList<Player> players;
     protected ArrayList<Player> spectators;
@@ -21,6 +24,14 @@ public abstract class InvadedEvent {
 
     public String getName() {
         return name;
+    }
+
+    public boolean isStarted() {
+        return started;
+    }
+
+    public boolean isEnding() {
+        return ending;
     }
 
     public void joinEvent(Player player) {

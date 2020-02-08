@@ -1,3 +1,6 @@
+# Don't touch me unless you know exactly what you are doing
+# All of this can be edited in game using commands
+
 event-world: event
 
 events:
@@ -9,6 +12,33 @@ events:
       yaw:
       pitch:
     start-location:
+      x:
+      y:
+      z:
+      yaw:
+      pitch:
+  spleef:
+    snow-position-1:
+      x:
+      y:
+      z:
+    snow-position-2:
+      x:
+      y:
+      z:
+    spec-location:
+      x:
+      y:
+      z:
+      yaw:
+      pitch:
+    start-location-1:
+      x:
+      y:
+      z:
+      yaw:
+      pitch:
+    start-location-2:
       x:
       y:
       z:

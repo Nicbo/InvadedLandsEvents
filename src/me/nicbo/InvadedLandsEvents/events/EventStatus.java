@@ -2,7 +2,7 @@ package me.nicbo.InvadedLandsEvents.events;
 
 public enum EventStatus {
     NONE("There is no event active right now"),
-    STARTED("The event has already started"),
+    STARTED("You cannot join the event as it has already started!"),
     ENDING("The event is ending"),
     INEVENT("You are already in the event");
 
