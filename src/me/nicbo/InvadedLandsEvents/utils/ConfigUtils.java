@@ -9,7 +9,7 @@ public final class ConfigUtils {
     private static World eventWorld;
     private ConfigUtils() {}
 
-    public static Location locationFromConfig(ConfigurationSection section) {
+    public static Location locFromConfig(ConfigurationSection section) {
         double x = section.getDouble("x");
         double y = section.getDouble("y");
         double z = section.getDouble("z");
@@ -18,7 +18,7 @@ public final class ConfigUtils {
         return new Location(eventWorld, x, y, z, yaw, pitch);
     }
 
-    public static void locationToConfig(Location loc, ConfigurationSection section) {
+    public static void locToConfig(Location loc, ConfigurationSection section) {
         section.set("x", loc.getX());
         section.set("y", loc.getY());
         section.set("z", loc.getZ());

@@ -6,7 +6,6 @@ import me.nicbo.InvadedLandsEvents.events.sumo.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public final class EventManager {
@@ -85,10 +84,6 @@ public final class EventManager {
                 time--;
             }
         }.runTaskTimerAsynchronously(plugin, 0, 20);
-    }
-
-    private boolean isInventoryEmpty(Inventory inv) {
-        return true; // <- is inv empty?
     }
 
     public EventStatus joinEvent(Player player) {
