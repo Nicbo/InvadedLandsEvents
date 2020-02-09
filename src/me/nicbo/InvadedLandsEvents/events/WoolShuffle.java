@@ -4,7 +4,12 @@ import me.nicbo.InvadedLandsEvents.EventsMain;
 
 public class WoolShuffle extends InvadedEvent {
     public WoolShuffle(EventsMain plugin) {
-        super("Wool Shuffle", plugin.getConfig());
+        super("Wool Shuffle", plugin);
+    }
+
+    @Override
+    protected void init() {
+
     }
 
     @Override

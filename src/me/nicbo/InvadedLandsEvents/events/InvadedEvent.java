@@ -1,24 +1,29 @@
 package me.nicbo.InvadedLandsEvents.events;
 
-import org.bukkit.configuration.file.FileConfiguration;
+import me.nicbo.InvadedLandsEvents.EventsMain;
+import org.bukkit.Bukkit;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public abstract class InvadedEvent implements Listener {
     private String name;
-    private boolean started;
-    protected boolean ending;
-    protected FileConfiguration config;
-    protected ArrayList<Player> players;
-    protected ArrayList<Player> spectators;
+    protected boolean started;
 
-    public InvadedEvent(String name, FileConfiguration config) {
+    protected ConfigurationSection eventConfig;
+    protected List<Player> players;
+    protected List<Player> spectators;
+
+    public InvadedEvent(String name, EventsMain plugin) {
         this.name = name;
-        this.config = config;
+        this.eventConfig = plugin.getConfig().getConfigurationSection(name.toLowerCase().replace("\\s", "-"));
+        Bukkit.getPluginManager().registerEvents(this, plugin);
+        init();
     }
 
+    protected abstract void init();
     public abstract void start();
     public abstract void stop();
 
@@ -28,10 +33,6 @@ public abstract class InvadedEvent implements Listener {
 
     public boolean isStarted() {
         return started;
-    }
-
-    public boolean isEnding() {
-        return ending;
     }
 
     public void joinEvent(Player player) {

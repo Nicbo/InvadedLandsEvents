@@ -4,7 +4,12 @@ import me.nicbo.InvadedLandsEvents.EventsMain;
 
 public class RedRover extends InvadedEvent {
     public RedRover(EventsMain plugin) {
-        super("Red Rover", plugin.getConfig());
+        super("Red Rover", plugin);
+    }
+
+    @Override
+    protected void init() {
+
     }
 
     @Override

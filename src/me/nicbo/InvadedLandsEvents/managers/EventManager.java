@@ -2,68 +2,40 @@ package me.nicbo.InvadedLandsEvents.managers;
 
 import me.nicbo.InvadedLandsEvents.EventsMain;
 import me.nicbo.InvadedLandsEvents.events.*;
-import me.nicbo.InvadedLandsEvents.events.sumo.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.HashMap;
+
 public final class EventManager {
     private EventsMain plugin;
+    private HashMap<String, InvadedEvent> events = new HashMap<>();
     private InvadedEvent currentEvent;
 
     public EventManager(EventsMain plugin) {
         this.plugin = plugin;
+        events.put("brackets", new Brackets(plugin));
+        events.put("koth", new KOTH(plugin));
+        events.put("lms", new LMS(plugin));
+        events.put("oitc", new OITC(plugin));
+        events.put("redrover", new RedRover(plugin));
+        events.put("rod", new RoD(plugin));
+        events.put("spleef", new Spleef(plugin));
+        events.put("tdm", new TDM(plugin));
+        events.put("tnttag", new TNTTag(plugin));
+        events.put("waterdrop", new Waterdrop(plugin));
+        events.put("woolshuffle", new WoolShuffle(plugin));
     }
 
     public boolean hostEvent(String name, String host) {
-        switch (name.toLowerCase()) {
-            case "brackets":
-                currentEvent = new Brackets(plugin);
-                break;
-            case "koth":
-                currentEvent= new KOTH(plugin);
-                break;
-            case "lms":
-                currentEvent = new LMS(plugin);
-                break;
-            case "oitc":
-                currentEvent = new OITC(plugin);
-                break;
-            case "rod":
-                currentEvent = new RoD(plugin);
-                break;
-            case "rr":
-            case "redrover":
-                currentEvent = new RedRover(plugin);
-                break;
-            case "spleef":
-                currentEvent = new Spleef(plugin);
-                break;
-            case "sumo1v1":
-                currentEvent = new Sumo1v1();
-                break;
-            case "sumo2v2":
-                currentEvent = new Sumo2v2();
-                break;
-            case "sumo3v3":
-                currentEvent = new Sumo3v3();
-                break;
-            case "tdm":
-                currentEvent = new TDM(plugin);
-                break;
-            case "tnttag":
-                currentEvent = new TNTTag(plugin);
-                break;
-            case "wd":
-            case "waterdrop":
-                currentEvent = new Waterdrop(plugin);
-                break;
-            default:
-                return false;
+        if (events.containsKey(name)) {
+            currentEvent = events.get(name);
+            startCountDown(host);
+            return true;
         }
-        startCountDown(host);
-        return true;
+        return false;
     }
 
     private void startCountDown(String host) {
@@ -96,5 +68,9 @@ public final class EventManager {
 
     public EventStatus leaveEvent(Player player) {
         return EventStatus.NONE; // ||
+    }
+
+    public InvadedEvent getCurrentEvent() {
+        return currentEvent;
     }
 }

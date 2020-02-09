@@ -4,7 +4,12 @@ import me.nicbo.InvadedLandsEvents.EventsMain;
 
 public class KOTH extends InvadedEvent {
     public KOTH(EventsMain plugin) {
-        super("King Of The Hill", plugin.getConfig());
+        super("King Of The Hill", plugin);
+    }
+
+    @Override
+    protected void init() {
+
     }
 
     @Override

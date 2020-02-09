@@ -4,7 +4,12 @@ import me.nicbo.InvadedLandsEvents.EventsMain;
 
 public class TNTTag extends InvadedEvent {
     public TNTTag(EventsMain plugin) {
-        super("TNT Tag", plugin.getConfig());
+        super("TNT Tag", plugin);
+    }
+
+    @Override
+    protected void init() {
+
     }
 
     @Override
