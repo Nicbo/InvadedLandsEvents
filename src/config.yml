@@ -11,6 +11,26 @@ spawn-loc:
   pitch:
 
 events:
+  brackets:
+    spec-location:
+      x:
+      y:
+      z:
+      yaw:
+      pitch:
+    start-location-1:
+      x:
+      y:
+      z:
+      yaw:
+      pitch:
+    start-location-2:
+      x:
+      y:
+      z:
+      yaw:
+      pitch:
+
   wool-shuffle:
     spec-location:
       x:
@@ -24,6 +44,7 @@ events:
       z:
       yaw:
       pitch:
+
   spleef:
     snow-position-1:
       x:

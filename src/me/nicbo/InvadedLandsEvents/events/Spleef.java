@@ -28,6 +28,7 @@ public class Spleef extends InvadedEvent {
     protected void init(EventsMain plugin) {
         RegionManager regionManager = plugin.getWorldGuardPlugin().getRegionManager(ConfigUtils.getEventWorld());
         region = regionManager.getRegion(eventConfig.getString("region-name"));
+
         try {
             BlockVector pos1 = (BlockVector) eventConfig.get("snow-position-1");
             BlockVector pos2 = (BlockVector) eventConfig.get("snow-position-2");
