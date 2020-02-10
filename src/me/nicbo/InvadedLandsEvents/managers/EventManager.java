@@ -11,22 +11,36 @@ import java.util.HashMap;
 
 public final class EventManager {
     private EventsMain plugin;
-    private HashMap<String, InvadedEvent> events = new HashMap<>();
+    private String[] eventNames;
+    private HashMap<String, InvadedEvent> events;
     private InvadedEvent currentEvent;
 
     public EventManager(EventsMain plugin) {
         this.plugin = plugin;
-        events.put("brackets", new Brackets(plugin));
-        events.put("koth", new KOTH(plugin));
-        events.put("lms", new LMS(plugin));
-        events.put("oitc", new OITC(plugin));
-        events.put("redrover", new RedRover(plugin));
-        events.put("rod", new RoD(plugin));
-        events.put("spleef", new Spleef(plugin));
-        events.put("tdm", new TDM(plugin));
-        events.put("tnttag", new TNTTag(plugin));
-        events.put("waterdrop", new Waterdrop(plugin));
-        events.put("woolshuffle", new WoolShuffle(plugin));
+        
+        this.eventNames = new String[]{
+            "brackets", "koth", "lms",
+            "oitc", "redrover", "rod",
+            "spleef", "tdm", "tnttag",
+            "waterdrop", "woolshuffle"
+        };
+        
+        this.events = new HashMap<>();
+        addEventsToMap();
+    }
+    
+    private void addEventsToMap() {
+        events.put(eventNames[0], new Brackets(plugin));
+        events.put(eventNames[1], new KOTH(plugin));
+        events.put(eventNames[2], new LMS(plugin));
+        events.put(eventNames[3], new OITC(plugin));
+        events.put(eventNames[4], new RedRover(plugin));
+        events.put(eventNames[5], new RoD(plugin));
+        events.put(eventNames[6], new Spleef(plugin));
+        events.put(eventNames[7], new TDM(plugin));
+        events.put(eventNames[8], new TNTTag(plugin));
+        events.put(eventNames[9], new Waterdrop(plugin));
+        events.put(eventNames[10], new WoolShuffle(plugin));
     }
 
     public boolean hostEvent(String name, String host) {
@@ -82,5 +96,9 @@ public final class EventManager {
 
     public InvadedEvent getCurrentEvent() {
         return currentEvent;
+    }
+    
+    public String[] getEventNames() {
+        return eventNames;   
     }
 }
