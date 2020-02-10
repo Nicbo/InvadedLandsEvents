@@ -11,20 +11,17 @@ import java.util.HashMap;
 
 public final class EventManager {
     private EventsMain plugin;
-    private String[] eventNames;
-    private HashMap<String, InvadedEvent> events;
-    private InvadedEvent currentEvent;
-
-    public EventManager(EventsMain plugin) {
-        this.plugin = plugin;
-        
-        this.eventNames = new String[]{
+    private static String[] eventNames = new String[]{
             "brackets", "koth", "lms",
             "oitc", "redrover", "rod",
             "spleef", "tdm", "tnttag",
             "waterdrop", "woolshuffle"
         };
-        
+    private HashMap<String, InvadedEvent> events;
+    private InvadedEvent currentEvent;
+
+    public EventManager(EventsMain plugin) {
+        this.plugin = plugin;
         this.events = new HashMap<>();
         addEventsToMap();
     }
@@ -98,7 +95,7 @@ public final class EventManager {
         return currentEvent;
     }
     
-    public String[] getEventNames() {
+    public static String[] getEventNames() {
         return eventNames;   
     }
 }
