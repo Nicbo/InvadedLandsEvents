@@ -8,7 +8,7 @@ public class OITC extends InvadedEvent {
     }
 
     @Override
-    protected void init() {
+    protected void init(EventsMain plugin) {
 
     }
 

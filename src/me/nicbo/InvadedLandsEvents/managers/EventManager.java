@@ -59,7 +59,17 @@ public final class EventManager {
     }
 
     public EventStatus joinEvent(Player player) {
-        return EventStatus.NONE; // -> do logic and  when  called can getdescription and send msg based on it else join event <- english good
+        if (currentEvent == null) {
+            return EventStatus.NONE;
+        } else if (currentEvent.isStarted()) {
+            return EventStatus.STARTED;
+        } else if (currentEvent.isEnding()) {
+            return EventStatus.ENDING;
+        } else if (currentEvent.containsPlayer(player)) {
+            return EventStatus.IN_EVENT;
+        }
+        currentEvent.joinEvent(player);
+        return EventStatus.JOIN;
     }
 
     public EventStatus specEvent(Player player) {

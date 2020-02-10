@@ -7,6 +7,7 @@ import org.bukkit.configuration.ConfigurationSection;
 
 public final class ConfigUtils {
     private static World eventWorld;
+    private static Location spawnLoc;
     private ConfigUtils() {}
 
     public static Location locFromConfig(ConfigurationSection section) {
@@ -32,5 +33,13 @@ public final class ConfigUtils {
 
     public static void setEventWorld(String world) {
         eventWorld = Bukkit.getWorld(world);
+    }
+
+    public static Location getSpawnLoc() {
+        return spawnLoc;
+    }
+
+    public static void setSpawnLoc(ConfigurationSection loc) {
+        spawnLoc = (Location) loc;
     }
 }

@@ -1,5 +1,6 @@
 package me.nicbo.InvadedLandsEvents.commands;
 
+import me.nicbo.InvadedLandsEvents.events.EventStatus;
 import me.nicbo.InvadedLandsEvents.managers.EventManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -16,9 +17,11 @@ public class EventCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String s, String[] args) {
         if (cmd.getName().toLowerCase().equalsIgnoreCase("event")) {
             if (args[0].equalsIgnoreCase("host")) {
-                eventManager.hostEvent(args[1], sender.getName());
+                if (!(eventManager.hostEvent(args[1], sender.getName()))) {
+                    sender.sendMessage(EventStatus.DOES_NOT_EXIST.getDescription().replace("{event}", args[1]));
+                }
             } else if (args[0].equalsIgnoreCase("join")) {
-                eventManager.joinEvent((Player) sender);
+                sender.sendMessage(eventManager.joinEvent((Player) sender).getDescription());
             }
         }
         return false;
@@ -28,6 +31,7 @@ public class EventCommand implements CommandExecutor {
     TODO:
         - Add tab complete
         - Sub commands
+        - Config commands
         - Right now this is just for testing I will work on actual command when events are done
      */
 }

@@ -8,7 +8,7 @@ public class TNTTag extends InvadedEvent {
     }
 
     @Override
-    protected void init() {
+    protected void init(EventsMain plugin) {
 
     }
 

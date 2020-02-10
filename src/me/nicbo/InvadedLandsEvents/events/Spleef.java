@@ -1,30 +1,51 @@
 package me.nicbo.InvadedLandsEvents.events;
 
+import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import me.nicbo.InvadedLandsEvents.EventsMain;
 import me.nicbo.InvadedLandsEvents.utils.ConfigUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.BlockVector;
 
 public class Spleef extends InvadedEvent {
-    private int minY;
+    private BukkitRunnable heightCheck;
     private ProtectedRegion region;
+    private int minY;
 
     public Spleef(EventsMain plugin) {
         super("Spleef", plugin);
     }
 
     @Override
-    protected void init() {
-        BlockVector pos1 = (BlockVector) eventConfig.get("snow-position-1");
-        BlockVector pos2 = (BlockVector) eventConfig.get("snow-position-2");
-        buildSnow(pos1, pos2);
+    protected void init(EventsMain plugin) {
+        RegionManager regionManager = plugin.getWorldGuardPlugin().getRegionManager(ConfigUtils.getEventWorld());
+        region = regionManager.getRegion(eventConfig.getString("region-name"));
+        try {
+            BlockVector pos1 = (BlockVector) eventConfig.get("snow-position-1");
+            BlockVector pos2 = (BlockVector) eventConfig.get("snow-position-2");
+            buildSnow(pos1, pos2);
+        } catch (NullPointerException npe) {
+            log.info("Spleef not configured yet");
+        }
+
+        heightCheck = new BukkitRunnable() {
+            @Override
+            public void run() {
+                for (Player player : players) {
+                    if (player.getLocation().getY() < minY - 1) {
+                        loseEvent(player);
+                    }
+                }
+            }
+        };
     }
 
     @Override
@@ -32,11 +53,13 @@ public class Spleef extends InvadedEvent {
         started = true;
         tpPlayers();
         players.forEach(player -> player.getInventory().setItem(0, new ItemStack(Material.DIAMOND_SPADE, 1)));
+        heightCheck.runTaskTimerAsynchronously(plugin, 0, 20);
     }
 
     @Override
     public void stop() {
-
+        started = false;
+        heightCheck.cancel();
     }
 
     private void buildSnow(BlockVector pos1, BlockVector pos2) {

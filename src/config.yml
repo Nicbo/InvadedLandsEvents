@@ -2,6 +2,13 @@
 # All of this can be edited in game using commands
 
 event-world: event
+spawn-loc:
+  world:
+  x:
+  y:
+  z:
+  yaw:
+  pitch:
 
 events:
   wool-shuffle:

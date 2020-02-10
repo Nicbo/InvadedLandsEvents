@@ -12,7 +12,6 @@ import java.util.logging.Logger;
 public class EventsMain extends JavaPlugin {
     private final String prefix = "[InvadedLandsEvents] ";
     private Logger log = getLogger();
-
     private EventManager eventManager;
     private WorldGuardPlugin worldGuardPlugin;
 
@@ -21,8 +20,12 @@ public class EventsMain extends JavaPlugin {
         reloadConfig();
         worldGuardPlugin = getWorldGuard();
         eventManager = new EventManager(this);
-
         ConfigUtils.setEventWorld(getConfig().getString("event-world"));
+        try {
+            ConfigUtils.setSpawnLoc(getConfig().getConfigurationSection("spawn-loc"));
+        } catch (ClassCastException cce) {
+            log.info("Spawn location not configured yet!");
+        }
         registerCommands();
         log.info(prefix + "enabled!");
     }
@@ -46,10 +49,6 @@ public class EventsMain extends JavaPlugin {
         }
 
         return (WorldGuardPlugin) plugin;
-    }
-
-    public EventManager getEventManager() {
-        return eventManager;
     }
 
     public WorldGuardPlugin getWorldGuardPlugin() {

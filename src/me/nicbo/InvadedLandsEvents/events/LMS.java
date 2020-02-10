@@ -8,7 +8,7 @@ public class LMS extends InvadedEvent {
     }
 
     @Override
-    protected void init() {
+    protected void init(EventsMain plugin) {
 
     }
 
