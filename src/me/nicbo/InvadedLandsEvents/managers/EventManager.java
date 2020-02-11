@@ -19,6 +19,7 @@ public final class EventManager {
         };
     private HashMap<String, InvadedEvent> events;
     private InvadedEvent currentEvent;
+    private static boolean eventRunning;
 
     public EventManager(EventsMain plugin) {
         this.plugin = plugin;
@@ -27,17 +28,17 @@ public final class EventManager {
     }
     
     private void addEventsToMap() {
-        events.put(eventNames[0], new Brackets(plugin));
-        events.put(eventNames[1], new KOTH(plugin));
-        events.put(eventNames[2], new LMS(plugin));
-        events.put(eventNames[3], new OITC(plugin));
-        events.put(eventNames[4], new RedRover(plugin));
-        events.put(eventNames[5], new RoD(plugin));
+//        events.put(eventNames[0], new Brackets(plugin));
+//        events.put(eventNames[1], new KOTH(plugin));
+//        events.put(eventNames[2], new LMS(plugin));
+//        events.put(eventNames[3], new OITC(plugin));
+//        events.put(eventNames[4], new RedRover(plugin));
+//        events.put(eventNames[5], new RoD(plugin));
         events.put(eventNames[6], new Spleef(plugin));
-        events.put(eventNames[7], new TDM(plugin));
-        events.put(eventNames[8], new TNTTag(plugin));
-        events.put(eventNames[9], new Waterdrop(plugin));
-        events.put(eventNames[10], new WoolShuffle(plugin));
+//        events.put(eventNames[7], new TDM(plugin));
+//        events.put(eventNames[8], new TNTTag(plugin));
+//        events.put(eventNames[9], new Waterdrop(plugin));
+//        events.put(eventNames[10], new WoolShuffle(plugin));
     }
 
     public boolean hostEvent(String name, String host) {
@@ -97,5 +98,13 @@ public final class EventManager {
     
     public static String[] getEventNames() {
         return eventNames;   
+    }
+
+    public static boolean isEventRunning() {
+        return eventRunning;
+    }
+
+    public static void setEventRunning(boolean running) {
+        eventRunning = running;
     }
 }

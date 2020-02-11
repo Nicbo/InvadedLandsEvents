@@ -3,6 +3,7 @@ package me.nicbo.InvadedLandsEvents.events;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import me.nicbo.InvadedLandsEvents.EventsMain;
+import me.nicbo.InvadedLandsEvents.managers.EventManager;
 import me.nicbo.InvadedLandsEvents.utils.ConfigUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -27,16 +28,15 @@ public class Spleef extends InvadedEvent {
     @Override
     protected void init(EventsMain plugin) {
         RegionManager regionManager = plugin.getWorldGuardPlugin().getRegionManager(ConfigUtils.getEventWorld());
-        region = regionManager.getRegion(eventConfig.getString("region-name"));
 
         try {
-            BlockVector pos1 = (BlockVector) eventConfig.get("snow-position-1");
-            BlockVector pos2 = (BlockVector) eventConfig.get("snow-position-2");
+            region = regionManager.getRegion(eventConfig.getString("region.name"));
+            BlockVector pos1 = ConfigUtils.blockVectorFromConfig(eventConfig.getConfigurationSection("snow-position-1"));
+            BlockVector pos2 = ConfigUtils.blockVectorFromConfig(eventConfig.getConfigurationSection("snow-position-2"));
             buildSnow(pos1, pos2);
         } catch (NullPointerException npe) {
             log.info("Spleef not configured yet");
         }
-
         heightCheck = new BukkitRunnable() {
             @Override
             public void run() {
@@ -61,6 +61,8 @@ public class Spleef extends InvadedEvent {
     public void stop() {
         started = false;
         heightCheck.cancel();
+        EventManager.setEventRunning(false);
+        // TODO: Delay before ending
     }
 
     private void buildSnow(BlockVector pos1, BlockVector pos2) {
@@ -74,7 +76,8 @@ public class Spleef extends InvadedEvent {
         for (int x = minX; x <= maxX; x++) {
             for (int y = minY; y <= maxY; y++) {
                 for (int z = minZ; z <= maxZ; z++) {
-                    ConfigUtils.getEventWorld().getBlockAt(x, y, z).setType(Material.SNOW);
+                    ConfigUtils.getEventWorld().getBlockAt(x, y, z).setType(Material.SNOW_BLOCK);
+                    System.out.println("block snow now " + x + " " + y  + " " + z);
                 }
             }
         }

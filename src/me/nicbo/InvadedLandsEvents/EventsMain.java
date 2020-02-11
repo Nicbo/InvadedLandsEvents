@@ -2,6 +2,8 @@ package me.nicbo.InvadedLandsEvents;
 
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import me.nicbo.InvadedLandsEvents.commands.EventCommand;
+import me.nicbo.InvadedLandsEvents.commands.EventConfigCommand;
+import me.nicbo.InvadedLandsEvents.listeners.GeneralEventListener;
 import me.nicbo.InvadedLandsEvents.managers.EventManager;
 import me.nicbo.InvadedLandsEvents.utils.ConfigUtils;
 import org.bukkit.plugin.Plugin;
@@ -10,41 +12,44 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.logging.Logger;
 
 public class EventsMain extends JavaPlugin {
-    private final String prefix = "[InvadedLandsEvents] ";
     private Logger log = getLogger();
     private EventManager eventManager;
     private WorldGuardPlugin worldGuardPlugin;
 
     @Override
     public void onEnable() { // MAKE EVENT WORLD IF DOESNT EXIST
-        reloadConfig();
         worldGuardPlugin = getWorldGuard();
-        eventManager = new EventManager(this);
+        saveConfig();
+
         ConfigUtils.setEventWorld(getConfig().getString("event-world"));
         try {
             ConfigUtils.setSpawnLoc(getConfig().getConfigurationSection("spawn-loc"));
         } catch (ClassCastException cce) {
             log.info("Spawn location not configured yet!");
         }
+
+        eventManager = new EventManager(this);
         registerCommands();
-        log.info(prefix + "enabled!");
+        getServer().getPluginManager().registerEvents(new GeneralEventListener(eventManager), this);
+        log.info("Plugin enabled!");
     }
 
     @Override
     public void onDisable() {
-        saveDefaultConfig();
-        log.info(prefix + "disabled!");
+        saveConfig();
+        log.info("Plugin disabled!");
     }
 
     private void registerCommands() {
         getCommand("event").setExecutor(new EventCommand(eventManager));
+        getCommand("eventconfig").setExecutor(new EventConfigCommand(this));
     }
 
     private WorldGuardPlugin getWorldGuard() { //im broken i think
         Plugin plugin = getServer().getPluginManager().getPlugin("WorldGuard");
 
         if (plugin == null || !(plugin instanceof WorldGuardPlugin)) {
-            log.severe(prefix + "WorldGuard not found!");
+            log.severe("WorldGuard not found!");
             return null;
         }
 

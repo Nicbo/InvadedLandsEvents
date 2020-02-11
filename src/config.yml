@@ -3,73 +3,77 @@
 
 event-world: event
 spawn-loc:
-  world:
-  x:
-  y:
-  z:
-  yaw:
-  pitch:
+  world: world
+  x: 0
+  y: 70
+  z: 0
+  yaw: 0
+  pitch: 0
 
 events:
   brackets:
+    enabled: false
     spec-location:
-      x:
-      y:
-      z:
-      yaw:
-      pitch:
+      x: 0
+      y: 70
+      z: 0
+      yaw: 0
+      pitch: 0
     start-location-1:
-      x:
-      y:
-      z:
-      yaw:
-      pitch:
+      x: 0
+      y: 70
+      z: 0
+      yaw: 0
+      pitch: 0
     start-location-2:
-      x:
-      y:
-      z:
-      yaw:
-      pitch:
+      x: 0
+      y: 70
+      z: 0
+      yaw: 0
+      pitch: 0
 
-  wool-shuffle:
+  woolshuffle:
+    enabled: false
     spec-location:
-      x:
-      y:
-      z:
-      yaw:
-      pitch:
+      x: 0
+      y: 70
+      z: 0
+      yaw: 0
+      pitch: 0
     start-location:
-      x:
-      y:
-      z:
-      yaw:
-      pitch:
+      x: 0
+      y: 70
+      z: 0
+      yaw: 0
+      pitch: 0
 
   spleef:
+    enabled: false
     snow-position-1:
-      x:
-      y:
-      z:
+      x: 0
+      y: 70
+      z: 0
     snow-position-2:
-      x:
-      y:
-      z:
+      x: 0
+      y: 70
+      z: 0
     spec-location:
-      x:
-      y:
-      z:
-      yaw:
-      pitch:
+      x: 0
+      y: 70
+      z: 0
+      yaw: 0
+      pitch: 0
     start-location-1:
-      x:
-      y:
-      z:
-      yaw:
-      pitch:
+      x: 0
+      y: 70
+      z: 0
+      yaw: 0
+      pitch: 0
     start-location-2:
-      x:
-      y:
-      z:
-      yaw:
-      pitch:
-    region-name:
+      x: 0
+      y: 70
+      z: 0
+      yaw: 0
+      pitch: 0
+    region: spleef
+      

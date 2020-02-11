@@ -8,3 +8,7 @@ depend: [WorldGuard]
 commands:
   event:
     usage: /<command>
+    aliases: e
+  eventconfig:
+    usage: /<command>
+    aliases: econfig

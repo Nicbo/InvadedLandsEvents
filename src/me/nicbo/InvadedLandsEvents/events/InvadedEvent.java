@@ -6,10 +6,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerQuitEvent;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -19,6 +18,7 @@ public abstract class InvadedEvent implements Listener {
     private String name;
     protected boolean started;
     protected boolean ending;
+    private boolean enabled;
 
     protected ConfigurationSection eventConfig;
     protected List<Player> players;
@@ -28,9 +28,16 @@ public abstract class InvadedEvent implements Listener {
         this.plugin = plugin;
         this.log = plugin.getLogger();
         this.name = name;
-        this.eventConfig = plugin.getConfig().getConfigurationSection(name.toLowerCase().replace("\\s", "-"));
-        Bukkit.getPluginManager().registerEvents(this, plugin);
-        init(plugin);
+        this.eventConfig = plugin.getConfig().getConfigurationSection("events." + name.toLowerCase().replace(" ", ""));
+        this.enabled = eventConfig.getBoolean("enabled");
+        if (enabled) {
+            this.players = new ArrayList<>();
+            this.spectators = new ArrayList<>();
+            Bukkit.getPluginManager().registerEvents(this, plugin);
+            init(plugin);
+        } else {
+            log.info(name + " not enabled!");
+        }
     }
 
     protected abstract void init(EventsMain plugin);
@@ -49,13 +56,17 @@ public abstract class InvadedEvent implements Listener {
         return ending;
     }
 
+    public boolean isEnabled() {
+        return enabled;
+    }
+
     public boolean containsPlayer(Player player) {
         return players.contains(player) || spectators.contains(player);
     }
 
     public void joinEvent(Player player) {
         players.add(player);
-        player.teleport((Location) eventConfig.get("spec-location"));
+        player.teleport(ConfigUtils.locFromConfig(eventConfig.getConfigurationSection("spec-location")));
         //add to team and scoreboard
     }
 
@@ -74,11 +85,6 @@ public abstract class InvadedEvent implements Listener {
     protected void loseEvent(Player player) {
         players.remove(player);
         specEvent(player);
-    }
-
-    @EventHandler
-    public void playerLeave(PlayerQuitEvent event) {
-        leaveEvent(event.getPlayer());
     }
 
     /*
