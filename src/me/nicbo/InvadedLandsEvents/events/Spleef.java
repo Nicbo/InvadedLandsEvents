@@ -103,7 +103,7 @@ public class Spleef extends InvadedEvent {
 
     @EventHandler
     public void snowClick(BlockDamageEvent event) {
-        if (!started || players.contains(event.getPlayer())) return;
+        if (!started || !players.contains(event.getPlayer())) return;
 
         Location loc = event.getBlock().getLocation();
         if (event.getPlayer().getItemInHand().getType() == Material.DIAMOND_SPADE && region.contains(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()) && event.getBlock().getType() == Material.SNOW_BLOCK) {
@@ -114,7 +114,7 @@ public class Spleef extends InvadedEvent {
 
     @EventHandler
     public void snowBallHitSnow(ProjectileHitEvent event) {
-        if (!started || players.contains(event.getEntity().getShooter())) return;
+        if (!started || !players.contains(event.getEntity().getShooter())) return;
 
         Entity entity = event.getEntity();
         if (entity instanceof Snowball) {
