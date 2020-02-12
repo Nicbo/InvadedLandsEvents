@@ -8,7 +8,7 @@ public class Waterdrop extends InvadedEvent {
     }
 
     @Override
-    protected void init(EventsMain plugin) {
+    public void init(EventsMain plugin) {
 
     }
 

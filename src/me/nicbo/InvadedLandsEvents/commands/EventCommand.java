@@ -21,7 +21,6 @@ public class EventCommand implements CommandExecutor {
                     sender.sendMessage(EventStatus.DOES_NOT_EXIST.getDescription().replace("{event}", args[1]));
                     return true;
                 }
-                EventManager.setEventRunning(true);
             } else if (args[0].equalsIgnoreCase("join")) {
                 sender.sendMessage(eventManager.joinEvent((Player) sender).getDescription());
             }

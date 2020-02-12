@@ -1,6 +1,5 @@
 package me.nicbo.InvadedLandsEvents.events;
 
-import com.google.common.base.Verify;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import me.nicbo.InvadedLandsEvents.EventsMain;
@@ -8,7 +7,6 @@ import me.nicbo.InvadedLandsEvents.managers.EventManager;
 import me.nicbo.InvadedLandsEvents.utils.ConfigUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Snowball;
@@ -21,7 +19,6 @@ import org.bukkit.util.BlockVector;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class Spleef extends InvadedEvent {
@@ -31,24 +28,7 @@ public class Spleef extends InvadedEvent {
 
     public Spleef(EventsMain plugin) {
         super("Spleef", plugin);
-    }
-
-    @Override
-    protected void init(EventsMain plugin) {
-        RegionManager regionManager = plugin.getWorldGuardPlugin().getRegionManager(ConfigUtils.getEventWorld());
-        String regionName = eventConfig.getString("region");
-
-        try {
-            region = regionManager.getRegion(regionName);
-        } catch (NullPointerException npe) {
-            log.severe("Spleef region '" + regionName + "' does not exist");
-        }
-
-        BlockVector pos1 = ConfigUtils.blockVectorFromConfig(eventConfig.getConfigurationSection("snow-position-1"));
-        BlockVector pos2 = ConfigUtils.blockVectorFromConfig(eventConfig.getConfigurationSection("snow-position-2"));
-        buildSnow(pos1, pos2);
-
-        heightCheck = new BukkitRunnable() {
+        this.heightCheck = new BukkitRunnable() {
             @Override
             public void run() {
                 List<Player> toLose = new ArrayList<>();
@@ -63,24 +43,42 @@ public class Spleef extends InvadedEvent {
     }
 
     @Override
+    public void init(EventsMain plugin) {
+        RegionManager regionManager = plugin.getWorldGuardPlugin().getRegionManager(ConfigUtils.getEventWorld());
+        String regionName = eventConfig.getString("region");
+
+        try {
+            region = regionManager.getRegion(regionName);
+        } catch (NullPointerException npe) {
+            log.severe("Spleef region '" + regionName + "' does not exist");
+        }
+
+        BlockVector pos1 = ConfigUtils.blockVectorFromConfig(eventConfig.getConfigurationSection("snow-position-1"));
+        BlockVector pos2 = ConfigUtils.blockVectorFromConfig(eventConfig.getConfigurationSection("snow-position-2"));
+        buildSnow(pos1, pos2);
+    }
+
+    @Override
     public void start() {
         started = true;
         tpPlayers();
         players.forEach(player -> player.getInventory().setItem(0, new ItemStack(Material.DIAMOND_SPADE, 1)));
-        heightCheck.runTaskTimerAsynchronously(plugin, 0, 20);
+        heightCheck.runTaskTimerAsynchronously(plugin, 0, 1);
+        playerCheck.runTaskTimerAsynchronously(plugin, 0, 1);
     }
 
     @Override
     public void stop() {
         started = false;
         heightCheck.cancel();
+        playerCheck.cancel();
+        spawnTpPlayers();
         EventManager.setEventRunning(false);
-        // TODO: Delay before ending
     }
 
     private void buildSnow(BlockVector pos1, BlockVector pos2) {
         int minX = (int) Math.min(pos1.getX(), pos2.getX());
-        minY = (int) Math.min(pos1.getY(), pos2.getY());
+        this.minY = (int) Math.min(pos1.getY(), pos2.getY());
         int minZ = (int) Math.min(pos1.getZ(), pos2.getZ());
         int maxX = (int) Math.max(pos1.getX(), pos2.getX());
         int maxY = (int) Math.max(pos1.getY(), pos2.getY());

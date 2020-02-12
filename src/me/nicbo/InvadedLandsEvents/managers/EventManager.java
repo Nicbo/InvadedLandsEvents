@@ -51,6 +51,8 @@ public final class EventManager {
     }
 
     private void startCountDown(String host) {
+        eventRunning = true;
+        currentEvent.init(plugin);
         String name = currentEvent.getName();
 
         new BukkitRunnable() {
@@ -75,8 +77,6 @@ public final class EventManager {
             return EventStatus.NONE;
         } else if (currentEvent.isStarted()) {
             return EventStatus.STARTED;
-        } else if (currentEvent.isEnding()) {
-            return EventStatus.ENDING;
         } else if (currentEvent.containsPlayer(player)) {
             return EventStatus.IN_EVENT;
         }

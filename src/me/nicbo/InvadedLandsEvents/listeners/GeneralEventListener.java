@@ -1,8 +1,11 @@
 package me.nicbo.InvadedLandsEvents.listeners;
 
 import me.nicbo.InvadedLandsEvents.managers.EventManager;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 public class GeneralEventListener implements Listener {
@@ -14,7 +17,23 @@ public class GeneralEventListener implements Listener {
 
     @EventHandler
     public void playerLeave(PlayerQuitEvent event) {
-        if (!EventManager.isEventRunning()) return;
-        eventManager.leaveEvent(event.getPlayer());
+        Player player = event.getPlayer();
+        if (EventManager.isEventRunning() && eventManager.getCurrentEvent().containsPlayer(player)) {
+            eventManager.leaveEvent(player);
+        }
+    }
+
+    @EventHandler
+    public void itemDrop(PlayerDropItemEvent event) {
+        if (EventManager.isEventRunning() && eventManager.getCurrentEvent().containsPlayer(event.getPlayer())) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void interactNetherStar(PlayerInteractEvent event) {
+        if (event.getPlayer().getItemInHand().getItemMeta().getDisplayName().contains("Leave Event") && EventManager.isEventRunning() &&  eventManager.getCurrentEvent().containsPlayer(event.getPlayer())) {
+            eventManager.leaveEvent(event.getPlayer());
+        }
     }
 }

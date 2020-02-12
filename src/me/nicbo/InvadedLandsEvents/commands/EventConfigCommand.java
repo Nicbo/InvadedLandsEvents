@@ -3,6 +3,7 @@ package me.nicbo.InvadedLandsEvents.commands;
 import me.nicbo.InvadedLandsEvents.EventsMain;
 import me.nicbo.InvadedLandsEvents.managers.EventManager;
 import me.nicbo.InvadedLandsEvents.utils.ConfigUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -28,7 +29,7 @@ public class EventConfigCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String s, String[] args) { //make me pretty pls
         if (cmd.getName().equalsIgnoreCase("eventconfig") || cmd.getName().equalsIgnoreCase("econfig")) {
             if (args.length == 0) {
-                sender.sendMessage(usage + "/econfig <event|reload|setting> <setting|value> <value>");
+                sender.sendMessage(usage + "/econfig <event|reload|setting(event-world|spawn-loc)> <setting|value> <value>");
                 return true;
             } else if (args[0].equalsIgnoreCase("reload")) {
                 plugin.reloadConfig();
@@ -39,6 +40,9 @@ public class EventConfigCommand implements CommandExecutor {
                 return true;
             } else {
                 switch (args[0]) {
+                    case "event-world":
+                        world(args, (Player) sender);
+                        break;
                     case "spleef":
                         spleef(args, (Player) sender);
                         break;
@@ -55,6 +59,14 @@ public class EventConfigCommand implements CommandExecutor {
         return false;
     }
 
+    private void world(String[] args, Player player) {
+        if (args.length == 1) player.sendMessage(usage + "/eventconfig event-world <string>");
+        else {
+            config.set("event-world", args[1]);
+            player.sendMessage(Bukkit.getWorld(args[1]) == null ? ChatColor.RED + "Warning: Could not find world '" + args[1] + "'!" : ChatColor.GREEN + "event-world set to '" + args[1] + "'!");
+        }
+    }
+
     private void spleef(String[] args, Player player) {
         ConfigurationSection section = config.getConfigurationSection("events.spleef");
         if (args.length == 1) player.sendMessage(ConfigUtils.configSectionToMsgs(section));
@@ -66,6 +78,7 @@ public class EventConfigCommand implements CommandExecutor {
                         player.sendMessage(usage + "/eventconfig spleef region <string>");
                     } else {
                         section.set("region", args[2]);
+                        player.sendMessage(ChatColor.GREEN + "region set to '" + args[2] + "'!");
                     }
                     break;
                 case "enabled":
@@ -73,25 +86,28 @@ public class EventConfigCommand implements CommandExecutor {
                         player.sendMessage(usage + "/eventconfig spleef enabled <boolean>");
                     } else {
                         section.set("enabled", Boolean.valueOf(args[2]));
+                        player.sendMessage(ChatColor.GREEN + "enabled set to '" + args[2] + "'!");
                     }
                     break;
                 case "snow-position-1":
                 case "snow-position-2":
                     if (preview) {
-                        player.sendMessage(usage + "/eventconfig spleef " + args[1] + " set (while standing on block)");
+                        player.sendMessage(usage + "/eventconfig spleef " + args[1].toLowerCase() + " set (while standing on block)");
                     } else {
                         Location loc = player.getLocation();
                         loc.setY(loc.getBlockY() - 1);
                         ConfigUtils.blockVectorToConfig(new BlockVector(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()), section.getConfigurationSection(args[1]));
+                        player.sendMessage(ChatColor.GREEN + args[1] + " set to block under you!");
                     }
                     break;
                 case "start-location-1":
                 case "start-location-2":
                 case "spec-location":
                     if (preview) {
-                        player.sendMessage(usage + "/eventconfig spleef " + args[1] + " set");
+                        player.sendMessage(usage + "/eventconfig spleef " + args[1].toLowerCase() + " set");
                     } else if (args[2].equalsIgnoreCase("set")) {
                         ConfigUtils.locToConfig(player.getLocation(), section.getConfigurationSection(args[1]));
+                        player.sendMessage(ChatColor.GREEN + args[1] + " set to your location!");
                     }
                     break;
             }
