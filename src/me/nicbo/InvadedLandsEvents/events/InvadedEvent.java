@@ -50,7 +50,7 @@ public abstract class InvadedEvent implements Listener {
 
         this.star = new ItemStack(Material.NETHER_STAR);
         ItemMeta im = star.getItemMeta();
-        im.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&l&3Leave Event"));
+        im.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&c&lLeave Event"));
         this.star.setItemMeta(im);
 
         Bukkit.getPluginManager().registerEvents(this, plugin);

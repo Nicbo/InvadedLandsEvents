@@ -7,6 +7,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.ItemStack;
 
 public class GeneralEventListener implements Listener {
     private EventManager eventManager;
@@ -32,7 +33,10 @@ public class GeneralEventListener implements Listener {
 
     @EventHandler
     public void interactNetherStar(PlayerInteractEvent event) {
-        if (event.getPlayer().getItemInHand().getItemMeta().getDisplayName().contains("Leave Event") && EventManager.isEventRunning() &&  eventManager.getCurrentEvent().containsPlayer(event.getPlayer())) {
+        ItemStack item = event.getItem();
+        if (!item.hasItemMeta()) return;
+
+        if (item.getItemMeta().getDisplayName().contains("Leave Event") && EventManager.isEventRunning() &&  eventManager.getCurrentEvent().containsPlayer(event.getPlayer())) {
             eventManager.leaveEvent(event.getPlayer());
         }
     }
