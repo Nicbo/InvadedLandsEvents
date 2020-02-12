@@ -5,10 +5,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.MemorySection;
 import org.bukkit.util.BlockVector;
 
-import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -73,11 +71,11 @@ public final class ConfigUtils {
                 Map<String, Object> keyValuesSub = subSection.getValues(false);
                 StringBuilder coords = new StringBuilder();
                 for (String subKey : keyValuesSub.keySet()) {
-                    coords.append("\n    ").append(subKey).append(": ").append(keyValuesSub.get(subKey).toString());
+                    coords.append("\n    ").append(ChatColor.GOLD + subKey).append(": ").append(ChatColor.YELLOW + keyValuesSub.get(subKey).toString());
                 }
                 msgs.add(ChatColor.GOLD + key + ": " + coords.toString());
             } catch (NullPointerException npe) {
-                msgs.add(ChatColor.GOLD + key + ": " + keyValues.get(key));
+                msgs.add(ChatColor.GOLD + key + ": " + ChatColor.YELLOW + keyValues.get(key));
             }
         }
         return msgs.toArray(new String[0]);

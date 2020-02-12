@@ -3,7 +3,6 @@ package me.nicbo.InvadedLandsEvents.events;
 import me.nicbo.InvadedLandsEvents.EventsMain;
 import me.nicbo.InvadedLandsEvents.utils.ConfigUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -79,7 +78,7 @@ public abstract class InvadedEvent implements Listener {
 
     public void specEvent(Player player) {
         spectators.add(player);
-        player.teleport((Location) eventConfig.get("spec-location"));
+        player.teleport(ConfigUtils.locFromConfig(eventConfig.getConfigurationSection("spec-location")));
     }
 
     protected void loseEvent(Player player) {

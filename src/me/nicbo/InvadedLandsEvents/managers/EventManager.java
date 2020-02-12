@@ -42,7 +42,7 @@ public final class EventManager {
     }
 
     public boolean hostEvent(String name, String host) {
-        if (events.containsKey(name)) {
+        if (events.containsKey(name) && events.get(name).isEnabled()) {
             currentEvent = events.get(name);
             startCountDown(host);
             return true;
@@ -54,7 +54,7 @@ public final class EventManager {
         String name = currentEvent.getName();
 
         new BukkitRunnable() {
-            int time = 60;
+            int time = 16; //for testing put back to 60
 
             @Override
             public void run() {
