@@ -80,6 +80,7 @@ public final class EventManager {
         } else if (currentEvent.containsPlayer(player)) {
             return EventStatus.IN_EVENT;
         }
+        Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&a&l" + player.getName() + " joined the event"));
         currentEvent.joinEvent(player);
         return EventStatus.JOIN;
     }
