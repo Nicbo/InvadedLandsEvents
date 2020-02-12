@@ -44,6 +44,7 @@ public abstract class InvadedEvent implements Listener {
             public void run() {
                 if (players.size() < 2) {
                     playerWon(players.get(0));
+                    this.cancel();
                 }
             }
         };
