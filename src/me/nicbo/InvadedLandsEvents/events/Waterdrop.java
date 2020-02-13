@@ -4,7 +4,7 @@ import me.nicbo.InvadedLandsEvents.EventsMain;
 
 public class Waterdrop extends InvadedEvent {
     public Waterdrop(EventsMain plugin) {
-        super("Waterdrop", plugin);
+        super("Waterdrop", "waterdrop", plugin);
     }
 
     @Override

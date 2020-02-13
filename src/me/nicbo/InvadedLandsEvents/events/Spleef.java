@@ -27,17 +27,18 @@ public class Spleef extends InvadedEvent {
     private int minY;
 
     public Spleef(EventsMain plugin) {
-        super("Spleef", plugin);
+        super("Spleef", "spleef", plugin);
         this.heightCheck = new BukkitRunnable() {
+            List<Player> toLose = new ArrayList<>();
             @Override
             public void run() {
-                List<Player> toLose = new ArrayList<>();
                 for (Player player : players) {
                     if (player.getLocation().getY() < minY - 1) {
                         toLose.add(player);
                     }
                 }
                 toLose.forEach(player -> loseEvent(player));
+                toLose.clear();
             }
         };
     }
@@ -109,6 +110,7 @@ public class Spleef extends InvadedEvent {
         if (event.getPlayer().getItemInHand().getType() == Material.DIAMOND_SPADE && region.contains(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()) && event.getBlock().getType() == Material.SNOW_BLOCK) {
             event.setInstaBreak(true);
             event.getPlayer().getInventory().addItem(new ItemStack(Material.SNOW_BALL, 4));
+            event.getBlock().getDrops().clear();
         }
     }
 

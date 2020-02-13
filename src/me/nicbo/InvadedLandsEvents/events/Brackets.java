@@ -4,7 +4,7 @@ import me.nicbo.InvadedLandsEvents.EventsMain;
 
 public class Brackets extends InvadedEvent {
     public Brackets(EventsMain plugin) {
-        super("1v1 Brackets", plugin);
+        super("1v1 Brackets", "brackets", plugin);
     }
 
     @Override

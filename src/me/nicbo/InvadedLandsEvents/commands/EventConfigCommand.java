@@ -29,7 +29,7 @@ public class EventConfigCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String s, String[] args) { //make me pretty pls
         if (cmd.getName().equalsIgnoreCase("eventconfig") || cmd.getName().equalsIgnoreCase("econfig")) {
             if (args.length == 0) {
-                sender.sendMessage(usage + "/econfig <event|reload|setting(event-world|spawn-loc)> <setting|value> <value>");
+                sender.sendMessage(usage + "/econfig <event|reload|setting(event-world|spawn-location)> <setting|value> <value>");
                 return true;
             } else if (args[0].equalsIgnoreCase("reload")) {
                 plugin.reloadConfig();
@@ -42,6 +42,9 @@ public class EventConfigCommand implements CommandExecutor {
                 switch (args[0]) {
                     case "event-world":
                         world(args, (Player) sender);
+                        break;
+                    case "spawn-loc":
+                        spawn(args, (Player) sender);
                         break;
                     case "spleef":
                         spleef(args, (Player) sender);
@@ -64,6 +67,14 @@ public class EventConfigCommand implements CommandExecutor {
         else {
             config.set("event-world", args[1]);
             player.sendMessage(Bukkit.getWorld(args[1]) == null ? ChatColor.RED + "Warning: Could not find world '" + args[1] + "'!" : ChatColor.GREEN + "event-world set to '" + args[1] + "'!");
+        }
+    }
+
+    private void spawn(String[] args, Player player) {
+        if (args.length == 1) player.sendMessage(usage + "/eventconfig spawn-location set");
+        else {
+            config.set("spawn-location", player.getLocation());
+            player.sendMessage("spawn-location set to your location!");
         }
     }
 

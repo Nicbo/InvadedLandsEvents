@@ -4,7 +4,7 @@ import me.nicbo.InvadedLandsEvents.EventsMain;
 
 public class RoD extends InvadedEvent {
     public RoD(EventsMain plugin) {
-        super("Race of Death", plugin);
+        super("Race of Death", "rod", plugin);
     }
 
     @Override

@@ -4,7 +4,7 @@ import me.nicbo.InvadedLandsEvents.EventsMain;
 
 public class OITC extends InvadedEvent {
     public OITC(EventsMain plugin) {
-        super("One in the Chamber", plugin);
+        super("One in the Chamber", "oitc", plugin);
     }
 
     @Override

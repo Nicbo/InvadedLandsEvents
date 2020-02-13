@@ -2,7 +2,7 @@
 # All of this can be edited in game using commands
 
 event-world: event
-spawn-loc:
+spawn-location:
   world: world
   x: 0
   y: 70
@@ -32,31 +32,8 @@ events:
       yaw: 0
       pitch: 0
 
-  woolshuffle:
+  sumo:
     enabled: false
-    spec-location:
-      x: 0
-      y: 70
-      z: 0
-      yaw: 0
-      pitch: 0
-    start-location:
-      x: 0
-      y: 70
-      z: 0
-      yaw: 0
-      pitch: 0
-
-  spleef:
-    enabled: false
-    snow-position-1:
-      x: 0
-      y: 70
-      z: 0
-    snow-position-2:
-      x: 0
-      y: 70
-      z: 0
     spec-location:
       x: 0
       y: 70
@@ -75,5 +52,236 @@ events:
       z: 0
       yaw: 0
       pitch: 0
+
+  koth:
+    enabled: false
+    spec-location:
+      x: 0
+      y: 70
+      z: 0
+      yaw: 0
+      pitch: 0
+    start-location-1:
+      x: 0
+      y: 70
+      z: 0
+      yaw: 0
+      pitch: 0
+    start-location-2:
+      x: 0
+      y: 70
+      z: 0
+      yaw: 0
+      pitch: 0
+    start-location-3:
+      x: 0
+      y: 70
+      z: 0
+      yaw: 0
+      pitch: 0
+    start-location-4:
+      x: 0
+      y: 70
+      z: 0
+      yaw: 0
+      pitch: 0
+
+  lms:
+    enabled: false
+    spec-location:
+      x: 0
+      y: 70
+      z: 0
+      yaw: 0
+      pitch: 0
+    start-location:
+      x: 0
+      y: 70
+      z: 0
+      yaw: 0
+      pitch: 0
+
+  oitc:
+    enabled: false
+    spec-location:
+      x: 0
+      y: 70
+      z: 0
+      yaw: 0
+      pitch: 0
+    start-location-1:
+      x: 0
+      y: 70
+      z: 0
+      yaw: 0
+      pitch: 0
+    start-location-2:
+      x: 0
+      y: 70
+      z: 0
+      yaw: 0
+      pitch: 0
+    start-location-3:
+      x: 0
+      y: 70
+      z: 0
+      yaw: 0
+      pitch: 0
+    start-location-4:
+      x: 0
+      y: 70
+      z: 0
+      yaw: 0
+      pitch: 0
+    start-location-5:
+      x: 0
+      y: 70
+      z: 0
+      yaw: 0
+      pitch: 0
+    start-location-6:
+      x: 0
+      y: 70
+      z: 0
+      yaw: 0
+      pitch: 0
+    start-location-7:
+      x: 0
+      y: 70
+      z: 0
+      yaw: 0
+      pitch: 0
+    start-location-8:
+      x: 0
+      y: 70
+      z: 0
+      yaw: 0
+      pitch: 0
+
+  red-rover:
+    enabled: false
+    spec-location:
+      x: 0
+      y: 70
+      z: 0
+      yaw: 0
+      pitch: 0
+    start-location:
+      x: 0
+      y: 70
+      z: 0
+      yaw: 0
+      pitch: 0
+    blue-region: rr-blue
+    red-region: rr-red
+
+  rod:
+    enabled: false
+    spec-location:
+      x: 0
+      y: 70
+      z: 0
+      yaw: 0
+      pitch: 0
+    start-location:
+      x: 0
+      y: 70
+      z: 0
+      yaw: 0
+      pitch: 0
+
+  spleef:
+    enabled: false
+    spec-location:
+      x: 0
+      y: 70
+      z: 0
+      yaw: 0
+      pitch: 0
+    start-location-1:
+      x: 0
+      y: 70
+      z: 0
+      yaw: 0
+      pitch: 0
+    start-location-2:
+      x: 0
+      y: 70
+      z: 0
+      yaw: 0
+      pitch: 0
+    snow-position-1:
+      x: 0
+      y: 70
+      z: 0
+    snow-position-2:
+      x: 0
+      y: 70
+      z: 0
     region: spleef
-      
+
+  tdm:
+    enabled: false
+    spec-location:
+      x: 0
+      y: 70
+      z: 0
+      yaw: 0
+      pitch: 0
+    blue-start-location:
+      x: 0
+      y: 70
+      z: 0
+      yaw: 0
+      pitch: 0
+    red-start-location:
+      x: 0
+      y: 70
+      z: 0
+      yaw: 0
+      pitch: 0
+
+  tnt-tag:
+    enabled: false
+    spec-location:
+      x: 0
+      y: 70
+      z: 0
+      yaw: 0
+      pitch: 0
+    start-location:
+      x: 0
+      y: 70
+      z: 0
+      yaw: 0
+      pitch: 0
+
+  waterdrop:
+    enabled: false
+    spec-location:
+      x: 0
+      y: 70
+      z: 0
+      yaw: 0
+      pitch: 0
+    start-location:
+      x: 0
+      y: 70
+      z: 0
+      yaw: 0
+      pitch: 0
+
+  wool-shuffle:
+    enabled: false
+    spec-location:
+      x: 0
+      y: 70
+      z: 0
+      yaw: 0
+      pitch: 0
+    start-location:
+      x: 0
+      y: 70
+      z: 0
+      yaw: 0
+      pitch: 0

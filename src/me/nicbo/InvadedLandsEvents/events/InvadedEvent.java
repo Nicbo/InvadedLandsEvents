@@ -30,11 +30,11 @@ public abstract class InvadedEvent implements Listener {
 
     protected ItemStack star;
 
-    public InvadedEvent(String name, EventsMain plugin) {
+    public InvadedEvent(String name, String configName, EventsMain plugin) {
         this.plugin = plugin;
         this.log = plugin.getLogger();
         this.name = name;
-        this.eventConfig = plugin.getConfig().getConfigurationSection("events." + name.toLowerCase().replace(" ", ""));
+        this.eventConfig = plugin.getConfig().getConfigurationSection("events." + configName);
         this.enabled = eventConfig.getBoolean("enabled");
         this.players = new ArrayList<>();
         this.spectators = new ArrayList<>();
@@ -108,7 +108,7 @@ public abstract class InvadedEvent implements Listener {
 
     protected void playerWon(Player player) {
         for (int i = 0; i < 4; i++) {
-            Bukkit.broadcastMessage(ChatColor.GOLD + player.getName() + ChatColor.YELLOW + " won the " + name + ChatColor.YELLOW + " event!");
+            Bukkit.broadcastMessage(ChatColor.GOLD + player.getName() + ChatColor.YELLOW + " won the " + ChatColor.GOLD + name + ChatColor.YELLOW + " event!");
         }
         plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
             @Override

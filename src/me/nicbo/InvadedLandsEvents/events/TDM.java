@@ -4,7 +4,7 @@ import me.nicbo.InvadedLandsEvents.EventsMain;
 
 public class TDM extends InvadedEvent {
     public TDM(EventsMain plugin) {
-        super("Team Deathmatch", plugin);
+        super("Team Deathmatch", "tdm", plugin);
     }
 
     @Override

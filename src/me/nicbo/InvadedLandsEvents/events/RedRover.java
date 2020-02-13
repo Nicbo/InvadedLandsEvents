@@ -4,7 +4,7 @@ import me.nicbo.InvadedLandsEvents.EventsMain;
 
 public class RedRover extends InvadedEvent {
     public RedRover(EventsMain plugin) {
-        super("Red Rover", plugin);
+        super("Red Rover", "red-rover", plugin);
     }
 
     @Override

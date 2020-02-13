@@ -5,7 +5,7 @@ import me.nicbo.InvadedLandsEvents.events.InvadedEvent;
 
 public class Sumo extends InvadedEvent {
     Sumo(String name, EventsMain plugin) {
-        super(name, plugin);
+        super(name, "sumo", plugin);
     }
 
     @Override
