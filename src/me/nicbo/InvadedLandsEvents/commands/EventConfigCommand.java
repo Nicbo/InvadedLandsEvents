@@ -64,46 +64,59 @@ public class EventConfigCommand implements CommandExecutor {
     }
 
     private void world(String[] args, Player player) {
-        if (args.length == 1) player.sendMessage(usage + "/econfig event-world <string>");
-        else {
+        if (args.length == 1) {
+            player.sendMessage(ChatColor.GOLD + "event-world: " + ChatColor.YELLOW + config.getString("event-world"));
+            player.sendMessage(usage + "/econfig event-world <string>");
+        } else {
             config.set("event-world", args[1]);
             player.sendMessage(Bukkit.getWorld(args[1]) == null ? ChatColor.RED + "Warning: Could not find world '" + args[1] + "'!" : ChatColor.GREEN + "event-world set to '" + args[1] + "'!");
         }
     }
 
     private void spawn(String[] args, Player player) {
-        if (args.length == 1) player.sendMessage(usage + "/econfig spawn-location set");
-        else {
+        String usageMessage = player.sendMessage(ChatColor.GOLD + "spawn-location: " + ChatColor.YELLOW + config.getString("spawn-location"));
+        if (args.length == 1) {
+            player.sendMessage(usageMessage);
+            player.sendMessage(usage + "/econfig spawn-location set");
+        } else if (args[1].equalsIgnoreCase("set") {
             config.set("spawn-location", player.getLocation());
             player.sendMessage("spawn-location set to your location!");
+        } else {
+            player.sendMessage(usageMessage);
         }
     }
 
     private void spleef(String[] args, Player player) {
         ConfigurationSection section = config.getConfigurationSection("events.spleef");
-        if (args.length == 1) player.sendMessage(ConfigUtils.configSectionToMsgs(section));
-        else {
+        if (args.length == 1) {
+            player.sendMessage(ConfigUtils.configSectionToMsgs(section));
+            player.sendMessage("\n" + usage + "/econfig spleef <key>");
+        } else {
             boolean preview = args.length == 2;
             switch (args[1].toLowerCase()) {
                 case "region":
                     if (preview) {
+                        player.sendMessage(ChatColor.YELLOW + "region: " + ChatColor.GOLD + config.getString("events.spleef.region"));
                         player.sendMessage(usage + "/econfig spleef region <string>");
                     } else {
                         section.set("region", args[2]);
-                        player.sendMessage(ChatColor.GREEN + "region set to '" + args[2] + "'!");
+                        player.sendMessage(ChatColor.GOLD + "region set to " + ChatColor.YELLOW + "'" + args[2] + "'" + ChatColor.GOLD + "!");
                     }
                     break;
                 case "enabled":
                     if (preview) {
+                        player.sendMessage(ChatColor.YELLOW + "enabled: " + ChatColor.GOLD + config.getBoolean("events.spleef.enabled"));
                         player.sendMessage(usage + "/econfig spleef enabled <boolean>");
                     } else {
-                        section.set("enabled", Boolean.valueOf(args[2]));
-                        player.sendMessage(ChatColor.GREEN + "enabled set to '" + args[2] + "'!");
+                        boolean enable = Boolean.valueOf(args[2]);
+                        section.set("enabled", enable);
+                        player.sendMessage(ChatColor.GOLD + "enabled set to " + ChatColor.YELLOW + enable + ChatColor.GOLD + "!");
                     }
                     break;
                 case "snow-position-1":
                 case "snow-position-2":
                     if (preview) {
+                        // use configutils function?
                         player.sendMessage(usage + "/econfig spleef " + args[1].toLowerCase() + " set (while standing on block)");
                     } else {
                         Location loc = player.getLocation();
@@ -116,6 +129,7 @@ public class EventConfigCommand implements CommandExecutor {
                 case "start-location-2":
                 case "spec-location":
                     if (preview) {
+                        // use configutils function?
                         player.sendMessage(usage + "/econfig spleef " + args[1].toLowerCase() + " set");
                     } else if (args[2].equalsIgnoreCase("set")) {
                         ConfigUtils.locToConfig(player.getLocation(), section.getConfigurationSection(args[1]));
