@@ -158,7 +158,7 @@ events:
       yaw: 0
       pitch: 0
 
-  red-rover:
+  redrover:
     enabled: false
     spec-location:
       x: 0
@@ -241,7 +241,7 @@ events:
       yaw: 0
       pitch: 0
 
-  tnt-tag:
+  tnttag:
     enabled: false
     spec-location:
       x: 0
@@ -271,7 +271,7 @@ events:
       yaw: 0
       pitch: 0
 
-  wool-shuffle:
+  woolshuffle:
     enabled: false
     spec-location:
       x: 0
