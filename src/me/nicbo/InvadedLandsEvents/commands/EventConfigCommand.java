@@ -38,32 +38,33 @@ public class EventConfigCommand implements CommandExecutor {
             } else if (!(sender instanceof Player)) {
                 sender.sendMessage(ChatColor.RED + "You must be a player to execute this command!");
                 return true;
-            } else {
-                switch (args[0]) {
-                    case "event-world":
-                        world(args, (Player) sender);
-                        break;
-                    case "spawn-loc":
-                        spawn(args, (Player) sender);
-                        break;
-                    case "spleef":
-                        spleef(args, (Player) sender);
-                        break;
-                    default:
-                        StringBuilder eventList = new StringBuilder(ChatColor.YELLOW.toString());
-                        for (String event : EventManager.getEventNames()) {
-                            eventList.append("\n   - ").append(event);
-                        }
-                        sender.sendMessage(ChatColor.YELLOW + "'" + args[0] + "'" + ChatColor.GOLD + " doesn't exist! \nAll events: " + eventList.toString());
-                }
-                return true;
+            }
+            Player player = (Player) sender;
+            switch (args[0]) {
+                case "event-world":
+                    world(args, player);
+                    break;
+                case "spawn-location":
+                    spawn(args, player);
+                    break;
+                case "spleef":
+                    spleef(args, player);
+                    break;
+                default:
+                    StringBuilder eventList = new StringBuilder(ChatColor.YELLOW.toString());
+                    for (String event : EventManager.getEventNames()) {
+                        boolean enabled = config.getBoolean("events." + event + ".enabled");
+                        eventList.append(ChatColor.YELLOW + "\n   - ").append((enabled ? ChatColor.GREEN : ChatColor.RED) + event);
+                    }
+                    player.sendMessage(ChatColor.YELLOW + "'" + args[0] + "'" + ChatColor.GOLD + " doesn't exist! Try event-world, spawn-location or an event. \nAll events: " + eventList.toString());
+            return true;
             }
         }
         return false;
     }
 
     private void world(String[] args, Player player) {
-        if (args.length == 1) player.sendMessage(usage + "/eventconfig event-world <string>");
+        if (args.length == 1) player.sendMessage(usage + "/econfig event-world <string>");
         else {
             config.set("event-world", args[1]);
             player.sendMessage(Bukkit.getWorld(args[1]) == null ? ChatColor.RED + "Warning: Could not find world '" + args[1] + "'!" : ChatColor.GREEN + "event-world set to '" + args[1] + "'!");
@@ -71,7 +72,7 @@ public class EventConfigCommand implements CommandExecutor {
     }
 
     private void spawn(String[] args, Player player) {
-        if (args.length == 1) player.sendMessage(usage + "/eventconfig spawn-location set");
+        if (args.length == 1) player.sendMessage(usage + "/econfig spawn-location set");
         else {
             config.set("spawn-location", player.getLocation());
             player.sendMessage("spawn-location set to your location!");
@@ -86,7 +87,7 @@ public class EventConfigCommand implements CommandExecutor {
             switch (args[1].toLowerCase()) {
                 case "region":
                     if (preview) {
-                        player.sendMessage(usage + "/eventconfig spleef region <string>");
+                        player.sendMessage(usage + "/econfig spleef region <string>");
                     } else {
                         section.set("region", args[2]);
                         player.sendMessage(ChatColor.GREEN + "region set to '" + args[2] + "'!");
@@ -94,7 +95,7 @@ public class EventConfigCommand implements CommandExecutor {
                     break;
                 case "enabled":
                     if (preview) {
-                        player.sendMessage(usage + "/eventconfig spleef enabled <boolean>");
+                        player.sendMessage(usage + "/econfig spleef enabled <boolean>");
                     } else {
                         section.set("enabled", Boolean.valueOf(args[2]));
                         player.sendMessage(ChatColor.GREEN + "enabled set to '" + args[2] + "'!");
@@ -103,7 +104,7 @@ public class EventConfigCommand implements CommandExecutor {
                 case "snow-position-1":
                 case "snow-position-2":
                     if (preview) {
-                        player.sendMessage(usage + "/eventconfig spleef " + args[1].toLowerCase() + " set (while standing on block)");
+                        player.sendMessage(usage + "/econfig spleef " + args[1].toLowerCase() + " set (while standing on block)");
                     } else {
                         Location loc = player.getLocation();
                         loc.setY(loc.getBlockY() - 1);
@@ -115,7 +116,7 @@ public class EventConfigCommand implements CommandExecutor {
                 case "start-location-2":
                 case "spec-location":
                     if (preview) {
-                        player.sendMessage(usage + "/eventconfig spleef " + args[1].toLowerCase() + " set");
+                        player.sendMessage(usage + "/econfig spleef " + args[1].toLowerCase() + " set");
                     } else if (args[2].equalsIgnoreCase("set")) {
                         ConfigUtils.locToConfig(player.getLocation(), section.getConfigurationSection(args[1]));
                         player.sendMessage(ChatColor.GREEN + args[1] + " set to your location!");
