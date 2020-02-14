@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 
 public class EventCommand implements CommandExecutor {
     private EventManager eventManager;
+    
     public EventCommand(EventManager eventManager) {
         this.eventManager = eventManager;
     }
@@ -34,5 +35,6 @@ public class EventCommand implements CommandExecutor {
         - Sub commands
         - Config commands
         - Right now this is just for testing I will work on actual command when events are done
+        - join, leave, host, forceend, spec, etc
      */
 }
