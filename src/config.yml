@@ -2,6 +2,7 @@
 # All of this can be edited in game using commands
 
 event-world: event
+
 spawn-location:
   world: world
   x: 0

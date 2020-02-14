@@ -2,6 +2,7 @@ package me.nicbo.InvadedLandsEvents.managers;
 
 import me.nicbo.InvadedLandsEvents.EventsMain;
 import me.nicbo.InvadedLandsEvents.events.*;
+import me.nicbo.InvadedLandsEvents.events.sumo.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -15,7 +16,8 @@ public final class EventManager {
             "brackets", "koth", "lms",
             "oitc", "redrover", "rod",
             "spleef", "tdm", "tnttag",
-            "waterdrop", "woolshuffle"
+            "waterdrop", "woolshuffle",
+            "sumo"
         };
     private HashMap<String, InvadedEvent> events;
     private InvadedEvent currentEvent;
@@ -28,20 +30,24 @@ public final class EventManager {
     }
     
     private void addEventsToMap() {
-//        events.put(eventNames[0], new Brackets(plugin));
-//        events.put(eventNames[1], new KOTH(plugin));
-//        events.put(eventNames[2], new LMS(plugin));
-//        events.put(eventNames[3], new OITC(plugin));
-//        events.put(eventNames[4], new RedRover(plugin));
-//        events.put(eventNames[5], new RoD(plugin));
+        events.put(eventNames[0], new Brackets(plugin));
+        events.put(eventNames[1], new KOTH(plugin));
+        events.put(eventNames[2], new LMS(plugin));
+        events.put(eventNames[3], new OITC(plugin));
+        events.put(eventNames[4], new RedRover(plugin));
+        events.put(eventNames[5], new RoD(plugin));
         events.put(eventNames[6], new Spleef(plugin));
-//        events.put(eventNames[7], new TDM(plugin));
-//        events.put(eventNames[8], new TNTTag(plugin));
-//        events.put(eventNames[9], new Waterdrop(plugin));
-//        events.put(eventNames[10], new WoolShuffle(plugin));
+        events.put(eventNames[7], new TDM(plugin));
+        events.put(eventNames[8], new TNTTag(plugin));
+        events.put(eventNames[9], new Waterdrop(plugin));
+        events.put(eventNames[10], new WoolShuffle(plugin));
+        events.put(eventNames[11], new Sumo1v1(plugin));
+        events.put(eventNames[11], new Sumo2v2(plugin));
+        events.put(eventNames[11], new Sumo3v3(plugin));
     }
 
     public boolean hostEvent(String name, String host) {
+        // if sumo check
         if (events.containsKey(name) && events.get(name).isEnabled()) {
             currentEvent = events.get(name);
             startCountDown(host);

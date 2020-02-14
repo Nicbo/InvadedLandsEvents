@@ -71,7 +71,7 @@ public final class ConfigUtils {
                 Map<String, Object> keyValuesSub = subSection.getValues(false);
                 StringBuilder coords = new StringBuilder();
                 for (String subKey : keyValuesSub.keySet()) {
-                    coords.append("\n    ").append(ChatColor.GOLD + subKey).append(": ").append(ChatColor.YELLOW + keyValuesSub.get(subKey).toString());
+                    coords.append("\n    ").append(ChatColor.GOLD).append(subKey).append(": ").append(ChatColor.YELLOW).append(keyValuesSub.get(subKey).toString());
                 }
                 msgs.add(ChatColor.GOLD + key + ": " + coords.toString());
             } catch (NullPointerException npe) {

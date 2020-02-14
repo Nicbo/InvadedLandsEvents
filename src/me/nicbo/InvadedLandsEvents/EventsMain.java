@@ -19,7 +19,7 @@ public class EventsMain extends JavaPlugin {
     @Override
     public void onEnable() { // MAKE EVENT WORLD IF DOESNT EXIST
         worldGuardPlugin = getWorldGuard();
-        saveConfig();
+        saveDefaultConfig();
 
         ConfigUtils.setEventWorld(getConfig().getString("event-world"));
         try {
@@ -36,19 +36,21 @@ public class EventsMain extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        saveConfig();
+        saveDefaultConfig();
         log.info("Plugin disabled!");
     }
 
     private void registerCommands() {
+        EventConfigCommand eventConfigCommand = new EventConfigCommand(this);
         getCommand("event").setExecutor(new EventCommand(eventManager));
-        getCommand("eventconfig").setExecutor(new EventConfigCommand(this));
+        getCommand("eventconfig").setExecutor(eventConfigCommand);
+        getCommand("eventconfig").setTabCompleter(eventConfigCommand);
     }
 
     private WorldGuardPlugin getWorldGuard() { //im broken i think
         Plugin plugin = getServer().getPluginManager().getPlugin("WorldGuard");
 
-        if (plugin == null || !(plugin instanceof WorldGuardPlugin)) {
+        if (!(plugin instanceof WorldGuardPlugin)) {
             log.severe("WorldGuard not found!");
             return null;
         }
