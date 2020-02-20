@@ -16,6 +16,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.BlockVector;
 import org.bukkit.util.StringUtil;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.*;
 
 public class EventConfigCommand implements CommandExecutor, TabCompleter {
@@ -31,7 +33,7 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
         this.usage = ChatColor.GOLD + "Usage: " + ChatColor.YELLOW;
         this.args0 = new ArrayList<>();
         this.args0.addAll(Arrays.asList(EventManager.getEventNames()));
-        this.args0.add("reload");
+        this.args0.add("save");
         this.args0.add("help");
         this.args0.add("event-world");
         this.args0.add("spawn-location");
@@ -47,73 +49,34 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String s, String[] args) { // perm check @ top
         if (cmd.getName().equalsIgnoreCase("eventconfig") || cmd.getName().equalsIgnoreCase("econfig")) {
+            sender.sendMessage("\n");
             if (args.length == 0) {
-                sender.sendMessage(usage + "/econfig <help|event|reload|setting(event-world|spawn-location)> <setting|value> <value>");
+                sender.sendMessage(usage + "/econfig <help|event|save|setting(event-world|spawn-location)> <setting|value> <value>");
                 return true;
-            } else if (args[0].equalsIgnoreCase("reload")) {
-                plugin.reloadConfig();
-                sender.sendMessage(ChatColor.GREEN + "Event config reloaded");
+            } else if (args[0].equalsIgnoreCase("save")) {
+                plugin.saveConfig();
+                sender.sendMessage(ChatColor.GREEN + "Event config saved");
                 return true;
             } else if (!(sender instanceof Player)) {
                 sender.sendMessage(ChatColor.RED + "You must be a player to execute this command!");
                 return true;
-            }
-            Player player = (Player) sender;
-            switch (args[0].toLowerCase()) {
-                case "help":
-                    help(player);
-                    break;
-                case "event-world":
-                    world(args, player);
-                    break;
-                case "spawn-location":
-                    spawn(args, player);
-                    break;
-                case "sumo":
-                    sumo(args, player);
-                    break;
-                case "brackets":
-                    brackets(args, player);
-                    break;
-                case "koth":
-                    koth(args, player);
-                    break;
-                case "lms":
-                    lms(args, player);
-                    break;
-                case "oitc":
-                    oitc(args, player);
-                    break;
-                case "redrover":
-                    redrover(args, player);
-                    break;
-                case "rod":
-                    rod(args, player);
-                    break;
-                case "spleef":
-                    spleef(args, player);
-                    break;
-                case "tdm":
-                    tdm(args, player);
-                    break;
-                case "tnttag":
-                    tnttag(args, player);
-                    break;
-                case "waterdrop":
-                    waterdrop(args, player);
-                    break;
-                case "woolshuffle":
-                    woolshuffle(args, player);
-                    break;
-                default:
+            } else {
+                // Uses reflection to call event method based on args[0]
+                Player player = (Player) sender;
+                try {
+                    Method method = EventConfigCommand.class.getDeclaredMethod(args[0].toLowerCase().replace("-", ""), String[].class, Player.class);
+                    method.invoke(this, args, player);
+                } catch (NoSuchMethodException e) {
                     StringBuilder eventList = new StringBuilder(ChatColor.YELLOW.toString());
                     for (String event : EventManager.getEventNames()) {
                         eventList.append("\n   - ").append(event);
                     }
                     player.sendMessage(ChatColor.YELLOW + "'" + args[0] + "'" + ChatColor.GOLD
                             + " doesn't exist! Try event-world, spawn-location or an event. \nAll events: " + eventList.toString());
+                } catch (IllegalAccessException | InvocationTargetException e) {
+                    e.printStackTrace();
+                }
             }
-            player.sendMessage("\n");
             return true;
         }
         return false;
@@ -123,28 +86,26 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
     public List<String> onTabComplete(CommandSender sender, Command cmd, String s, String[] args) {
         if (cmd.getName().equalsIgnoreCase("eventconfig") || cmd.getName().equalsIgnoreCase("econfig")) {
             if (sender instanceof Player) {
+                List<String> completions = new ArrayList<>();
                 if (args.length == 1) {
-                    List<String> completions = new ArrayList<>();
                     StringUtil.copyPartialMatches(args[0], args0, completions);
                     Collections.sort(completions);
-                    return completions;
-                } else if (args.length == 2) {
-                    List<String> completions = new ArrayList<>();
+                } else if (!args[0].equals("") && args.length == 2) {
                     StringUtil.copyPartialMatches(args[1], args1.get(args[0]), completions);
                     Collections.sort(completions);
-                    return completions;
                 }
+                return completions;
             }
         }
         return null;
     }
 
-    private void help(Player player) {
-        player.sendMessage(usage + "/econfig <help|event|reload|setting(event-world|spawn-location)> <setting|value> <value>");
+    private void help(String[] args, Player player) {
+        player.sendMessage(usage + "/econfig <help|event|save|setting(event-world|spawn-location)> <setting|value> <value>");
         player.sendMessage(ChatColor.GOLD + "Tutorial video: " + ChatColor.YELLOW + "youtube.com/LINK_TO_VIDEO");
     }
 
-    private void world(String[] args, Player player) {
+    private void eventworld(String[] args, Player player) {
         if (args.length == 1) {
             player.sendMessage(ChatColor.GOLD + "event-world: " + ChatColor.YELLOW + config.getString("event-world"));
             player.sendMessage(usage + "/econfig event-world <string>");
@@ -155,17 +116,9 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
         }
     }
 
-    private void spawn(String[] args, Player player) {
-        String usageMessage = ChatColor.GOLD + "spawn-location: " + ChatColor.YELLOW + config.getString("spawn-location");
-        if (args.length == 1) {
-            player.sendMessage(usageMessage);
-            player.sendMessage(usage + "/econfig spawn-location set");
-        } else if (args[1].equalsIgnoreCase("set")) {
-            config.set("spawn-location", player.getLocation());
-            player.sendMessage(ChatColor.GOLD  + "spawn-location set to " + ChatColor.YELLOW + "your location" + ChatColor.GOLD + "!");
-        } else {
-            player.sendMessage(usageMessage);
-        }
+    private void spawnlocation(String[] args, Player player) {
+        config.set("spawn-location", player.getLocation());
+        player.sendMessage(ChatColor.GOLD + "spawn-location set to " + ChatColor.YELLOW + "your location" + ChatColor.GOLD + "!");
     }
 
     private void sumo(String[] args, Player player) {
@@ -187,12 +140,9 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
                 case "start-location-1":
                 case "start-location-2":
                 case "spec-location":
-                    if (args[2].equalsIgnoreCase("set")) {
-                        ConfigUtils.locToConfig(player.getLocation(), section.getConfigurationSection(args[1]));
-                        player.sendMessage(ChatColor.GOLD + args[1] + " set to " + ChatColor.YELLOW + "your location" + ChatColor.GOLD + "!");
-                    } else {
-                        player.sendMessage(usage + "/econfig sumo " + args[1].toLowerCase() + " set");
-                    }
+                    ConfigUtils.serializeLoc(player.getLocation(), section.getConfigurationSection(args[1]));
+                    player.sendMessage(ChatColor.GOLD + args[1] + " set to " + ChatColor.YELLOW + "your location" + ChatColor.GOLD + "!");
+                    player.sendMessage(usage + "/econfig sumo " + args[1].toLowerCase() + " set");
                     break;
             }
         }
@@ -217,12 +167,9 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
                 case "start-location-1":
                 case "start-location-2":
                 case "spec-location":
-                    if (args[2].equalsIgnoreCase("set")) {
-                        ConfigUtils.locToConfig(player.getLocation(), section.getConfigurationSection(args[1]));
-                        player.sendMessage(ChatColor.GOLD + args[1] + " set to " + ChatColor.YELLOW + "your location" + ChatColor.GOLD + "!");
-                    } else {
-                        player.sendMessage(usage + "/econfig brackets " + args[1].toLowerCase() + " set");
-                    }
+                    ConfigUtils.serializeLoc(player.getLocation(), section.getConfigurationSection(args[1]));
+                    player.sendMessage(ChatColor.GOLD + args[1] + " set to " + ChatColor.YELLOW + "your location" + ChatColor.GOLD + "!");
+                    player.sendMessage(usage + "/econfig brackets " + args[1].toLowerCase() + " set");
                     break;
             }
         }
@@ -257,12 +204,9 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
                 case "start-location-3":
                 case "start-location-4":
                 case "spec-location":
-                    if (args[2].equalsIgnoreCase("set")) {
-                        ConfigUtils.locToConfig(player.getLocation(), section.getConfigurationSection(args[1]));
-                        player.sendMessage(ChatColor.GOLD + args[1] + " set to " + ChatColor.YELLOW + "your location" + ChatColor.GOLD + "!");
-                    } else {
-                        player.sendMessage(usage + "/econfig koth " + args[1].toLowerCase() + " set");
-                    }
+                    ConfigUtils.serializeLoc(player.getLocation(), section.getConfigurationSection(args[1]));
+                    player.sendMessage(ChatColor.GOLD + args[1] + " set to " + ChatColor.YELLOW + "your location" + ChatColor.GOLD + "!");
+                    player.sendMessage(usage + "/econfig koth " + args[1].toLowerCase() + " set");
                     break;
             }
         }
@@ -286,12 +230,9 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
                     break;
                 case "start-location":
                 case "spec-location":
-                    if (args[2].equalsIgnoreCase("set")) {
-                        ConfigUtils.locToConfig(player.getLocation(), section.getConfigurationSection(args[1]));
-                        player.sendMessage(ChatColor.GOLD + args[1] + " set to " + ChatColor.YELLOW + "your location" + ChatColor.GOLD + "!");
-                    } else {
-                        player.sendMessage(usage + "/econfig lms " + args[1].toLowerCase() + " set");
-                    }
+                    ConfigUtils.serializeLoc(player.getLocation(), section.getConfigurationSection(args[1]));
+                    player.sendMessage(ChatColor.GOLD + args[1] + " set to " + ChatColor.YELLOW + "your location" + ChatColor.GOLD + "!");
+                    player.sendMessage(usage + "/econfig lms " + args[1].toLowerCase() + " set");
                     break;
             }
         }
@@ -330,16 +271,14 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
                 case "start-location-7":
                 case "start-location-8":
                 case "spec-location":
-                    if (args[2].equalsIgnoreCase("set")) {
-                        ConfigUtils.locToConfig(player.getLocation(), section.getConfigurationSection(args[1]));
-                        player.sendMessage(ChatColor.GOLD + args[1] + " set to " + ChatColor.YELLOW + "your location" + ChatColor.GOLD + "!");
-                    } else {
-                        player.sendMessage(usage + "/econfig oitc " + args[1].toLowerCase() + " set");
-                    }
+                    ConfigUtils.serializeLoc(player.getLocation(), section.getConfigurationSection(args[1]));
+                    player.sendMessage(ChatColor.GOLD + args[1] + " set to " + ChatColor.YELLOW + "your location" + ChatColor.GOLD + "!");
+                    player.sendMessage(usage + "/econfig oitc " + args[1].toLowerCase() + " set");
                     break;
             }
         }
     }
+
     private void redrover(String[] args, Player player) {
         ConfigurationSection section = config.getConfigurationSection("events.redrover");
         if (args.length == 1) {
@@ -367,12 +306,9 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
                     break;
                 case "start-location":
                 case "spec-location":
-                    if (args[2].equalsIgnoreCase("set")) {
-                        ConfigUtils.locToConfig(player.getLocation(), section.getConfigurationSection(args[1]));
-                        player.sendMessage(ChatColor.GOLD + args[1] + " set to " + ChatColor.YELLOW + "your location" + ChatColor.GOLD + "!");
-                    } else {
-                        player.sendMessage(usage + "/econfig redrover " + args[1].toLowerCase() + " set");
-                    }
+                    ConfigUtils.serializeLoc(player.getLocation(), section.getConfigurationSection(args[1]));
+                    player.sendMessage(ChatColor.GOLD + args[1] + " set to " + ChatColor.YELLOW + "your location" + ChatColor.GOLD + "!");
+                    player.sendMessage(usage + "/econfig redrover " + args[1].toLowerCase() + " set");
                     break;
             }
         }
@@ -396,12 +332,9 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
                     break;
                 case "start-location":
                 case "spec-location":
-                    if (args[2].equalsIgnoreCase("set")) {
-                        ConfigUtils.locToConfig(player.getLocation(), section.getConfigurationSection(args[1]));
-                        player.sendMessage(ChatColor.GOLD + args[1] + " set to " + ChatColor.YELLOW + "your location" + ChatColor.GOLD + "!");
-                    } else {
-                        player.sendMessage(usage + "/econfig rod " + args[1].toLowerCase() + " set");
-                    }
+                    ConfigUtils.serializeLoc(player.getLocation(), section.getConfigurationSection(args[1]));
+                    player.sendMessage(ChatColor.GOLD + args[1] + " set to " + ChatColor.YELLOW + "your location" + ChatColor.GOLD + "!");
+                    player.sendMessage(usage + "/econfig rod " + args[1].toLowerCase() + " set");
                     break;
             }
         }
@@ -433,24 +366,16 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
                     break;
                 case "snow-position-1":
                 case "snow-position-2":
-                    if (args[2].equalsIgnoreCase("set")) {
-                        Location loc = player.getLocation();
-                        loc.setY(loc.getBlockY() - 1);
-                        ConfigUtils.blockVectorToConfig(new BlockVector(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()), section.getConfigurationSection(args[1]));
-                        player.sendMessage(ChatColor.GOLD + args[1] + " set to " + ChatColor.YELLOW + "the block under you" + ChatColor.GOLD + "!");
-                    } else {
-                        player.sendMessage(usage + "/econfig spleef " + args[1].toLowerCase() + " set (while standing on block)");
-                    }
+                    Location loc = player.getLocation();
+                    loc.setY(loc.getBlockY() - 1);
+                    ConfigUtils.blockVectorToConfig(new BlockVector(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()), section.getConfigurationSection(args[1]));
+                    player.sendMessage(ChatColor.GOLD + args[1] + " set to " + ChatColor.YELLOW + "the block under you" + ChatColor.GOLD + "!");
                     break;
                 case "start-location-1":
                 case "start-location-2":
                 case "spec-location":
-                    if (args[2].equalsIgnoreCase("set")) {
-                        ConfigUtils.locToConfig(player.getLocation(), section.getConfigurationSection(args[1]));
-                        player.sendMessage(ChatColor.GOLD + args[1] + " set to " + ChatColor.YELLOW + "your location" + ChatColor.GOLD + "!");
-                    } else {
-                        player.sendMessage(usage + "/econfig spleef " + args[1].toLowerCase() + " set");
-                    }
+                    ConfigUtils.serializeLoc(player.getLocation(), section.getConfigurationSection(args[1]));
+                    player.sendMessage(ChatColor.GOLD + args[1] + " set to " + ChatColor.YELLOW + "your location" + ChatColor.GOLD + "!");
                     break;
             }
         }
@@ -475,12 +400,9 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
                 case "blue-start-location":
                 case "red-start-location":
                 case "spec-location":
-                    if (args[2].equalsIgnoreCase("set")) {
-                        ConfigUtils.locToConfig(player.getLocation(), section.getConfigurationSection(args[1]));
-                        player.sendMessage(ChatColor.GOLD + args[1] + " set to " + ChatColor.YELLOW + "your location" + ChatColor.GOLD + "!");
-                    } else {
-                        player.sendMessage(usage + "/econfig tdm " + args[1].toLowerCase() + " set");
-                    }
+                    ConfigUtils.serializeLoc(player.getLocation(), section.getConfigurationSection(args[1]));
+                    player.sendMessage(ChatColor.GOLD + args[1] + " set to " + ChatColor.YELLOW + "your location" + ChatColor.GOLD + "!");
+                    player.sendMessage(usage + "/econfig tdm " + args[1].toLowerCase() + " set");
                     break;
             }
         }
@@ -504,12 +426,9 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
                     break;
                 case "start-location":
                 case "spec-location":
-                    if (args[2].equalsIgnoreCase("set")) {
-                        ConfigUtils.locToConfig(player.getLocation(), section.getConfigurationSection(args[1]));
-                        player.sendMessage(ChatColor.GOLD + args[1] + " set to " + ChatColor.YELLOW + "your location" + ChatColor.GOLD + "!");
-                    } else {
-                        player.sendMessage(usage + "/econfig tnttag " + args[1].toLowerCase() + " set");
-                    }
+                    ConfigUtils.serializeLoc(player.getLocation(), section.getConfigurationSection(args[1]));
+                    player.sendMessage(ChatColor.GOLD + args[1] + " set to " + ChatColor.YELLOW + "your location" + ChatColor.GOLD + "!");
+                    player.sendMessage(usage + "/econfig tnttag " + args[1].toLowerCase() + " set");
                     break;
             }
         }
@@ -533,12 +452,9 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
                     break;
                 case "start-location":
                 case "spec-location":
-                    if (args[2].equalsIgnoreCase("set")) {
-                        ConfigUtils.locToConfig(player.getLocation(), section.getConfigurationSection(args[1]));
-                        player.sendMessage(ChatColor.GOLD + args[1] + " set to " + ChatColor.YELLOW + "your location" + ChatColor.GOLD + "!");
-                    } else {
-                        player.sendMessage(usage + "/econfig waterdrop " + args[1].toLowerCase() + " set");
-                    }
+                    ConfigUtils.serializeLoc(player.getLocation(), section.getConfigurationSection(args[1]));
+                    player.sendMessage(ChatColor.GOLD + args[1] + " set to " + ChatColor.YELLOW + "your location" + ChatColor.GOLD + "!");
+                    player.sendMessage(usage + "/econfig waterdrop " + args[1].toLowerCase() + " set");
                     break;
             }
         }
@@ -562,12 +478,9 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
                     break;
                 case "start-location":
                 case "spec-location":
-                    if (args[2].equalsIgnoreCase("set")) {
-                        ConfigUtils.locToConfig(player.getLocation(), section.getConfigurationSection(args[1]));
-                        player.sendMessage(ChatColor.GOLD + args[1] + " set to " + ChatColor.YELLOW + "your location" + ChatColor.GOLD + "!");
-                    } else {
-                        player.sendMessage(usage + "/econfig woolshuffle " + args[1].toLowerCase() + " set");
-                    }
+                    ConfigUtils.serializeLoc(player.getLocation(), section.getConfigurationSection(args[1]));
+                    player.sendMessage(ChatColor.GOLD + args[1] + " set to " + ChatColor.YELLOW + "your location" + ChatColor.GOLD + "!");
+                    player.sendMessage(usage + "/econfig woolshuffle " + args[1].toLowerCase() + " set");
                     break;
             }
         }

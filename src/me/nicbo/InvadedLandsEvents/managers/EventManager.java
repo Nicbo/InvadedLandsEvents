@@ -46,14 +46,14 @@ public final class EventManager {
         events.put(eventNames[11], new Sumo3v3(plugin));
     }
 
-    public boolean hostEvent(String name, String host) {
+    public EventMessage hostEvent(String name, String host) {
         // if sumo check
-        if (events.containsKey(name) && events.get(name).isEnabled()) {
+        if (!eventRunning && events.containsKey(name) && events.get(name).isEnabled()) {
             currentEvent = events.get(name);
             startCountDown(host);
-            return true;
+            return null;
         }
-        return false;
+        return null;
     }
 
     private void startCountDown(String host) {
@@ -78,25 +78,26 @@ public final class EventManager {
         }.runTaskTimerAsynchronously(plugin, 0, 20);
     }
 
-    public EventStatus joinEvent(Player player) {
+    public EventMessage joinEvent(Player player) {
         if (currentEvent == null) {
-            return EventStatus.NONE;
+            return EventMessage.NONE;
         } else if (currentEvent.isStarted()) {
-            return EventStatus.STARTED;
+            return EventMessage.STARTED;
         } else if (currentEvent.containsPlayer(player)) {
-            return EventStatus.IN_EVENT;
+            return EventMessage.IN_EVENT;
         }
-        Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&a&l" + player.getName() + " has joined the event."));
+
         currentEvent.joinEvent(player);
-        return EventStatus.JOIN;
+        return null;
     }
 
-    public EventStatus specEvent(Player player) {
-        return EventStatus.NONE; // same as above
+    public EventMessage specEvent(Player player) {
+        return EventMessage.NONE; // same as above
     }
 
-    public EventStatus leaveEvent(Player player) {
-        return EventStatus.NONE; // ||
+    public EventMessage leaveEvent(Player player) {
+        currentEvent.leaveEvent(player);
+        return EventMessage.NONE; // ||
     }
 
     public InvadedEvent getCurrentEvent() {
@@ -113,5 +114,30 @@ public final class EventManager {
 
     public static void setEventRunning(boolean running) {
         eventRunning = running;
+    }
+
+    public enum EventMessage {
+        NONE(ChatColor.RED + "There currently isn't any event active right now."),
+        STARTED(ChatColor.RED + "You cannot join the event as it has already started!"),
+        ENDING(ChatColor.RED + "The event is ending"),
+        IN_EVENT(ChatColor.RED + "You're already in the event."),
+        DOES_NOT_EXIST(ChatColor.RED + "There is no event named " + ChatColor.YELLOW + "{event}" + ChatColor.RED + "."),
+        NOT_ENABLED(ChatColor.RED + "That event is not enabled!"),
+        NO_PERMISSION(ChatColor.RED + "I'm sorry, but you do not have permission to perform this command.");
+
+        final String description;
+
+        EventMessage(String description) {
+            this.description = description;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+    /*
+    TODO:
+        - Make descriptions editable based on config (later version)
+     */
     }
 }

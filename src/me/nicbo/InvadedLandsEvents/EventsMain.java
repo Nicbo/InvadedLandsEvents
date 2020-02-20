@@ -6,6 +6,8 @@ import me.nicbo.InvadedLandsEvents.commands.EventConfigCommand;
 import me.nicbo.InvadedLandsEvents.listeners.GeneralEventListener;
 import me.nicbo.InvadedLandsEvents.managers.EventManager;
 import me.nicbo.InvadedLandsEvents.utils.ConfigUtils;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -17,13 +19,13 @@ public class EventsMain extends JavaPlugin {
     private WorldGuardPlugin worldGuardPlugin;
 
     @Override
-    public void onEnable() { // MAKE EVENT WORLD IF DOESNT EXIST
+    public void onEnable() {
         worldGuardPlugin = getWorldGuard();
         saveDefaultConfig();
 
         ConfigUtils.setEventWorld(getConfig().getString("event-world"));
         try {
-            ConfigUtils.setSpawnLoc(getConfig().getConfigurationSection("spawn-loc"));
+            ConfigUtils.setSpawnLoc((Location) getConfig().get("spawn-location"));
         } catch (ClassCastException cce) {
             log.info("Spawn location not configured yet!");
         }

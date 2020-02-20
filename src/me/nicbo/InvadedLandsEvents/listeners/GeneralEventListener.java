@@ -33,11 +33,16 @@ public class GeneralEventListener implements Listener {
 
     @EventHandler
     public void interactNetherStar(PlayerInteractEvent event) {
-        ItemStack item = event.getItem();
-        if (item == null || !item.hasItemMeta()) return;
+        if (EventManager.isEventRunning() && eventManager.getCurrentEvent().containsPlayer(event.getPlayer())) {
+            ItemStack item = event.getItem();
+            if (item == null || !item.hasItemMeta()) return;
+            System.out.println("1st check");
 
-        if (item.getItemMeta().getDisplayName().contains("Leave Event") && EventManager.isEventRunning() &&  eventManager.getCurrentEvent().containsPlayer(event.getPlayer())) {
-            eventManager.leaveEvent(event.getPlayer());
+            Player player = event.getPlayer();
+            if (item.getItemMeta().getDisplayName().contains("Leave Event") && EventManager.isEventRunning() && eventManager.getCurrentEvent().containsPlayer(player)) {
+                System.out.println("hhhh");
+                eventManager.leaveEvent(player);
+            }
         }
     }
 }

@@ -10,13 +10,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
 public abstract class InvadedEvent implements Listener {
+
     protected EventsMain plugin;
     protected Logger log;
     private String name;
@@ -26,7 +26,6 @@ public abstract class InvadedEvent implements Listener {
     protected ConfigurationSection eventConfig;
     protected List<Player> players;
     protected List<Player> spectators;
-    protected BukkitRunnable playerCheck;
 
     protected ItemStack star;
 
@@ -39,23 +38,13 @@ public abstract class InvadedEvent implements Listener {
         this.players = new ArrayList<>();
         this.spectators = new ArrayList<>();
 
-        this.playerCheck = new BukkitRunnable() {
-            @Override
-            public void run() {
-                if (players.size() < 2) {
-                    playerWon(players.get(0));
-                    this.cancel();
-                }
-            }
-        };
-
         this.star = new ItemStack(Material.NETHER_STAR);
         ItemMeta im = star.getItemMeta();
         im.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&c&lLeave Event"));
         this.star.setItemMeta(im);
 
         Bukkit.getPluginManager().registerEvents(this, plugin);
-        if (enabled)
+        if (this.enabled)
             init(plugin);
         else
             log.info(name + " not enabled!");
@@ -82,7 +71,7 @@ public abstract class InvadedEvent implements Listener {
 
     public void joinEvent(Player player) {
         players.add(player);
-        player.teleport(ConfigUtils.locFromConfig(eventConfig.getConfigurationSection("spec-location")));
+        player.teleport(ConfigUtils.deserializeLoc(eventConfig.getConfigurationSection("spec-location")));
         player.getInventory().setItem(8, star);
         //add to team and scoreboard
     }
@@ -97,7 +86,7 @@ public abstract class InvadedEvent implements Listener {
 
     public void specEvent(Player player) {
         spectators.add(player);
-        player.teleport(ConfigUtils.locFromConfig(eventConfig.getConfigurationSection("spec-location")));
+        player.teleport(ConfigUtils.deserializeLoc(eventConfig.getConfigurationSection("spec-location")));
         player.getInventory().setItem(8, star);
     }
 
@@ -108,8 +97,10 @@ public abstract class InvadedEvent implements Listener {
 
     protected void playerWon(Player player) {
         for (int i = 0; i < 4; i++) {
-            Bukkit.broadcastMessage(ChatColor.GOLD + player.getName() + ChatColor.YELLOW + " won the " + ChatColor.GOLD + name + ChatColor.YELLOW + " event!");
+            Bukkit.broadcastMessage(ChatColor.GOLD + (player == null ? "No one" : player.getName()) + ChatColor.YELLOW + " won the " + ChatColor.GOLD + name + ChatColor.YELLOW + " event!");
+            // run command
         }
+
         plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
             @Override
             public void run() {
@@ -128,6 +119,10 @@ public abstract class InvadedEvent implements Listener {
             player.getInventory().clear();
             player.teleport(ConfigUtils.getSpawnLoc());
         }
+    }
+
+    protected boolean dontRunEvent(Player player) {
+        return !started || !players.contains(player);
     }
 
     /*

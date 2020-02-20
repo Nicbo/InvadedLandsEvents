@@ -16,7 +16,7 @@ public final class ConfigUtils {
     private static Location spawnLoc;
     private ConfigUtils() {}
 
-    public static void locToConfig(Location loc, ConfigurationSection section) {
+    public static void serializeLoc(Location loc, ConfigurationSection section) {
         section.set("x", loc.getX());
         section.set("y", loc.getY());
         section.set("z", loc.getZ());
@@ -24,7 +24,7 @@ public final class ConfigUtils {
         section.set("pitch", loc.getPitch());
     }
 
-    public static Location locFromConfig(ConfigurationSection section) {
+    public static Location deserializeLoc(ConfigurationSection section) {
         double x = section.getDouble("x");
         double y = section.getDouble("y");
         double z = section.getDouble("z");
@@ -58,8 +58,8 @@ public final class ConfigUtils {
         return spawnLoc;
     }
 
-    public static void setSpawnLoc(ConfigurationSection loc) {
-        spawnLoc = (Location) loc;
+    public static void setSpawnLoc(Location loc) {
+        spawnLoc = loc;
     }
 
     public static String[] configSectionToMsgs(ConfigurationSection section) { // bad code but it works ¯\_(ツ)_/¯
