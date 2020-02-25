@@ -86,13 +86,19 @@ public final class EventManager {
         } else if (currentEvent.containsPlayer(player)) {
             return EventMessage.IN_EVENT;
         }
-
         currentEvent.joinEvent(player);
         return null;
     }
 
     public EventMessage specEvent(Player player) {
-        return EventMessage.NONE; // same as above
+        if (currentEvent == null) {
+            return EventMessage.NONE;
+        } else if (currentEvent.containsPlayer(player)) {
+            return EventMessage.IN_EVENT;
+        }
+
+        currentEvent.leaveEvent(player);
+        return null;
     }
 
     public EventMessage leaveEvent(Player player) {
@@ -119,7 +125,6 @@ public final class EventManager {
     public enum EventMessage {
         NONE(ChatColor.RED + "There currently isn't any event active right now."),
         STARTED(ChatColor.RED + "You cannot join the event as it has already started!"),
-        ENDING(ChatColor.RED + "The event is ending"),
         IN_EVENT(ChatColor.RED + "You're already in the event."),
         DOES_NOT_EXIST(ChatColor.RED + "There is no event named " + ChatColor.YELLOW + "{event}" + ChatColor.RED + "."),
         NOT_ENABLED(ChatColor.RED + "That event is not enabled!"),
