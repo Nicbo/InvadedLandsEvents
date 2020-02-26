@@ -17,6 +17,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.BlockVector;
 import org.bukkit.util.Vector;
@@ -140,9 +141,11 @@ public class Spleef extends InvadedEvent {
 
     @EventHandler
     public void snowBallHitSnow(ProjectileHitEvent event) {
-        if (dontRunEvent((Player) event.getEntity().getShooter())) return;
+        ProjectileSource shooter = event.getEntity().getShooter();
+        if (!(shooter instanceof Player) || dontRunEvent((Player) shooter)) return;
 
         Entity entity = event.getEntity();
+
         if (entity instanceof Snowball) {
             Location loc = entity.getLocation();
             Vector vec = entity.getVelocity();
