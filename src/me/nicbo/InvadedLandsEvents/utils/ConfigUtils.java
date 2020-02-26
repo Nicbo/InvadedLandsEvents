@@ -14,6 +14,8 @@ import java.util.Map;
 public final class ConfigUtils {
     private static World eventWorld;
     private static Location spawnLoc;
+    private static String winCommand;
+
     private ConfigUtils() {}
 
     public static void serializeLoc(Location loc, ConfigurationSection section) {
@@ -60,6 +62,14 @@ public final class ConfigUtils {
 
     public static void setSpawnLoc(Location loc) {
         spawnLoc = loc;
+    }
+
+    public static String getWinCommand() {
+        return winCommand;
+    }
+
+    public static void setWinCommand(String command) {
+        winCommand = command;
     }
 
     public static String[] configSectionToMsgs(ConfigurationSection section) { // bad code but it works ¯\_(ツ)_/¯

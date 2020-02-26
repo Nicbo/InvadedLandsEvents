@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,13 +20,17 @@ public abstract class InvadedEvent implements Listener {
 
     protected EventsMain plugin;
     protected Logger log;
+
     private String name;
+    protected boolean countdown;
     protected boolean started;
     private boolean enabled;
 
     protected ConfigurationSection eventConfig;
     protected List<Player> players;
     protected List<Player> spectators;
+
+    protected BukkitRunnable playerCheck;
 
     protected ItemStack star;
 
@@ -65,6 +70,19 @@ public abstract class InvadedEvent implements Listener {
         return enabled;
     }
 
+    protected void initPlayerCheck() {
+        this.playerCheck = new BukkitRunnable() {
+            @Override
+            public void run() {
+                int playerCount = players.size();
+                if (playerCount < 2) {
+                    playerWon(playerCount == 1 ? players.get(0) : null);
+                    this.cancel();
+                }
+            }
+        };
+    }
+
     public boolean containsPlayer(Player player) {
         return players.contains(player) || spectators.contains(player);
     }
@@ -98,7 +116,6 @@ public abstract class InvadedEvent implements Listener {
     protected void playerWon(Player player) {
         for (int i = 0; i < 4; i++) {
             Bukkit.broadcastMessage(ChatColor.GOLD + (player == null ? "No one" : player.getName()) + ChatColor.YELLOW + " won the " + ChatColor.GOLD + name + ChatColor.YELLOW + " event!");
-            // run command
         }
 
         plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
@@ -107,6 +124,9 @@ public abstract class InvadedEvent implements Listener {
                 stop();
             }
         }, 100);
+
+        if (player != null)
+            plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), ConfigUtils.getWinCommand().replace("{winner}", player.getName()));
     }
 
     protected void spawnTpPlayers() {
@@ -115,14 +135,32 @@ public abstract class InvadedEvent implements Listener {
             player.teleport(ConfigUtils.getSpawnLoc());
         }
 
-        for (Player player : spectators) {
-            player.getInventory().clear();
-            player.teleport(ConfigUtils.getSpawnLoc());
+        for (Player spectator : spectators) {
+            spectator.getInventory().clear();
+            spectator.teleport(ConfigUtils.getSpawnLoc());
         }
     }
 
     protected boolean dontRunEvent(Player player) {
         return !started || !players.contains(player);
+    }
+
+    protected void startMatchCountdown(List<Player> players) {
+        countdown = true;
+        new BukkitRunnable() {
+            private int timer = 5;
+
+            @Override
+            public void run() {
+                if (timer == 1) {
+                    countdown = false;
+                    this.cancel();
+                }
+                players.forEach(player -> player.sendMessage(ChatColor.YELLOW + "Starting in " + ChatColor.GOLD + timer--));
+                // CHECK IF INVADED BROADCASTS TO ALL OR JUST PLAYER
+            }
+
+        }.runTaskTimerAsynchronously(plugin, 0, 20);
     }
 
     /*

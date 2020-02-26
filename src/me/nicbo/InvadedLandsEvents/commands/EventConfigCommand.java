@@ -36,6 +36,7 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
         this.args0.add("save");
         this.args0.add("help");
         this.args0.add("event-world");
+        this.args0.add("win-command");
         this.args0.add("spawn-location");
 
         this.args1 = new HashMap<>();
@@ -72,7 +73,7 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
                         eventList.append("\n   - ").append(event);
                     }
                     player.sendMessage(ChatColor.YELLOW + "'" + args[0] + "'" + ChatColor.GOLD
-                            + " doesn't exist! Try event-world, spawn-location or an event. \nAll events: " + eventList.toString());
+                            + " doesn't exist! Try event-world, win-command, spawn-location or an event. \nAll events: " + eventList.toString());
                 } catch (IllegalAccessException | InvocationTargetException e) {
                     e.printStackTrace();
                 }
@@ -113,6 +114,22 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
             config.set("event-world", args[1]);
             player.sendMessage(Bukkit.getWorld(args[1]) == null ? ChatColor.RED + "Warning: Could not find world " + ChatColor.YELLOW + "'" + args[1] + "'" + ChatColor.RED + "!"
                     : ChatColor.GOLD + "event-world set to " + ChatColor.YELLOW + "'" + args[1] + "'" + ChatColor.GOLD + "!");
+        }
+    }
+
+    private void wincommand(String[] args, Player player) {
+        if (args.length == 1) {
+            player.sendMessage(ChatColor.GOLD + "win-command: " + ChatColor.YELLOW + config.getString("win-command"));
+            player.sendMessage(usage + "/econfig win-command <string[]>");
+        } else {
+            List<String> command = new ArrayList<>();
+
+            for (String arg : args) {
+                command.add(arg + " ");
+            }
+
+            config.set("event-world", command.toString());
+            player.sendMessage(ChatColor.GOLD + "win-command set to " + ChatColor.YELLOW + "'" + command.toString() + "'" + ChatColor.GOLD + "!");
         }
     }
 

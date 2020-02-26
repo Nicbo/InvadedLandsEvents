@@ -24,11 +24,8 @@ public class EventsMain extends JavaPlugin {
         saveDefaultConfig();
 
         ConfigUtils.setEventWorld(getConfig().getString("event-world"));
-        try {
-            ConfigUtils.setSpawnLoc((Location) getConfig().get("spawn-location"));
-        } catch (ClassCastException cce) {
-            log.info("Spawn location not configured yet!");
-        }
+        ConfigUtils.setWinCommand(getConfig().getString("win-command"));
+        ConfigUtils.setSpawnLoc((Location) getConfig().get("spawn-location"));
 
         eventManager = new EventManager(this);
         registerCommands();

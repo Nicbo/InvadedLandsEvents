@@ -5,6 +5,7 @@ import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import me.nicbo.InvadedLandsEvents.EventsMain;
 import me.nicbo.InvadedLandsEvents.managers.EventManager;
 import me.nicbo.InvadedLandsEvents.utils.ConfigUtils;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -25,7 +26,6 @@ import java.util.List;
 
 public class Spleef extends InvadedEvent {
     private BukkitRunnable heightCheck;
-    private BukkitRunnable playerCheck;
     private ProtectedRegion region;
     private int minY;
 
@@ -36,7 +36,8 @@ public class Spleef extends InvadedEvent {
     @Override
     public void init(EventsMain plugin) {
         this.heightCheck = new BukkitRunnable() {
-            List<Player> toLose = new ArrayList<>();
+            private List<Player> toLose = new ArrayList<>();
+
             @Override
             public void run() {
                 for (Player player : players) {
@@ -49,16 +50,7 @@ public class Spleef extends InvadedEvent {
             }
         };
 
-        this.playerCheck = new BukkitRunnable() {
-            @Override
-            public void run() {
-                int playerCount = players.size();
-                if (playerCount < 2) {
-                    playerWon(playerCount == 1 ? players.get(0) : null);
-                    this.cancel();
-                }
-            }
-        };
+        initPlayerCheck();
 
         RegionManager regionManager = plugin.getWorldGuardPlugin().getRegionManager(ConfigUtils.getEventWorld());
         String regionName = eventConfig.getString("region");
@@ -79,6 +71,7 @@ public class Spleef extends InvadedEvent {
         started = true;
         tpPlayers();
         players.forEach(player -> player.getInventory().setItem(0, new ItemStack(Material.DIAMOND_SPADE, 1)));
+        startMatchCountdown(players);
         heightCheck.runTaskTimerAsynchronously(plugin, 0, 1);
         playerCheck.runTaskTimerAsynchronously(plugin, 0, 1);
     }
@@ -133,6 +126,11 @@ public class Spleef extends InvadedEvent {
     @EventHandler
     public void snowBreak(BlockBreakEvent event) {
         if (dontRunEvent(event.getPlayer())) return;
+
+        if (countdown) {
+            event.getPlayer().sendMessage(ChatColor.RED + "You can't break that block right now!");
+            event.setCancelled(true);
+        }
 
         Block block = event.getBlock();
         if (block.getType() == Material.SNOW_BLOCK) {
