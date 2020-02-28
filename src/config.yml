@@ -1,6 +1,6 @@
 # Don't touch me unless you know exactly what you are doing
 # All of this can be edited in game using commands
-# Command placeholders: {winner-name}
+# Command placeholders: {winner}
 
 event-world: event
 win-command: msg {winner} you win
