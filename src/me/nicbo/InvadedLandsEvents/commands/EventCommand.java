@@ -39,16 +39,14 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                 switch (args[0].toLowerCase()) {
                     case "j":
                     case "join": {
-                        EventManager.EventMessage msg = eventManager.joinEvent(player);
-                        if (msg != null)
-                            player.sendMessage(msg.getDescription());
+                        EventManager.EventMessage joinMsg = eventManager.joinEvent(player);
+                        if (joinMsg != null)
+                            player.sendMessage(joinMsg.getDescription());
                         break;
                     }
                     case "l":
-                    case "leave": { // not done get msg from seperate method?
-                        EventManager.EventMessage msg = eventManager.leaveEvent(player);
-                    }
-
+                    case "leave": // not done get msg from seperate method?
+                        EventManager.EventMessage leaveMsg = eventManager.leaveEvent(player);
                 }
             }
         }

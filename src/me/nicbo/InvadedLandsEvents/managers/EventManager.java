@@ -21,7 +21,6 @@ public final class EventManager {
         };
     private HashMap<String, InvadedEvent> events;
     private InvadedEvent currentEvent;
-    private static boolean eventRunning;
 
     public EventManager(EventsMain plugin) {
         this.plugin = plugin;
@@ -47,17 +46,19 @@ public final class EventManager {
     }
 
     public EventMessage hostEvent(String name, String host) {
-        // if sumo check
-        if (!eventRunning && events.containsKey(name) && events.get(name).isEnabled()) {
-            currentEvent = events.get(name);
-            startCountDown(host);
-            return null;
+        if (currentEvent != null) {
+            return EventMessage.HOST_STARTED;
+        } else if (!events.containsKey(name)) {
+            return EventMessage.DOES_NOT_EXIST;
+        } else if (!events.get(name).isEnabled()) {
+            return EventMessage.NOT_ENABLED;
         }
+        currentEvent = events.get(name);
+        startCountDown(host);
         return null;
     }
 
     private void startCountDown(String host) {
-        eventRunning = true;
         currentEvent.init(plugin);
         String name = currentEvent.getName();
 
@@ -69,6 +70,7 @@ public final class EventManager {
                 if (time == 60 || time == 45 || time == 30 || time == 15 || time <= 5 && time >= 1) {
                     Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&c&l"+ host + " is hosting a " + name + " event!"));
                     Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&c&lStarting in " + time + " seconds " + "&a&l[Click to Join]"));
+                    // Add Click Event text
                 } else if (time == 0) {
                     currentEvent.start();
                     this.cancel();
@@ -90,6 +92,16 @@ public final class EventManager {
         return null;
     }
 
+    public EventMessage leaveEvent(Player player) {
+        if (currentEvent == null) {
+            return EventMessage.NONE;
+        } else if (!currentEvent.containsPlayer(player)) {
+            return EventMessage.NOT_IN_EVENT;
+        }
+        currentEvent.leaveEvent(player);
+        return EventMessage.NONE;
+    }
+
     public EventMessage specEvent(Player player) {
         if (currentEvent == null) {
             return EventMessage.NONE;
@@ -101,33 +113,26 @@ public final class EventManager {
         return null;
     }
 
-    public EventMessage leaveEvent(Player player) {
-        currentEvent.leaveEvent(player);
-        return EventMessage.NONE; // ||
-    }
-
     public InvadedEvent getCurrentEvent() {
         return currentEvent;
+    }
+
+    public void setCurrentEvent(InvadedEvent event) {
+        this.currentEvent = event;
     }
     
     public static String[] getEventNames() {
         return eventNames;   
     }
 
-    public static boolean isEventRunning() {
-        return eventRunning;
-    }
-
-    public static void setEventRunning(boolean running) {
-        eventRunning = running;
-    }
-
     public enum EventMessage {
         NONE(ChatColor.RED + "There currently isn't any event active right now."),
         STARTED(ChatColor.RED + "You cannot join the event as it has already started!"),
+        HOST_STARTED(ChatColor.RED + "You cannot host an event as one is already in progress."),
         IN_EVENT(ChatColor.RED + "You're already in the event."),
         DOES_NOT_EXIST(ChatColor.RED + "There is no event named " + ChatColor.YELLOW + "{event}" + ChatColor.RED + "."),
         NOT_ENABLED(ChatColor.RED + "That event is not enabled!"),
+        NOT_IN_EVENT(ChatColor.RED + "You aren't in an event!"),
         NO_PERMISSION(ChatColor.RED + "I'm sorry, but you do not have permission to perform this command.");
 
         final String description;
