@@ -36,11 +36,11 @@ public class GeneralEventListener implements Listener {
         if (EventManager.isEventRunning() && eventManager.getCurrentEvent().containsPlayer(event.getPlayer())) {
             ItemStack item = event.getItem();
             if (item == null || !item.hasItemMeta()) return;
-            System.out.println("1st check");
+            System.out.println("1st check"); // Remove when plugin is stable
 
             Player player = event.getPlayer();
             if (item.getItemMeta().getDisplayName().contains("Leave Event") && EventManager.isEventRunning() && eventManager.getCurrentEvent().containsPlayer(player)) {
-                System.out.println("hhhh");
+                System.out.println("hhhh"); // Remove when plugin is stable
                 eventManager.leaveEvent(player);
             }
         }
