@@ -1,8 +1,6 @@
 package me.nicbo.InvadedLandsEvents.commands;
 
 import me.nicbo.InvadedLandsEvents.managers.EventManager;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -45,7 +43,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                         break;
                     }
                     case "l":
-                    case "leave": // not done get msg from seperate method?
+                    case "leave":
                         EventManager.EventMessage leaveMsg = eventManager.leaveEvent(player);
                 }
             }

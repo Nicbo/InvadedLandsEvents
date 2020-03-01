@@ -2,10 +2,9 @@ package me.nicbo.InvadedLandsEvents.events;
 
 import me.nicbo.InvadedLandsEvents.EventsMain;
 import me.nicbo.InvadedLandsEvents.utils.ConfigUtils;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
@@ -20,6 +19,11 @@ public abstract class InvadedEvent implements Listener {
 
     protected EventsMain plugin;
     protected Logger log;
+
+    protected Location spawnLoc;
+    protected Location specLoc;
+    protected World world;
+    protected String winCommand;
 
     private String name;
     protected boolean countdown;
@@ -38,7 +42,14 @@ public abstract class InvadedEvent implements Listener {
         this.plugin = plugin;
         this.log = plugin.getLogger();
         this.name = name;
-        this.eventConfig = plugin.getConfig().getConfigurationSection("events." + configName);
+
+        FileConfiguration config = this.plugin.getConfig();
+        this.eventConfig = config.getConfigurationSection("events." + configName);
+        this.world = Bukkit.getWorld(config.getString("event-world"));
+        this.spawnLoc = (Location) config.get("spawn-location");
+        this.specLoc = ConfigUtils.deserializeLoc(this.eventConfig.getConfigurationSection("spec-location"), this.world);
+        this.winCommand = config.getString("win-command");
+
         this.enabled = eventConfig.getBoolean("enabled");
         this.players = new ArrayList<>();
         this.spectators = new ArrayList<>();
@@ -89,7 +100,7 @@ public abstract class InvadedEvent implements Listener {
 
     public void joinEvent(Player player) {
         players.add(player);
-        player.teleport(ConfigUtils.deserializeLoc(eventConfig.getConfigurationSection("spec-location")));
+        player.teleport(specLoc);
         player.getInventory().setItem(8, star);
         //add to team and scoreboard
     }
@@ -98,13 +109,13 @@ public abstract class InvadedEvent implements Listener {
         players.remove(player);
         spectators.remove(player);
         player.getInventory().clear();
-        player.teleport(ConfigUtils.getSpawnLoc());
+        player.teleport(spawnLoc);
         //remove from team and scoreboard
     }
 
     public void specEvent(Player player) {
         spectators.add(player);
-        player.teleport(ConfigUtils.deserializeLoc(eventConfig.getConfigurationSection("spec-location")));
+        player.teleport(specLoc);
         player.getInventory().setItem(8, star);
     }
 
@@ -126,18 +137,18 @@ public abstract class InvadedEvent implements Listener {
         }, 100);
 
         if (player != null)
-            plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), ConfigUtils.getWinCommand().replace("{winner}", player.getName()));
+            plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), winCommand.replace("{winner}", player.getName()));
     }
 
     protected void spawnTpPlayers() {
         for (Player player : players) {
             player.getInventory().clear();
-            player.teleport(ConfigUtils.getSpawnLoc());
+            player.teleport(spawnLoc);
         }
 
         for (Player spectator : spectators) {
             spectator.getInventory().clear();
-            spectator.teleport(ConfigUtils.getSpawnLoc());
+            spectator.teleport(spawnLoc);
         }
     }
 

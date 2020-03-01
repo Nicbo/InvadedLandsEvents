@@ -53,7 +53,7 @@ public class Spleef extends InvadedEvent {
 
         initPlayerCheck();
 
-        RegionManager regionManager = plugin.getWorldGuardPlugin().getRegionManager(ConfigUtils.getEventWorld());
+        RegionManager regionManager = plugin.getWorldGuardPlugin().getRegionManager(world);
         String regionName = eventConfig.getString("region");
 
         try {
@@ -99,7 +99,7 @@ public class Spleef extends InvadedEvent {
         for (int x = minX; x <= maxX; x++) {
             for (int y = minY; y <= maxY; y++) {
                 for (int z = minZ; z <= maxZ; z++) {
-                    ConfigUtils.getEventWorld().getBlockAt(x, y, z).setType(Material.SNOW_BLOCK);
+                    world.getBlockAt(x, y, z).setType(Material.SNOW_BLOCK);
                 }
             }
         }
@@ -107,7 +107,7 @@ public class Spleef extends InvadedEvent {
 
     private void tpPlayers() {
         for (int i = 0; i < players.size(); i++) {
-            Location start = ConfigUtils.deserializeLoc(eventConfig.getConfigurationSection("start-location-" + (i % 2 == 0 ? 1 : 2)));
+            Location start = ConfigUtils.deserializeLoc(eventConfig.getConfigurationSection("start-location-" + (i % 2 == 0 ? 1 : 2)), world);
             players.get(i).teleport(start);
 
         }

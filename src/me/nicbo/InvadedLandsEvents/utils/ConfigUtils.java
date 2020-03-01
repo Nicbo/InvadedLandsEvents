@@ -1,6 +1,5 @@
 package me.nicbo.InvadedLandsEvents.utils;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -12,10 +11,6 @@ import java.util.List;
 import java.util.Map;
 
 public final class ConfigUtils {
-    private static World eventWorld;
-    private static Location spawnLoc;
-    private static String winCommand;
-
     private ConfigUtils() {}
 
     public static void serializeLoc(Location loc, ConfigurationSection section) {
@@ -26,13 +21,13 @@ public final class ConfigUtils {
         section.set("pitch", loc.getPitch());
     }
 
-    public static Location deserializeLoc(ConfigurationSection section) {
+    public static Location deserializeLoc(ConfigurationSection section, World world) {
         double x = section.getDouble("x");
         double y = section.getDouble("y");
         double z = section.getDouble("z");
         float yaw = (float) section.getDouble("yaw");
         float pitch = (float) section.getDouble("pitch");
-        return new Location(eventWorld, x, y, z, yaw, pitch);
+        return new Location(world, x, y, z, yaw, pitch);
     }
 
     public static void blockVectorToConfig(BlockVector blockVector, ConfigurationSection section) {
@@ -46,30 +41,6 @@ public final class ConfigUtils {
         int y = section.getInt("y");
         int z = section.getInt("z");
         return new BlockVector(x, y, z);
-    }
-
-    public static World getEventWorld() {
-        return eventWorld;
-    }
-
-    public static void setEventWorld(String world) {
-        eventWorld = Bukkit.getWorld(world);
-    }
-
-    public static Location getSpawnLoc() {
-        return spawnLoc;
-    }
-
-    public static void setSpawnLoc(Location loc) {
-        spawnLoc = loc;
-    }
-
-    public static String getWinCommand() {
-        return winCommand;
-    }
-
-    public static void setWinCommand(String command) {
-        winCommand = command;
     }
 
     public static String[] configSectionToMsgs(ConfigurationSection section) { // bad code but it works ¯\_(ツ)_/¯

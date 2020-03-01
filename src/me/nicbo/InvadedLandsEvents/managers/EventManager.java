@@ -21,6 +21,7 @@ public final class EventManager {
         };
     private HashMap<String, InvadedEvent> events;
     private InvadedEvent currentEvent;
+    private static boolean eventRunning;
 
     public EventManager(EventsMain plugin) {
         this.plugin = plugin;
@@ -120,7 +121,15 @@ public final class EventManager {
     public void setCurrentEvent(InvadedEvent event) {
         this.currentEvent = event;
     }
-    
+
+    public static boolean isEventRunning() {
+        return eventRunning;
+    }
+
+    public static void setEventRunning(boolean bool) {
+        eventRunning = bool;
+    }
+
     public static String[] getEventNames() {
         return eventNames;   
     }
