@@ -13,6 +13,7 @@ public class Waterdrop extends InvadedEvent {
     private Material[][] openCover;
     private Material[][] closedCover;
     private Material[][] cross;
+    private Material[][] x;
 
     public Waterdrop(EventsMain plugin) {
         super("Waterdrop", "waterdrop", plugin);
@@ -36,6 +37,14 @@ public class Waterdrop extends InvadedEvent {
         };
 
         cross = new Material[][] {
+                { redstone, redstone, water, redstone, redstone },
+                { redstone, redstone, water, redstone, redstone },
+                { water, water, water, water, water },
+                { redstone, redstone, water, redstone, redstone },
+                { redstone, redstone, water, redstone, redstone }
+        };
+
+        x = new Material[][] {
                 { water, redstone, redstone, redstone, water },
                 { redstone, water, redstone, water, redstone },
                 { redstone, redstone, water, redstone, redstone },
