@@ -70,11 +70,11 @@ public class Waterdrop extends InvadedEvent {
 
     public void setLineCover(int lines) {
         boolean vertical = GeneralUtils.randomBoolean();
-        boolean left = GeneralUtils.randomBoolean();
+        boolean side = GeneralUtils.randomBoolean();
 
         mainCover = openCover.clone();
         for (int i = 0; i < lines; i++) {
-            for (int j = left ? 0 : 5; i < 5; i += left ? 1 : -1) {
+            for (int j = side ? 0 : 5; i < 5; i += side ? 1 : -1) {
                 if (vertical) {
                     mainCover[j][i] = water;
                 } else {
