@@ -120,12 +120,6 @@ public class Spleef extends InvadedEvent {
         }
     }
 
-    private void clearInventories() {
-        for (int i = 0; i < players.size(); i++) {
-            EventUtils.clear(players.get(i));
-        }
-    }
-
     @EventHandler
     public void snowClick(BlockDamageEvent event) {
         if (blockEvent(event.getPlayer())) return;
