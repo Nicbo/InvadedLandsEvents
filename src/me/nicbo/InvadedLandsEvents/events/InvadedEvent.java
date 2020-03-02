@@ -168,6 +168,12 @@ public abstract class InvadedEvent implements Listener {
             spectator.teleport(spawnLoc);
         }
     }
+    
+    protected void clearInventories() {
+        for (int i = 0; i < players.size(); i++) {
+            EventUtils.clear(players.get(i));
+        }
+    }
 
     protected boolean blockEvent(Player player) {
         return !started || !players.contains(player);
