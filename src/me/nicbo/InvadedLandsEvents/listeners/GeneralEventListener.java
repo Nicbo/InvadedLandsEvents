@@ -1,5 +1,6 @@
 package me.nicbo.InvadedLandsEvents.listeners;
 
+import me.nicbo.InvadedLandsEvents.EventMessage;
 import me.nicbo.InvadedLandsEvents.managers.EventManager;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -57,7 +58,7 @@ public class GeneralEventListener implements Listener {
 
             event.setCancelled(true);
             Player player = (Player) event.getWhoClicked();
-            player.sendMessage(EventManager.EventMessage.CRAFT_IN_EVENT.getDescription());
+            player.sendMessage(EventMessage.CRAFT_IN_EVENT.getDescription());
         }
     }
 }

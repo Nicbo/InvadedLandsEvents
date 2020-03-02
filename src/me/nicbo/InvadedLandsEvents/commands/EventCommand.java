@@ -1,5 +1,6 @@
 package me.nicbo.InvadedLandsEvents.commands;
 
+import me.nicbo.InvadedLandsEvents.EventMessage;
 import me.nicbo.InvadedLandsEvents.managers.EventManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -37,18 +38,18 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                 switch (args[0].toLowerCase()) {
                     case "j":
                     case "join": {
-                        EventManager.EventMessage joinMsg = eventManager.joinEvent(player);
+                        EventMessage joinMsg = eventManager.joinEvent(player);
                         if (joinMsg != null) player.sendMessage(joinMsg.getDescription());
                         break;
                     }
                     case "l":
                     case "leave": {
-                        EventManager.EventMessage leaveMsg = eventManager.leaveEvent(player);
+                        EventMessage leaveMsg = eventManager.leaveEvent(player);
                         player.sendMessage(leaveMsg.getDescription());
                         break;
                     }
                     case "host": {
-                        EventManager.EventMessage hostMsg = eventManager.hostEvent(args[1], player.getName());
+                        EventMessage hostMsg = eventManager.hostEvent(args[1], player.getName());
                         if (hostMsg != null) player.sendMessage(hostMsg.getDescription().replace("{event}", args[1]));
                     }
                 }
