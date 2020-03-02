@@ -1,14 +1,47 @@
 package me.nicbo.InvadedLandsEvents.events;
 
 import me.nicbo.InvadedLandsEvents.EventsMain;
+import me.nicbo.InvadedLandsEvents.utils.GeneralUtils;
 import org.bukkit.Material;
 
 public class Waterdrop extends InvadedEvent {
-
     private Material[][] mainCover;
+
+    private Material water;
+    private Material redstone;
+
+    private Material[][] openCover;
+    private Material[][] closedCover;
+    private Material[][] cross;
 
     public Waterdrop(EventsMain plugin) {
         super("Waterdrop", "waterdrop", plugin);
+        water = Material.WATER;
+        redstone = Material.REDSTONE_BLOCK;
+
+        openCover = new Material[][] {
+                { water, water, water, water, water },
+                { water, water, water, water, water },
+                { water, water, water, water, water },
+                { water, water, water, water, water },
+                { water, water, water, water, water },
+        };
+
+        closedCover = new Material[][] {
+                { redstone, redstone, redstone, redstone, redstone },
+                { redstone, redstone, redstone, redstone, redstone },
+                { redstone, redstone, redstone, redstone, redstone },
+                { redstone, redstone, redstone, redstone, redstone },
+                { redstone, redstone, redstone, redstone, redstone }
+        };
+
+        cross = new Material[][] {
+                { water, redstone, redstone, redstone, water },
+                { redstone, water, redstone, water, redstone },
+                { redstone, redstone, water, redstone, redstone },
+                { redstone, water, redstone, water, redstone },
+                { water, redstone, redstone, redstone, water }
+        };
     }
 
     @Override
@@ -27,33 +60,36 @@ public class Waterdrop extends InvadedEvent {
     }
 
     private void placeMainCover() {
-        
+
     }
 
-    public static class WaterdropPresets {
-        private static Material water;
-        private static Material redstone;
-        public static Material[][] cover;
+    // Depending on round return line / hole / cross / open
+    public void changeCover(int round) {
 
-        static {
-            water = Material.WATER;
-            redstone = Material.REDSTONE_BLOCK;
-            cover = new Material[][] {
-                    { redstone, redstone, redstone, redstone, redstone },
-                    { redstone, redstone, redstone, redstone, redstone },
-                    { redstone, redstone, redstone, redstone, redstone },
-                    { redstone, redstone, redstone, redstone, redstone },
-                    { redstone, redstone, redstone, redstone, redstone }
-            };
+    }
+
+    public void setLineCover(int lines) {
+        boolean vertical = GeneralUtils.randomBoolean();
+        boolean left = GeneralUtils.randomBoolean();
+
+        mainCover = openCover.clone();
+        for (int i = 0; i < lines; i++) {
+            for (int j = left ? 0 : 5; i < 5; i += left ? 1 : -1) {
+                if (vertical) {
+                    mainCover[j][i] = water;
+                } else {
+                    mainCover[i][j] = water;
+                }
+            }
         }
+    }
 
-        public Material[][] getRandomPreset() {
-            return null;
-        }
-
-        public Material[][] getHoleCover() {
-            Material[][] randomCover = cover.clone();
-            return null;
+    public void setHoleCover(int holes) {
+        mainCover = closedCover.clone();
+        for (int i = 0; i < holes; i++) {
+            int row = GeneralUtils.randomMinMax(0, 4);
+            int column = GeneralUtils.randomMinMax(0, 4);
+            mainCover[row][column] = water;
         }
     }
 }

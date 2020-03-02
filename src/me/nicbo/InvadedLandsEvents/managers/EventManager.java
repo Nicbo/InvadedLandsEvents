@@ -13,16 +13,20 @@ import java.util.HashMap;
 
 public final class EventManager {
     private EventsMain plugin;
-    private static String[] eventNames = new String[]{
-            "brackets", "koth", "lms",
-            "oitc", "redrover", "rod",
-            "spleef", "tdm", "tnttag",
-            "waterdrop", "woolshuffle",
-            "sumo"
-        };
+    private static String[] eventNames;
     private HashMap<String, InvadedEvent> events;
     private InvadedEvent currentEvent;
     private static boolean eventRunning;
+
+    static {
+        eventNames = new String[]{
+                "brackets", "koth", "lms",
+                "oitc", "redrover", "rod",
+                "spleef", "tdm", "tnttag",
+                "waterdrop", "woolshuffle",
+                "sumo"
+        };
+    }
 
     public EventManager(EventsMain plugin) {
         this.plugin = plugin;

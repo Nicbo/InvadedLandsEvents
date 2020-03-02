@@ -10,6 +10,7 @@ public enum EventMessage {
     DOES_NOT_EXIST(ChatColor.RED + "There is no event named " + ChatColor.YELLOW + "{event}" + ChatColor.RED + "."),
     NOT_ENABLED(ChatColor.RED + "That event is not enabled!"),
     NOT_IN_EVENT(ChatColor.RED + "You aren't in an event!"),
+    EMPTY_INVENTORY(ChatColor.RED + "Your inventory must be empty to join an event!"),
     CRAFT_IN_EVENT(ChatColor.RED + "You're unable to craft in this state."),
     NO_PERMISSION(ChatColor.RED + "I'm sorry, but you do not have permission to perform this command.");
 
