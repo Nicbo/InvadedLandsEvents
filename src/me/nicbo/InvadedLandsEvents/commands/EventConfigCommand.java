@@ -1,7 +1,7 @@
 package me.nicbo.InvadedLandsEvents.commands;
 
 import me.nicbo.InvadedLandsEvents.EventsMain;
-import me.nicbo.InvadedLandsEvents.managers.EventManager;
+import me.nicbo.InvadedLandsEvents.manager.managers.EventManager;
 import me.nicbo.InvadedLandsEvents.utils.ConfigUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -34,6 +34,7 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
         this.args0 = new ArrayList<>();
         this.args0.addAll(Arrays.asList(EventManager.getEventNames()));
         this.args0.add("save");
+        this.args0.add("reload");
         this.args0.add("help");
         this.args0.add("event-world");
         this.args0.add("win-command");
@@ -52,11 +53,17 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
         if (cmd.getName().equalsIgnoreCase("eventconfig") || cmd.getName().equalsIgnoreCase("econfig")) {
             sender.sendMessage("\n");
             if (args.length == 0) {
-                sender.sendMessage(usage + "/econfig <help|event|save|setting(event-world|spawn-location)> <setting|value> <value>");
+                sender.sendMessage(usage + "/econfig <help|event|save|reload|setting(event-world|spawn-location)> <setting|value> <value>");
                 return true;
             } else if (args[0].equalsIgnoreCase("save")) {
                 plugin.saveConfig();
                 sender.sendMessage(ChatColor.GREEN + "Event config saved");
+                return true;
+            } else if (args[0].equalsIgnoreCase("reload")) {
+                plugin.reloadConfig();
+                plugin.getManagerHandler().restartEventManager();
+                sender.sendMessage(ChatColor.GREEN + "Event config reloaded");
+                sender.sendMessage(ChatColor.GREEN + "Event manager reloaded");
                 return true;
             } else if (!(sender instanceof Player)) {
                 sender.sendMessage(ChatColor.RED + "You must be a player to execute this command!");

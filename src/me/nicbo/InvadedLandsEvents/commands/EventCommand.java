@@ -1,7 +1,10 @@
 package me.nicbo.InvadedLandsEvents.commands;
 
 import me.nicbo.InvadedLandsEvents.EventMessage;
-import me.nicbo.InvadedLandsEvents.managers.EventManager;
+import me.nicbo.InvadedLandsEvents.EventsMain;
+import me.nicbo.InvadedLandsEvents.manager.ManagerHandler;
+import me.nicbo.InvadedLandsEvents.manager.managers.EventManager;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -13,11 +16,15 @@ import java.util.*;
 
 public class EventCommand implements CommandExecutor, TabCompleter {
     private EventManager eventManager;
+    private final String usage;
+    private EventsMain plugin;
     private List<String> args0;
     private List<String> events;
 
-    public EventCommand(EventManager eventManager) {
-        this.eventManager = eventManager;
+    public EventCommand(EventsMain plugin) {
+        this.plugin = plugin;
+        this.eventManager = plugin.getManagerHandler().getEventManager();
+        this.usage = ChatColor.GOLD + "Usage: " + ChatColor.YELLOW;
         this.args0 = new ArrayList<>();
         this.args0.add("join");
         this.args0.add("leave");
@@ -35,23 +42,35 @@ public class EventCommand implements CommandExecutor, TabCompleter {
         if (cmd.getName().toLowerCase().equalsIgnoreCase("event")) {
             if (sender instanceof Player) {
                 Player player = (Player) sender;
-                switch (args[0].toLowerCase()) {
-                    case "j":
-                    case "join": {
-                        EventMessage joinMsg = eventManager.joinEvent(player);
-                        if (joinMsg != null) player.sendMessage(joinMsg.getDescription());
-                        break;
+                if (args.length >= 1) {
+                    switch (args[0].toLowerCase()) {
+                        case "j":
+                        case "join": {
+                            EventMessage joinMsg = eventManager.joinEvent(player);
+                            if (joinMsg != null) player.sendMessage(joinMsg.getDescription());
+                            break;
+                        }
+                        case "l":
+                        case "leave": {
+                            EventMessage leaveMsg = eventManager.leaveEvent(player);
+                            player.sendMessage(leaveMsg.getDescription());
+                            break;
+                        }
+                        case "host": {
+                            if (args.length >= 2) {
+                                EventMessage hostMsg = eventManager.hostEvent(args[1], player.getName());
+                                if (hostMsg != null)
+                                    player.sendMessage(hostMsg.getDescription().replace("{event}", args[1]));
+                            }
+                            break;
+                        }
+                        default: {
+                            player.sendMessage(usage + "/event <join|leave|host|> (event)");
+                        }
                     }
-                    case "l":
-                    case "leave": {
-                        EventMessage leaveMsg = eventManager.leaveEvent(player);
-                        player.sendMessage(leaveMsg.getDescription());
-                        break;
-                    }
-                    case "host": {
-                        EventMessage hostMsg = eventManager.hostEvent(args[1], player.getName());
-                        if (hostMsg != null) player.sendMessage(hostMsg.getDescription().replace("{event}", args[1]));
-                    }
+                }
+                else {
+                    player.sendMessage(usage + "/event <join|leave|host|> (event)");
                 }
             }
         }
@@ -78,8 +97,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
 
     /*
     TODO:
-        - Add tab complete
-        - Sub commands
+        - Sub commands partially complete
         - Right now this is just for testing I will work on actual command when events are done
      */
 }

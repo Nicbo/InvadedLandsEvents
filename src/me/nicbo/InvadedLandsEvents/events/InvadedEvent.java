@@ -2,6 +2,7 @@ package me.nicbo.InvadedLandsEvents.events;
 
 import me.nicbo.InvadedLandsEvents.EventsMain;
 import me.nicbo.InvadedLandsEvents.utils.ConfigUtils;
+import me.nicbo.InvadedLandsEvents.utils.EventUtils;
 import org.bukkit.*;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -98,9 +99,14 @@ public abstract class InvadedEvent implements Listener {
         return players.contains(player) || spectators.contains(player);
     }
 
+    public int getSize() {
+        return players.size();
+    }
+
     public void joinEvent(Player player) {
         players.add(player);
         player.teleport(specLoc);
+        EventUtils.clear(player);
         player.getInventory().setItem(8, star);
         //add to team and scoreboard
     }
@@ -108,7 +114,7 @@ public abstract class InvadedEvent implements Listener {
     public void leaveEvent(Player player) {
         players.remove(player);
         spectators.remove(player);
-        player.getInventory().clear();
+        EventUtils.clear(player);
         player.teleport(spawnLoc);
         //remove from team and scoreboard
     }
@@ -116,15 +122,19 @@ public abstract class InvadedEvent implements Listener {
     public void specEvent(Player player) {
         spectators.add(player);
         player.teleport(specLoc);
+        EventUtils.clear(player);
         player.getInventory().setItem(8, star);
     }
 
     protected void loseEvent(Player player) {
         players.remove(player);
+        EventUtils.clear(player);
         specEvent(player);
     }
 
     protected void playerWon(Player player) {
+        countdown = false;
+
         for (int i = 0; i < 4; i++) {
             Bukkit.broadcastMessage(ChatColor.GOLD + (player == null ? "No one" : player.getName()) + ChatColor.YELLOW + " won the " + ChatColor.GOLD + name + ChatColor.YELLOW + " event!");
         }
@@ -133,11 +143,18 @@ public abstract class InvadedEvent implements Listener {
             @Override
             public void run() {
                 stop();
+                plugin.getManagerHandler().getEventManager().setCurrentEvent(null);
             }
         }, 100);
 
-        if (player != null)
-            plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), winCommand.replace("{winner}", player.getName()));
+        if (player != null) {
+            plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+                @Override
+                public void run() {
+                    plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), winCommand.replace("{winner}", player.getName()));
+                }
+            }, 100);
+        }
     }
 
     protected void spawnTpPlayers() {
@@ -163,6 +180,10 @@ public abstract class InvadedEvent implements Listener {
 
             @Override
             public void run() {
+                if (!countdown) {
+                    this.cancel();
+                    return;
+                }
                 if (timer == 1) {
                     countdown = false;
                     this.cancel();

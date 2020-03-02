@@ -6,12 +6,13 @@ event-world: event
 win-command: msg {winner} you win
 
 spawn-location:
+  ==: org.bukkit.Location
   world: world
   x: 0
   y: 70
   z: 0
-  yaw: 0
   pitch: 0
+  yaw: 0
 
 events:
   brackets:

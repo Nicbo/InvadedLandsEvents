@@ -81,7 +81,7 @@ public class Waterdrop extends InvadedEvent {
         boolean vertical = GeneralUtils.randomBoolean();
         boolean side = GeneralUtils.randomBoolean();
 
-        mainCover = openCover.clone();
+        mainCover = closedCover.clone();
         for (int i = 0; i < lines; i++) {
             for (int j = side ? 0 : 5; i < 5; i += side ? 1 : -1) {
                 if (vertical) {

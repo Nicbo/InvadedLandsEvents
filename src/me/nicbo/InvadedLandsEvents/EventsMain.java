@@ -4,24 +4,28 @@ import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import me.nicbo.InvadedLandsEvents.commands.EventCommand;
 import me.nicbo.InvadedLandsEvents.commands.EventConfigCommand;
 import me.nicbo.InvadedLandsEvents.listeners.GeneralEventListener;
-import me.nicbo.InvadedLandsEvents.managers.EventManager;
+import me.nicbo.InvadedLandsEvents.manager.ManagerHandler;
+import me.nicbo.InvadedLandsEvents.manager.managers.EventManager;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.logging.Logger;
 
 public class EventsMain extends JavaPlugin {
+    private static EventsMain plugin;
     private Logger log = getLogger();
     private EventManager eventManager;
+    private ManagerHandler managerHandler;
     private WorldGuardPlugin worldGuardPlugin;
 
     @Override
     public void onEnable() {
+        this.plugin = this;
         worldGuardPlugin = getWorldGuard();
         saveDefaultConfig();
-        eventManager = new EventManager(this);
+        this.managerHandler = new ManagerHandler(this);
         registerCommands();
-        getServer().getPluginManager().registerEvents(new GeneralEventListener(eventManager), this);
+        getServer().getPluginManager().registerEvents(new GeneralEventListener(this), this);
         log.info("Plugin enabled!");
     }
 
@@ -33,9 +37,13 @@ public class EventsMain extends JavaPlugin {
 
     private void registerCommands() {
         EventConfigCommand eventConfigCommand = new EventConfigCommand(this);
-        getCommand("event").setExecutor(new EventCommand(eventManager));
+        EventCommand eventCommand = new EventCommand(this);
+
+        getCommand("event").setExecutor(eventCommand);
         getCommand("eventconfig").setExecutor(eventConfigCommand);
+
         getCommand("eventconfig").setTabCompleter(eventConfigCommand);
+        getCommand("event").setTabCompleter(eventCommand);
     }
 
     private WorldGuardPlugin getWorldGuard() { //im broken i think
@@ -51,5 +59,13 @@ public class EventsMain extends JavaPlugin {
 
     public WorldGuardPlugin getWorldGuardPlugin() {
         return worldGuardPlugin;
+    }
+
+    public ManagerHandler getManagerHandler() {
+        return this.managerHandler;
+    }
+
+    public static EventsMain getInstance() {
+        return plugin;
     }
 }

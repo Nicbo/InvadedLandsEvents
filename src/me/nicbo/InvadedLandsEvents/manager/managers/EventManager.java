@@ -1,9 +1,11 @@
-package me.nicbo.InvadedLandsEvents.managers;
+package me.nicbo.InvadedLandsEvents.manager.managers;
 
 import me.nicbo.InvadedLandsEvents.EventMessage;
 import me.nicbo.InvadedLandsEvents.EventsMain;
 import me.nicbo.InvadedLandsEvents.events.*;
 import me.nicbo.InvadedLandsEvents.events.sumo.*;
+import me.nicbo.InvadedLandsEvents.manager.Manager;
+import me.nicbo.InvadedLandsEvents.manager.ManagerHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -11,7 +13,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
 
-public final class EventManager {
+public final class EventManager extends Manager {
     private EventsMain plugin;
     private static String[] eventNames;
     private HashMap<String, InvadedEvent> events;
@@ -28,8 +30,9 @@ public final class EventManager {
         };
     }
 
-    public EventManager(EventsMain plugin) {
-        this.plugin = plugin;
+    public EventManager(ManagerHandler handler) {
+        super(handler);
+        this.plugin = handler.getPlugin();
         this.events = new HashMap<>();
         addEventsToMap();
     }
@@ -67,6 +70,7 @@ public final class EventManager {
     private void startCountDown(String host) {
         currentEvent.init(plugin);
         String name = currentEvent.getName();
+        setEventRunning(true);
 
         new BukkitRunnable() {
             int time = 16; //for testing put back to 60
@@ -78,8 +82,10 @@ public final class EventManager {
                     Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&c&lStarting in " + time + " seconds " + "&a&l[Click to Join]"));
                     // Add Click Event text
                 } else if (time == 0) {
+//                  if (!currentEvent.getSize() >= 6) { For testing disable this, will later allow customizing minimum event size.
                     currentEvent.start();
                     this.cancel();
+//                  }
                 }
                 time--;
             }
