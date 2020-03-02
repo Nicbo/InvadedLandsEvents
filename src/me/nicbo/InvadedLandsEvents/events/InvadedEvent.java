@@ -169,7 +169,7 @@ public abstract class InvadedEvent implements Listener {
         }
     }
 
-    protected boolean dontRunEvent(Player player) {
+    protected boolean blockEvent(Player player) {
         return !started || !players.contains(player);
     }
 
