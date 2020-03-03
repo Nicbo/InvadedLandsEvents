@@ -1,8 +1,10 @@
 package me.nicbo.InvadedLandsEvents.events;
 
+import me.nicbo.InvadedLandsEvents.EventMessage;
 import me.nicbo.InvadedLandsEvents.EventsMain;
 import me.nicbo.InvadedLandsEvents.utils.ConfigUtils;
 import me.nicbo.InvadedLandsEvents.utils.EventUtils;
+import me.nicbo.InvadedLandsEvents.utils.GeneralUtils;
 import org.bukkit.*;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -109,6 +111,9 @@ public abstract class InvadedEvent implements Listener {
         player.teleport(specLoc);
         EventUtils.clear(player);
         player.getInventory().setItem(8, star);
+        for (Player onlinePlayers : GeneralUtils.getPlayers()) {
+            onlinePlayers.sendMessage(EventMessage.JOINED_EVENT.getDescription().replace("{player}", player.getName()));
+        }
         //add to team and scoreboard
     }
 
@@ -117,6 +122,16 @@ public abstract class InvadedEvent implements Listener {
         spectators.remove(player);
         EventUtils.clear(player);
         player.teleport(spawnLoc);
+        if (started) {
+            for (Player eventPlayers : players) {
+                eventPlayers.sendMessage(EventMessage.LEFT_EVENT.getDescription().replace("{player}", player.getName()));
+            }
+        }
+        else {
+            for (Player onlinePlayers : GeneralUtils.getPlayers()) {
+                onlinePlayers.sendMessage(EventMessage.LEFT_EVENT.getDescription().replace("{player}", player.getName()));
+            }
+        }
         //remove from team and scoreboard
     }
 
@@ -125,6 +140,30 @@ public abstract class InvadedEvent implements Listener {
         player.teleport(specLoc);
         EventUtils.clear(player);
         player.getInventory().setItem(8, star);
+    }
+
+    public void eventInfo(Player player) {
+        player.sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + "Active Event:");
+        player.sendMessage(ChatColor.YELLOW + "Type: " + ChatColor.GOLD + name);
+        player.sendMessage(ChatColor.YELLOW + "Players: " + ChatColor.GOLD + players.size());
+        player.sendMessage(ChatColor.YELLOW + "Spectators: " + ChatColor.GOLD + spectators.size());
+    }
+
+    public void forceEndEvent() {
+        for (Player eventPlayers : players) {
+            eventPlayers.sendMessage(EventMessage.EVENT_FORCE_ENDED.getDescription().replace("{event}", name));
+        }
+        this.plugin.getServer().getScheduler().runTask(this.plugin, new Runnable() {
+            @Override
+            public void run() {
+                clearInventories();
+            }
+        });
+        spawnTpPlayers();
+        players.clear();
+        spectators.clear();
+        plugin.getManagerHandler().getEventManager().setEventRunning(false);
+        plugin.getManagerHandler().getEventManager().setCurrentEvent(null);
     }
 
     protected void loseEvent(Player player) {

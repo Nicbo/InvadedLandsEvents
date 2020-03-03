@@ -27,10 +27,10 @@ public class EventCommand implements CommandExecutor, TabCompleter {
         this.args0 = new ArrayList<>();
         this.args0.add("join");
         this.args0.add("leave");
-        this.args0.add("host");
         this.args0.add("spectate");
         this.args0.add("info");
         this.args0.add("forceend");
+        this.args0.add("host");
 
         this.events = new ArrayList<>();
         this.events.addAll(Arrays.asList(EventManager.getEventNames()));
@@ -56,21 +56,44 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                             player.sendMessage(leaveMsg.getDescription());
                             break;
                         }
+                        case "s":
+                        case "spec":
+                        case "spectate": {
+                            EventMessage spectateMsg = eventManager.specEvent(player);
+                            player.sendMessage(spectateMsg.getDescription());
+                            break;
+                        }
+                        case "i":
+                        case "info": {
+                            EventMessage infoMsg = eventManager.eventInfo(player);
+                            if (infoMsg != null)
+                                player.sendMessage(infoMsg.getDescription());
+                            break;
+                        }
+                        case "fe":
+                        case "stop":
+                        case "forceend": {
+                            EventMessage forceEndMsg = eventManager.endEvent(player);
+                            player.sendMessage(forceEndMsg.getDescription());
+                            break;
+                        }
+                        case "h":
                         case "host": {
                             if (args.length >= 2) {
                                 EventMessage hostMsg = eventManager.hostEvent(args[1], player.getName());
                                 if (hostMsg != null)
                                     player.sendMessage(hostMsg.getDescription().replace("{event}", args[1]));
+                                break;
                             }
-                            break;
+                            // If only 1 arg then go to default case.
                         }
                         default: {
-                            player.sendMessage(usage + "/event <join|leave|host|> (event)");
+                            player.sendMessage(usage + "/event <join|leave|spectate|info|host> (event)");
                         }
                     }
                 }
                 else {
-                    player.sendMessage(usage + "/event <join|leave|host|> (event)");
+                    player.sendMessage(usage + "/event <join|leave|spectate|info|host> (event)");
                 }
             }
             else {

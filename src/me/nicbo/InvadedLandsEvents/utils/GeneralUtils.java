@@ -1,5 +1,10 @@
 package me.nicbo.InvadedLandsEvents.utils;
 
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public final class GeneralUtils {
@@ -17,5 +22,11 @@ public final class GeneralUtils {
 
     public static boolean randomBoolean() {
         return random.nextBoolean();
+    }
+
+    public static List<Player> getPlayers() {
+        List<Player> players = new ArrayList<Player>();
+        for (Player player : Bukkit.getOnlinePlayers()) { players.add(player); }
+        return players;
     }
 }

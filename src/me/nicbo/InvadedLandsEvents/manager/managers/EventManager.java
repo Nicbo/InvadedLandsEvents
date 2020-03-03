@@ -18,7 +18,7 @@ public final class EventManager extends Manager {
     private static String[] eventNames;
     private HashMap<String, InvadedEvent> events;
     private InvadedEvent currentEvent;
-    private static boolean eventRunning;
+    private static boolean eventRunning = false;
 
     static {
         eventNames = new String[]{
@@ -77,6 +77,10 @@ public final class EventManager extends Manager {
 
             @Override
             public void run() {
+                if (!isEventRunning()) {
+                    this.cancel();
+                    return;
+                }
                 if (time == 60 || time == 45 || time == 30 || time == 15 || time <= 5 && time >= 1) {
                     Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&c&l"+ host + " is hosting a " + name + " event!"));
                     Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&c&lStarting in " + time + " seconds " + "&a&l[Click to Join]"));
@@ -111,7 +115,7 @@ public final class EventManager extends Manager {
             return EventMessage.NOT_IN_EVENT;
         }
         currentEvent.leaveEvent(player);
-        return EventMessage.NONE;
+        return null;
     }
 
     public EventMessage specEvent(Player player) {
@@ -120,8 +124,27 @@ public final class EventManager extends Manager {
         } else if (currentEvent.containsPlayer(player)) {
             return EventMessage.IN_EVENT;
         }
+        currentEvent.specEvent(player);
+        return EventMessage.SPECTATING;
+    }
 
-        currentEvent.leaveEvent(player);
+    public EventMessage endEvent(Player player) {
+        if (currentEvent == null) {
+            return EventMessage.NONE;
+        } else if (!currentEvent.isStarted() && !isEventRunning()) {
+            return EventMessage.EVENT_ENDING;
+        }
+        currentEvent.forceEndEvent();
+        return EventMessage.ENDED;
+    }
+
+    public EventMessage eventInfo(Player player) {
+        if (currentEvent == null) {
+            return EventMessage.NONE;
+        } else if (!currentEvent.isStarted() && !isEventRunning()) {
+            return EventMessage.EVENT_ENDING;
+        }
+        currentEvent.eventInfo(player);
         return null;
     }
 
