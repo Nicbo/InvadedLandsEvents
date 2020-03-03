@@ -141,7 +141,8 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
     }
 
     private void spawnlocation(String[] args, Player player) {
-        config.set("spawn-location", player.getLocation());
+        ConfigurationSection section = config.getConfigurationSection("spawn-location");
+        ConfigUtils.serializeLoc(player.getLocation(), true, section);
         player.sendMessage(ChatColor.GOLD + "spawn-location set to " + ChatColor.YELLOW + "your location" + ChatColor.GOLD + "!");
     }
 
@@ -164,7 +165,7 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
                 case "start-location-1":
                 case "start-location-2":
                 case "spec-location":
-                    ConfigUtils.serializeLoc(player.getLocation(), section.getConfigurationSection(args[1]));
+                    ConfigUtils.serializeLoc(player.getLocation(), false, section.getConfigurationSection(args[1]));
                     player.sendMessage(ChatColor.GOLD + args[1] + " set to " + ChatColor.YELLOW + "your location" + ChatColor.GOLD + "!");
                     player.sendMessage(usage + "/econfig sumo " + args[1].toLowerCase() + " set");
                     break;
@@ -191,7 +192,7 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
                 case "start-location-1":
                 case "start-location-2":
                 case "spec-location":
-                    ConfigUtils.serializeLoc(player.getLocation(), section.getConfigurationSection(args[1]));
+                    ConfigUtils.serializeLoc(player.getLocation(), false, section.getConfigurationSection(args[1]));
                     player.sendMessage(ChatColor.GOLD + args[1] + " set to " + ChatColor.YELLOW + "your location" + ChatColor.GOLD + "!");
                     player.sendMessage(usage + "/econfig brackets " + args[1].toLowerCase() + " set");
                     break;
@@ -228,7 +229,7 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
                 case "start-location-3":
                 case "start-location-4":
                 case "spec-location":
-                    ConfigUtils.serializeLoc(player.getLocation(), section.getConfigurationSection(args[1]));
+                    ConfigUtils.serializeLoc(player.getLocation(), false, section.getConfigurationSection(args[1]));
                     player.sendMessage(ChatColor.GOLD + args[1] + " set to " + ChatColor.YELLOW + "your location" + ChatColor.GOLD + "!");
                     player.sendMessage(usage + "/econfig koth " + args[1].toLowerCase() + " set");
                     break;
@@ -254,7 +255,7 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
                     break;
                 case "start-location":
                 case "spec-location":
-                    ConfigUtils.serializeLoc(player.getLocation(), section.getConfigurationSection(args[1]));
+                    ConfigUtils.serializeLoc(player.getLocation(), false, section.getConfigurationSection(args[1]));
                     player.sendMessage(ChatColor.GOLD + args[1] + " set to " + ChatColor.YELLOW + "your location" + ChatColor.GOLD + "!");
                     player.sendMessage(usage + "/econfig lms " + args[1].toLowerCase() + " set");
                     break;
@@ -295,7 +296,7 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
                 case "start-location-7":
                 case "start-location-8":
                 case "spec-location":
-                    ConfigUtils.serializeLoc(player.getLocation(), section.getConfigurationSection(args[1]));
+                    ConfigUtils.serializeLoc(player.getLocation(), false, section.getConfigurationSection(args[1]));
                     player.sendMessage(ChatColor.GOLD + args[1] + " set to " + ChatColor.YELLOW + "your location" + ChatColor.GOLD + "!");
                     player.sendMessage(usage + "/econfig oitc " + args[1].toLowerCase() + " set");
                     break;
@@ -330,7 +331,7 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
                     break;
                 case "start-location":
                 case "spec-location":
-                    ConfigUtils.serializeLoc(player.getLocation(), section.getConfigurationSection(args[1]));
+                    ConfigUtils.serializeLoc(player.getLocation(), false, section.getConfigurationSection(args[1]));
                     player.sendMessage(ChatColor.GOLD + args[1] + " set to " + ChatColor.YELLOW + "your location" + ChatColor.GOLD + "!");
                     player.sendMessage(usage + "/econfig redrover " + args[1].toLowerCase() + " set");
                     break;
@@ -356,7 +357,7 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
                     break;
                 case "start-location":
                 case "spec-location":
-                    ConfigUtils.serializeLoc(player.getLocation(), section.getConfigurationSection(args[1]));
+                    ConfigUtils.serializeLoc(player.getLocation(), false, section.getConfigurationSection(args[1]));
                     player.sendMessage(ChatColor.GOLD + args[1] + " set to " + ChatColor.YELLOW + "your location" + ChatColor.GOLD + "!");
                     player.sendMessage(usage + "/econfig rod " + args[1].toLowerCase() + " set");
                     break;
@@ -398,7 +399,7 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
                 case "start-location-1":
                 case "start-location-2":
                 case "spec-location":
-                    ConfigUtils.serializeLoc(player.getLocation(), section.getConfigurationSection(args[1]));
+                    ConfigUtils.serializeLoc(player.getLocation(), false, section.getConfigurationSection(args[1]));
                     player.sendMessage(ChatColor.GOLD + args[1] + " set to " + ChatColor.YELLOW + "your location" + ChatColor.GOLD + "!");
                     break;
             }
@@ -424,7 +425,7 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
                 case "blue-start-location":
                 case "red-start-location":
                 case "spec-location":
-                    ConfigUtils.serializeLoc(player.getLocation(), section.getConfigurationSection(args[1]));
+                    ConfigUtils.serializeLoc(player.getLocation(), false, section.getConfigurationSection(args[1]));
                     player.sendMessage(ChatColor.GOLD + args[1] + " set to " + ChatColor.YELLOW + "your location" + ChatColor.GOLD + "!");
                     player.sendMessage(usage + "/econfig tdm " + args[1].toLowerCase() + " set");
                     break;
@@ -450,7 +451,7 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
                     break;
                 case "start-location":
                 case "spec-location":
-                    ConfigUtils.serializeLoc(player.getLocation(), section.getConfigurationSection(args[1]));
+                    ConfigUtils.serializeLoc(player.getLocation(), false, section.getConfigurationSection(args[1]));
                     player.sendMessage(ChatColor.GOLD + args[1] + " set to " + ChatColor.YELLOW + "your location" + ChatColor.GOLD + "!");
                     player.sendMessage(usage + "/econfig tnttag " + args[1].toLowerCase() + " set");
                     break;
@@ -476,7 +477,7 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
                     break;
                 case "start-location":
                 case "spec-location":
-                    ConfigUtils.serializeLoc(player.getLocation(), section.getConfigurationSection(args[1]));
+                    ConfigUtils.serializeLoc(player.getLocation(), false, section.getConfigurationSection(args[1]));
                     player.sendMessage(ChatColor.GOLD + args[1] + " set to " + ChatColor.YELLOW + "your location" + ChatColor.GOLD + "!");
                     player.sendMessage(usage + "/econfig waterdrop " + args[1].toLowerCase() + " set");
                     break;
@@ -502,7 +503,7 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
                     break;
                 case "start-location":
                 case "spec-location":
-                    ConfigUtils.serializeLoc(player.getLocation(), section.getConfigurationSection(args[1]));
+                    ConfigUtils.serializeLoc(player.getLocation(), false, section.getConfigurationSection(args[1]));
                     player.sendMessage(ChatColor.GOLD + args[1] + " set to " + ChatColor.YELLOW + "your location" + ChatColor.GOLD + "!");
                     player.sendMessage(usage + "/econfig woolshuffle " + args[1].toLowerCase() + " set");
                     break;

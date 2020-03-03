@@ -47,7 +47,8 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                         case "j":
                         case "join": {
                             EventMessage joinMsg = eventManager.joinEvent(player);
-                            if (joinMsg != null) player.sendMessage(joinMsg.getDescription());
+                            if (joinMsg != null)
+                                player.sendMessage(joinMsg.getDescription());
                             break;
                         }
                         case "l":
@@ -68,9 +69,11 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                             player.sendMessage(usage + "/event <join|leave|host|> (event)");
                         }
                     }
+                    return true;
                 }
                 else {
                     player.sendMessage(usage + "/event <join|leave|host|> (event)");
+                    return true;
                 }
             }
         }

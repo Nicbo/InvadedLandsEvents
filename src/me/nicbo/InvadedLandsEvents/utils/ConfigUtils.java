@@ -1,5 +1,6 @@
 package me.nicbo.InvadedLandsEvents.utils;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -13,7 +14,8 @@ import java.util.Map;
 public final class ConfigUtils {
     private ConfigUtils() {}
 
-    public static void serializeLoc(Location loc, ConfigurationSection section) {
+    public static void serializeLoc(Location loc, boolean includeWorld, ConfigurationSection section) {
+        if (includeWorld) section.set("world", loc.getWorld().getName());
         section.set("x", loc.getX());
         section.set("y", loc.getY());
         section.set("z", loc.getZ());
@@ -22,6 +24,16 @@ public final class ConfigUtils {
     }
 
     public static Location deserializeLoc(ConfigurationSection section, World world) {
+        double x = section.getDouble("x");
+        double y = section.getDouble("y");
+        double z = section.getDouble("z");
+        float yaw = (float) section.getDouble("yaw");
+        float pitch = (float) section.getDouble("pitch");
+        return new Location(world, x, y, z, yaw, pitch);
+    }
+
+    public static Location deserializeLoc(ConfigurationSection section) {
+        World world = Bukkit.getWorld(section.get("world").toString());
         double x = section.getDouble("x");
         double y = section.getDouble("y");
         double z = section.getDouble("z");

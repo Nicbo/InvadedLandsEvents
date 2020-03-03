@@ -47,9 +47,10 @@ public abstract class InvadedEvent implements Listener {
         FileConfiguration config = this.plugin.getConfig();
         this.eventConfig = config.getConfigurationSection("events." + configName);
         this.world = Bukkit.getWorld(config.getString("event-world"));
-        this.spawnLoc = (Location) config.get("spawn-location");
+        this.spawnLoc = ConfigUtils.deserializeLoc(config.getConfigurationSection("spawn-location"));
         this.specLoc = ConfigUtils.deserializeLoc(this.eventConfig.getConfigurationSection("spec-location"), this.world);
         this.winCommand = config.getString("win-command");
+
 
         this.enabled = eventConfig.getBoolean("enabled");
         this.players = new ArrayList<>();
