@@ -2,7 +2,6 @@ package me.nicbo.InvadedLandsEvents.commands;
 
 import me.nicbo.InvadedLandsEvents.EventMessage;
 import me.nicbo.InvadedLandsEvents.EventsMain;
-import me.nicbo.InvadedLandsEvents.manager.ManagerHandler;
 import me.nicbo.InvadedLandsEvents.manager.managers.EventManager;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.command.Command;
@@ -69,12 +68,13 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                             player.sendMessage(usage + "/event <join|leave|host|> (event)");
                         }
                     }
-                    return true;
                 }
                 else {
                     player.sendMessage(usage + "/event <join|leave|host|> (event)");
-                    return true;
                 }
+            }
+            else {
+                sender.sendMessage(ChatColor.RED + "You must be a player to execute this command!");
             }
             return true;
         }
