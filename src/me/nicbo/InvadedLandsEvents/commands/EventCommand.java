@@ -76,6 +76,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                     return true;
                 }
             }
+            return true;
         }
         return false;
     }
