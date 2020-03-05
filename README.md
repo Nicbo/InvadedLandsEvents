@@ -8,7 +8,7 @@ If you're going to make changes, go ahead, this project needs a bunch of help.
 
 Things that are in development:
 - All the events.
-- Parties.
+- Party functionality (The commands for parties are done but they wont affect the events yet).
 - More coming soon.
 
 [!] NOTICE [!]
