@@ -210,8 +210,8 @@ public abstract class InvadedEvent implements Listener {
     }
     
     protected void clearInventories() {
-        for (int i = 0; i < players.size(); i++) {
-            EventUtils.clear(players.get(i));
+        for (Player player : players) {
+            EventUtils.clear(player);
         }
     }
 
