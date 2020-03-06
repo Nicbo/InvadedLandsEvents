@@ -20,13 +20,14 @@ public enum EventMessage {
     CRAFT_IN_EVENT(ChatColor.RED + "You're unable to craft in this state."),
     NO_PERMISSION(ChatColor.RED + "I'm sorry, but you do not have permission to perform this command.");
 
-    final String description;
+    final String message;
 
-    EventMessage(String description) {
-        this.description = description;
+    EventMessage(String message) {
+        this.message = message;
     }
 
-    public String getDescription() {
-        return description;
+    @Override
+    public String toString() {
+        return message;
     }
 }

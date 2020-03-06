@@ -59,7 +59,7 @@ public class GeneralEventListener implements Listener {
 
             event.setCancelled(true);
             Player player = (Player) event.getWhoClicked();
-            player.sendMessage(EventMessage.CRAFT_IN_EVENT.getDescription());
+            player.sendMessage(EventMessage.CRAFT_IN_EVENT.toString());
         }
     }
 }

@@ -112,7 +112,7 @@ public abstract class InvadedEvent implements Listener {
         EventUtils.clear(player);
         player.getInventory().setItem(8, star);
         for (Player onlinePlayers : GeneralUtils.getPlayers()) {
-            onlinePlayers.sendMessage(EventMessage.JOINED_EVENT.getDescription().replace("{player}", player.getName()));
+            onlinePlayers.sendMessage(EventMessage.JOINED_EVENT.toString().replace("{player}", player.getName()));
         }
         //add to team and scoreboard
     }
@@ -124,12 +124,12 @@ public abstract class InvadedEvent implements Listener {
         player.teleport(spawnLoc);
         if (started) {
             for (Player eventPlayers : players) {
-                eventPlayers.sendMessage(EventMessage.LEFT_EVENT.getDescription().replace("{player}", player.getName()));
+                eventPlayers.sendMessage(EventMessage.LEFT_EVENT.toString().replace("{player}", player.getName()));
             }
         }
         else {
             for (Player onlinePlayers : GeneralUtils.getPlayers()) {
-                onlinePlayers.sendMessage(EventMessage.LEFT_EVENT.getDescription().replace("{player}", player.getName()));
+                onlinePlayers.sendMessage(EventMessage.LEFT_EVENT.toString().replace("{player}", player.getName()));
             }
         }
         //remove from team and scoreboard
@@ -151,7 +151,7 @@ public abstract class InvadedEvent implements Listener {
 
     public void forceEndEvent() {
         for (Player eventPlayers : players) {
-            eventPlayers.sendMessage(EventMessage.EVENT_FORCE_ENDED.getDescription().replace("{event}", name));
+            eventPlayers.sendMessage(EventMessage.EVENT_FORCE_ENDED.toString().replace("{event}", name));
         }
         this.plugin.getServer().getScheduler().runTask(this.plugin, new Runnable() {
             @Override

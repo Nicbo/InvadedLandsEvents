@@ -33,13 +33,14 @@ public enum EventPartyMessage {
     CANNOT_ACTION_SELF(ChatColor.RED + "You cannot {action} yourself."),
     NO_PERMISSION(ChatColor.RED + "I'm sorry, but you do not have permission to perform this command.");
 
-    final String description;
+    final String message;
 
-    EventPartyMessage(String description) {
-        this.description = description;
+    EventPartyMessage(String message) {
+        this.message = message;
     }
 
-    public String getDescription() {
-        return description;
+    @Override
+    public String toString() {
+        return message;
     }
 }

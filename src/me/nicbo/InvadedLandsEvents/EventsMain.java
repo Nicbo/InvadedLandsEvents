@@ -12,7 +12,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.logging.Logger;
 
 public class EventsMain extends JavaPlugin {
-    private static EventsMain plugin;
     private Logger log = getLogger();
     private EventManager eventManager;
     private ManagerHandler managerHandler;
@@ -20,7 +19,6 @@ public class EventsMain extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        this.plugin = this;
         worldGuardPlugin = getWorldGuard();
         saveDefaultConfig();
         this.managerHandler = new ManagerHandler(this);
@@ -63,9 +61,5 @@ public class EventsMain extends JavaPlugin {
 
     public ManagerHandler getManagerHandler() {
         return this.managerHandler;
-    }
-
-    public static EventsMain getInstance() {
-        return plugin;
     }
 }
