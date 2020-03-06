@@ -3,10 +3,7 @@ package me.nicbo.InvadedLandsEvents.events;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import me.nicbo.InvadedLandsEvents.EventsMain;
-import me.nicbo.InvadedLandsEvents.manager.managers.EventManager;
 import me.nicbo.InvadedLandsEvents.utils.ConfigUtils;
-import me.nicbo.InvadedLandsEvents.utils.EventUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -55,13 +52,13 @@ public class Spleef extends InvadedEvent {
 
         initPlayerCheck();
 
-        RegionManager regionManager = plugin.getWorldGuardPlugin().getRegionManager(world);
+        RegionManager regionManager = plugin.getWorldGuardPlugin().getRegionManager(eventWorld);
         String regionName = eventConfig.getString("region");
 
         try {
             region = regionManager.getRegion(regionName);
         } catch (NullPointerException npe) {
-            log.severe("Spleef region '" + regionName + "' does not exist");
+            logger.severe("Spleef region '" + regionName + "' does not exist");
         }
 
         BlockVector pos1 = ConfigUtils.blockVectorFromConfig(eventConfig.getConfigurationSection("snow-position-1"));
@@ -93,7 +90,7 @@ public class Spleef extends InvadedEvent {
         spawnTpPlayers();
         players.clear();
         spectators.clear();
-        EventManager.setEventRunning(false);
+        plugin.getManagerHandler().getEventManager().setEventRunning(false);
     }
 
     private void buildSnow(BlockVector pos1, BlockVector pos2) {
@@ -107,7 +104,7 @@ public class Spleef extends InvadedEvent {
         for (int x = minX; x <= maxX; x++) {
             for (int y = minY; y <= maxY; y++) {
                 for (int z = minZ; z <= maxZ; z++) {
-                    world.getBlockAt(x, y, z).setType(Material.SNOW_BLOCK);
+                    eventWorld.getBlockAt(x, y, z).setType(Material.SNOW_BLOCK);
                 }
             }
         }
@@ -115,7 +112,7 @@ public class Spleef extends InvadedEvent {
 
     private void tpPlayers() {
         for (int i = 0; i < players.size(); i++) {
-            Location start = ConfigUtils.deserializeLoc(eventConfig.getConfigurationSection("start-location-" + (i % 2 == 0 ? 1 : 2)), world);
+            Location start = ConfigUtils.deserializeLoc(eventConfig.getConfigurationSection("start-location-" + (i % 2 == 0 ? 1 : 2)), eventWorld);
             players.get(i).teleport(start);
 
         }
@@ -136,7 +133,7 @@ public class Spleef extends InvadedEvent {
     public void snowBreak(BlockBreakEvent event) {
         if (blockEvent(event.getPlayer())) return;
 
-        if (countdown) {
+        if (endCountdown) {
             event.getPlayer().sendMessage(ChatColor.RED + "You can't break that block right now!");
             event.setCancelled(true);
         }

@@ -21,15 +21,15 @@ import java.util.logging.Logger;
 public abstract class InvadedEvent implements Listener {
 
     protected EventsMain plugin;
-    protected Logger log;
+    protected Logger logger;
 
     protected Location spawnLoc;
     protected Location specLoc;
-    protected World world;
+    protected World eventWorld;
     protected String winCommand;
 
-    private String name;
-    protected boolean countdown;
+    private String eventName;
+    protected boolean endCountdown;
     protected boolean started;
     private boolean enabled;
 
@@ -41,18 +41,17 @@ public abstract class InvadedEvent implements Listener {
 
     protected ItemStack star;
 
-    public InvadedEvent(String name, String configName, EventsMain plugin) {
+    public InvadedEvent(String eventName, String configName, EventsMain plugin) {
         this.plugin = plugin;
-        this.log = plugin.getLogger();
-        this.name = name;
+        this.logger = plugin.getLogger();
+        this.eventName = eventName;
 
         FileConfiguration config = this.plugin.getConfig();
         this.eventConfig = config.getConfigurationSection("events." + configName);
-        this.world = Bukkit.getWorld(config.getString("event-world"));
+        this.eventWorld = Bukkit.getWorld(config.getString("event-world"));
         this.spawnLoc = ConfigUtils.deserializeLoc(config.getConfigurationSection("spawn-location"));
-        this.specLoc = ConfigUtils.deserializeLoc(this.eventConfig.getConfigurationSection("spec-location"), this.world);
+        this.specLoc = ConfigUtils.deserializeLoc(this.eventConfig.getConfigurationSection("spec-location"), this.eventWorld);
         this.winCommand = config.getString("win-command");
-
 
         this.enabled = eventConfig.getBoolean("enabled");
         this.players = new ArrayList<>();
@@ -67,15 +66,15 @@ public abstract class InvadedEvent implements Listener {
         if (this.enabled)
             init(plugin);
         else
-            log.info(name + " not enabled!");
+            logger.info(eventName + " not enabled!");
     }
 
     public abstract void init(EventsMain plugin);
     public abstract void start();
     public abstract void stop();
 
-    public String getName() {
-        return name;
+    public String getEventName() {
+        return eventName;
     }
 
     public boolean isStarted() {
@@ -111,8 +110,9 @@ public abstract class InvadedEvent implements Listener {
         player.teleport(specLoc);
         EventUtils.clear(player);
         player.getInventory().setItem(8, star);
-        for (Player onlinePlayers : GeneralUtils.getPlayers()) {
-            onlinePlayers.sendMessage(EventMessage.JOINED_EVENT.toString().replace("{player}", player.getName()));
+
+        for (Player p : GeneralUtils.getPlayers()) {
+            p.sendMessage(EventMessage.JOINED_EVENT.toString().replace("{player}", player.getName()));
         }
         //add to team and scoreboard
     }
@@ -122,15 +122,9 @@ public abstract class InvadedEvent implements Listener {
         spectators.remove(player);
         EventUtils.clear(player);
         player.teleport(spawnLoc);
-        if (started) {
-            for (Player eventPlayers : players) {
-                eventPlayers.sendMessage(EventMessage.LEFT_EVENT.toString().replace("{player}", player.getName()));
-            }
-        }
-        else {
-            for (Player onlinePlayers : GeneralUtils.getPlayers()) {
-                onlinePlayers.sendMessage(EventMessage.LEFT_EVENT.toString().replace("{player}", player.getName()));
-            }
+
+        for (Player p : started ? players : GeneralUtils.getPlayers()) {
+            p.sendMessage(EventMessage.LEFT_EVENT.toString().replace("{player}", player.getName()));
         }
         //remove from team and scoreboard
     }
@@ -143,22 +137,22 @@ public abstract class InvadedEvent implements Listener {
     }
 
     public void eventInfo(Player player) {
-        player.sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + "Active Event:");
-        player.sendMessage(ChatColor.YELLOW + "Type: " + ChatColor.GOLD + name);
+        player.sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + "Active Event: " + eventName);
+        player.sendMessage(ChatColor.YELLOW + "Type: " + ChatColor.GOLD + eventName);
         player.sendMessage(ChatColor.YELLOW + "Players: " + ChatColor.GOLD + players.size());
         player.sendMessage(ChatColor.YELLOW + "Spectators: " + ChatColor.GOLD + spectators.size());
     }
 
     public void forceEndEvent() {
-        for (Player eventPlayers : players) {
-            eventPlayers.sendMessage(EventMessage.EVENT_FORCE_ENDED.toString().replace("{event}", name));
-        }
+        players.forEach(player -> player.sendMessage(EventMessage.EVENT_FORCE_ENDED.toString().replace("{event}", eventName)));
+
         this.plugin.getServer().getScheduler().runTask(this.plugin, new Runnable() {
             @Override
             public void run() {
                 clearInventories();
             }
         });
+
         spawnTpPlayers();
         players.clear();
         spectators.clear();
@@ -173,10 +167,8 @@ public abstract class InvadedEvent implements Listener {
     }
 
     protected void playerWon(Player player) {
-        countdown = false;
-
         for (int i = 0; i < 4; i++) {
-            Bukkit.broadcastMessage(ChatColor.GOLD + (player == null ? "No one" : player.getName()) + ChatColor.YELLOW + " won the " + ChatColor.GOLD + name + ChatColor.YELLOW + " event!");
+            Bukkit.broadcastMessage(ChatColor.GOLD + (player == null ? "No one" : player.getName()) + ChatColor.YELLOW + " won the " + ChatColor.GOLD + eventName + ChatColor.YELLOW + " event!");
         }
 
         plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
@@ -220,18 +212,18 @@ public abstract class InvadedEvent implements Listener {
     }
 
     protected void startMatchCountdown(List<Player> players) {
-        countdown = true;
+        endCountdown = true;
         new BukkitRunnable() {
             private int timer = 5;
 
             @Override
             public void run() {
-                if (!countdown) {
+                if (!endCountdown) {
                     this.cancel();
                     return;
                 }
                 if (timer == 1) {
-                    countdown = false;
+                    endCountdown = false;
                     this.cancel();
                 }
                 players.forEach(player -> player.sendMessage(ChatColor.YELLOW + "Starting in " + ChatColor.GOLD + timer--));

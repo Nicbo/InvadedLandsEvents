@@ -70,7 +70,7 @@ public final class EventManager extends Manager {
 
     private void startCountDown(String host) {
         currentEvent.init(plugin);
-        String name = currentEvent.getName();
+        String name = currentEvent.getEventName();
         setEventRunning(true);
 
         new BukkitRunnable() {
