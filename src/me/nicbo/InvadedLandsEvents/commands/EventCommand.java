@@ -44,7 +44,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
         this.args1.add("create");
         this.args1.add("disband");
         this.args1.add("invite");
-        this.args1.add("deinvite");
+        this.args1.add("uninvite");
         this.args1.add("kick");
         this.args1.add("join");
         this.args1.add("leave");
@@ -105,15 +105,15 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                                                 if (party.getLeader() == uuid) {
                                                     Player target = this.plugin.getServer().getPlayer(args[2]);
                                                     if (target != null || target.isOnline()) {
-                                                        String targetname = target.getName();
+                                                        String targetName = target.getName();
                                                         UUID uuid1 = target.getUniqueId();
                                                         if (party.getLeader() != uuid1) {
                                                             if (eventPartyManager.getParty(uuid1) == null) {
                                                                 if (eventPartyRequestManager.hasPartyRequests(target) && eventPartyRequestManager.hasPartyRequestFromPlayer(target, player)) {
-                                                                    player.sendMessage(EventPartyMessage.INVITE_ALREADY_SENT.toString().replace("{player}", targetname));
+                                                                    player.sendMessage(EventPartyMessage.INVITE_ALREADY_SENT.toString().replace("{player}", targetName));
                                                                     break;
                                                                 }
-                                                                eventPartyManager.notifyParty(party, EventPartyMessage.PARTY_INVITE_PLAYER.toString().replace("{player}", targetname));
+                                                                eventPartyManager.notifyParty(party, EventPartyMessage.PARTY_INVITE_PLAYER.toString().replace("{player}", targetName));
                                                                 eventPartyRequestManager.addPartyRequest(target, player);
 
                                                                 TextComponent invite = new TextComponent(EventPartyMessage.PARTY_INVITE.toString().replace("{leader}", playername));
@@ -142,8 +142,8 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                                         player.sendMessage(usage + "/event <join|leave|spectate|info|host> (event)");
                                         break;
                                     }
-                                    case "di":
-                                    case "deinvite": {
+                                    case "ui":
+                                    case "uninvite": {
                                         if (args.length >= 3) {
                                             if (eventPartyManager.getParty(uuid) != null) {
                                                 EventParty party = eventPartyManager.getParty(uuid);
@@ -151,18 +151,18 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                                                     Player target = this.plugin.getServer().getPlayer(args[2]);
                                                     if (target != null || target.isOnline()) {
                                                         UUID uuid1 = target.getUniqueId();
-                                                        String targetname = target.getName();
+                                                        String targetName = target.getName();
                                                         if (party.getLeader() != uuid1) {
                                                             if (eventPartyRequestManager.hasPartyRequests(target) && eventPartyRequestManager.hasPartyRequestFromPlayer(target, player)) {
-                                                                eventPartyManager.notifyParty(party, EventPartyMessage.PARTY_DEINVITE_PLAYER.toString().replace("{player}", targetname));
+                                                                eventPartyManager.notifyParty(party, EventPartyMessage.PARTY_DEINVITE_PLAYER.toString().replace("{player}", targetName));
                                                                 eventPartyRequestManager.removePartyRequest(target, player);
 
                                                                 target.sendMessage(EventPartyMessage.PARTY_DEINVITE.toString().replace("{leader}", playername));
                                                                 break;
                                                             }
-                                                            player.sendMessage(EventPartyMessage.INVITE_DOES_NOT_EXIST.toString().replace("{player}", targetname));
+                                                            player.sendMessage(EventPartyMessage.INVITE_DOES_NOT_EXIST.toString().replace("{player}", targetName));
                                                         } else {
-                                                            player.sendMessage(EventPartyMessage.CANNOT_ACTION_SELF.toString().replace("{action}", "deinvite"));
+                                                            player.sendMessage(EventPartyMessage.CANNOT_ACTION_SELF.toString().replace("{action}", "uninvite"));
                                                         }
                                                     } else {
                                                         player.sendMessage(EventPartyMessage.PLAYER_NOT_FOUND.toString().replace("{player}", args[2]));
@@ -225,7 +225,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                                             if (this.plugin.getServer().getPlayer(args[2]) != null) {
                                                 Player target = this.plugin.getServer().getPlayer(args[2]);
                                                 UUID uuid1 = target.getUniqueId();
-                                                String targetname = target.getName();
+                                                String targetName = target.getName();
                                                 if (eventPartyManager.getParty(uuid1) != null) {
                                                     EventParty party = eventPartyManager.getParty(uuid1);
                                                     if (party.getLeader() == uuid) {
@@ -233,13 +233,13 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                                                             eventPartyManager.notifyParty(party, EventPartyMessage.PARTY_JOIN.toString().replace("{member}", playername));
                                                             eventPartyManager.joinParty(uuid1, uuid);
                                                         } else {
-                                                            player.sendMessage(EventPartyMessage.NO_INVITE.toString().replace("{leader}", targetname));
+                                                            player.sendMessage(EventPartyMessage.NO_INVITE.toString().replace("{leader}", targetName));
                                                         }
                                                     } else {
                                                         player.sendMessage(EventPartyMessage.CANNOT_ACTION_SELF.toString().replace("{action} yourself", "join your own party"));
                                                     }
                                                 } else {
-                                                    player.sendMessage(EventPartyMessage.PARTY_DOES_NOT_EXIST.toString().replace("{player}", targetname));
+                                                    player.sendMessage(EventPartyMessage.PARTY_DOES_NOT_EXIST.toString().replace("{player}", targetName));
                                                 }
                                             } else {
                                                 player.sendMessage(EventPartyMessage.PLAYER_NOT_FOUND.toString().replace("{player}", args[2]));
