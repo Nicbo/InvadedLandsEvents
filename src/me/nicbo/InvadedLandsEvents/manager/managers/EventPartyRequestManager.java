@@ -12,7 +12,7 @@ public class EventPartyRequestManager extends Manager
 
     public EventPartyRequestManager(ManagerHandler handler) {
         super(handler);
-        this.partyRequestMap = new HashMap<UUID, List<UUID>>();
+        this.partyRequestMap = new HashMap<>();
     }
 
     public void addPartyRequest(Player requested, Player requester) {

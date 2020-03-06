@@ -26,8 +26,7 @@ public final class EventUtils {
         player.setFlying(false);
         player.setMaximumNoDamageTicks(20);
         player.setFoodLevel(20);
-        Damageable dam = (Damageable) player;
-        player.setHealth(dam.getMaxHealth());
+        player.setHealth((player).getMaxHealth());
         player.setFireTicks(0);
         player.setFallDistance(0.0f);
         player.getInventory().clear();

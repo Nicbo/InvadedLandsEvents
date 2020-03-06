@@ -25,8 +25,6 @@ public final class GeneralUtils {
     }
 
     public static List<Player> getPlayers() {
-        List<Player> players = new ArrayList<Player>();
-        for (Player player : Bukkit.getOnlinePlayers()) { players.add(player); }
-        return players;
+        return new ArrayList<>(Bukkit.getOnlinePlayers());
     }
 }

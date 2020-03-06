@@ -5,10 +5,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class ConfigFile {
     private File file;
@@ -41,7 +38,7 @@ public class ConfigFile {
     }
 
     public boolean getBoolean(String path) {
-        return this.configuration.contains(path) ? this.configuration.getBoolean(path) : false;
+        return this.configuration.contains(path) && this.configuration.getBoolean(path);
     }
 
     public String getString(String path) {
@@ -59,10 +56,10 @@ public class ConfigFile {
     public List<String> getReversedStringList(String path) {
         List<String> list = this.getStringList(path);
         if (list == null) {
-            return Arrays.asList("ERROR: STRING LIST NOT FOUND!");
+            return Collections.singletonList("ERROR: STRING LIST NOT FOUND!");
         } else {
             int size = list.size();
-            List<String> toReturn = new ArrayList();
+            List<String> toReturn = new ArrayList<>();
 
             for(int i = size - 1; i >= 0; --i) {
                 toReturn.add(list.get(i));
@@ -76,11 +73,9 @@ public class ConfigFile {
         if (!this.configuration.contains(path)) {
             return Arrays.asList("ERROR: STRING LIST NOT FOUND!");
         } else {
-            ArrayList<String> strings = new ArrayList();
-            Iterator var3 = this.configuration.getStringList(path).iterator();
+            ArrayList<String> strings = new ArrayList<>();
 
-            while(var3.hasNext()) {
-                String string = (String)var3.next();
+            for (String string : this.configuration.getStringList(path)) {
                 strings.add(ChatColor.translateAlternateColorCodes('&', string));
             }
 
@@ -92,11 +87,9 @@ public class ConfigFile {
         if (!this.configuration.contains(path)) {
             return toReturn;
         } else {
-            ArrayList<String> strings = new ArrayList();
-            Iterator var4 = this.configuration.getStringList(path).iterator();
+            ArrayList<String> strings = new ArrayList<>();
 
-            while(var4.hasNext()) {
-                String string = (String)var4.next();
+            for (String string : this.configuration.getStringList(path)) {
                 strings.add(ChatColor.translateAlternateColorCodes('&', string));
             }
 

@@ -18,7 +18,7 @@ public final class EventManager extends Manager {
     private static String[] eventNames;
     private HashMap<String, InvadedEvent> events;
     private InvadedEvent currentEvent;
-    private static boolean eventRunning = false;
+    private boolean eventRunning;
 
     static {
         eventNames = new String[]{
@@ -34,6 +34,7 @@ public final class EventManager extends Manager {
         super(handler);
         this.plugin = handler.getPlugin();
         this.events = new HashMap<>();
+        this.eventRunning = false;
         addEventsToMap();
     }
     
@@ -156,12 +157,12 @@ public final class EventManager extends Manager {
         this.currentEvent = event;
     }
 
-    public static boolean isEventRunning() {
+    public boolean isEventRunning() {
         return eventRunning;
     }
 
-    public static void setEventRunning(boolean bool) {
-        eventRunning = bool;
+    public void setEventRunning(boolean eventRunning) {
+        this.eventRunning = eventRunning;
     }
 
     public static String[] getEventNames() {

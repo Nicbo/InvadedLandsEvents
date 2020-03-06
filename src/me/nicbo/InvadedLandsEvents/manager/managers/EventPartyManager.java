@@ -13,8 +13,8 @@ public class EventPartyManager extends Manager {
 
     public EventPartyManager(ManagerHandler handler) {
         super(handler);
-        this.leaderUUIDtoParty = new HashMap<UUID, EventParty>();
-        this.playerUUIDtoLeaderUUID = new HashMap<UUID, UUID>();
+        this.leaderUUIDtoParty = new HashMap<>();
+        this.playerUUIDtoLeaderUUID = new HashMap<>();
     }
 
     public EventParty getParty(UUID player) {
@@ -30,8 +30,8 @@ public class EventPartyManager extends Manager {
         return this.leaderUUIDtoParty;
     }
 
-    public EventParty createParty(UUID leader, String leadername) {
-        EventParty party = new EventParty(leader, leadername);
+    public EventParty createParty(UUID leader, String leaderName) {
+        EventParty party = new EventParty(leader, leaderName);
         this.leaderUUIDtoParty.put(leader, party);
         return party;
     }

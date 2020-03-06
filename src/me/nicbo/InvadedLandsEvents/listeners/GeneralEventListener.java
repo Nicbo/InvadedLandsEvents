@@ -53,7 +53,7 @@ public class GeneralEventListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOW)
     public void itemCraft(CraftItemEvent event) {
-        if (eventManager.isEventRunning() && eventManager.getCurrentEvent().containsPlayer((Player)event.getWhoClicked())) {
+        if (eventManager.isEventRunning() && eventManager.getCurrentEvent().containsPlayer((Player) event.getWhoClicked())) {
             ItemStack item = event.getCurrentItem();
             if (item == null || item.getType() == Material.AIR) return;
 
