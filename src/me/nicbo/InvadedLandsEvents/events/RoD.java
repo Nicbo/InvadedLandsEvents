@@ -12,7 +12,6 @@ public class RoD extends InvadedEvent {
 
     public RoD(EventsMain plugin) {
         super("Race of Death", "rod", plugin);
-        init(plugin);
     }
 
     @Override
