@@ -304,7 +304,8 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                         case "l":
                         case "leave": {
                             EventMessage leaveMsg = eventManager.leaveEvent(player);
-                            player.sendMessage(leaveMsg.toString());
+                            if (leaveMsg != null)
+                                player.sendMessage(leaveMsg.toString());
                             break;
                         }
                         case "s":
