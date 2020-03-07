@@ -58,11 +58,13 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
             } else if (args[0].equalsIgnoreCase("save")) {
                 plugin.saveConfig();
                 sender.sendMessage(ChatColor.GREEN + "Event config saved");
+                plugin.reloadConfig();
+                sender.sendMessage(ChatColor.GREEN + "Event config reloaded");
                 return true;
             } else if (args[0].equalsIgnoreCase("reload")) {
                 plugin.reloadConfig();
-                plugin.getManagerHandler().restartEventManager();
                 sender.sendMessage(ChatColor.GREEN + "Event config reloaded");
+                plugin.getManagerHandler().restartEventManager();
                 sender.sendMessage(ChatColor.GREEN + "Event manager reloaded");
                 return true;
             } else if (!(sender instanceof Player)) {
@@ -122,6 +124,7 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
             player.sendMessage(Bukkit.getWorld(args[1]) == null ? ChatColor.RED + "Warning: Could not find world " + ChatColor.YELLOW + "'" + args[1] + "'" + ChatColor.RED + "!"
                     : ChatColor.GOLD + "event-world set to " + ChatColor.YELLOW + "'" + args[1] + "'" + ChatColor.GOLD + "!");
         }
+        plugin.saveConfig();
     }
 
     private void wincommand(String[] args, Player player) {
@@ -138,12 +141,14 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
             config.set("event-world", command.toString());
             player.sendMessage(ChatColor.GOLD + "win-command set to " + ChatColor.YELLOW + "'" + command.toString() + "'" + ChatColor.GOLD + "!");
         }
+        plugin.saveConfig();
     }
 
     private void spawnlocation(String[] args, Player player) {
         ConfigurationSection section = config.getConfigurationSection("spawn-location");
         ConfigUtils.serializeLoc(player.getLocation(), true, section);
         player.sendMessage(ChatColor.GOLD + "spawn-location set to " + ChatColor.YELLOW + "your location" + ChatColor.GOLD + "!");
+        plugin.saveConfig();
     }
 
     private void sumo(String[] args, Player player) {
@@ -170,6 +175,7 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
                     player.sendMessage(usage + "/econfig sumo " + args[1].toLowerCase() + " set");
                     break;
             }
+            plugin.saveConfig();
         }
     }
 
@@ -197,6 +203,7 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
                     player.sendMessage(usage + "/econfig brackets " + args[1].toLowerCase() + " set");
                     break;
             }
+            plugin.saveConfig();
         }
     }
 
@@ -234,6 +241,7 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
                     player.sendMessage(usage + "/econfig koth " + args[1].toLowerCase() + " set");
                     break;
             }
+            plugin.saveConfig();
         }
     }
 
@@ -260,6 +268,7 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
                     player.sendMessage(usage + "/econfig lms " + args[1].toLowerCase() + " set");
                     break;
             }
+            plugin.saveConfig();
         }
     }
 
@@ -301,6 +310,7 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
                     player.sendMessage(usage + "/econfig oitc " + args[1].toLowerCase() + " set");
                     break;
             }
+            plugin.saveConfig();
         }
     }
 
@@ -336,6 +346,7 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
                     player.sendMessage(usage + "/econfig redrover " + args[1].toLowerCase() + " set");
                     break;
             }
+            plugin.saveConfig();
         }
     }
 
@@ -362,6 +373,7 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
                     player.sendMessage(usage + "/econfig rod " + args[1].toLowerCase() + " set");
                     break;
             }
+            plugin.saveConfig();
         }
     }
 
@@ -403,6 +415,7 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
                     player.sendMessage(ChatColor.GOLD + args[1] + " set to " + ChatColor.YELLOW + "your location" + ChatColor.GOLD + "!");
                     break;
             }
+            plugin.saveConfig();
         }
     }
 
@@ -430,6 +443,7 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
                     player.sendMessage(usage + "/econfig tdm " + args[1].toLowerCase() + " set");
                     break;
             }
+            plugin.saveConfig();
         }
     }
 
@@ -456,6 +470,7 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
                     player.sendMessage(usage + "/econfig tnttag " + args[1].toLowerCase() + " set");
                     break;
             }
+            plugin.saveConfig();
         }
     }
 
@@ -482,6 +497,7 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
                     player.sendMessage(usage + "/econfig waterdrop " + args[1].toLowerCase() + " set");
                     break;
             }
+            plugin.saveConfig();
         }
     }
 
@@ -508,6 +524,7 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
                     player.sendMessage(usage + "/econfig woolshuffle " + args[1].toLowerCase() + " set");
                     break;
             }
+            plugin.saveConfig();
         }
     }
 
