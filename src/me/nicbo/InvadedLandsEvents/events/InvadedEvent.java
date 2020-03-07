@@ -222,6 +222,7 @@ public abstract class InvadedEvent implements Listener {
                     this.cancel();
                     return;
                 }
+
                 if (timer == 1) {
                     matchCountdown = false;
                     this.cancel();

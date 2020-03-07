@@ -5,11 +5,10 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.scoreboard.Objective;
 import org.bukkit.util.BlockVector;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public final class ConfigUtils {
     private ConfigUtils() {}
@@ -55,22 +54,30 @@ public final class ConfigUtils {
         return new BlockVector(x, y, z);
     }
 
-    public static String[] configSectionToMsgs(ConfigurationSection section) { // bad code but it works ¯\_(ツ)_/¯
-        List<String> msgs = new ArrayList<>();
+    public static String[] getConfigMessage(ConfigurationSection section) {
+        List<String> message = new ArrayList<>();
         Map<String, Object> keyValues = section.getValues(false);
+
         for (String key : keyValues.keySet()) {
-            try {
-                ConfigurationSection subSection = section.getConfigurationSection(key);
-                Map<String, Object> keyValuesSub = subSection.getValues(false);
-                StringBuilder coords = new StringBuilder();
-                for (String subKey : keyValuesSub.keySet()) {
-                    coords.append("\n    ").append(ChatColor.GOLD).append(subKey).append(": ").append(ChatColor.YELLOW).append(keyValuesSub.get(subKey).toString());
-                }
-                msgs.add(ChatColor.GOLD + key + ": " + coords.toString());
-            } catch (NullPointerException npe) {
-                msgs.add(ChatColor.GOLD + key + ": " + ChatColor.YELLOW + keyValues.get(key));
+            if (key.equals("events"))
+                continue;
+
+            Object value = keyValues.get(key);
+            String val = value.toString();
+
+            if (value instanceof ConfigurationSection) {
+                ConfigurationSection locSection = (ConfigurationSection) value;
+
+                val = "(" + String.format("%.2f", locSection.getDouble("x")) + ", "
+                        + String.format("%.2f", locSection.getDouble("y")) + ", "
+                        + String.format("%.2f", locSection.getDouble("z")) + ") ["
+                        + String.format("%.2f", locSection.getDouble("yaw")) + ", "
+                        + String.format("%.2f", locSection.getDouble("pitch")) + "]";
             }
+
+            message.add(ChatColor.GOLD + key + ": " + ChatColor.YELLOW + val);
         }
-        return msgs.toArray(new String[0]);
+
+        return message.toArray(new String[0]);
     }
 }

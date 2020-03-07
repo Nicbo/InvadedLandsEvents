@@ -60,6 +60,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public boolean onCommand(CommandSender sender, Command cmd, String s, String[] args) {
         if (cmd.getName().toLowerCase().equalsIgnoreCase("event")) {
             if (sender instanceof Player) {
@@ -281,13 +282,13 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                                     Player member = this.plugin.getServer().getPlayer(memberUUID);
                                     members.add(member.getName());
                                 }
-                                String[] information = { ChatColor.GRAY + "" + ChatColor.STRIKETHROUGH +
-                                        "----------------------------------------------------", ChatColor.GOLD + "" +
-                                        ChatColor.BOLD + "Party Information:", ChatColor.YELLOW + "Leader: " + ChatColor.GOLD +
-                                        leader.getName(), ChatColor.YELLOW + "Members " + ChatColor.GRAY + "[" +
-                                        ChatColor.GOLD + "" + (party.getMembers().size()) + ChatColor.GRAY + "]" + ChatColor.YELLOW
-                                        + ":", ChatColor.GOLD + ((party.getSize() >= 2) ? "" + members : "None"), ChatColor.GRAY
-                                        + "" + ChatColor.STRIKETHROUGH + "----------------------------------------------------" };
+                                String[] information = { ChatColor.GRAY + "" + ChatColor.STRIKETHROUGH + "----------------------------------------------------",
+                                        ChatColor.GOLD + "" + ChatColor.BOLD + "Party Information:",
+                                        ChatColor.YELLOW + "Leader: " + ChatColor.GOLD + leader.getName(),
+                                        ChatColor.YELLOW + "Members " + ChatColor.GRAY + "[" +
+                                        ChatColor.GOLD + "" + (party.getMembers().size()) + ChatColor.GRAY + "]" + ChatColor.YELLOW + ":",
+                                        ChatColor.GOLD + ((party.getSize() >= 2) ? "" + members : "None"),
+                                        ChatColor.GRAY  + "" + ChatColor.STRIKETHROUGH + "----------------------------------------------------" };
                                 player.sendMessage(information);
                                 break;
                             }

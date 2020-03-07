@@ -13,7 +13,7 @@ public class EventParty
     private boolean open;
 
     public EventParty(UUID partyLeader, String leaderName) {
-        this.memberUUIDs = new ArrayList<UUID>();
+        this.memberUUIDs = new ArrayList<>();
         this.partyLeader = partyLeader;
         this.leaderName = leaderName;
         this.partyState = EventPartyState.NOT_IN_EVENT;
@@ -60,7 +60,7 @@ public class EventParty
     }
 
     public List<UUID> getAllMembersOnline() {
-        List<UUID> membersOnline = new ArrayList<UUID>();
+        List<UUID> membersOnline = new ArrayList<>();
         for (UUID memberUUID : this.memberUUIDs) {
             Player member = Bukkit.getPlayer(memberUUID);
             if (member != null) {

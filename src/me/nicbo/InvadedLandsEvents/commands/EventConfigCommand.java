@@ -2,6 +2,7 @@ package me.nicbo.InvadedLandsEvents.commands;
 
 import me.nicbo.InvadedLandsEvents.EventsMain;
 import me.nicbo.InvadedLandsEvents.manager.managers.EventManager;
+import me.nicbo.InvadedLandsEvents.utils.Config;
 import me.nicbo.InvadedLandsEvents.utils.ConfigUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -53,6 +54,7 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
         if (cmd.getName().equalsIgnoreCase("eventconfig") || cmd.getName().equalsIgnoreCase("econfig")) {
             sender.sendMessage("\n");
             if (args.length == 0) {
+                sender.sendMessage(ConfigUtils.getConfigMessage(config));
                 sender.sendMessage(usage + "/econfig <help|event|save|reload|setting(event-world|spawn-location)> <setting|value> <value>");
                 return true;
             } else if (args[0].equalsIgnoreCase("save")) {
@@ -154,7 +156,7 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
     private void sumo(String[] args, Player player) {
         ConfigurationSection section = config.getConfigurationSection("events.sumo");
         if (args.length == 1) {
-            player.sendMessage(ConfigUtils.configSectionToMsgs(section));
+            player.sendMessage(ConfigUtils.getConfigMessage(section));
             player.sendMessage("\n" + usage + "/econfig sumo <key>");
         } else {
             switch (args[1].toLowerCase()) {
@@ -182,7 +184,7 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
     private void brackets(String[] args, Player player) {
         ConfigurationSection section = config.getConfigurationSection("events.brackets");
         if (args.length == 1) {
-            player.sendMessage(ConfigUtils.configSectionToMsgs(section));
+            player.sendMessage(ConfigUtils.getConfigMessage(section));
             player.sendMessage("\n" + usage + "/econfig brackets <key>");
         } else {
             switch (args[1].toLowerCase()) {
@@ -210,7 +212,7 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
     private void koth(String[] args, Player player) {
         ConfigurationSection section = config.getConfigurationSection("events.koth");
         if (args.length == 1) {
-            player.sendMessage(ConfigUtils.configSectionToMsgs(section));
+            player.sendMessage(ConfigUtils.getConfigMessage(section));
             player.sendMessage("\n" + usage + "/econfig koth <key>");
         } else {
             switch (args[1].toLowerCase()) {
@@ -248,7 +250,7 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
     private void lms(String[] args, Player player) {
         ConfigurationSection section = config.getConfigurationSection("events.lms");
         if (args.length == 1) {
-            player.sendMessage(ConfigUtils.configSectionToMsgs(section));
+            player.sendMessage(ConfigUtils.getConfigMessage(section));
             player.sendMessage("\n" + usage + "/econfig lms <key>");
         } else {
             switch (args[1].toLowerCase()) {
@@ -275,7 +277,7 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
     private void oitc(String[] args, Player player) {
         ConfigurationSection section = config.getConfigurationSection("events.oitc");
         if (args.length == 1) {
-            player.sendMessage(ConfigUtils.configSectionToMsgs(section));
+            player.sendMessage(ConfigUtils.getConfigMessage(section));
             player.sendMessage("\n" + usage + "/econfig oitc <key>");
         } else {
             switch (args[1].toLowerCase()) {
@@ -317,7 +319,7 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
     private void redrover(String[] args, Player player) {
         ConfigurationSection section = config.getConfigurationSection("events.redrover");
         if (args.length == 1) {
-            player.sendMessage(ConfigUtils.configSectionToMsgs(section));
+            player.sendMessage(ConfigUtils.getConfigMessage(section));
             player.sendMessage("\n" + usage + "/econfig redrover <key>");
         } else {
             switch (args[1].toLowerCase()) {
@@ -353,7 +355,7 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
     private void rod(String[] args, Player player) {
         ConfigurationSection section = config.getConfigurationSection("events.rod");
         if (args.length == 1) {
-            player.sendMessage(ConfigUtils.configSectionToMsgs(section));
+            player.sendMessage(ConfigUtils.getConfigMessage(section));
             player.sendMessage("\n" + usage + "/econfig rod <key>");
         } else {
             switch (args[1].toLowerCase()) {
@@ -380,7 +382,7 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
     private void spleef(String[] args, Player player) {
         ConfigurationSection section = config.getConfigurationSection("events.spleef");
         if (args.length == 1) {
-            player.sendMessage(ConfigUtils.configSectionToMsgs(section));
+            player.sendMessage(ConfigUtils.getConfigMessage(section));
             player.sendMessage("\n" + usage + "/econfig spleef <key>");
         } else {
             switch (args[1].toLowerCase()) {
@@ -422,7 +424,7 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
     private void tdm(String[] args, Player player) {
         ConfigurationSection section = config.getConfigurationSection("events.tdm");
         if (args.length == 1) {
-            player.sendMessage(ConfigUtils.configSectionToMsgs(section));
+            player.sendMessage(ConfigUtils.getConfigMessage(section));
             player.sendMessage("\n" + usage + "/econfig tdm <key>");
         } else {
             switch (args[1].toLowerCase()) {
@@ -450,7 +452,7 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
     private void tnttag(String[] args, Player player) {
         ConfigurationSection section = config.getConfigurationSection("events.tnttag");
         if (args.length == 1) {
-            player.sendMessage(ConfigUtils.configSectionToMsgs(section));
+            player.sendMessage(ConfigUtils.getConfigMessage(section));
             player.sendMessage("\n" + usage + "/econfig tnttag <key>");
         } else {
             switch (args[1].toLowerCase()) {
@@ -477,7 +479,7 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
     private void waterdrop(String[] args, Player player) {
         ConfigurationSection section = config.getConfigurationSection("events.waterdrop");
         if (args.length == 1) {
-            player.sendMessage(ConfigUtils.configSectionToMsgs(section));
+            player.sendMessage(ConfigUtils.getConfigMessage(section));
             player.sendMessage("\n" + usage + "/econfig waterdrop <key>");
         } else {
             switch (args[1].toLowerCase()) {
@@ -504,7 +506,7 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
     private void woolshuffle(String[] args, Player player) {
         ConfigurationSection section = config.getConfigurationSection("events.woolshuffle");
         if (args.length == 1) {
-            player.sendMessage(ConfigUtils.configSectionToMsgs(section));
+            player.sendMessage(ConfigUtils.getConfigMessage(section));
             player.sendMessage("\n" + usage + "/econfig woolshuffle <key>");
         } else {
             switch (args[1].toLowerCase()) {
@@ -533,6 +535,10 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
         - A lot
         - This entire class needs to be re-written it is a shit show
         - tbh I don't know if I'm gonna optimize this class it's really boring
+
+
+
+        - econfig
      */
 
 }

@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="jar" name="InvadedLandsEvents:jar2">
-    <output-path>D:/Zyrox and Shield</output-path>
+    <output-path>$USER_HOME$/Desktop</output-path>
     <root id="archive" name="InvadedLandsEvents.jar">
       <element id="module-output" name="InvadedLandsEvents" />
     </root>
