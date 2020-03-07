@@ -22,8 +22,6 @@ public final class EventUtils {
             player.removePotionEffect(potion.getType());
         }
         player.setGameMode(GameMode.SURVIVAL);
-        player.setAllowFlight(false);
-        player.setFlying(false);
         player.setMaximumNoDamageTicks(20);
         player.setFoodLevel(20);
         player.setHealth(20);
