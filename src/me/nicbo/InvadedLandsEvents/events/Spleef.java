@@ -68,18 +68,19 @@ public class Spleef extends InvadedEvent {
 
     @Override
     public void start() {
+//        this.plugin.getServer().getScheduler().runTask(this.plugin, new Runnable() {
+//            @Override
+//            public void run() {
+//                clearInventories();
+//            }
+//        });
+        clearInventories();
         started = true;
         tpPlayers();
-        this.plugin.getServer().getScheduler().runTask(this.plugin, new Runnable() {
-            @Override
-            public void run() {
-                clearInventories();
-            }
-        });
-        players.forEach(player -> player.getInventory().setItem(0, new ItemStack(Material.DIAMOND_SPADE, 1)));
         startMatchCountdown(players);
         heightCheck.runTaskTimerAsynchronously(plugin, 0, 1);
         playerCheck.runTaskTimerAsynchronously(plugin, 0, 1);
+        players.forEach(player -> player.getInventory().setItem(0, new ItemStack(Material.DIAMOND_SPADE, 1)));
     }
 
     @Override
