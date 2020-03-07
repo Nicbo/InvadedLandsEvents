@@ -226,7 +226,8 @@ public abstract class InvadedEvent implements Listener {
                     endCountdown = false;
                     this.cancel();
                 }
-                players.forEach(player -> player.sendMessage(ChatColor.YELLOW + "Starting in " + ChatColor.GOLD + timer--));
+                players.forEach(player -> player.sendMessage(ChatColor.YELLOW + "Starting in " + ChatColor.GOLD + timer));
+                timer--;
                 // CHECK IF INVADED BROADCASTS TO ALL OR JUST PLAYER
             }
 
