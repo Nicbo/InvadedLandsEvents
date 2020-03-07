@@ -208,7 +208,7 @@ public abstract class InvadedEvent implements Listener {
     }
 
     protected boolean blockEvent(Player player) {
-        return !started || !players.contains(player) || matchCountdown;
+        return !started || !players.contains(player);
     }
 
     protected void startMatchCountdown(List<Player> players) {
