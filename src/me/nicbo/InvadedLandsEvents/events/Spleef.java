@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Spleef extends InvadedEvent {
+    private boolean matchCountdown;
     private BukkitRunnable heightCheck;
     private ProtectedRegion region;
     private int minY;
@@ -61,10 +62,6 @@ public class Spleef extends InvadedEvent {
         } catch (NullPointerException npe) {
             logger.severe("Spleef region '" + regionName + "' does not exist");
         }
-
-        BlockVector pos1 = ConfigUtils.blockVectorFromConfig(eventConfig.getConfigurationSection("snow-position-1"));
-        BlockVector pos2 = ConfigUtils.blockVectorFromConfig(eventConfig.getConfigurationSection("snow-position-2"));
-        buildSnow(pos1, pos2);
     }
 
     @Override
@@ -72,7 +69,7 @@ public class Spleef extends InvadedEvent {
         clearInventories();
         started = true;
         tpPlayers();
-        startMatchCountdown(players);
+        startMatchCountdown();
         heightCheck.runTaskTimerAsynchronously(plugin, 0, 1);
         playerCheck.runTaskTimerAsynchronously(plugin, 0, 1);
         players.forEach(player -> player.getInventory().setItem(0, new ItemStack(Material.DIAMOND_SPADE, 1)));
@@ -87,6 +84,10 @@ public class Spleef extends InvadedEvent {
         players.clear();
         spectators.clear();
         plugin.getManagerHandler().getEventManager().setEventRunning(false);
+
+        BlockVector pos1 = ConfigUtils.blockVectorFromConfig(eventConfig.getConfigurationSection("snow-position-1"));
+        BlockVector pos2 = ConfigUtils.blockVectorFromConfig(eventConfig.getConfigurationSection("snow-position-2"));
+        buildSnow(pos1, pos2);
     }
 
     private void buildSnow(BlockVector pos1, BlockVector pos2) {
@@ -107,11 +108,35 @@ public class Spleef extends InvadedEvent {
     }
 
     private void tpPlayers() {
-        for (int i = 0; i < players.size(); i++) {
-            Location start = ConfigUtils.deserializeLoc(eventConfig.getConfigurationSection("start-location-" + (i % 2 == 0 ? 1 : 2)), eventWorld);
-            players.get(i).teleport(start);
+        Location start1 = ConfigUtils.deserializeLoc(eventConfig.getConfigurationSection("start-location-1"), eventWorld);
+        Location start2 = ConfigUtils.deserializeLoc(eventConfig.getConfigurationSection("start-location-2"), eventWorld);
 
+        for (int i = 0; i < players.size(); i++) {
+            players.get(i).teleport(i % 2 == 0 ? start1 : start2);
         }
+    }
+
+    private void startMatchCountdown() {
+        matchCountdown = true;
+        new BukkitRunnable() {
+            private int timer = 5;
+
+            @Override
+            public void run() {
+                if (!matchCountdown) {
+                    this.cancel();
+                    return;
+                }
+
+                if (timer == 1) {
+                    matchCountdown = false;
+                    this.cancel();
+                }
+                players.forEach(player -> player.sendMessage(ChatColor.YELLOW + "You can break blocks in " + ChatColor.GOLD + timer));
+                timer--;
+            }
+
+        }.runTaskTimerAsynchronously(plugin, 0, 20);
     }
 
     @EventHandler
@@ -120,6 +145,7 @@ public class Spleef extends InvadedEvent {
             event.setCancelled(true);
             return;
         }
+
         if (matchCountdown) {
             event.setCancelled(true);
             return;
@@ -138,6 +164,7 @@ public class Spleef extends InvadedEvent {
             event.setCancelled(true);
             return;
         }
+
         if (matchCountdown) {
             event.setCancelled(true);
             return;
