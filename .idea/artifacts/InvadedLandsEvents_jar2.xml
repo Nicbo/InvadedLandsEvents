@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="jar" name="InvadedLandsEvents:jar2">
-    <output-path>$USER_HOME$/Documents/spigot test servers/1.8 test server/plugins</output-path>
+    <output-path>D:/Zyrox and Shield</output-path>
     <root id="archive" name="InvadedLandsEvents.jar">
       <element id="module-output" name="InvadedLandsEvents" />
     </root>
