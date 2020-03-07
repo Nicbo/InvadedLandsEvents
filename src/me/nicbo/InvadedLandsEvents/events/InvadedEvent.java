@@ -29,7 +29,7 @@ public abstract class InvadedEvent implements Listener {
     protected String winCommand;
 
     private String eventName;
-    protected boolean endCountdown;
+    protected boolean matchCountdown;
     protected boolean started;
     private boolean enabled;
 
@@ -208,22 +208,22 @@ public abstract class InvadedEvent implements Listener {
     }
 
     protected boolean blockEvent(Player player) {
-        return !started || !players.contains(player);
+        return !started || !players.contains(player) || matchCountdown;
     }
 
     protected void startMatchCountdown(List<Player> players) {
-        endCountdown = true;
+        matchCountdown = true;
         new BukkitRunnable() {
             private int timer = 5;
 
             @Override
             public void run() {
-                if (!endCountdown) {
+                if (!matchCountdown) {
                     this.cancel();
                     return;
                 }
                 if (timer == 1) {
-                    endCountdown = false;
+                    matchCountdown = false;
                     this.cancel();
                 }
                 players.forEach(player -> player.sendMessage(ChatColor.YELLOW + "Starting in " + ChatColor.GOLD + timer));

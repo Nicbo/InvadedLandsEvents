@@ -51,6 +51,20 @@ public class Spleef extends InvadedEvent {
         };
 
         initPlayerCheck();
+
+
+        RegionManager regionManager = plugin.getWorldGuardPlugin().getRegionManager(eventWorld);
+        String regionName = eventConfig.getString("region");
+
+        try {
+            region = regionManager.getRegion(regionName);
+        } catch (NullPointerException npe) {
+            logger.severe("Spleef region '" + regionName + "' does not exist");
+        }
+
+        BlockVector pos1 = ConfigUtils.blockVectorFromConfig(eventConfig.getConfigurationSection("snow-position-1"));
+        BlockVector pos2 = ConfigUtils.blockVectorFromConfig(eventConfig.getConfigurationSection("snow-position-2"));
+        buildSnow(pos1, pos2);
     }
 
     @Override
@@ -72,20 +86,6 @@ public class Spleef extends InvadedEvent {
         spawnTpPlayers();
         players.clear();
         spectators.clear();
-
-        RegionManager regionManager = plugin.getWorldGuardPlugin().getRegionManager(eventWorld);
-        String regionName = eventConfig.getString("region");
-
-        try {
-            region = regionManager.getRegion(regionName);
-        } catch (NullPointerException npe) {
-            logger.severe("Spleef region '" + regionName + "' does not exist");
-        }
-
-        BlockVector pos1 = ConfigUtils.blockVectorFromConfig(eventConfig.getConfigurationSection("snow-position-1"));
-        BlockVector pos2 = ConfigUtils.blockVectorFromConfig(eventConfig.getConfigurationSection("snow-position-2"));
-        buildSnow(pos1, pos2);
-
         plugin.getManagerHandler().getEventManager().setEventRunning(false);
     }
 
@@ -119,7 +119,6 @@ public class Spleef extends InvadedEvent {
         if (blockEvent(event.getPlayer())) return;
 
         Location loc = event.getBlock().getLocation();
-        if (!endCountdown) event.setCancelled(true);
         if (event.getPlayer().getItemInHand().getType() == Material.DIAMOND_SPADE && region.contains(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()) && event.getBlock().getType() == Material.SNOW_BLOCK) {
             event.setInstaBreak(true);
             event.getPlayer().getInventory().addItem(new ItemStack(Material.SNOW_BALL, 4));
@@ -130,7 +129,7 @@ public class Spleef extends InvadedEvent {
     public void snowBreak(BlockBreakEvent event) {
         if (blockEvent(event.getPlayer())) return;
 
-        if (endCountdown) {
+        if (matchCountdown) {
             event.getPlayer().sendMessage(ChatColor.RED + "You can't break that block right now!");
             event.setCancelled(true);
         }
