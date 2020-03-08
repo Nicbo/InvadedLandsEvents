@@ -5,7 +5,6 @@ import me.nicbo.InvadedLandsEvents.commands.EventCommand;
 import me.nicbo.InvadedLandsEvents.commands.EventConfigCommand;
 import me.nicbo.InvadedLandsEvents.listeners.GeneralEventListener;
 import me.nicbo.InvadedLandsEvents.manager.ManagerHandler;
-import me.nicbo.InvadedLandsEvents.manager.managers.EventManager;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -13,7 +12,6 @@ import java.util.logging.Logger;
 
 public class EventsMain extends JavaPlugin {
     private Logger log = getLogger();
-    private EventManager eventManager;
     private ManagerHandler managerHandler;
     private WorldGuardPlugin worldGuardPlugin;
 
@@ -30,7 +28,7 @@ public class EventsMain extends JavaPlugin {
     @Override
     public void onDisable() {
         saveDefaultConfig();
-        eventManager.getCurrentEvent().forceEndEvent();
+        managerHandler.getEventManager().getCurrentEvent().forceEndEvent();
         log.info("Plugin disabled!");
     }
 
