@@ -74,7 +74,7 @@ public final class EventManager extends Manager {
         setEventRunning(true);
 
         new BukkitRunnable() {
-            int time = 16; //for testing put back to 60
+            int time = 15; //for testing put back to 60
 
             @Override
             public void run() {
@@ -82,6 +82,7 @@ public final class EventManager extends Manager {
                     this.cancel();
                     return;
                 }
+
                 if (time == 60 || time == 45 || time == 30 || time == 15 || time <= 5 && time >= 1) {
                     Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&c&l"+ host + " is hosting a " + name + " event!"));
                     Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&c&lStarting in " + time + " seconds " + "&a&l[Click to Join]"));

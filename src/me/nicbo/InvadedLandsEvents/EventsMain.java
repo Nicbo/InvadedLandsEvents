@@ -30,6 +30,7 @@ public class EventsMain extends JavaPlugin {
     @Override
     public void onDisable() {
         saveDefaultConfig();
+        eventManager.getCurrentEvent().forceEndEvent();
         log.info("Plugin disabled!");
     }
 

@@ -8,6 +8,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Snowball;
@@ -16,6 +17,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.BlockVector;
@@ -29,6 +31,8 @@ public class Spleef extends InvadedEvent {
     private BukkitRunnable heightCheck;
     private ProtectedRegion region;
     private int minY;
+
+    private ItemStack shovel;
 
     public Spleef(EventsMain plugin) {
         super("Spleef", "spleef", plugin);
@@ -62,32 +66,49 @@ public class Spleef extends InvadedEvent {
         } catch (NullPointerException npe) {
             logger.severe("Spleef region '" + regionName + "' does not exist");
         }
+
+        this.shovel = new ItemStack(Material.DIAMOND_SPADE);
+        ItemMeta itemMeta = shovel.getItemMeta();
+        itemMeta.addEnchant(Enchantment.DIG_SPEED, 5, true);
+        this.shovel.setItemMeta(itemMeta);
+
+        BlockVector pos1 = ConfigUtils.blockVectorFromConfig(eventConfig.getConfigurationSection("snow-position-1"));
+        BlockVector pos2 = ConfigUtils.blockVectorFromConfig(eventConfig.getConfigurationSection("snow-position-2"));
+        buildSnow(pos1, pos2);
     }
 
     @Override
     public void start() {
-        clearInventories();
         started = true;
+        clearPlayers();
         tpPlayers();
+        startRunnables();
         startMatchCountdown();
-        heightCheck.runTaskTimerAsynchronously(plugin, 0, 1);
-        playerCheck.runTaskTimerAsynchronously(plugin, 0, 1);
-        players.forEach(player -> player.getInventory().setItem(0, new ItemStack(Material.DIAMOND_SPADE, 1)));
+        players.forEach(player -> player.getInventory().setItem(0, shovel));
     }
 
     @Override
     public void stop() {
         started = false;
+        cancelRunnables();
+        spawnTpPlayers();
+        clearLists();
+        plugin.getManagerHandler().getEventManager().setEventRunning(false);
+    }
+
+    private void startRunnables() {
+        heightCheck.runTaskTimerAsynchronously(plugin, 0, 1);
+        playerCheck.runTaskTimerAsynchronously(plugin, 0, 1);
+    }
+
+    private void cancelRunnables() {
         heightCheck.cancel();
         playerCheck.cancel();
-        spawnTpPlayers();
+    }
+
+    private void clearLists() {
         players.clear();
         spectators.clear();
-        plugin.getManagerHandler().getEventManager().setEventRunning(false);
-
-        BlockVector pos1 = ConfigUtils.blockVectorFromConfig(eventConfig.getConfigurationSection("snow-position-1"));
-        BlockVector pos2 = ConfigUtils.blockVectorFromConfig(eventConfig.getConfigurationSection("snow-position-2"));
-        buildSnow(pos1, pos2);
     }
 
     private void buildSnow(BlockVector pos1, BlockVector pos2) {
@@ -140,30 +161,9 @@ public class Spleef extends InvadedEvent {
     }
 
     @EventHandler
-    public void snowClick(BlockDamageEvent event) {
-        if (blockEvent(event.getPlayer())) {
-            event.setCancelled(true);
-            return;
-        }
-
-        if (matchCountdown) {
-            event.setCancelled(true);
-            return;
-        }
-
-        Location loc = event.getBlock().getLocation();
-        if (event.getPlayer().getItemInHand().getType() == Material.DIAMOND_SPADE && region.contains(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()) && event.getBlock().getType() == Material.SNOW_BLOCK) {
-            event.setInstaBreak(true);
-            event.getPlayer().getInventory().addItem(new ItemStack(Material.SNOW_BALL, 4));
-        }
-    }
-
-    @EventHandler
     public void snowBreak(BlockBreakEvent event) {
-        if (blockEvent(event.getPlayer())) {
-            event.setCancelled(true);
+        if (blockEvent(event.getPlayer()))
             return;
-        }
 
         if (matchCountdown) {
             event.setCancelled(true);
@@ -171,15 +171,18 @@ public class Spleef extends InvadedEvent {
         }
 
         Block block = event.getBlock();
-        if (block.getType() == Material.SNOW_BLOCK) {
+        Location loc = block.getLocation();
+        if (region.contains(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()) && event.getBlock().getType() == Material.SNOW_BLOCK) {
             block.setType(Material.AIR);
+            event.getPlayer().getInventory().addItem(new ItemStack(Material.SNOW_BALL, 4));
         }
     }
 
     @EventHandler
     public void snowBallHitSnow(ProjectileHitEvent event) {
         ProjectileSource shooter = event.getEntity().getShooter();
-        if (!(shooter instanceof Player) || blockEvent((Player) shooter)) return;
+        if (!(shooter instanceof Player) || blockEvent((Player) shooter))
+            return;
 
         Entity entity = event.getEntity();
 

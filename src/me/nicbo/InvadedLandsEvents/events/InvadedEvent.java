@@ -148,7 +148,7 @@ public abstract class InvadedEvent implements Listener {
         this.plugin.getServer().getScheduler().runTask(this.plugin, new Runnable() {
             @Override
             public void run() {
-                clearInventories();
+                clearPlayers();
             }
         });
 
@@ -200,7 +200,7 @@ public abstract class InvadedEvent implements Listener {
         }
     }
     
-    protected void clearInventories() {
+    protected void clearPlayers() {
         for (Player player : players) {
             EventUtils.clear(player);
         }

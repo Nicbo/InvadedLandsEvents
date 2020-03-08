@@ -21,6 +21,7 @@ public final class EventUtils {
         for (PotionEffect potion : player.getActivePotionEffects()) {
             player.removePotionEffect(potion.getType());
         }
+
         player.setGameMode(GameMode.SURVIVAL);
         player.setMaximumNoDamageTicks(20);
         player.setFoodLevel(20);
