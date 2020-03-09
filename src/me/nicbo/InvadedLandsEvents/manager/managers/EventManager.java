@@ -170,6 +170,14 @@ public final class EventManager extends Manager {
         return eventNames;   
     }
 
+    public static boolean eventExists(String name) {
+        for (String event : eventNames) {
+            if (event.equalsIgnoreCase(name))
+                return true;
+        }
+        return false;
+    }
+
     /*
     TODO:
         - Make descriptions editable based on config (later version)

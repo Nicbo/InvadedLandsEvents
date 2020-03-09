@@ -71,7 +71,7 @@ public class ConfigFile {
 
     public List<String> getStringList(String path) {
         if (!this.configuration.contains(path)) {
-            return Arrays.asList("ERROR: STRING LIST NOT FOUND!");
+            return Collections.singletonList("ERROR: STRING LIST NOT FOUND!");
         } else {
             ArrayList<String> strings = new ArrayList<>();
 

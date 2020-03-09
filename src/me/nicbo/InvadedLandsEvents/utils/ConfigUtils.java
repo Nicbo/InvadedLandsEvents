@@ -12,8 +12,8 @@ import java.util.*;
 public final class ConfigUtils {
     private ConfigUtils() {}
 
-    public static void serializeLoc(Location loc, boolean includeWorld, ConfigurationSection section) {
-        if (includeWorld) section.set("world", loc.getWorld().getName());
+    public static void serializeLoc(ConfigurationSection section, Location loc) {
+        section.set("world", loc.getWorld().getName());
         section.set("x", loc.getX());
         section.set("y", loc.getY());
         section.set("z", loc.getZ());
@@ -21,17 +21,11 @@ public final class ConfigUtils {
         section.set("pitch", loc.getPitch());
     }
 
-    public static Location deserializeLoc(ConfigurationSection section, World world) {
-        double x = section.getDouble("x");
-        double y = section.getDouble("y");
-        double z = section.getDouble("z");
-        float yaw = (float) section.getDouble("yaw");
-        float pitch = (float) section.getDouble("pitch");
-        return new Location(world, x, y, z, yaw, pitch);
+    public static Location deserializeLoc(ConfigurationSection section) {
+        return deserializeLoc(section, Bukkit.getWorld(section.getString("world")));
     }
 
-    public static Location deserializeLoc(ConfigurationSection section) {
-        World world = Bukkit.getWorld(section.get("world").toString());
+    public static Location deserializeLoc(ConfigurationSection section, World world) {
         double x = section.getDouble("x");
         double y = section.getDouble("y");
         double z = section.getDouble("z");

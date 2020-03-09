@@ -16,10 +16,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class GeneralEventListener implements Listener {
     private EventManager eventManager;
-    private EventsMain plugin;
 
     public GeneralEventListener(EventsMain plugin) {
-        this.plugin = plugin;
         this.eventManager = plugin.getManagerHandler().getEventManager();
     }
 
@@ -42,7 +40,8 @@ public class GeneralEventListener implements Listener {
     public void interactNetherStar(PlayerInteractEvent event) {
         if (eventManager.isEventRunning() && eventManager.getCurrentEvent().containsPlayer(event.getPlayer())) {
             ItemStack item = event.getItem();
-            if (item == null || !item.hasItemMeta()) return;
+            if (item == null || !item.hasItemMeta() || !item.getItemMeta().hasDisplayName())
+                return;
 
             Player player = event.getPlayer();
             if (item.getItemMeta().getDisplayName().contains("Leave Event") && eventManager.isEventRunning() && eventManager.getCurrentEvent().containsPlayer(player)) {

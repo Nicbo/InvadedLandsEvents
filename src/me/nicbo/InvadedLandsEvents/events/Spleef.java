@@ -30,6 +30,7 @@ public class Spleef extends InvadedEvent {
     private boolean matchCountdown;
     private BukkitRunnable heightCheck;
     private ProtectedRegion region;
+
     private int minY;
 
     private ItemStack shovel;
