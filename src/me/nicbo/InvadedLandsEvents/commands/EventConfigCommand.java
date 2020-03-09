@@ -133,10 +133,9 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
                                 break;
                         }
                     }
-            } else { // not a possible args[0]
-                possibleArgs(player, eventSetting, true, true);
-            }
-
+                } else { // not a possible args[0]
+                    possibleArgs(player, eventSetting, true, true);
+                }
             }
             plugin.saveConfig();
             return true;
