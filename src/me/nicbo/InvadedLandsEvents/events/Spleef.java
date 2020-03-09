@@ -37,6 +37,11 @@ public class Spleef extends InvadedEvent {
 
     public Spleef(EventsMain plugin) {
         super("Spleef", "spleef", plugin);
+        
+        this.shovel = new ItemStack(Material.DIAMOND_SPADE);
+        ItemMeta itemMeta = shovel.getItemMeta();
+        itemMeta.addEnchant(Enchantment.DIG_SPEED, 5, true);
+        this.shovel.setItemMeta(itemMeta);
     }
 
     @Override
@@ -67,11 +72,6 @@ public class Spleef extends InvadedEvent {
         } catch (NullPointerException npe) {
             logger.severe("Spleef region '" + regionName + "' does not exist");
         }
-
-        this.shovel = new ItemStack(Material.DIAMOND_SPADE);
-        ItemMeta itemMeta = shovel.getItemMeta();
-        itemMeta.addEnchant(Enchantment.DIG_SPEED, 5, true);
-        this.shovel.setItemMeta(itemMeta);
 
         BlockVector pos1 = ConfigUtils.blockVectorFromConfig(eventConfig.getConfigurationSection("snow-position-1"));
         BlockVector pos2 = ConfigUtils.blockVectorFromConfig(eventConfig.getConfigurationSection("snow-position-2"));
