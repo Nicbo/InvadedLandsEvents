@@ -73,18 +73,25 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
                         }
 
                         String path = eventSetting + "." + args[1].toLowerCase();
-
                         String key = args[1].toLowerCase();
 
                         if (args[1].contains("location")) {
-                            ConfigUtils.serializeLoc(config.getConfigurationSection("events." + path), player.getLocation());
-                            player.sendMessage(ChatColor.GOLD + eventSetting + ChatColor.YELLOW + " set to " + ChatColor.GOLD + " your location!");
+                            try {
+                                ConfigUtils.serializeLoc(config.getConfigurationSection("events." + path), player.getLocation());
+                                player.sendMessage(ChatColor.GOLD + key + ChatColor.YELLOW + " set to " + ChatColor.GOLD + " your location!");
+                            } catch (NullPointerException npe) {
+                                possibleArgs(player, eventSetting, false);
+                            }
                         } else if (args[1].contains("region")) {
                             if (args.length == 2)
                                 player.sendMessage(USAGE + "/econfig " + eventSetting + " " + key + " <string>");
                             else {
-                                section.set(key, args[2].toLowerCase());
-                                player.sendMessage(ChatColor.GOLD + eventSetting + ChatColor.YELLOW + " set to '" + ChatColor.GOLD + key + ChatColor.YELLOW + "'!");
+                                try {
+                                    section.set(key, args[2].toLowerCase());
+                                    player.sendMessage(ChatColor.GOLD + key + ChatColor.YELLOW + " set to '" + ChatColor.GOLD + key + ChatColor.YELLOW + "'!");
+                                } catch (NullPointerException npe) {
+                                    possibleArgs(player, eventSetting, false);
+                                }
                             }
                         } else if (args[1].equalsIgnoreCase("enabled")) {
                             if (args.length == 2)
@@ -92,14 +99,10 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
                             else {
                                 boolean bool = Boolean.parseBoolean(args[2].toLowerCase());
                                 section.set(key, bool);
-                                player.sendMessage(ChatColor.GOLD + eventSetting + ChatColor.YELLOW + " set to '" + ChatColor.GOLD + bool + ChatColor.YELLOW + "'!");
+                                player.sendMessage(ChatColor.GOLD + key + ChatColor.YELLOW + " set to '" + ChatColor.GOLD + bool + ChatColor.YELLOW + "'!");
                             }
                         } else {
-                            player.sendMessage(ChatColor.RED + "Sub command does not exist!");
-                            player.sendMessage(POSSIBLE_SUB_COMMANDS);
-                            for (String subCommand : args1.get(eventSetting)) {
-                                player.sendMessage(ChatColor.YELLOW + "- " + subCommand);
-                            }
+                            possibleArgs(player, eventSetting, false);
                         }
                     } else {
                         switch (args[0].toLowerCase()) {
@@ -131,11 +134,7 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
                         }
                     }
             } else {
-                player.sendMessage(ChatColor.RED + "Sub command does not exist!");
-                player.sendMessage(POSSIBLE_SUB_COMMANDS);
-                for (String subCommand : args0) {
-                    player.sendMessage(ChatColor.YELLOW + "- " + subCommand);
-                }
+                    possibleArgs(player, eventSetting, true);
             }
 
             }
@@ -143,6 +142,14 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
             return true;
         }
         return false;
+    }
+
+    private void possibleArgs(Player player, String eventSetting, boolean first) {
+        player.sendMessage(ChatColor.RED + "Sub command does not exist!");
+        player.sendMessage(POSSIBLE_SUB_COMMANDS);
+        for (String subCommand : first ? args0 : args1.get(eventSetting)) {
+            player.sendMessage(ChatColor.YELLOW + "- " + subCommand);
+        }
     }
 
     @Override
