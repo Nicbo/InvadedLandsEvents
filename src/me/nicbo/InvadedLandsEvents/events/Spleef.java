@@ -73,8 +73,8 @@ public class Spleef extends InvadedEvent {
             logger.severe("Spleef region '" + regionName + "' does not exist");
         }
 
-        BlockVector pos1 = ConfigUtils.blockVectorFromConfig(eventConfig.getConfigurationSection("snow-position-1"));
-        BlockVector pos2 = ConfigUtils.blockVectorFromConfig(eventConfig.getConfigurationSection("snow-position-2"));
+        BlockVector pos1 = ConfigUtils.deserializeBlockVector(eventConfig.getConfigurationSection("snow-position-1"));
+        BlockVector pos2 = ConfigUtils.deserializeBlockVector(eventConfig.getConfigurationSection("snow-position-2"));
         buildSnow(pos1, pos2);
     }
 

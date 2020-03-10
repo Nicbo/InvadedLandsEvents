@@ -12,8 +12,9 @@ import java.util.*;
 public final class ConfigUtils {
     private ConfigUtils() {}
 
-    public static void serializeLoc(ConfigurationSection section, Location loc) {
-        section.set("world", loc.getWorld().getName());
+    public static void serializeLoc(ConfigurationSection section, Location loc, boolean includeWorld) {
+        if (includeWorld)
+            section.set("world", loc.getWorld().getName());
         section.set("x", loc.getX());
         section.set("y", loc.getY());
         section.set("z", loc.getZ());
@@ -34,13 +35,13 @@ public final class ConfigUtils {
         return new Location(world, x, y, z, yaw, pitch);
     }
 
-    public static void blockVectorToConfig(BlockVector blockVector, ConfigurationSection section) {
+    public static void serializeBlockVector(ConfigurationSection section, BlockVector blockVector) {
         section.set("x", blockVector.getX());
         section.set("y", blockVector.getY());
         section.set("z", blockVector.getZ());
     }
 
-    public static BlockVector blockVectorFromConfig(ConfigurationSection section) {
+    public static BlockVector deserializeBlockVector(ConfigurationSection section) {
         int x = section.getInt("x");
         int y = section.getInt("y");
         int z = section.getInt("z");

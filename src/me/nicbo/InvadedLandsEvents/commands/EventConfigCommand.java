@@ -4,6 +4,7 @@ import me.nicbo.InvadedLandsEvents.EventsMain;
 import me.nicbo.InvadedLandsEvents.manager.managers.EventManager;
 import me.nicbo.InvadedLandsEvents.utils.ConfigUtils;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -11,6 +12,7 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.util.BlockVector;
 import org.bukkit.util.StringUtil;
 
 import java.util.*;
@@ -75,9 +77,18 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
 
                         if (args[1].contains("location")) { // Event config target is a location
                             try { // set section to player's location
-                                ConfigUtils.serializeLoc(config.getConfigurationSection("events." + path), player.getLocation());
-                                player.sendMessage(ChatColor.GOLD + key + ChatColor.YELLOW + " set to " + ChatColor.GOLD + " your location!");
+                                ConfigUtils.serializeLoc(config.getConfigurationSection("events." + path), player.getLocation(), false);
+                                player.sendMessage(ChatColor.GOLD + key + ChatColor.YELLOW + " set to " + ChatColor.GOLD + "your location" + ChatColor.YELLOW + "!");
                             } catch (NullPointerException npe) { // had location in string but config section does not exist
+                                possibleArgs(player, eventSetting, false, true);
+                            }
+                        } else if (args[1].contains("position")) {
+                            try { // set section to player's block vector under them
+                                Location loc = player.getLocation();
+                                loc.setY(loc.getBlockY() - 1);
+                                ConfigUtils.serializeBlockVector(config.getConfigurationSection("events." + path), new BlockVector(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
+                                player.sendMessage(ChatColor.GOLD + key + ChatColor.YELLOW + " set to " + ChatColor.GOLD + "the block under you" + ChatColor.YELLOW + "!");
+                            } catch (NullPointerException npe) { // had position in string but config section does not exist
                                 possibleArgs(player, eventSetting, false, true);
                             }
                         } else if (args[1].contains("region")) { // Event config target is a region
@@ -128,8 +139,8 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
                                 }
                                 break;
                             case "spawn-location":
-                                config.set(eventSetting, player.getLocation());
-                                player.sendMessage(ChatColor.GOLD + eventSetting + ChatColor.YELLOW + " set to " + ChatColor.GOLD + " your location!");
+                                ConfigUtils.serializeLoc(config.getConfigurationSection(eventSetting), player.getLocation(), true);
+                                player.sendMessage(ChatColor.GOLD + eventSetting + ChatColor.YELLOW + " set to " + ChatColor.GOLD + "your location!");
                                 break;
                         }
                     }

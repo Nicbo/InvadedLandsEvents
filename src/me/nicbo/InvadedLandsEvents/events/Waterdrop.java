@@ -7,13 +7,14 @@ import org.bukkit.Material;
 public class Waterdrop extends InvadedEvent {
     private Material[][] mainCover;
 
-    private Material water;
+    public Material water;
     private Material redstone;
 
     private Material[][] openCover;
     private Material[][] closedCover;
-    private Material[][] cross;
+    private Material[][] checkered;
     private Material[][] x;
+    private Material[][] h;
 
     public Waterdrop(EventsMain plugin) {
         super("Waterdrop", "waterdrop", plugin);
@@ -36,14 +37,6 @@ public class Waterdrop extends InvadedEvent {
                 { redstone, redstone, redstone, redstone, redstone }
         };
 
-        cross = new Material[][] {
-                { redstone, redstone, water, redstone, redstone },
-                { redstone, redstone, water, redstone, redstone },
-                { water, water, water, water, water },
-                { redstone, redstone, water, redstone, redstone },
-                { redstone, redstone, water, redstone, redstone }
-        };
-
         x = new Material[][] {
                 { water, redstone, redstone, redstone, water },
                 { redstone, water, redstone, water, redstone },
@@ -51,6 +44,15 @@ public class Waterdrop extends InvadedEvent {
                 { redstone, water, redstone, water, redstone },
                 { water, redstone, redstone, redstone, water }
         };
+
+        h = new Material[][] {
+                { water, redstone, redstone, redstone, water },
+                { water, redstone, redstone, redstone, water },
+                { water, water, water, water, water },
+                { water, redstone, redstone, redstone, water },
+                { water, redstone, redstone, redstone, water }
+        };
+
     }
 
     @Override
