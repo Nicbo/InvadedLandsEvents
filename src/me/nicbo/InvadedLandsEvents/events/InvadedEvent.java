@@ -1,5 +1,6 @@
 package me.nicbo.InvadedLandsEvents.events;
 
+import com.sk89q.worldguard.protection.managers.RegionManager;
 import me.nicbo.InvadedLandsEvents.EventMessage;
 import me.nicbo.InvadedLandsEvents.EventsMain;
 import me.nicbo.InvadedLandsEvents.utils.ConfigUtils;
@@ -22,6 +23,7 @@ public abstract class InvadedEvent implements Listener {
 
     protected EventsMain plugin;
     protected Logger logger;
+    protected RegionManager regionManager;
 
     protected Location spawnLoc;
     protected Location specLoc;
@@ -51,6 +53,8 @@ public abstract class InvadedEvent implements Listener {
         this.spawnLoc = ConfigUtils.deserializeLoc(config.getConfigurationSection("spawn-location"));
         this.specLoc = ConfigUtils.deserializeLoc(this.eventConfig.getConfigurationSection("spec-location"), this.eventWorld);
         this.winCommand = config.getString("win-command");
+
+        this.regionManager = plugin.getWorldGuardPlugin().getRegionManager(eventWorld);
 
         this.enabled = eventConfig.getBoolean("enabled");
         this.players = new ArrayList<>();

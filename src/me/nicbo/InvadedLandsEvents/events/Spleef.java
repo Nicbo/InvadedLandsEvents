@@ -14,7 +14,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Snowball;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -32,16 +31,28 @@ public class Spleef extends InvadedEvent {
     private ProtectedRegion region;
 
     private int minY;
+    private BlockVector pos1;
+    private BlockVector pos2;
 
     private ItemStack shovel;
 
     public Spleef(EventsMain plugin) {
         super("Spleef", "spleef", plugin);
-        
+
         this.shovel = new ItemStack(Material.DIAMOND_SPADE);
         ItemMeta itemMeta = shovel.getItemMeta();
         itemMeta.addEnchant(Enchantment.DIG_SPEED, 5, true);
         this.shovel.setItemMeta(itemMeta);
+
+        String regionName = eventConfig.getString("region");
+        try {
+            this.region = regionManager.getRegion(regionName);
+        } catch (NullPointerException npe) {
+            logger.severe("Spleef region '" + regionName + "' does not exist");
+        }
+
+        this.pos1 = ConfigUtils.deserializeBlockVector(eventConfig.getConfigurationSection("snow-position-1"));
+        this.pos2 = ConfigUtils.deserializeBlockVector(eventConfig.getConfigurationSection("snow-position-2"));
     }
 
     @Override
@@ -62,19 +73,6 @@ public class Spleef extends InvadedEvent {
         };
 
         initPlayerCheck();
-
-
-        RegionManager regionManager = plugin.getWorldGuardPlugin().getRegionManager(eventWorld);
-        String regionName = eventConfig.getString("region");
-
-        try {
-            region = regionManager.getRegion(regionName);
-        } catch (NullPointerException npe) {
-            logger.severe("Spleef region '" + regionName + "' does not exist");
-        }
-
-        BlockVector pos1 = ConfigUtils.deserializeBlockVector(eventConfig.getConfigurationSection("snow-position-1"));
-        BlockVector pos2 = ConfigUtils.deserializeBlockVector(eventConfig.getConfigurationSection("snow-position-2"));
         buildSnow(pos1, pos2);
     }
 
