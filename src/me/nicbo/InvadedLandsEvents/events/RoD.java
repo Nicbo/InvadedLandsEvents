@@ -1,17 +1,27 @@
 package me.nicbo.InvadedLandsEvents.events;
 
+import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import me.nicbo.InvadedLandsEvents.EventsMain;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 
 public class RoD extends InvadedEvent {
     private BukkitRunnable didPlayerFinish;
+    private ProtectedRegion winRegion;
 
     public RoD(EventsMain plugin) {
         super("Race of Death", "rod", plugin);
+
+        String regionName = eventConfig.getString("win-region");
+        try {
+            this.winRegion = regionManager.getRegion(regionName);
+        } catch (NullPointerException npe) {
+            logger.severe("RoD region '" + regionName + "' does not exist");
+        }
     }
 
     @Override
@@ -20,7 +30,12 @@ public class RoD extends InvadedEvent {
             @Override
             public void run() {
                 for (Player player : players) {
-                    // Check if player entered finish region
+                    Vector vector = player.getLocation().toVector();
+                    // Idk trying to do this w/out worldedit api
+                    if (winRegion.contains()) {
+
+                    }
+
                 }
             }
         };
