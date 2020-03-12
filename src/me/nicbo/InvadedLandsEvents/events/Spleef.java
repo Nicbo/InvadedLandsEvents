@@ -1,6 +1,5 @@
 package me.nicbo.InvadedLandsEvents.events;
 
-import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import me.nicbo.InvadedLandsEvents.EventsMain;
 import me.nicbo.InvadedLandsEvents.utils.ConfigUtils;
@@ -31,6 +30,8 @@ public class Spleef extends InvadedEvent {
     private ProtectedRegion region;
 
     private int minY;
+    private Location start1;
+    private Location start2;
     private BlockVector pos1;
     private BlockVector pos2;
 
@@ -51,6 +52,8 @@ public class Spleef extends InvadedEvent {
             logger.severe("Spleef region '" + regionName + "' does not exist");
         }
 
+        this.start1 = ConfigUtils.deserializeLoc(eventConfig.getConfigurationSection("start-location-1"), eventWorld);
+        this.start2 = ConfigUtils.deserializeLoc(eventConfig.getConfigurationSection("start-location-2"), eventWorld);
         this.pos1 = ConfigUtils.deserializeBlockVector(eventConfig.getConfigurationSection("snow-position-1"));
         this.pos2 = ConfigUtils.deserializeBlockVector(eventConfig.getConfigurationSection("snow-position-2"));
     }
@@ -78,10 +81,10 @@ public class Spleef extends InvadedEvent {
 
     @Override
     public void start() {
-        started = true;
         clearPlayers();
         tpPlayers();
-        startRunnables();
+        heightCheck.runTaskTimerAsynchronously(plugin, 0, 1);
+        playerCheck.runTaskTimerAsynchronously(plugin, 0, 1);
         startMatchCountdown();
         players.forEach(player -> player.getInventory().setItem(0, shovel));
     }
@@ -89,25 +92,10 @@ public class Spleef extends InvadedEvent {
     @Override
     public void stop() {
         started = false;
-        cancelRunnables();
-        spawnTpPlayers();
-        clearLists();
-        plugin.getManagerHandler().getEventManager().setEventRunning(false);
-    }
-
-    private void startRunnables() {
-        heightCheck.runTaskTimerAsynchronously(plugin, 0, 1);
-        playerCheck.runTaskTimerAsynchronously(plugin, 0, 1);
-    }
-
-    private void cancelRunnables() {
         heightCheck.cancel();
         playerCheck.cancel();
-    }
-
-    private void clearLists() {
-        players.clear();
-        spectators.clear();
+        removePlayers();
+        plugin.getManagerHandler().getEventManager().setCurrentEvent(null);
     }
 
     private void buildSnow(BlockVector pos1, BlockVector pos2) {
@@ -128,9 +116,6 @@ public class Spleef extends InvadedEvent {
     }
 
     private void tpPlayers() {
-        Location start1 = ConfigUtils.deserializeLoc(eventConfig.getConfigurationSection("start-location-1"), eventWorld);
-        Location start2 = ConfigUtils.deserializeLoc(eventConfig.getConfigurationSection("start-location-2"), eventWorld);
-
         for (int i = 0; i < players.size(); i++) {
             players.get(i).teleport(i % 2 == 0 ? start1 : start2);
         }
@@ -178,7 +163,7 @@ public class Spleef extends InvadedEvent {
     }
 
     @EventHandler
-    public void snowBallHitSnow(ProjectileHitEvent event) {
+    public void snowBallHitSnow(ProjectileHitEvent event) { // Needs changing
         ProjectileSource shooter = event.getEntity().getShooter();
         if (!(shooter instanceof Player) || blockEvent((Player) shooter))
             return;

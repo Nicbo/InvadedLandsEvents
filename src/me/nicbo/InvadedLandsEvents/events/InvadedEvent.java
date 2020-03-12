@@ -80,6 +80,10 @@ public abstract class InvadedEvent implements Listener {
         return eventName;
     }
 
+    public void setStarted(boolean started) {
+        this.started = started;
+    }
+
     public boolean isStarted() {
         return started;
     }
@@ -156,10 +160,8 @@ public abstract class InvadedEvent implements Listener {
             }
         });
 
-        spawnTpPlayers();
-        players.clear();
-        spectators.clear();
-        plugin.getManagerHandler().getEventManager().setEventRunning(false);
+        started = false;
+        removePlayers();
         plugin.getManagerHandler().getEventManager().setCurrentEvent(null);
     }
 
@@ -192,16 +194,19 @@ public abstract class InvadedEvent implements Listener {
         }
     }
 
-    protected void spawnTpPlayers() {
+    protected void removePlayers() {
         for (Player player : players) {
-            player.getInventory().clear();
+            EventUtils.clear(player);
             player.teleport(spawnLoc);
         }
 
         for (Player spectator : spectators) {
-            spectator.getInventory().clear();
+            EventUtils.clear(spectator);
             spectator.teleport(spawnLoc);
         }
+
+        players.clear();
+        spectators.clear();
     }
     
     protected void clearPlayers() {

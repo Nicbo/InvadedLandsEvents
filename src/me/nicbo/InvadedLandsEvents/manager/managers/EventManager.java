@@ -18,7 +18,6 @@ public final class EventManager extends Manager {
     private static String[] eventNames;
     private HashMap<String, InvadedEvent> events;
     private InvadedEvent currentEvent;
-    private boolean eventRunning;
 
     static {
         eventNames = new String[]{
@@ -34,7 +33,6 @@ public final class EventManager extends Manager {
         super(handler);
         this.plugin = handler.getPlugin();
         this.events = new HashMap<>();
-        this.eventRunning = false;
         addEventsToMap();
     }
     
@@ -71,14 +69,13 @@ public final class EventManager extends Manager {
     private void startCountDown(String host) {
         currentEvent.init(plugin);
         String name = currentEvent.getEventName();
-        setEventRunning(true);
 
         new BukkitRunnable() {
             int time = 15; //for testing put back to 60
 
             @Override
             public void run() {
-                if (!isEventRunning()) {
+                if (currentEvent == null) {
                     this.cancel();
                     return;
                 }
@@ -89,6 +86,7 @@ public final class EventManager extends Manager {
                     // Add Click Event text
                 } else if (time == 0) {
 //                  if (!currentEvent.getSize() >= 6) { For testing disable this, will later allow customizing minimum event size.
+                    currentEvent.setStarted(true);
                     currentEvent.start();
                     this.cancel();
 //                  }
@@ -133,7 +131,7 @@ public final class EventManager extends Manager {
     public EventMessage endEvent(Player player) {
         if (currentEvent == null) {
             return EventMessage.NONE;
-        } else if (!currentEvent.isStarted() && !isEventRunning()) {
+        } else if (!currentEvent.isStarted()) {
             return EventMessage.EVENT_ENDING;
         }
         currentEvent.forceEndEvent();
@@ -143,7 +141,7 @@ public final class EventManager extends Manager {
     public EventMessage eventInfo(Player player) {
         if (currentEvent == null) {
             return EventMessage.NONE;
-        } else if (!currentEvent.isStarted() && !isEventRunning()) {
+        } else if (!currentEvent.isStarted()) {
             return EventMessage.EVENT_ENDING;
         }
         currentEvent.eventInfo(player);
@@ -156,14 +154,6 @@ public final class EventManager extends Manager {
 
     public void setCurrentEvent(InvadedEvent event) {
         this.currentEvent = event;
-    }
-
-    public boolean isEventRunning() {
-        return eventRunning;
-    }
-
-    public void setEventRunning(boolean eventRunning) {
-        this.eventRunning = eventRunning;
     }
 
     public static String[] getEventNames() {
