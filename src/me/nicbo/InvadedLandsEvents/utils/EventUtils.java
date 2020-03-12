@@ -1,11 +1,17 @@
 package me.nicbo.InvadedLandsEvents.utils;
 
-import me.nicbo.InvadedLandsEvents.EventsMain;
 import org.bukkit.GameMode;
-import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
+
+/**
+ * Utility class for events
+ *
+ * @author StarZorroww
+ * @author Nicbo
+ * @since 2020-03-12
+ */
 
 public final class EventUtils {
     private EventUtils() {}

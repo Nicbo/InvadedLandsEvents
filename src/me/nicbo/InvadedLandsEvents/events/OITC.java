@@ -1,6 +1,7 @@
 package me.nicbo.InvadedLandsEvents.events;
 
 import me.nicbo.InvadedLandsEvents.EventsMain;
+import me.nicbo.InvadedLandsEvents.utils.ConfigUtils;
 import me.nicbo.InvadedLandsEvents.utils.GeneralUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -18,6 +19,7 @@ public class OITC extends InvadedEvent {
 
     public OITC(EventsMain plugin) {
         super("One in the Chamber", "oitc", plugin);
+        this.locations = new ArrayList<>();
         this.kit = Arrays.asList(new ItemStack(Material.WOOD_SWORD, 1), new ItemStack(Material.BOW, 1), new ItemStack(Material.ARROW, 1));
     }
 
@@ -48,4 +50,6 @@ public class OITC extends InvadedEvent {
         player.getInventory().clear();
         kit.forEach(item -> player.getInventory().addItem(item));
     }
+
+
 }

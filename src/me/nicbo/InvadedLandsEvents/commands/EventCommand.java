@@ -22,12 +22,21 @@ import org.bukkit.util.StringUtil;
 
 import java.util.*;
 
+/**
+ * Event Command class, handles commands for /event
+ *
+ * @author StarZorroww
+ * @author Nicbo
+ * @since 2020-03-12
+ */
+
 public class EventCommand implements CommandExecutor, TabCompleter {
     private EventManager eventManager;
     private EventPartyManager eventPartyManager;
     private EventPartyRequestManager eventPartyRequestManager;
     private final String usage;
     private EventsMain plugin;
+
     private List<String> args0;
     private List<String> args1;
     private List<String> events;
@@ -38,25 +47,27 @@ public class EventCommand implements CommandExecutor, TabCompleter {
         this.eventPartyManager = plugin.getManagerHandler().getEventPartyManager();
         this.eventPartyRequestManager = plugin.getManagerHandler().getEventPartyRequestManager();
         this.usage = ChatColor.GOLD + "Usage: " + ChatColor.YELLOW;
-        this.args0 = new ArrayList<>();
-        this.args1 = new ArrayList<>();
-        this.args0.add("party");
-        this.args1.add("create");
-        this.args1.add("disband");
-        this.args1.add("invite");
-        this.args1.add("uninvite");
-        this.args1.add("kick");
-        this.args1.add("join");
-        this.args1.add("leave");
-        this.args0.add("join");
-        this.args0.add("leave");
-        this.args0.add("spectate");
-        this.args0.add("info");
-        this.args0.add("forceend");
-        this.args0.add("host");
+        this.args0 = new ArrayList<>(Arrays.asList(
+                "party",
+                "join",
+                "leave",
+                "spectate",
+                "info",
+                "forceend",
+                "host"
+        ));
 
-        this.events = new ArrayList<>();
-        this.events.addAll(Arrays.asList(EventManager.getEventNames()));
+        this.args1 = new ArrayList<>(Arrays.asList(
+                "create",
+                "disband",
+                "invite",
+                "uninvite",
+                "kick",
+                "join",
+                "leave"
+        ));
+
+        this.events = new ArrayList<>(Arrays.asList(EventManager.getEventNames()));
     }
 
     @Override

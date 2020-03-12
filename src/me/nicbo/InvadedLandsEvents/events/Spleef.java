@@ -24,6 +24,15 @@ import org.bukkit.util.Vector;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Spleef event:
+ * All players are teleported to 2 start locations with shovels
+ * Thrown snowballs break whatever block is hit
+ *
+ * @author Nicbo
+ * @since 2020-03-12
+ */
+
 public class Spleef extends InvadedEvent {
     private boolean matchCountdown;
     private BukkitRunnable heightCheck;

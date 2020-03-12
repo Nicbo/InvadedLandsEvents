@@ -7,6 +7,13 @@ import me.nicbo.InvadedLandsEvents.manager.ManagerHandler;
 import me.nicbo.InvadedLandsEvents.party.EventParty;
 import org.bukkit.entity.*;
 
+/**
+ * Handles parties
+ *
+ * @author StarZorroww
+ * @since 2020-03-12
+ */
+
 public class EventPartyManager extends Manager {
     private Map<UUID, EventParty> leaderUUIDtoParty;
     private Map<UUID, UUID> playerUUIDtoLeaderUUID;

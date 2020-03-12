@@ -9,6 +9,14 @@ import org.bukkit.util.BlockVector;
 
 import java.util.*;
 
+/**
+ * Utility class for config files
+ *
+ * @author Nicbo
+ * @author StarZorroww
+ * @since 2020-03-12
+ */
+
 public final class ConfigUtils {
     private ConfigUtils() {}
 

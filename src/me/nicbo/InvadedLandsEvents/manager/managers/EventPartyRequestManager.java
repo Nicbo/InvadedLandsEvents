@@ -6,6 +6,13 @@ import me.nicbo.InvadedLandsEvents.manager.Manager;
 import me.nicbo.InvadedLandsEvents.manager.ManagerHandler;
 import org.bukkit.entity.*;
 
+/**
+ * Handles party requests
+ *
+ * @author StarZorroww
+ * @since 2020-03-12
+ */
+
 public class EventPartyRequestManager extends Manager
 {
     private Map<UUID, List<UUID>> partyRequestMap;

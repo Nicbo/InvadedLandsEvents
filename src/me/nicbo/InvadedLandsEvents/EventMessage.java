@@ -2,6 +2,14 @@ package me.nicbo.InvadedLandsEvents;
 
 import org.bukkit.ChatColor;
 
+/**
+ * All event messages
+ *
+ * @author Nicbo
+ * @author StarZorroww
+ * @since 2020-03-12
+ */
+
 public enum EventMessage {
     NONE(ChatColor.RED + "There currently isn't any event active right now."),
     STARTED(ChatColor.RED + "You cannot join the event as it has already started!"),
@@ -30,4 +38,9 @@ public enum EventMessage {
     public String toString() {
         return message;
     }
+
+    /*
+    TODO:
+        - Make these all configurable in config file
+     */
 }

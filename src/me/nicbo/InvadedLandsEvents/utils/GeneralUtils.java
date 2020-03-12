@@ -7,6 +7,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Utility class for events
+ *
+ * @author Nicbo
+ * @author StarZorroww
+ * @since 2020-03-12
+ */
+
 public final class GeneralUtils {
     private static Random random;
 

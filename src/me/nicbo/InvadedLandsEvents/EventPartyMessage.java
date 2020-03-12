@@ -2,6 +2,13 @@ package me.nicbo.InvadedLandsEvents;
 
 import org.bukkit.ChatColor;
 
+/**
+ * All event party messages
+ *
+ * @author StarZorroww
+ * @since 2020-03-12
+ */
+
 public enum EventPartyMessage {
     NOT_IN_PARTY(ChatColor.RED + "You're not in a party."),
     ALREADY_IN_PARTY(ChatColor.RED + "You're already in a party."),
@@ -43,4 +50,9 @@ public enum EventPartyMessage {
     public String toString() {
         return message;
     }
+
+    /*
+    TODO:
+        - Make these all configurable in config file
+     */
 }

@@ -13,6 +13,14 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
 
+/**
+ * Event manager handles hosting, spectating, joining etc.
+ *
+ * @author Nicbo
+ * @author StarZorroww
+ * @since 2020-03-12
+ */
+
 public final class EventManager extends Manager {
     private EventsMain plugin;
     private static String[] eventNames;
@@ -150,6 +158,10 @@ public final class EventManager extends Manager {
 
     public InvadedEvent getCurrentEvent() {
         return currentEvent;
+    }
+
+    public boolean isEventRunning() {
+        return currentEvent != null;
     }
 
     public void setCurrentEvent(InvadedEvent event) {

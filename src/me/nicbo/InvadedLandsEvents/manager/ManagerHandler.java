@@ -5,6 +5,13 @@ import me.nicbo.InvadedLandsEvents.manager.managers.EventManager;
 import me.nicbo.InvadedLandsEvents.manager.managers.EventPartyManager;
 import me.nicbo.InvadedLandsEvents.manager.managers.EventPartyRequestManager;
 
+/**
+ * Handles managers
+ *
+ * @author StarZorroww
+ * @since 2020-03-12
+ */
+
 public class ManagerHandler
 {
     private EventsMain plugin;

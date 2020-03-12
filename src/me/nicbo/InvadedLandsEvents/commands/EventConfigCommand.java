@@ -17,6 +17,13 @@ import org.bukkit.util.StringUtil;
 
 import java.util.*;
 
+/**
+ * Event Config command class, handles commands for /eventconfig
+ *
+ * @author Nicbo
+ * @since 2020-03-12
+ */
+
 public class EventConfigCommand implements CommandExecutor, TabCompleter {
     private EventsMain plugin;
     private FileConfiguration config;
@@ -30,14 +37,15 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
     public EventConfigCommand(EventsMain plugin) {
         this.plugin = plugin;
         this.config = plugin.getConfig();
-        this.args0 = new ArrayList<>();
-        this.args0.addAll(Arrays.asList(EventManager.getEventNames()));
-        this.args0.add("save");
-        this.args0.add("reload");
-        this.args0.add("help");
-        this.args0.add("event-world");
-        this.args0.add("win-command");
-        this.args0.add("spawn-location");
+        this.args0 = new ArrayList<>(Arrays.asList(EventManager.getEventNames()));
+        this.args0.addAll(Arrays.asList(
+                "save",
+                "reload",
+                "help",
+                "event-world",
+                "win-command",
+                "spawn-location"
+        ));
 
         this.args1 = new HashMap<>();
 
@@ -153,6 +161,14 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
         }
         return false;
     }
+
+    /**
+     * Sends player list of possible sub commands
+     * @param player Player to send message to
+     * @param eventSetting Used for getting args1 sub commands
+     * @param first Boolean that decides between sub commands for args0 or args1
+     * @param error Send error message or not
+     */
 
     private void possibleArgs(Player player, String eventSetting, boolean first, boolean error) {
         if (error)

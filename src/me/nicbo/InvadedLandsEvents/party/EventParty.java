@@ -4,6 +4,13 @@ import org.bukkit.*;
 import java.util.*;
 import org.bukkit.entity.*;
 
+/**
+ * Party class
+ *
+ * @author StarZorroww
+ * @since 2020-03-12
+ */
+
 public class EventParty
 {
     private List<UUID> memberUUIDs;

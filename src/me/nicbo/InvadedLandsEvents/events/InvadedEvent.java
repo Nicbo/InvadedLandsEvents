@@ -19,8 +19,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-public abstract class InvadedEvent implements Listener {
+/**
+ * Abstract event class, all events extend this class
+ *
+ * @author Nicbo
+ * @author StarZorroww
+ * @since 2020-03-12
+ */
 
+public abstract class InvadedEvent implements Listener {
     protected EventsMain plugin;
     protected Logger logger;
     protected RegionManager regionManager;
@@ -41,6 +48,13 @@ public abstract class InvadedEvent implements Listener {
     protected BukkitRunnable playerCheck;
 
     protected ItemStack star;
+
+    /**
+     *
+     * @param eventName Name that gets broadcasted
+     * @param configName Path is events.eventName
+     * @param plugin Instance of main class
+     */
 
     public InvadedEvent(String eventName, String configName, EventsMain plugin) {
         this.plugin = plugin;

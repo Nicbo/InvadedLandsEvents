@@ -14,6 +14,15 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 
+/**
+ * General event listener
+ * This listener is active on all events
+ *
+ * @author Nicbo
+ * @author StarZorroww
+ * @since 2020-03-12
+ */
+
 public class GeneralEventListener implements Listener {
     private EventManager eventManager;
 

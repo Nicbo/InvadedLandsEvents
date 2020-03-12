@@ -4,6 +4,13 @@ import org.bukkit.plugin.java.*;
 import java.io.*;
 import org.bukkit.configuration.file.*;
 
+/**
+ * Used to create custom configs
+ *
+ * @author StarZorroww
+ * @since 2020-03-12
+ */
+
 public class Config
 {
     private FileConfiguration config;

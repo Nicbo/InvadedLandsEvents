@@ -7,6 +7,13 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.util.*;
 
+/**
+ * Config file
+ *
+ * @author StarZorroww
+ * @since 2020-03-12
+ */
+
 public class ConfigFile {
     private File file;
     private YamlConfiguration configuration;
