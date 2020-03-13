@@ -20,6 +20,15 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * OITC event:
+ * All players have a wooden sword, a bow, and 1 arrow
+ * Arrows one shot and when you get a kill you receive an arrow
+ *
+ * @author Nicbo
+ * @since 2020-03-13
+ */
+
 public class OITC extends InvadedEvent {
     private List<Location> locations;
     private List<ItemStack> kit;
