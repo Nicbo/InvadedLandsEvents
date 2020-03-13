@@ -61,6 +61,7 @@ public class Spleef extends InvadedEvent {
             logger.severe("Spleef region '" + regionName + "' does not exist");
         }
 
+
         this.start1 = ConfigUtils.deserializeLoc(eventConfig.getConfigurationSection("start-location-1"), eventWorld);
         this.start2 = ConfigUtils.deserializeLoc(eventConfig.getConfigurationSection("start-location-2"), eventWorld);
         this.pos1 = ConfigUtils.deserializeBlockVector(eventConfig.getConfigurationSection("snow-position-1"));
@@ -69,6 +70,7 @@ public class Spleef extends InvadedEvent {
 
     @Override
     public void init(EventsMain plugin) {
+        buildSnow(pos1, pos2);
         this.heightCheck = new BukkitRunnable() {
             private List<Player> toLose = new ArrayList<>();
 
@@ -85,7 +87,6 @@ public class Spleef extends InvadedEvent {
         };
 
         initPlayerCheck();
-        buildSnow(pos1, pos2);
     }
 
     @Override

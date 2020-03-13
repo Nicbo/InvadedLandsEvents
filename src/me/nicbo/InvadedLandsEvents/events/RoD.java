@@ -1,5 +1,6 @@
 package me.nicbo.InvadedLandsEvents.events;
 
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import me.nicbo.InvadedLandsEvents.EventsMain;
 import me.nicbo.InvadedLandsEvents.utils.ConfigUtils;
@@ -10,6 +11,8 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class RoD extends InvadedEvent {
+    private WorldGuardPlugin worldGuardPlugin;
+
     private BukkitRunnable didPlayerFinish;
     private ProtectedRegion winRegion;
     private Location startLoc;
@@ -17,6 +20,7 @@ public class RoD extends InvadedEvent {
     public RoD(EventsMain plugin) {
         super("Race of Death", "rod", plugin);
 
+        this.worldGuardPlugin = plugin.getWorldGuardPlugin();
         String regionName = eventConfig.getString("win-region");
         try {
             this.winRegion = regionManager.getRegion(regionName);
@@ -24,7 +28,7 @@ public class RoD extends InvadedEvent {
             logger.severe("RoD region '" + regionName + "' does not exist");
         }
 
-        this.startLoc = ConfigUtils.deserializeLoc(eventConfig.getConfigurationSection("start-location"));
+        this.startLoc = ConfigUtils.deserializeLoc(eventConfig.getConfigurationSection("start-location"), eventWorld);
     }
 
     @Override
@@ -34,8 +38,9 @@ public class RoD extends InvadedEvent {
             @Override
             public void run() {
                 for (Player player : players) {
-                    if (winRegion.contains(plugin.getWorldGuardPlugin().wrapPlayer(player).getPosition())) {
+                    if (winRegion.contains(worldGuardPlugin.wrapPlayer(player).getPosition())) {
                         playerWon(player);
+                        this.cancel();
                     }
                 }
             }
@@ -44,9 +49,14 @@ public class RoD extends InvadedEvent {
 
     @Override
     public void start() {
+        this.plugin.getServer().getScheduler().runTask(this.plugin, new Runnable() {
+            @Override
+            public void run() {
+                tpApplyInvisibility();
+            }
+        });
         didPlayerFinish.runTaskTimerAsynchronously(plugin, 0, 1);
         playerCheck.runTaskTimerAsynchronously(plugin, 0, 1);
-        tpApplyInvisibility();
     }
 
     @Override

@@ -80,9 +80,7 @@ public abstract class InvadedEvent implements Listener {
         this.star.setItemMeta(im);
 
         Bukkit.getPluginManager().registerEvents(this, plugin);
-        if (this.enabled)
-            init(plugin);
-        else
+        if (!this.enabled)
             logger.info(eventName + " not enabled!");
     }
 
