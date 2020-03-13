@@ -13,3 +13,8 @@ It is no where near done and is in no way ready to be built for stable releases.
 ## Prerequisites
 - WorldGuard
 - WorldEdit (for WorldGuard)
+
+## Discord invite link:
+- https://discord.gg/ychwA4h
+- Receive updates, real time code additions / removals / changes through the #github channel!
+- Talk with the community through the #general channel!
