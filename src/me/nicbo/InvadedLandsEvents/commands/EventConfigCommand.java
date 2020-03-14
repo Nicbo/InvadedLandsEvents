@@ -196,4 +196,9 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
         }
         return null;
     }
+
+    /*
+    TODO:
+        - Allow int to be set (sumo min y, oitc max points, max players, etc.)
+     */
 }
