@@ -11,14 +11,10 @@ import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.util.Vector;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * OITC event:
@@ -34,6 +30,7 @@ public class OITC extends InvadedEvent {
     private List<ItemStack> kit;
 
     private HashMap<Player, Integer> points;
+    private Set<Player> respawning;
 
     public OITC(EventsMain plugin) {
         super("One in the Chamber", "oitc", plugin);
@@ -45,6 +42,7 @@ public class OITC extends InvadedEvent {
 
         this.kit = Arrays.asList(new ItemStack(Material.WOOD_SWORD, 1), new ItemStack(Material.BOW, 1), new ItemStack(Material.ARROW, 1));
         this.points = new HashMap<>();
+        this.respawning = new HashSet<>();
     }
 
     @Override
@@ -57,7 +55,7 @@ public class OITC extends InvadedEvent {
         playerCheck.runTaskTimerAsynchronously(plugin, 0, 1);
         for (Player player : players) {
             points.put(player, 0);
-            randomSpawn(player);
+            player.teleport(randomSpawn(player));
         }
     }
 
@@ -66,62 +64,63 @@ public class OITC extends InvadedEvent {
         started = false;
         playerCheck.cancel();
         removePlayers();
+        respawning.clear();
         plugin.getManagerHandler().getEventManager().setCurrentEvent(null);
     }
 
-    private void randomSpawn(Player player) {
-        player.teleport(locations.get(GeneralUtils.randomMinMax(0, 7)));
-        player.setHealth(20);
+    /**
+     * Set's players inventory to kit and returns location
+     * @param player Player that needs to be teleported
+     * @return Random location from config
+     */
+
+    private Location randomSpawn(Player player) {
         player.getInventory().clear();
         kit.forEach(item -> player.getInventory().addItem(item));
+        return locations.get(GeneralUtils.randomMinMax(0, 7));
     }
 
     @EventHandler
-    public void playerDeath(PlayerDeathEvent event) {
-        Player player = event.getEntity();
-
-        if (blockEvent(player))
-            return;
-
-        if(event.getEntity() != null) {
-            event.getEntity().spigot().respawn();
-        }
-    }
-
-    @EventHandler
-    public void arrowHit(EntityDamageByEntityEvent event) {
+    public void playerHurt(EntityDamageByEntityEvent event) {
         if (event.getEntity() instanceof Player) {
-            Player hurtPlayer = (Player) event.getEntity();
-            if (blockEvent(hurtPlayer))
+            Player player = (Player) event.getEntity();
+            if (blockEvent(player))
                 return;
 
             if (event.getDamager() instanceof Arrow) {
                 event.setDamage(20);
             }
+
+            if (event.getDamage() >= player.getHealth()) {
+                respawning.add(player);
+                plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+                    @Override
+                    public void run() {
+                        player.spigot().respawn();
+                    }
+                }, 1);
+            }
         }
     }
 
     @EventHandler
-    public void onDeath(PlayerDeathEvent event) {
-        if (blockEvent(event.getEntity()))
+    public void onRespawn(PlayerRespawnEvent event) {
+        Player player = event.getPlayer();
+
+        if (!respawning.contains(player))
             return;
 
-        Player deadPlayer = event.getEntity();
-        Player killer = deadPlayer.getKiller();
-
-        if (killer != null && deadPlayer != killer) {
+        Player killer = player.getKiller();
+        if (killer != null && player != killer) {
             points.put(killer, points.get(killer) + 1);
-            Bukkit.broadcastMessage(ChatColor.YELLOW + deadPlayer.getName() + "[" + points.get(deadPlayer) + "]" + " has been killed by " + killer.getName() + "[" + points.get(killer) + "]");
+            Bukkit.broadcastMessage(ChatColor.YELLOW + player.getName() + "[" + points.get(player) + "]" + " has been killed by " + killer.getName() + "[" + points.get(killer) + "]");
             killer.getInventory().addItem(kit.get(2));
-
-            if (points.get(killer) == 20) {
+            if (points.get(killer) == 20)
                 playerWon(killer);
-            }
         }
 
-        deadPlayer.spigot().respawn();
-        deadPlayer.setVelocity(new Vector(0, 0, 0));
-        randomSpawn(deadPlayer);
+        event.setRespawnLocation(randomSpawn(player));
+        respawning.remove(player);
     }
 
     /*
