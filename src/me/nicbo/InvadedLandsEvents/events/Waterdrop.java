@@ -73,34 +73,4 @@ public class Waterdrop extends InvadedEvent {
     private void placeMainCover() {
 
     }
-
-    // Depending on round return line / hole / cross / open
-    public void changeCover(int round) {
-
-    }
-
-    public void setLineCover(int lines) {
-        boolean vertical = GeneralUtils.randomBoolean();
-        boolean side = GeneralUtils.randomBoolean();
-
-        mainCover = closedCover.clone();
-        for (int i = 0; i < lines; i++) {
-            for (int j = side ? 0 : 5; i < 5; i += side ? 1 : -1) {
-                if (vertical) {
-                    mainCover[j][i] = water;
-                } else {
-                    mainCover[i][j] = water;
-                }
-            }
-        }
-    }
-
-    public void setHoleCover(int holes) {
-        mainCover = closedCover.clone();
-        for (int i = 0; i < holes; i++) {
-            int row = GeneralUtils.randomMinMax(0, 4);
-            int column = GeneralUtils.randomMinMax(0, 4);
-            mainCover[row][column] = water;
-        }
-    }
 }

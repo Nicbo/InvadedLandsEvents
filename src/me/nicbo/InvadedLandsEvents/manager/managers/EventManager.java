@@ -23,9 +23,10 @@ import java.util.HashMap;
 
 public final class EventManager extends Manager {
     private EventsMain plugin;
-    private static String[] eventNames;
     private HashMap<String, InvadedEvent> events;
     private InvadedEvent currentEvent;
+
+    private static String[] eventNames;
 
     static {
         eventNames = new String[]{
