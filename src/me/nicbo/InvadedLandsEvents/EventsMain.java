@@ -3,7 +3,7 @@ package me.nicbo.InvadedLandsEvents;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import me.nicbo.InvadedLandsEvents.commands.EventCommand;
 import me.nicbo.InvadedLandsEvents.commands.EventConfigCommand;
-import me.nicbo.InvadedLandsEvents.handlers.EventFile;
+import me.nicbo.InvadedLandsEvents.utils.EventFile;
 import me.nicbo.InvadedLandsEvents.listeners.GeneralEventListener;
 import me.nicbo.InvadedLandsEvents.handlers.ManagerHandler;
 import org.bukkit.plugin.Plugin;

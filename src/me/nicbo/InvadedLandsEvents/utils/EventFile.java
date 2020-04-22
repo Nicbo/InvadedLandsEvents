@@ -1,4 +1,4 @@
-package me.nicbo.InvadedLandsEvents.handlers;
+package me.nicbo.InvadedLandsEvents.utils;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -56,6 +56,7 @@ public class EventFile {
         }
     }
 
-    public FileConfiguration get() { return config; }
-    public FileConfiguration getConfig() { return config; }
+    public FileConfiguration getConfig() {
+        return config;
+    }
 }
