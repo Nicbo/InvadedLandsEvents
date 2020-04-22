@@ -1,10 +1,10 @@
-package me.nicbo.InvadedLandsEvents.manager.managers;
+package me.nicbo.InvadedLandsEvents.managers;
 
 import java.util.*;
 
-import me.nicbo.InvadedLandsEvents.manager.Manager;
-import me.nicbo.InvadedLandsEvents.manager.ManagerHandler;
+import me.nicbo.InvadedLandsEvents.handlers.ManagerHandler;
 import me.nicbo.InvadedLandsEvents.party.EventParty;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.*;
 
 /**
@@ -14,12 +14,11 @@ import org.bukkit.entity.*;
  * @since 2020-03-12
  */
 
-public class EventPartyManager extends Manager {
+public final class EventPartyManager {
     private Map<UUID, EventParty> leaderUUIDtoParty;
     private Map<UUID, UUID> playerUUIDtoLeaderUUID;
 
-    public EventPartyManager(ManagerHandler handler) {
-        super(handler);
+    public EventPartyManager() {
         this.leaderUUIDtoParty = new HashMap<>();
         this.playerUUIDtoLeaderUUID = new HashMap<>();
     }
@@ -63,10 +62,10 @@ public class EventPartyManager extends Manager {
     }
 
     public void notifyParty(EventParty party, String message) {
-        Player leaderPlayer = this.handler.getPlugin().getServer().getPlayer(party.getLeader());
+        Player leaderPlayer = Bukkit.getPlayer(party.getLeader());
         leaderPlayer.sendMessage(message);
         for (UUID uuid : party.getMembers()) {
-            Player memberPlayer = this.handler.getPlugin().getServer().getPlayer(uuid);
+            Player memberPlayer = Bukkit.getPlayer(uuid);
             if (memberPlayer == null) continue;
             memberPlayer.sendMessage(message);
         }

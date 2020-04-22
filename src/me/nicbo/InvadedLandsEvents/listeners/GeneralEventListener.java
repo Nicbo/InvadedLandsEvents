@@ -2,7 +2,7 @@ package me.nicbo.InvadedLandsEvents.listeners;
 
 import me.nicbo.InvadedLandsEvents.EventMessage;
 import me.nicbo.InvadedLandsEvents.EventsMain;
-import me.nicbo.InvadedLandsEvents.manager.managers.EventManager;
+import me.nicbo.InvadedLandsEvents.managers.EventManager;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -31,24 +31,28 @@ public class GeneralEventListener implements Listener {
         this.eventManager = plugin.getManagerHandler().getEventManager();
     }
 
+    private boolean runEvent(Player player) {
+        return eventManager.isEventRunning() && eventManager.getCurrentEvent().containsPlayer(player);
+    }
+
     @EventHandler
     public void playerLeave(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        if (eventManager.isEventRunning() && eventManager.getCurrentEvent().containsPlayer(player)) {
+        if (runEvent(player)) {
             eventManager.leaveEvent(player);
         }
     }
 
     @EventHandler
     public void itemDrop(PlayerDropItemEvent event) {
-        if (eventManager.isEventRunning() && eventManager.getCurrentEvent().containsPlayer(event.getPlayer())) {
+        if (runEvent(event.getPlayer())) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler
     public void interactNetherStar(PlayerInteractEvent event) {
-        if (eventManager.isEventRunning() && eventManager.getCurrentEvent().containsPlayer(event.getPlayer())) {
+        if (runEvent(event.getPlayer())) {
             ItemStack item = event.getItem();
             if (item == null || !item.hasItemMeta() || !item.getItemMeta().hasDisplayName())
                 return;
@@ -62,7 +66,7 @@ public class GeneralEventListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOW)
     public void itemCraft(CraftItemEvent event) {
-        if (eventManager.isEventRunning() && eventManager.getCurrentEvent().containsPlayer((Player) event.getWhoClicked())) {
+        if (runEvent((Player) event.getWhoClicked())) {
             ItemStack item = event.getCurrentItem();
             if (item == null || item.getType() == Material.AIR) return;
 
@@ -74,7 +78,7 @@ public class GeneralEventListener implements Listener {
 
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
-        if (eventManager.isEventRunning() && eventManager.getCurrentEvent().containsPlayer((event.getEntity()))) {
+        if (runEvent(event.getEntity())) {
             event.setDeathMessage("");
         }
     }

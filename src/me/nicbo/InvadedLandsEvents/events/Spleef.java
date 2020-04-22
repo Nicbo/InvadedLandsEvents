@@ -156,7 +156,7 @@ public class Spleef extends InvadedEvent {
 
     @EventHandler
     public void snowBreak(BlockBreakEvent event) {
-        if (blockEvent(event.getPlayer()))
+        if (blockListener(event.getPlayer()))
             return;
 
         if (matchCountdown) {
@@ -175,7 +175,7 @@ public class Spleef extends InvadedEvent {
     @EventHandler
     public void snowBallHitSnow(ProjectileHitEvent event) { // Needs changing
         ProjectileSource shooter = event.getEntity().getShooter();
-        if (!(shooter instanceof Player) || blockEvent((Player) shooter))
+        if (!(shooter instanceof Player) || blockListener((Player) shooter))
             return;
 
         Entity entity = event.getEntity();

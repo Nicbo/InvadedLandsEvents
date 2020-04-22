@@ -55,6 +55,7 @@ public class RoD extends InvadedEvent {
                 tpApplyInvisibility();
             }
         });
+
         didPlayerFinish.runTaskTimerAsynchronously(plugin, 0, 1);
         playerCheck.runTaskTimerAsynchronously(plugin, 0, 1);
     }

@@ -1,7 +1,7 @@
 package me.nicbo.InvadedLandsEvents.commands;
 
 import me.nicbo.InvadedLandsEvents.EventsMain;
-import me.nicbo.InvadedLandsEvents.manager.managers.EventManager;
+import me.nicbo.InvadedLandsEvents.managers.EventManager;
 import me.nicbo.InvadedLandsEvents.utils.ConfigUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;

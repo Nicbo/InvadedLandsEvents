@@ -1,11 +1,10 @@
-package me.nicbo.InvadedLandsEvents.manager.managers;
+package me.nicbo.InvadedLandsEvents.managers;
 
 import me.nicbo.InvadedLandsEvents.EventMessage;
 import me.nicbo.InvadedLandsEvents.EventsMain;
 import me.nicbo.InvadedLandsEvents.events.*;
 import me.nicbo.InvadedLandsEvents.events.sumo.*;
-import me.nicbo.InvadedLandsEvents.manager.Manager;
-import me.nicbo.InvadedLandsEvents.manager.ManagerHandler;
+import me.nicbo.InvadedLandsEvents.handlers.ManagerHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -21,7 +20,7 @@ import java.util.HashMap;
  * @since 2020-03-12
  */
 
-public final class EventManager extends Manager {
+public final class EventManager {
     private EventsMain plugin;
     private HashMap<String, InvadedEvent> events;
     private InvadedEvent currentEvent;
@@ -38,9 +37,8 @@ public final class EventManager extends Manager {
         };
     }
 
-    public EventManager(ManagerHandler handler) {
-        super(handler);
-        this.plugin = handler.getPlugin();
+    public EventManager(EventsMain plugin) {
+        this.plugin = plugin;
         this.events = new HashMap<>();
         addEventsToMap();
     }

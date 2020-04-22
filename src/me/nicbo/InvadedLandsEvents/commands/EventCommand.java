@@ -3,9 +3,9 @@ package me.nicbo.InvadedLandsEvents.commands;
 import me.nicbo.InvadedLandsEvents.EventMessage;
 import me.nicbo.InvadedLandsEvents.EventPartyMessage;
 import me.nicbo.InvadedLandsEvents.EventsMain;
-import me.nicbo.InvadedLandsEvents.manager.managers.EventManager;
-import me.nicbo.InvadedLandsEvents.manager.managers.EventPartyManager;
-import me.nicbo.InvadedLandsEvents.manager.managers.EventPartyRequestManager;
+import me.nicbo.InvadedLandsEvents.managers.EventManager;
+import me.nicbo.InvadedLandsEvents.managers.EventPartyManager;
+import me.nicbo.InvadedLandsEvents.managers.EventPartyRequestManager;
 import me.nicbo.InvadedLandsEvents.party.EventParty;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -399,8 +399,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
 
     /*
     TODO:
-        - Sub commands complete basically
         - Host command needs a GUI
-        - Right now this is just for testing I will work on actual command when events are done
+        - Needs optimizing
      */
 }

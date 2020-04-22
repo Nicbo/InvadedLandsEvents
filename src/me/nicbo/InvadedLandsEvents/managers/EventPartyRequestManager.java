@@ -1,9 +1,8 @@
-package me.nicbo.InvadedLandsEvents.manager.managers;
+package me.nicbo.InvadedLandsEvents.managers;
 
 import java.util.*;
 
-import me.nicbo.InvadedLandsEvents.manager.Manager;
-import me.nicbo.InvadedLandsEvents.manager.ManagerHandler;
+import me.nicbo.InvadedLandsEvents.handlers.ManagerHandler;
 import org.bukkit.entity.*;
 
 /**
@@ -13,18 +12,16 @@ import org.bukkit.entity.*;
  * @since 2020-03-12
  */
 
-public class EventPartyRequestManager extends Manager
-{
+public final class EventPartyRequestManager {
     private Map<UUID, List<UUID>> partyRequestMap;
 
-    public EventPartyRequestManager(ManagerHandler handler) {
-        super(handler);
+    public EventPartyRequestManager() {
         this.partyRequestMap = new HashMap<>();
     }
 
     public void addPartyRequest(Player requested, Player requester) {
         if (!this.hasPartyRequests(requested)) {
-            this.partyRequestMap.put(requested.getUniqueId(), new ArrayList<UUID>());
+            this.partyRequestMap.put(requested.getUniqueId(), new ArrayList<>());
         }
         this.partyRequestMap.get(requested.getUniqueId()).add(requester.getUniqueId());
     }

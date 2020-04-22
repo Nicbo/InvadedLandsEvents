@@ -103,6 +103,10 @@ public abstract class InvadedEvent implements Listener {
         return enabled;
     }
 
+    public int getSize() {
+        return players.size();
+    }
+
     protected void initPlayerCheck() {
         this.playerCheck = new BukkitRunnable() {
             @Override
@@ -118,10 +122,6 @@ public abstract class InvadedEvent implements Listener {
 
     public boolean containsPlayer(Player player) {
         return players.contains(player) || spectators.contains(player);
-    }
-
-    public int getSize() {
-        return players.size();
     }
 
     public void joinEvent(Player player) {
@@ -220,14 +220,14 @@ public abstract class InvadedEvent implements Listener {
         players.clear();
         spectators.clear();
     }
-    
+
     protected void clearPlayers() {
         for (Player player : players) {
             EventUtils.clear(player);
         }
     }
 
-    protected boolean blockEvent(Player player) {
+    protected boolean blockListener(Player player) {
         return !started || !players.contains(player);
     }
 

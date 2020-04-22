@@ -11,8 +11,7 @@ import org.bukkit.configuration.file.*;
  * @since 2020-03-12
  */
 
-public class Config
-{
+public class Config {
     private FileConfiguration config;
     private File file;
     private String name;

@@ -30,7 +30,7 @@ public class OITC extends InvadedEvent {
     private List<ItemStack> kit;
 
     private HashMap<Player, Integer> points;
-    private Set<Player> respawning;
+    private Set<Player> respawningPlayers;
 
     public OITC(EventsMain plugin) {
         super("One in the Chamber", "oitc", plugin);
@@ -42,7 +42,7 @@ public class OITC extends InvadedEvent {
 
         this.kit = Arrays.asList(new ItemStack(Material.WOOD_SWORD, 1), new ItemStack(Material.BOW, 1), new ItemStack(Material.ARROW, 1));
         this.points = new HashMap<>();
-        this.respawning = new HashSet<>();
+        this.respawningPlayers = new HashSet<>();
     }
 
     @Override
@@ -55,7 +55,8 @@ public class OITC extends InvadedEvent {
         playerCheck.runTaskTimerAsynchronously(plugin, 0, 1);
         for (Player player : players) {
             points.put(player, 0);
-            player.teleport(randomSpawn(player));
+            preparePlayer(player);
+            player.teleport(getRandomLocation());
         }
     }
 
@@ -64,19 +65,16 @@ public class OITC extends InvadedEvent {
         started = false;
         playerCheck.cancel();
         removePlayers();
-        respawning.clear();
+        respawningPlayers.clear();
         plugin.getManagerHandler().getEventManager().setCurrentEvent(null);
     }
 
-    /**
-     * Set's players inventory to kit and returns location
-     * @param player Player that needs to be teleported
-     * @return Random location from config
-     */
-
-    private Location randomSpawn(Player player) {
+    private void preparePlayer(Player player) {
         player.getInventory().clear();
         kit.forEach(item -> player.getInventory().addItem(item));
+    }
+
+    private Location getRandomLocation() {
         return locations.get(GeneralUtils.randomMinMax(0, 7));
     }
 
@@ -84,7 +82,7 @@ public class OITC extends InvadedEvent {
     public void playerHurt(EntityDamageByEntityEvent event) {
         if (event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();
-            if (blockEvent(player))
+            if (blockListener(player))
                 return;
 
             if (event.getDamager() instanceof Arrow) {
@@ -92,7 +90,7 @@ public class OITC extends InvadedEvent {
             }
 
             if (event.getDamage() >= player.getHealth()) {
-                respawning.add(player);
+                respawningPlayers.add(player);
                 plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
                     @Override
                     public void run() {
@@ -107,20 +105,22 @@ public class OITC extends InvadedEvent {
     public void onRespawn(PlayerRespawnEvent event) {
         Player player = event.getPlayer();
 
-        if (!respawning.contains(player))
+        if (!respawningPlayers.contains(player))
             return;
 
         Player killer = player.getKiller();
         if (killer != null && player != killer) {
             points.put(killer, points.get(killer) + 1);
             Bukkit.broadcastMessage(ChatColor.YELLOW + player.getName() + "[" + points.get(player) + "]" + " has been killed by " + killer.getName() + "[" + points.get(killer) + "]");
+            killer.setHealth(20);
             killer.getInventory().addItem(kit.get(2));
             if (points.get(killer) == 20)
                 playerWon(killer);
         }
 
-        event.setRespawnLocation(randomSpawn(player));
-        respawning.remove(player);
+        preparePlayer(player);
+        event.setRespawnLocation(getRandomLocation());
+        respawningPlayers.remove(player);
     }
 
     /*
