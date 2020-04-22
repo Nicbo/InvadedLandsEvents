@@ -8,19 +8,19 @@ import org.bukkit.plugin.Plugin;
 import java.io.File;
 
 /**
- * File/config handler
+ * File/config class
  *
  * @author thehydrogen
  * @since 2020-04-22
  */
 
-public class EventFile {
+public class ConfigFile {
 
     private File file;
     private FileConfiguration config;
     private String name;
 
-    public EventFile(String fileName, Plugin plugin) {
+    public ConfigFile(String fileName, Plugin plugin) {
 
         file = new File(plugin.getDataFolder(), fileName);
 
