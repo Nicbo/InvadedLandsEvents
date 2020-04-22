@@ -7,26 +7,27 @@ import org.bukkit.ChatColor;
  *
  * @author Nicbo
  * @author StarZorroww
+ * @author thehydrogen
  * @since 2020-03-12
  */
 
 public enum EventMessage {
-    NONE(ChatColor.RED + "There currently isn't any event active right now."),
-    STARTED(ChatColor.RED + "You cannot join the event as it has already started!"),
-    ENDED(ChatColor.GREEN + "You stopped the active event."),
-    SPECTATING(ChatColor.YELLOW + "You are now " + ChatColor.GOLD + "spectating" + ChatColor.YELLOW + " the event."),
-    JOINED_EVENT(ChatColor.GREEN + "" + ChatColor.BOLD + "{player} has joined the event"),
-    LEFT_EVENT(ChatColor.RED + "" + ChatColor.BOLD + "{player} has left the event"),
-    EVENT_FORCE_ENDED(ChatColor.YELLOW + "The " + ChatColor.GOLD + "{event}" + ChatColor.YELLOW + " event has been stopped manually."),
-    HOST_STARTED(ChatColor.RED + "You cannot host an event as one is already in progress."),
-    EVENT_ENDING(ChatColor.RED + "The event currently active is ending, please wait..."),
-    IN_EVENT(ChatColor.RED + "You're already in the event."),
-    DOES_NOT_EXIST(ChatColor.RED + "There is no event named " + ChatColor.YELLOW + "{event}" + ChatColor.RED + "."),
-    NOT_ENABLED(ChatColor.RED + "That event is not enabled!"),
-    NOT_IN_EVENT(ChatColor.RED + "You aren't in an event!"),
-    EMPTY_INVENTORY(ChatColor.RED + "Your inventory must be empty to join an event!"),
-    CRAFT_IN_EVENT(ChatColor.RED + "You're unable to craft in this state."),
-    NO_PERMISSION(ChatColor.RED + "I'm sorry, but you do not have permission to perform this command.");
+    NONE(ChatColor.translateAlternateColorCodes('&', EventsMain.messages.getConfig().getString("NONE"))),
+    STARTED(ChatColor.translateAlternateColorCodes('&', EventsMain.messages.getConfig().getString("STARTED"))),
+    ENDED(ChatColor.translateAlternateColorCodes('&', EventsMain.messages.getConfig().getString("ENDED"))),
+    SPECTATING(ChatColor.translateAlternateColorCodes('&', EventsMain.messages.getConfig().getString("SPECTATING"))),
+    JOINED_EVENT(ChatColor.translateAlternateColorCodes('&', EventsMain.messages.getConfig().getString("JOINED_EVENT"))),
+    LEFT_EVENT(ChatColor.translateAlternateColorCodes('&', EventsMain.messages.getConfig().getString("LEFT_EVENT"))),
+    EVENT_FORCE_ENDED(ChatColor.translateAlternateColorCodes('&', EventsMain.messages.getConfig().getString("LEFT_EVENT"))),
+    HOST_STARTED(ChatColor.translateAlternateColorCodes('&', EventsMain.messages.getConfig().getString("HOST_STARTED"))),
+    EVENT_ENDING(ChatColor.translateAlternateColorCodes('&', EventsMain.messages.getConfig().getString("EVENT_ENDING"))),
+    IN_EVENT(ChatColor.translateAlternateColorCodes('&', EventsMain.messages.getConfig().getString("IN_EVENT"))),
+    DOES_NOT_EXIST(ChatColor.translateAlternateColorCodes('&', EventsMain.messages.getConfig().getString("404"))),
+    NOT_ENABLED(ChatColor.translateAlternateColorCodes('&', EventsMain.messages.getConfig().getString("DISABLED"))),
+    NOT_IN_EVENT(ChatColor.translateAlternateColorCodes('&', EventsMain.messages.getConfig().getString("NOT_IN_EVENT"))),
+    EMPTY_INVENTORY(ChatColor.translateAlternateColorCodes('&', EventsMain.messages.getConfig().getString("EMPTY_INV"))),
+    CRAFT_IN_EVENT(ChatColor.translateAlternateColorCodes('&', EventsMain.messages.getConfig().getString("CRAFT_IN_EVENT"))),
+    NO_PERMISSION(ChatColor.translateAlternateColorCodes('&', EventsMain.messages.getConfig().getString("NO_PERMS")));
 
     final String message;
 
@@ -38,9 +39,4 @@ public enum EventMessage {
     public String toString() {
         return message;
     }
-
-    /*
-    TODO:
-        - Make these all configurable in config file
-     */
 }
