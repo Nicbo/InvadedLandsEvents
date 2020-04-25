@@ -18,7 +18,7 @@ public enum EventMessage {
     SPECTATING(ChatColor.translateAlternateColorCodes('&', EventsMain.messages.getConfig().getString("SPECTATING"))),
     JOINED_EVENT(ChatColor.translateAlternateColorCodes('&', EventsMain.messages.getConfig().getString("JOINED_EVENT"))),
     LEFT_EVENT(ChatColor.translateAlternateColorCodes('&', EventsMain.messages.getConfig().getString("LEFT_EVENT"))),
-    EVENT_FORCE_ENDED(ChatColor.translateAlternateColorCodes('&', EventsMain.messages.getConfig().getString("LEFT_EVENT"))),
+    EVENT_FORCE_ENDED(ChatColor.translateAlternateColorCodes('&', EventsMain.messages.getConfig().getString("EVENT_FORCE_ENDED"))),
     HOST_STARTED(ChatColor.translateAlternateColorCodes('&', EventsMain.messages.getConfig().getString("HOST_STARTED"))),
     EVENT_ENDING(ChatColor.translateAlternateColorCodes('&', EventsMain.messages.getConfig().getString("EVENT_ENDING"))),
     IN_EVENT(ChatColor.translateAlternateColorCodes('&', EventsMain.messages.getConfig().getString("IN_EVENT"))),
