@@ -2,8 +2,8 @@ package me.nicbo.InvadedLandsEvents.events;
 
 import me.nicbo.InvadedLandsEvents.EventsMain;
 import me.nicbo.InvadedLandsEvents.utils.ConfigUtils;
+import me.nicbo.InvadedLandsEvents.utils.EventUtils;
 import me.nicbo.InvadedLandsEvents.utils.GeneralUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -32,6 +32,9 @@ public class OITC extends InvadedEvent {
     private HashMap<Player, Integer> points;
     private Set<Player> respawningPlayers;
 
+    private final String killMessage;
+    private final int WIN_POINTS;
+
     public OITC(EventsMain plugin) {
         super("One in the Chamber", "oitc", plugin);
         this.locations = new ArrayList<>();
@@ -43,6 +46,9 @@ public class OITC extends InvadedEvent {
         this.kit = Arrays.asList(new ItemStack(Material.WOOD_SWORD, 1), new ItemStack(Material.BOW, 1), new ItemStack(Material.ARROW, 1));
         this.points = new HashMap<>();
         this.respawningPlayers = new HashSet<>();
+
+        this.killMessage = ChatColor.translateAlternateColorCodes('&', EventsMain.messages.getConfig().getString(configName + ".KILL_MESSAGE"));
+        this.WIN_POINTS = eventConfig.getInt("int-win-points");
     }
 
     @Override
@@ -78,6 +84,13 @@ public class OITC extends InvadedEvent {
         return locations.get(GeneralUtils.randomMinMax(0, 7));
     }
 
+    private String getKillMessage(Player killer, int killerPoints, Player player, int playerPoints) {
+        return killMessage.replace("{killer}", killer.getName())
+                .replace("{killer_points}", String.valueOf(killerPoints))
+                .replace("{player}", player.getName())
+                .replace("{player_points}", String.valueOf(playerPoints));
+    }
+
     @EventHandler
     public void playerHurt(EntityDamageByEntityEvent event) {
         if (event.getEntity() instanceof Player) {
@@ -111,10 +124,10 @@ public class OITC extends InvadedEvent {
         Player killer = player.getKiller();
         if (killer != null && player != killer) {
             points.put(killer, points.get(killer) + 1);
-            Bukkit.broadcastMessage(ChatColor.YELLOW + player.getName() + "[" + points.get(player) + "]" + " has been killed by " + killer.getName() + "[" + points.get(killer) + "]");
+            EventUtils.broadcastEventMessage(this, getKillMessage(killer, points.get(killer), player, points.get(player)));
             killer.setHealth(20);
             killer.getInventory().addItem(kit.get(2));
-            if (points.get(killer) == 20)
+            if (points.get(killer) == WIN_POINTS)
                 playerWon(killer);
         }
 

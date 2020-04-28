@@ -1,5 +1,6 @@
 package me.nicbo.InvadedLandsEvents.utils;
 
+import me.nicbo.InvadedLandsEvents.events.InvadedEvent;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -38,5 +39,9 @@ public final class EventUtils {
         player.getOpenInventory().getTopInventory().clear();
         player.getOpenInventory().getBottomInventory().clear();
         player.getInventory().setArmorContents(null);
+    }
+
+    public static void broadcastEventMessage(InvadedEvent event, String msg) {
+        event.getParticipants().forEach(player -> player.sendMessage(msg));
     }
 }

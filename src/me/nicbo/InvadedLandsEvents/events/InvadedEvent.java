@@ -38,6 +38,7 @@ public abstract class InvadedEvent implements Listener {
     protected String winCommand;
 
     private String eventName;
+    protected String configName;
     protected boolean started;
     private boolean enabled;
 
@@ -60,6 +61,7 @@ public abstract class InvadedEvent implements Listener {
         this.plugin = plugin;
         this.logger = plugin.getLogger();
         this.eventName = eventName;
+        this.configName = configName;
 
         FileConfiguration config = this.plugin.getConfig();
         this.eventConfig = config.getConfigurationSection("events." + configName);
@@ -87,6 +89,12 @@ public abstract class InvadedEvent implements Listener {
     public abstract void init(EventsMain plugin);
     public abstract void start();
     public abstract void stop();
+
+    public List<Player> getParticipants() {
+        List<Player> participants = new ArrayList<>(players);
+        participants.addAll(spectators);
+        return participants;
+    }
 
     public String getEventName() {
         return eventName;

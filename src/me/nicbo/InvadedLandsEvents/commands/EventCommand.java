@@ -77,7 +77,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
             if (sender instanceof Player) {
                 Player player = (Player) sender;
                 UUID uuid = player.getUniqueId();
-                String playername = player.getName();
+                String playerName = player.getName();
                 if (args.length >= 1) {
                     switch (args[0].toLowerCase()) {
                         case "p":
@@ -90,8 +90,8 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                                             player.sendMessage(EventPartyMessage.ALREADY_IN_PARTY.toString());
                                             break;
                                         }
-                                        EventParty party = eventPartyManager.createParty(uuid, playername);
-                                        eventPartyManager.notifyParty(party, EventPartyMessage.PARTY_CREATE.toString().replace("{leader}", playername));
+                                        EventParty party = eventPartyManager.createParty(uuid, playerName);
+                                        eventPartyManager.notifyParty(party, EventPartyMessage.PARTY_CREATE.toString().replace("{leader}", playerName));
                                         break;
                                     }
                                     case "d":
@@ -102,7 +102,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                                                 player.sendMessage(EventPartyMessage.NOT_LEADER.toString());
                                                 break;
                                             }
-                                            eventPartyManager.notifyParty(party, EventPartyMessage.PARTY_DISBAND.toString().replace("{leader}", playername));
+                                            eventPartyManager.notifyParty(party, EventPartyMessage.PARTY_DISBAND.toString().replace("{leader}", playerName));
                                             eventPartyManager.destroyParty(uuid);
                                             break;
                                         }
@@ -143,10 +143,10 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                                             eventPartyManager.notifyParty(party, EventPartyMessage.PARTY_INVITE_PLAYER.toString().replace("{player}", targetname));
                                             eventPartyRequestManager.addPartyRequest(target, player);
 
-                                            TextComponent invite = new TextComponent(EventPartyMessage.PARTY_INVITE.toString().replace("{leader}", playername));
-                                            TextComponent part = new TextComponent(EventPartyMessage.CLICK_TO_JOIN_FORMATTED.toString().replace("{leader}", playername));
+                                            TextComponent invite = new TextComponent(EventPartyMessage.PARTY_INVITE.toString().replace("{leader}", playerName));
+                                            TextComponent part = new TextComponent(EventPartyMessage.CLICK_TO_JOIN_FORMATTED.toString().replace("{leader}", playerName));
                                             part.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(EventPartyMessage.CLICK_TO_JOIN.toString()).create()));
-                                            part.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, EventPartyMessage.CLICK_COMMAND.toString().replace("{leader}", playername)));
+                                            part.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, EventPartyMessage.CLICK_COMMAND.toString().replace("{leader}", playerName)));
                                             invite.addExtra(part);
                                             target.spigot().sendMessage(invite);
                                             break;
@@ -172,19 +172,19 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                                                 break;
                                             }
                                             UUID uuid1 = target.getUniqueId();
-                                            String targetname = target.getName();
+                                            String targetName = target.getName();
                                             if (party.getLeader() == uuid1) {
                                                 player.sendMessage(EventPartyMessage.CANNOT_ACTION_SELF.toString().replace("{action}", "deinvite"));
                                                 break;
                                             }
                                             if (eventPartyRequestManager.hasPartyRequests(target) && eventPartyRequestManager.hasPartyRequestFromPlayer(target, player)) {
-                                                eventPartyManager.notifyParty(party, EventPartyMessage.PARTY_UNINVITE_PLAYER.toString().replace("{player}", targetname));
+                                                eventPartyManager.notifyParty(party, EventPartyMessage.PARTY_UNINVITE_PLAYER.toString().replace("{player}", targetName));
                                                 eventPartyRequestManager.removePartyRequest(target, player);
 
-                                                target.sendMessage(EventPartyMessage.PARTY_UNINVITE.toString().replace("{leader}", playername));
+                                                target.sendMessage(EventPartyMessage.PARTY_UNINVITE.toString().replace("{leader}", playerName));
                                                 break;
                                             }
-                                            player.sendMessage(EventPartyMessage.INVITE_DOES_NOT_EXIST.toString().replace("{player}", targetname));
+                                            player.sendMessage(EventPartyMessage.INVITE_DOES_NOT_EXIST.toString().replace("{player}", targetName));
                                             break;
                                         }
                                         player.sendMessage(usage + "/event <join|leave|spectate|info|host> (event)");
@@ -221,7 +221,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                                                 eventPartyManager.notifyParty(party, EventPartyMessage.PARTY_KICK_MEMBER.toString().replace("{member}", targetname));
                                                 eventPartyManager.leaveParty(uuid1);
 
-                                                if (target.isOnline()) this.plugin.getServer().getPlayer(target.getUniqueId()).sendMessage(EventPartyMessage.PARTY_KICK.toString().replace("{leader}", playername));
+                                                if (target.isOnline()) this.plugin.getServer().getPlayer(target.getUniqueId()).sendMessage(EventPartyMessage.PARTY_KICK.toString().replace("{leader}", playerName));
                                                 break;
                                             }
                                             player.sendMessage(EventPartyMessage.NOT_LEADER.toString());
@@ -243,9 +243,9 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                                             }
                                             Player target = this.plugin.getServer().getPlayer(args[2]);
                                             UUID uuid1 = target.getUniqueId();
-                                            String targetname = target.getName();
+                                            String targetName = target.getName();
                                             if (eventPartyManager.getParty(uuid1) == null) {
-                                                player.sendMessage(EventPartyMessage.PARTY_DOES_NOT_EXIST.toString().replace("{player}", targetname));
+                                                player.sendMessage(EventPartyMessage.PARTY_DOES_NOT_EXIST.toString().replace("{player}", targetName));
                                                 break;
                                             }
                                             EventParty party = eventPartyManager.getParty(uuid1);
@@ -255,11 +255,11 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                                             }
                                             if (eventPartyRequestManager.hasPartyRequests(player) && eventPartyRequestManager.hasPartyRequestFromPlayer(player, target)) {
                                                 eventPartyManager.joinParty(uuid1, uuid);
-                                                eventPartyManager.notifyParty(party, EventPartyMessage.PARTY_JOIN.toString().replace("{member}", playername));
+                                                eventPartyManager.notifyParty(party, EventPartyMessage.PARTY_JOIN.toString().replace("{member}", playerName));
                                                 eventPartyRequestManager.removePartyRequest(player, target);
                                                 break;
                                             } else {
-                                                player.sendMessage(EventPartyMessage.NO_INVITE.toString().replace("{leader}", targetname));
+                                                player.sendMessage(EventPartyMessage.NO_INVITE.toString().replace("{leader}", targetName));
                                                 break;
                                             }
                                         }
@@ -271,11 +271,11 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                                         if (eventPartyManager.getParty(uuid) != null) {
                                             EventParty party = eventPartyManager.getParty(uuid);
                                             if (party.getLeader() == uuid) {
-                                                eventPartyManager.notifyParty(party, EventPartyMessage.PARTY_DISBAND.toString().replace("{leader}", playername));
+                                                eventPartyManager.notifyParty(party, EventPartyMessage.PARTY_DISBAND.toString().replace("{leader}", playerName));
                                                 eventPartyManager.destroyParty(uuid);
                                                 break;
                                             } else {
-                                                eventPartyManager.notifyParty(party, EventPartyMessage.PARTY_LEFT.toString().replace("{member}", playername));
+                                                eventPartyManager.notifyParty(party, EventPartyMessage.PARTY_LEFT.toString().replace("{member}", playerName));
                                                 eventPartyManager.leaveParty(uuid);
                                                 break;
                                             }

@@ -37,7 +37,6 @@ public class ManagerHandler {
         return this.eventPartyRequestManager;
     }
 
-
     public void restartEventManager() {
         this.eventManager = new EventManager(plugin);
     }

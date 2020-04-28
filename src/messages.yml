@@ -14,3 +14,6 @@ NOT_IN_EVENT: '&cYou aren''t in an event.'
 EMPTY_INV: '&cYour inventory must be empty to join an event!'
 CRAFT_IN_EVENT: '&cYou are unable to craft in an event.'
 NO_PERMS: '&cI''m sorry, but you do not have permission to perform this command.'
+
+oitc:
+  KILL_MESSAGE: '&6{killer} &7[&c{killer_points}&7] &ehas killed &6{player} &7[&c{player_points}&7]'

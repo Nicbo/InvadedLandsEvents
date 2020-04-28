@@ -30,7 +30,7 @@ public class EventsMain extends JavaPlugin {
     public void onEnable() {
         log = getLogger();
         worldGuardPlugin = getWorldGuard();
-
+        saveDefaultConfig();
         messages = new ConfigFile("messages.yml", this);
 
         this.managerHandler = new ManagerHandler(this);
