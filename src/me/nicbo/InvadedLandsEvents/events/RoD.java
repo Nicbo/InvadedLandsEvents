@@ -66,7 +66,6 @@ public class RoD extends InvadedEvent {
         didPlayerFinish.cancel();
         playerCheck.cancel();
         removePlayers();
-        plugin.getManagerHandler().getEventManager().setCurrentEvent(null);
     }
 
     private void tpApplyInvisibility() {

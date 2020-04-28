@@ -273,12 +273,11 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                                             if (party.getLeader() == uuid) {
                                                 eventPartyManager.notifyParty(party, EventPartyMessage.PARTY_DISBAND.toString().replace("{leader}", playerName));
                                                 eventPartyManager.destroyParty(uuid);
-                                                break;
                                             } else {
                                                 eventPartyManager.notifyParty(party, EventPartyMessage.PARTY_LEFT.toString().replace("{member}", playerName));
                                                 eventPartyManager.leaveParty(uuid);
-                                                break;
                                             }
+                                            break;
                                         }
                                         player.sendMessage(EventPartyMessage.NOT_IN_PARTY.toString());
                                         break;
@@ -337,7 +336,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                         case "fe":
                         case "stop":
                         case "forceend": {
-                            EventMessage forceEndMsg = eventManager.endEvent(player);
+                            EventMessage forceEndMsg = eventManager.endEvent();
                             player.sendMessage(forceEndMsg.toString());
                             break;
                         }

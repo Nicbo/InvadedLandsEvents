@@ -107,6 +107,7 @@ public abstract class InvadedEvent implements Listener {
     public boolean isStarted() {
         return started;
     }
+
     public boolean isEnabled() {
         return enabled;
     }
@@ -133,26 +134,23 @@ public abstract class InvadedEvent implements Listener {
     }
 
     public void joinEvent(Player player) {
+        for (Player p : GeneralUtils.getPlayers()) {
+            p.sendMessage(EventMessage.JOINED_EVENT.toString().replace("{player}", player.getName()));
+        }
+
         players.add(player);
         player.teleport(specLoc);
         EventUtils.clear(player);
         player.getInventory().setItem(8, star);
-
-        for (Player p : GeneralUtils.getPlayers()) {
-            p.sendMessage(EventMessage.JOINED_EVENT.toString().replace("{player}", player.getName()));
-        }
         //add to team and scoreboard
     }
 
     public void leaveEvent(Player player) {
+        EventUtils.broadcastEventMessage(this, EventMessage.LEFT_EVENT.toString().replace("{player}", player.getName()));
         players.remove(player);
         spectators.remove(player);
-        EventUtils.clear(player);
         player.teleport(spawnLoc);
-
-        for (Player p : started ? players : GeneralUtils.getPlayers()) {
-            p.sendMessage(EventMessage.LEFT_EVENT.toString().replace("{player}", player.getName()));
-        }
+        EventUtils.clear(player);
         //remove from team and scoreboard
     }
 
@@ -163,7 +161,7 @@ public abstract class InvadedEvent implements Listener {
         player.getInventory().setItem(8, star);
     }
 
-    public void eventInfo(Player player) {
+    public void sendEventInfo(Player player) {
         player.sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + "Active Event: " + eventName);
         player.sendMessage(ChatColor.YELLOW + "Type: " + ChatColor.GOLD + eventName);
         player.sendMessage(ChatColor.YELLOW + "Players: " + ChatColor.GOLD + players.size());
@@ -171,7 +169,7 @@ public abstract class InvadedEvent implements Listener {
     }
 
     public void forceEndEvent() {
-        players.forEach(player -> player.sendMessage(EventMessage.EVENT_FORCE_ENDED.toString().replace("{event}", eventName)));
+        EventUtils.broadcastEventMessage(this, EventMessage.EVENT_FORCE_ENDED.toString().replace("{event}", eventName));
 
         this.plugin.getServer().getScheduler().runTask(this.plugin, new Runnable() {
             @Override
@@ -215,14 +213,9 @@ public abstract class InvadedEvent implements Listener {
     }
 
     protected void removePlayers() {
-        for (Player player : players) {
+        for (Player player : getParticipants()) {
             EventUtils.clear(player);
             player.teleport(spawnLoc);
-        }
-
-        for (Player spectator : spectators) {
-            EventUtils.clear(spectator);
-            spectator.teleport(spawnLoc);
         }
 
         players.clear();

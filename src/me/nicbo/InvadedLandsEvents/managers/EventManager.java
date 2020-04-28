@@ -1,10 +1,15 @@
 package me.nicbo.InvadedLandsEvents.managers;
 
 import me.nicbo.InvadedLandsEvents.EventMessage;
+import me.nicbo.InvadedLandsEvents.EventPartyMessage;
 import me.nicbo.InvadedLandsEvents.EventsMain;
 import me.nicbo.InvadedLandsEvents.events.*;
 import me.nicbo.InvadedLandsEvents.events.sumo.*;
-import me.nicbo.InvadedLandsEvents.handlers.ManagerHandler;
+import me.nicbo.InvadedLandsEvents.utils.GeneralUtils;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -88,9 +93,13 @@ public final class EventManager {
                 }
 
                 if (time == 60 || time == 45 || time == 30 || time == 15 || time <= 5 && time >= 1) {
-                    Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&c&l"+ host + " is hosting a " + name + " event!"));
-                    Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&c&lStarting in " + time + " seconds " + "&a&l[Click to Join]"));
-                    // Add Click Event text
+                    for (Player player : GeneralUtils.getPlayers()) {
+                        TextComponent join = new TextComponent(ChatColor.translateAlternateColorCodes('&', "&c&lStarting in " + time + " seconds " + "&a&l[Click to Join]"));
+                        join.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.GREEN + "Click to join " + currentEvent.getEventName()).create()));
+                        join.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/event join"));
+                        player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&c&l" + host + " is hosting a " + name + " event!"));
+                        player.spigot().sendMessage(join);
+                    }
                 } else if (time == 0) {
 //                  if (!currentEvent.getSize() >= 6) { For testing disable this, will later allow customizing minimum event size.
                     currentEvent.setStarted(true);
@@ -135,7 +144,7 @@ public final class EventManager {
         return EventMessage.SPECTATING;
     }
 
-    public EventMessage endEvent(Player player) {
+    public EventMessage endEvent() {
         if (currentEvent == null) {
             return EventMessage.NONE;
         } else if (!currentEvent.isStarted()) {
@@ -151,7 +160,7 @@ public final class EventManager {
         } else if (!currentEvent.isStarted()) {
             return EventMessage.EVENT_ENDING;
         }
-        currentEvent.eventInfo(player);
+        currentEvent.sendEventInfo(player);
         return null;
     }
 

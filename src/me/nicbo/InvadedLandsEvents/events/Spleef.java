@@ -105,7 +105,6 @@ public class Spleef extends InvadedEvent {
         heightCheck.cancel();
         playerCheck.cancel();
         removePlayers();
-        plugin.getManagerHandler().getEventManager().setCurrentEvent(null);
     }
 
     private void buildSnow(BlockVector pos1, BlockVector pos2) {
@@ -173,7 +172,7 @@ public class Spleef extends InvadedEvent {
     }
 
     @EventHandler
-    public void snowBallHitSnow(ProjectileHitEvent event) { // Needs changing
+    public void snowballHitSnow(ProjectileHitEvent event) { // Needs changing
         ProjectileSource shooter = event.getEntity().getShooter();
         if (!(shooter instanceof Player) || blockListener((Player) shooter))
             return;
@@ -189,4 +188,9 @@ public class Spleef extends InvadedEvent {
             }
         }
     }
+
+    /*
+    TODO:
+        - Make ProjectileHitEvent event more reliable
+     */
 }

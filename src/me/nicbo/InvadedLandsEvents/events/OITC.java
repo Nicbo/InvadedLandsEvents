@@ -11,6 +11,7 @@ import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -72,7 +73,6 @@ public class OITC extends InvadedEvent {
         playerCheck.cancel();
         removePlayers();
         respawningPlayers.clear();
-        plugin.getManagerHandler().getEventManager().setCurrentEvent(null);
     }
 
     private void preparePlayer(Player player) {
@@ -104,14 +104,15 @@ public class OITC extends InvadedEvent {
 
             if (event.getDamage() >= player.getHealth()) {
                 respawningPlayers.add(player);
-                plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-                    @Override
-                    public void run() {
-                        player.spigot().respawn();
-                    }
-                }, 1);
+                plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> player.spigot().respawn(), 1);
             }
         }
+    }
+
+    @EventHandler
+    public void playerDeath(PlayerDeathEvent event) {
+        if (!blockListener(event.getEntity()))
+            event.getDrops().clear();
     }
 
     @EventHandler
