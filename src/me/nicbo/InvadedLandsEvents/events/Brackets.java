@@ -8,15 +8,15 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class Brackets extends InvadedEvent {
     private Location startLoc1;
@@ -26,8 +26,6 @@ public class Brackets extends InvadedEvent {
     private ItemStack[] kit;
 
     private List<Player> fightingPlayers;
-
-    private BukkitRunnable playerFreeze;
 
     private boolean frozen;
 
@@ -66,33 +64,11 @@ public class Brackets extends InvadedEvent {
 
     @Override
     public void init(EventsMain plugin) {
-        initPlayerCheck();
 
-        InvadedEvent instance = this;
-        this.playerFreeze = new BukkitRunnable() {
-            private int timer = 5;
-
-            @Override
-            public void run() {
-                if (timer == 5) {
-                    frozen = true;
-                    EventUtils.broadcastEventMessage(instance, MATCH_START.replace("{player1}", fightingPlayers.get(0).getName())
-                            .replace("{player2}", fightingPlayers.get(1).getName()));
-                } else if (timer <= 1) {
-                    EventUtils.broadcastEventMessage(instance, MATCH_STARTED);
-                    frozen = false;
-                    this.cancel();
-                } else {
-                    EventUtils.broadcastEventMessage(instance, MATCH_COUNTER.replace("{seconds}", String.valueOf(timer)));
-                }
-                timer--;
-            }
-        };
     }
 
     @Override
     public void start() {
-        playerCheck.runTaskTimerAsynchronously(plugin, 0, 1);
         newRound();
     }
 
@@ -101,11 +77,38 @@ public class Brackets extends InvadedEvent {
         fightingPlayers.clear();
     }
 
+    private void restartPlayerFreeze() {
+        InvadedEvent instance = this;
+        new BukkitRunnable() {
+            private int timer = 5;
+
+            @Override
+            public void run() {
+                if (timer == 5) {
+                    frozen = true;
+                    EventUtils.broadcastEventMessage(instance, MATCH_START.replace("{player1}", fightingPlayers.get(0).getName())
+                            .replace("{player2}", fightingPlayers.get(1).getName()));
+                }
+
+                EventUtils.broadcastEventMessage(instance, MATCH_COUNTER.replace("{seconds}", String.valueOf(timer--)));
+                if (timer <= 0) {
+                    EventUtils.broadcastEventMessage(instance, MATCH_STARTED);
+                    frozen = false;
+                    this.cancel();
+                }
+            }
+        };
+    }
+
     private void newRound() {
-        fightingPlayers.clear();
-        addTwoPlayers();
-        applyKitAndTp();
-        playerFreeze.runTaskTimerAsynchronously(plugin, 0, 20);
+        if (players.size() < 2) {
+            playerWon(players.get(0));
+        } else {
+            fightingPlayers.clear();
+            addTwoPlayers();
+            applyKitAndTp();
+            restartPlayerFreeze();
+        }
     }
 
     private void addTwoPlayers() {
@@ -133,9 +136,11 @@ public class Brackets extends InvadedEvent {
     }
 
     private void roundOver(Player loser) {
+        Player winner = fightingPlayers.get(0);
         EventUtils.broadcastEventMessage(this, MATCH_ENDED.replace("{loser}", loser.getName())
-                .replace("{winner}", fightingPlayers.get(0).getName())
+                .replace("{winner}", winner.getName())
                 .replace("{remaining}", String.valueOf(players.size())));
+        winner.teleport(specLoc);
         newRound();
     }
 
@@ -145,7 +150,11 @@ public class Brackets extends InvadedEvent {
     public void onMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
         if (fightingPlayers.contains(player) && frozen) {
-            event.setCancelled(true);
+            Location to = event.getTo();
+            Location from = event.getFrom();
+            if (from.getX() != to.getX() || from.getZ() != to.getZ()) {
+                player.teleport(from.setDirection(to.getDirection()));
+            }
         }
     }
 
@@ -170,5 +179,8 @@ public class Brackets extends InvadedEvent {
     /*
     TODO:
         - heads up this event is completely broken I just had to commit cause im going to sleep
+        - if player leaves in a match the event breaks
+        - everythign is bnroken errors are everywhere oh god oh no
+        - im annoyed at this event star you fix it ok thanks
      */
 }

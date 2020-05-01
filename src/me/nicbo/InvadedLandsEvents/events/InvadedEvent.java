@@ -182,12 +182,7 @@ public abstract class InvadedEvent implements Listener {
     public void forceEndEvent() {
         EventUtils.broadcastEventMessage(this, EventMessage.EVENT_FORCE_ENDED.replace("{event}", eventName));
 
-        this.plugin.getServer().getScheduler().runTask(this.plugin, new Runnable() {
-            @Override
-            public void run() {
-                clearPlayers();
-            }
-        });
+        clearPlayers();
 
         started = false;
         removePlayers();
