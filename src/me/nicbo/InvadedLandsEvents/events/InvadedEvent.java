@@ -124,7 +124,7 @@ public abstract class InvadedEvent implements Listener {
     }
 
     protected String getEventMessage(String message) {
-        return ChatColor.translateAlternateColorCodes('&', EventsMain.getMessages().getConfig().getString(message));
+        return ChatColor.translateAlternateColorCodes('&', EventsMain.getMessages().getConfig().getString(configName + "." + message));
     }
 
     protected void initPlayerCheck() {
