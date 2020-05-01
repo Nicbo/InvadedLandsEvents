@@ -43,7 +43,7 @@ public abstract class InvadedEvent implements Listener {
     private boolean enabled;
 
     protected ConfigurationSection eventConfig;
-    protected ConfigurationSection eventMessages;
+
     protected List<Player> players;
     protected List<Player> spectators;
 
@@ -65,7 +65,6 @@ public abstract class InvadedEvent implements Listener {
         this.configName = configName;
 
         FileConfiguration config = this.plugin.getConfig();
-        this.eventMessages = EventsMain.getMessages().getConfig().getConfigurationSection(configName);
         this.eventConfig = config.getConfigurationSection("events." + configName);
 
         this.eventWorld = Bukkit.getWorld(config.getString("event-world"));
@@ -125,7 +124,7 @@ public abstract class InvadedEvent implements Listener {
     }
 
     protected String getEventMessage(String message) {
-        return ChatColor.translateAlternateColorCodes('&', EventsMain.getMessages().getConfig().getString(configName + "." + message));
+        return ChatColor.translateAlternateColorCodes('&', EventsMain.getMessages().getConfig().getString(message));
     }
 
     protected void initPlayerCheck() {
