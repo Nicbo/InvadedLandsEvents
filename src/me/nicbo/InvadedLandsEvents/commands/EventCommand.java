@@ -1,7 +1,7 @@
 package me.nicbo.InvadedLandsEvents.commands;
 
-import me.nicbo.InvadedLandsEvents.EventMessage;
-import me.nicbo.InvadedLandsEvents.EventPartyMessage;
+import me.nicbo.InvadedLandsEvents.messages.EventMessage;
+import me.nicbo.InvadedLandsEvents.messages.EventPartyMessage;
 import me.nicbo.InvadedLandsEvents.EventsMain;
 import me.nicbo.InvadedLandsEvents.managers.EventManager;
 import me.nicbo.InvadedLandsEvents.managers.EventPartyManager;
@@ -307,45 +307,45 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                         }
                         case "j":
                         case "join": {
-                            EventMessage joinMsg = eventManager.joinEvent(player);
+                            String joinMsg = eventManager.joinEvent(player);
                             if (joinMsg != null)
-                                player.sendMessage(joinMsg.toString());
+                                player.sendMessage(joinMsg);
                             break;
                         }
                         case "l":
                         case "leave": {
-                            EventMessage leaveMsg = eventManager.leaveEvent(player);
+                            String leaveMsg = eventManager.leaveEvent(player);
                             if (leaveMsg != null)
-                                player.sendMessage(leaveMsg.toString());
+                                player.sendMessage(leaveMsg);
                             break;
                         }
                         case "s":
                         case "spec":
                         case "spectate": {
-                            EventMessage spectateMsg = eventManager.specEvent(player);
-                            player.sendMessage(spectateMsg.toString());
+                            String spectateMsg = eventManager.specEvent(player);
+                            player.sendMessage(spectateMsg);
                             break;
                         }
                         case "i":
                         case "info": {
-                            EventMessage infoMsg = eventManager.eventInfo(player);
+                            String infoMsg = eventManager.eventInfo(player);
                             if (infoMsg != null)
-                                player.sendMessage(infoMsg.toString());
+                                player.sendMessage(infoMsg);
                             break;
                         }
                         case "fe":
                         case "stop":
                         case "forceend": {
-                            EventMessage forceEndMsg = eventManager.endEvent();
-                            player.sendMessage(forceEndMsg.toString());
+                            String forceEndMsg = eventManager.endEvent();
+                            player.sendMessage(forceEndMsg);
                             break;
                         }
                         case "h":
                         case "host": {
                             if (args.length >= 2) {
-                                EventMessage hostMsg = eventManager.hostEvent(args[1], player.getName());
+                                String hostMsg = eventManager.hostEvent(args[1], player.getName());
                                 if (hostMsg != null)
-                                    player.sendMessage(hostMsg.toString().replace("{event}", args[1]));
+                                    player.sendMessage(hostMsg.replace("{event}", args[1]));
                                 break;
                             }
                             // If only 1 arg then go to default case.

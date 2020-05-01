@@ -44,6 +44,10 @@ public final class GeneralUtils {
         return true;
     }
 
+    public static <T> T getRandom(List<T> list) {
+        return list.get(random.nextInt(list.size()));
+    }
+
     public static List<Player> getPlayers() {
         return new ArrayList<>(Bukkit.getOnlinePlayers());
     }

@@ -1,4 +1,4 @@
-package me.nicbo.InvadedLandsEvents;
+package me.nicbo.InvadedLandsEvents.messages;
 
 import org.bukkit.ChatColor;
 
@@ -53,6 +53,6 @@ public enum EventPartyMessage {
 
     /*
     TODO:
-        - Make these all configurable in config file
+        - Same as EventMessage class
      */
 }

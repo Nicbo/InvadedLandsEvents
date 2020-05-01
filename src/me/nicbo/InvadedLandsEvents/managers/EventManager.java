@@ -1,7 +1,6 @@
 package me.nicbo.InvadedLandsEvents.managers;
 
-import me.nicbo.InvadedLandsEvents.EventMessage;
-import me.nicbo.InvadedLandsEvents.EventPartyMessage;
+import me.nicbo.InvadedLandsEvents.messages.EventMessage;
 import me.nicbo.InvadedLandsEvents.EventsMain;
 import me.nicbo.InvadedLandsEvents.events.*;
 import me.nicbo.InvadedLandsEvents.events.sumo.*;
@@ -10,7 +9,6 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -65,7 +63,7 @@ public final class EventManager {
         events.put(eventNames[11], new Sumo3v3(plugin));
     }
 
-    public EventMessage hostEvent(String name, String host) {
+    public String hostEvent(String name, String host) {
         if (currentEvent != null) {
             return EventMessage.HOST_STARTED;
         } else if (!events.containsKey(name)) {
@@ -112,7 +110,7 @@ public final class EventManager {
         }.runTaskTimerAsynchronously(plugin, 0, 20);
     }
 
-    public EventMessage joinEvent(Player player) {
+    public String joinEvent(Player player) {
         if (currentEvent == null) {
             return EventMessage.NONE;
         } else if (currentEvent.isStarted()) {
@@ -124,7 +122,7 @@ public final class EventManager {
         return null;
     }
 
-    public EventMessage leaveEvent(Player player) {
+    public String leaveEvent(Player player) {
         if (currentEvent == null) {
             return EventMessage.NONE;
         } else if (!currentEvent.containsPlayer(player)) {
@@ -134,7 +132,7 @@ public final class EventManager {
         return null;
     }
 
-    public EventMessage specEvent(Player player) {
+    public String specEvent(Player player) {
         if (currentEvent == null) {
             return EventMessage.NONE;
         } else if (currentEvent.containsPlayer(player)) {
@@ -144,7 +142,7 @@ public final class EventManager {
         return EventMessage.SPECTATING;
     }
 
-    public EventMessage endEvent() {
+    public String endEvent() {
         if (currentEvent == null) {
             return EventMessage.NONE;
         } else if (!currentEvent.isStarted()) {
@@ -154,7 +152,7 @@ public final class EventManager {
         return EventMessage.ENDED;
     }
 
-    public EventMessage eventInfo(Player player) {
+    public String eventInfo(Player player) {
         if (currentEvent == null) {
             return EventMessage.NONE;
         } else if (!currentEvent.isStarted()) {

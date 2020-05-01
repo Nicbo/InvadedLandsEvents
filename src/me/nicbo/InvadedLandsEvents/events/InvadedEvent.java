@@ -1,7 +1,7 @@
 package me.nicbo.InvadedLandsEvents.events;
 
 import com.sk89q.worldguard.protection.managers.RegionManager;
-import me.nicbo.InvadedLandsEvents.EventMessage;
+import me.nicbo.InvadedLandsEvents.messages.EventMessage;
 import me.nicbo.InvadedLandsEvents.EventsMain;
 import me.nicbo.InvadedLandsEvents.utils.ConfigUtils;
 import me.nicbo.InvadedLandsEvents.utils.EventUtils;
@@ -43,6 +43,7 @@ public abstract class InvadedEvent implements Listener {
     private boolean enabled;
 
     protected ConfigurationSection eventConfig;
+    protected ConfigurationSection eventMessages;
     protected List<Player> players;
     protected List<Player> spectators;
 
@@ -64,7 +65,9 @@ public abstract class InvadedEvent implements Listener {
         this.configName = configName;
 
         FileConfiguration config = this.plugin.getConfig();
+        this.eventMessages = EventsMain.getMessages().getConfig().getConfigurationSection(configName);
         this.eventConfig = config.getConfigurationSection("events." + configName);
+
         this.eventWorld = Bukkit.getWorld(config.getString("event-world"));
         this.spawnLoc = ConfigUtils.deserializeLoc(config.getConfigurationSection("spawn-location"));
         this.specLoc = ConfigUtils.deserializeLoc(this.eventConfig.getConfigurationSection("spec-location"), this.eventWorld);
@@ -86,6 +89,11 @@ public abstract class InvadedEvent implements Listener {
             logger.info(eventName + " not enabled!");
     }
 
+    /**
+     * Gets called every time event is hosted (start of countdown)
+     * Init variables and call methods that need to be run before event starts here
+     * @param plugin Plugin instance
+     */
     public abstract void init(EventsMain plugin);
     public abstract void start();
     public abstract void stop();
@@ -116,6 +124,10 @@ public abstract class InvadedEvent implements Listener {
         return players.size();
     }
 
+    protected String getEventMessage(String message) {
+        return ChatColor.translateAlternateColorCodes('&', EventsMain.getMessages().getConfig().getString(configName + "." + message));
+    }
+
     protected void initPlayerCheck() {
         this.playerCheck = new BukkitRunnable() {
             @Override
@@ -135,7 +147,7 @@ public abstract class InvadedEvent implements Listener {
 
     public void joinEvent(Player player) {
         for (Player p : GeneralUtils.getPlayers()) {
-            p.sendMessage(EventMessage.JOINED_EVENT.toString().replace("{player}", player.getName()));
+            p.sendMessage(EventMessage.JOINED_EVENT.replace("{player}", player.getName()));
         }
 
         players.add(player);
@@ -146,7 +158,7 @@ public abstract class InvadedEvent implements Listener {
     }
 
     public void leaveEvent(Player player) {
-        EventUtils.broadcastEventMessage(this, EventMessage.LEFT_EVENT.toString().replace("{player}", player.getName()));
+        EventUtils.broadcastEventMessage(this, EventMessage.LEFT_EVENT.replace("{player}", player.getName()));
         players.remove(player);
         spectators.remove(player);
         player.teleport(spawnLoc);
@@ -169,7 +181,7 @@ public abstract class InvadedEvent implements Listener {
     }
 
     public void forceEndEvent() {
-        EventUtils.broadcastEventMessage(this, EventMessage.EVENT_FORCE_ENDED.toString().replace("{event}", eventName));
+        EventUtils.broadcastEventMessage(this, EventMessage.EVENT_FORCE_ENDED.replace("{event}", eventName));
 
         this.plugin.getServer().getScheduler().runTask(this.plugin, new Runnable() {
             @Override

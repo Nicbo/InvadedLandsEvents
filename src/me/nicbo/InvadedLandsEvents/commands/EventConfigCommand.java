@@ -2,6 +2,7 @@ package me.nicbo.InvadedLandsEvents.commands;
 
 import me.nicbo.InvadedLandsEvents.EventsMain;
 import me.nicbo.InvadedLandsEvents.managers.EventManager;
+import me.nicbo.InvadedLandsEvents.messages.EventMessage;
 import me.nicbo.InvadedLandsEvents.utils.ConfigUtils;
 import me.nicbo.InvadedLandsEvents.utils.GeneralUtils;
 import org.bukkit.ChatColor;
@@ -133,6 +134,11 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
                                 sender.sendMessage(ChatColor.GREEN + "Event config saved");
                                 plugin.reloadConfig();
                                 sender.sendMessage(ChatColor.GREEN + "Event config reloaded");
+                                EventsMain.getMessages().save();
+                                sender.sendMessage(ChatColor.GREEN + "Event messages saved");
+                                EventsMain.getMessages().reload();
+                                EventMessage.reload();
+                                sender.sendMessage(ChatColor.GREEN + "Event messages reloaded");
                                 break;
                             case "reload":
                                 plugin.reloadConfig();

@@ -1,6 +1,6 @@
 package me.nicbo.InvadedLandsEvents.listeners;
 
-import me.nicbo.InvadedLandsEvents.EventMessage;
+import me.nicbo.InvadedLandsEvents.messages.EventMessage;
 import me.nicbo.InvadedLandsEvents.EventsMain;
 import me.nicbo.InvadedLandsEvents.managers.EventManager;
 import org.bukkit.Material;

@@ -17,3 +17,10 @@ NO_PERMS: '&cI''m sorry, but you do not have permission to perform this command.
 
 oitc:
   KILL_MESSAGE: '&6{killer} &7[&c{killer_points}&7] &ehas killed &6{player} &7[&c{player_points}&7]'
+
+brackets:
+  MATCH_START: '&eStarting a brackets match: &6{player1} &evs. &6{player2}&e.'
+  MATCH_COUNTER: '&eThe match starts in &6{seconds} &esecond(s)...'
+  MATCH_STARTED: '&eThe match has started!'
+  MATCH_ENDED: '&6{loser} &ewas eliminated by &6{winner}&e. (&6{remaining}&e)'
+

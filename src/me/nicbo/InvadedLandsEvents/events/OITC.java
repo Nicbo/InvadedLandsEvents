@@ -28,7 +28,7 @@ import java.util.*;
 
 public class OITC extends InvadedEvent {
     private List<Location> locations;
-    private List<ItemStack> kit;
+    private ItemStack[] kit;
 
     private HashMap<Player, Integer> points;
     private Set<Player> respawningPlayers;
@@ -44,11 +44,16 @@ public class OITC extends InvadedEvent {
             this.locations.add(ConfigUtils.deserializeLoc(eventConfig.getConfigurationSection("start-location-" + i), eventWorld));
         }
 
-        this.kit = Arrays.asList(new ItemStack(Material.WOOD_SWORD, 1), new ItemStack(Material.BOW, 1), new ItemStack(Material.ARROW, 1));
+        this.kit = new ItemStack[] {
+                new ItemStack(Material.WOOD_SWORD, 1),
+                new ItemStack(Material.BOW, 1),
+                new ItemStack(Material.ARROW, 1)
+        };
+
         this.points = new HashMap<>();
         this.respawningPlayers = new HashSet<>();
 
-        this.killMessage = ChatColor.translateAlternateColorCodes('&', EventsMain.messages.getConfig().getString(configName + ".KILL_MESSAGE"));
+        this.killMessage = getEventMessage("KILL_MESSAGE");
         this.WIN_POINTS = eventConfig.getInt("int-win-points");
     }
 
@@ -72,16 +77,16 @@ public class OITC extends InvadedEvent {
         started = false;
         playerCheck.cancel();
         removePlayers();
+        points.clear();
         respawningPlayers.clear();
     }
 
     private void preparePlayer(Player player) {
-        player.getInventory().clear();
-        kit.forEach(item -> player.getInventory().addItem(item));
+        player.getInventory().setContents(kit);
     }
 
     private Location getRandomLocation() {
-        return locations.get(GeneralUtils.randomMinMax(0, 7));
+        return GeneralUtils.getRandom(locations);
     }
 
     private String getKillMessage(Player killer, int killerPoints, Player player, int playerPoints) {
@@ -103,16 +108,11 @@ public class OITC extends InvadedEvent {
             }
 
             if (event.getDamage() >= player.getHealth()) {
+                player.getInventory().clear();
                 respawningPlayers.add(player);
                 plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> player.spigot().respawn(), 1);
             }
         }
-    }
-
-    @EventHandler
-    public void playerDeath(PlayerDeathEvent event) {
-        if (!blockListener(event.getEntity()))
-            event.getDrops().clear();
     }
 
     @EventHandler
@@ -127,7 +127,7 @@ public class OITC extends InvadedEvent {
             points.put(killer, points.get(killer) + 1);
             EventUtils.broadcastEventMessage(this, getKillMessage(killer, points.get(killer), player, points.get(player)));
             killer.setHealth(20);
-            killer.getInventory().addItem(kit.get(2));
+            killer.getInventory().addItem(kit[2]);
             if (points.get(killer) == WIN_POINTS)
                 playerWon(killer);
         }

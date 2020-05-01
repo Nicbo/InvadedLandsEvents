@@ -3,6 +3,7 @@ package me.nicbo.InvadedLandsEvents;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import me.nicbo.InvadedLandsEvents.commands.EventCommand;
 import me.nicbo.InvadedLandsEvents.commands.EventConfigCommand;
+import me.nicbo.InvadedLandsEvents.messages.EventMessage;
 import me.nicbo.InvadedLandsEvents.utils.ConfigFile;
 import me.nicbo.InvadedLandsEvents.listeners.GeneralEventListener;
 import me.nicbo.InvadedLandsEvents.handlers.ManagerHandler;
@@ -24,7 +25,7 @@ public class EventsMain extends JavaPlugin {
     private ManagerHandler managerHandler;
     private WorldGuardPlugin worldGuardPlugin;
 
-    public static ConfigFile messages;
+    private static ConfigFile messages;
 
     @Override
     public void onEnable() {
@@ -32,6 +33,7 @@ public class EventsMain extends JavaPlugin {
         worldGuardPlugin = getWorldGuard();
         saveDefaultConfig();
         messages = new ConfigFile("messages.yml", this);
+        EventMessage.reload();
 
         this.managerHandler = new ManagerHandler(this);
         registerCommands();
@@ -42,6 +44,7 @@ public class EventsMain extends JavaPlugin {
     @Override
     public void onDisable() {
         saveDefaultConfig();
+        messages.save();
 
         if (managerHandler.getEventManager().isEventRunning())
             managerHandler.getEventManager().getCurrentEvent().forceEndEvent();
@@ -75,5 +78,9 @@ public class EventsMain extends JavaPlugin {
 
     public ManagerHandler getManagerHandler() {
         return this.managerHandler;
+    }
+
+    public static ConfigFile getMessages() {
+        return messages;
     }
 }
