@@ -74,11 +74,12 @@ public class Brackets extends InvadedEvent {
 
     @Override
     public void stop() {
+        started = false;
         fightingPlayers.clear();
+        removePlayers();
     }
 
     private void restartPlayerFreeze() {
-        InvadedEvent instance = this;
         new BukkitRunnable() {
             private int timer = 5;
 
@@ -86,13 +87,13 @@ public class Brackets extends InvadedEvent {
             public void run() {
                 if (timer == 5) {
                     frozen = true;
-                    EventUtils.broadcastEventMessage(instance, MATCH_START.replace("{player1}", fightingPlayers.get(0).getName())
+                    EventUtils.broadcastEventMessage(MATCH_START.replace("{player1}", fightingPlayers.get(0).getName())
                             .replace("{player2}", fightingPlayers.get(1).getName()));
                 }
 
-                EventUtils.broadcastEventMessage(instance, MATCH_COUNTER.replace("{seconds}", String.valueOf(timer--)));
+                EventUtils.broadcastEventMessage(MATCH_COUNTER.replace("{seconds}", String.valueOf(timer--)));
                 if (timer <= 0) {
-                    EventUtils.broadcastEventMessage(instance, MATCH_STARTED);
+                    EventUtils.broadcastEventMessage(MATCH_STARTED);
                     frozen = false;
                     this.cancel();
                 }
@@ -137,7 +138,7 @@ public class Brackets extends InvadedEvent {
 
     private void roundOver(Player loser) {
         Player winner = fightingPlayers.get(0);
-        EventUtils.broadcastEventMessage(this, MATCH_ENDED.replace("{loser}", loser.getName())
+        EventUtils.broadcastEventMessage(MATCH_ENDED.replace("{loser}", loser.getName())
                 .replace("{winner}", winner.getName())
                 .replace("{remaining}", String.valueOf(players.size())));
         winner.teleport(specLoc);

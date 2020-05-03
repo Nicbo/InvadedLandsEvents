@@ -40,7 +40,7 @@ public abstract class InvadedEvent implements Listener {
     private String eventName;
     protected String configName;
     protected boolean started;
-    private boolean enabled;
+    protected boolean enabled;
 
     protected ConfigurationSection eventConfig;
 
@@ -157,7 +157,7 @@ public abstract class InvadedEvent implements Listener {
     }
 
     public void leaveEvent(Player player) {
-        EventUtils.broadcastEventMessage(this, EventMessage.LEFT_EVENT.replace("{player}", player.getName()));
+        EventUtils.broadcastEventMessage(EventMessage.LEFT_EVENT.replace("{player}", player.getName()));
         players.remove(player);
         spectators.remove(player);
         player.teleport(spawnLoc);
@@ -180,12 +180,8 @@ public abstract class InvadedEvent implements Listener {
     }
 
     public void forceEndEvent() {
-        EventUtils.broadcastEventMessage(this, EventMessage.EVENT_FORCE_ENDED.replace("{event}", eventName));
-
-        clearPlayers();
-
-        started = false;
-        removePlayers();
+        EventUtils.broadcastEventMessage(EventMessage.EVENT_FORCE_ENDED.replace("{event}", eventName));
+        stop();
         plugin.getManagerHandler().getEventManager().setCurrentEvent(null);
     }
 
@@ -200,21 +196,14 @@ public abstract class InvadedEvent implements Listener {
             Bukkit.broadcastMessage(ChatColor.GOLD + (player == null ? "No one" : player.getName()) + ChatColor.YELLOW + " won the " + ChatColor.GOLD + eventName + ChatColor.YELLOW + " event!");
         }
 
-        plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-            @Override
-            public void run() {
-                stop();
-                plugin.getManagerHandler().getEventManager().setCurrentEvent(null);
-            }
+        plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+            stop();
+            plugin.getManagerHandler().getEventManager().setCurrentEvent(null);
         }, 100);
 
         if (player != null) {
-            plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-                @Override
-                public void run() {
-                    plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), winCommand.replace("{winner}", player.getName()));
-                }
-            }, 100);
+            plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin,
+                    () -> plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), winCommand.replace("{winner}", player.getName())), 100);
         }
     }
 

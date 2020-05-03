@@ -125,7 +125,7 @@ public class OITC extends InvadedEvent {
         Player killer = player.getKiller();
         if (killer != null && player != killer) {
             points.put(killer, points.get(killer) + 1);
-            EventUtils.broadcastEventMessage(this, getKillMessage(killer, points.get(killer), player, points.get(player)));
+            EventUtils.broadcastEventMessage(getKillMessage(killer, points.get(killer), player, points.get(player)));
             killer.setHealth(20);
             killer.getInventory().addItem(kit[2]);
             if (points.get(killer) == WIN_POINTS)
@@ -139,7 +139,7 @@ public class OITC extends InvadedEvent {
 
     /*
     TODO:
-        - Make point cap configurable (20)
+        - Blocking with sword glitches event
      */
 
 }

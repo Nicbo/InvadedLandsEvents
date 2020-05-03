@@ -8,7 +8,7 @@ win-command: msg {winner} you win
 spawn-location:
   world: world
   x: 0
-  y: 70
+  y: 0
   z: 0
   yaw: 0
   pitch: 0
@@ -18,19 +18,19 @@ events:
     enabled: false
     spec-location:
       x: 0
-      y: 70
+      y: 0
       z: 0
       yaw: 0
       pitch: 0
     start-location-1:
       x: 0
-      y: 70
+      y: 0
       z: 0
       yaw: 0
       pitch: 0
     start-location-2:
       x: 0
-      y: 70
+      y: 0
       z: 0
       yaw: 0
       pitch: 0
@@ -39,19 +39,19 @@ events:
     enabled: false
     spec-location:
       x: 0
-      y: 70
+      y: 0
       z: 0
       yaw: 0
       pitch: 0
     start-location-1:
       x: 0
-      y: 70
+      y: 0
       z: 0
       yaw: 0
       pitch: 0
     start-location-2:
       x: 0
-      y: 70
+      y: 0
       z: 0
       yaw: 0
       pitch: 0
@@ -60,31 +60,31 @@ events:
     enabled: false
     spec-location:
       x: 0
-      y: 70
+      y: 0
       z: 0
       yaw: 0
       pitch: 0
     start-location-1:
       x: 0
-      y: 70
+      y: 0
       z: 0
       yaw: 0
       pitch: 0
     start-location-2:
       x: 0
-      y: 70
+      y: 0
       z: 0
       yaw: 0
       pitch: 0
     start-location-3:
       x: 0
-      y: 70
+      y: 0
       z: 0
       yaw: 0
       pitch: 0
     start-location-4:
       x: 0
-      y: 70
+      y: 0
       z: 0
       yaw: 0
       pitch: 0
@@ -93,13 +93,13 @@ events:
     enabled: false
     spec-location:
       x: 0
-      y: 70
+      y: 0
       z: 0
       yaw: 0
       pitch: 0
     start-location:
       x: 0
-      y: 70
+      y: 0
       z: 0
       yaw: 0
       pitch: 0
@@ -108,55 +108,55 @@ events:
     enabled: false
     spec-location:
       x: 0
-      y: 70
+      y: 0
       z: 0
       yaw: 0
       pitch: 0
     start-location-1:
       x: 0
-      y: 70
+      y: 0
       z: 0
       yaw: 0
       pitch: 0
     start-location-2:
       x: 0
-      y: 70
+      y: 0
       z: 0
       yaw: 0
       pitch: 0
     start-location-3:
       x: 0
-      y: 70
+      y: 0
       z: 0
       yaw: 0
       pitch: 0
     start-location-4:
       x: 0
-      y: 70
+      y: 0
       z: 0
       yaw: 0
       pitch: 0
     start-location-5:
       x: 0
-      y: 70
+      y: 0
       z: 0
       yaw: 0
       pitch: 0
     start-location-6:
       x: 0
-      y: 70
+      y: 0
       z: 0
       yaw: 0
       pitch: 0
     start-location-7:
       x: 0
-      y: 70
+      y: 0
       z: 0
       yaw: 0
       pitch: 0
     start-location-8:
       x: 0
-      y: 70
+      y: 0
       z: 0
       yaw: 0
       pitch: 0
@@ -166,13 +166,13 @@ events:
     enabled: false
     spec-location:
       x: 0
-      y: 70
+      y: 0
       z: 0
       yaw: 0
       pitch: 0
     start-location:
       x: 0
-      y: 70
+      y: 0
       z: 0
       yaw: 0
       pitch: 0
@@ -183,13 +183,13 @@ events:
     enabled: false
     spec-location:
       x: 0
-      y: 70
+      y: 0
       z: 0
       yaw: 0
       pitch: 0
     start-location:
       x: 0
-      y: 70
+      y: 0
       z: 0
       yaw: 0
       pitch: 0
@@ -199,49 +199,48 @@ events:
     enabled: false
     spec-location:
       x: 0
-      y: 70
+      y: 0
       z: 0
       yaw: 0
       pitch: 0
     start-location-1:
       x: 0
-      y: 70
+      y: 0
       z: 0
       yaw: 0
       pitch: 0
     start-location-2:
       x: 0
-      y: 70
+      y: 0
       z: 0
       yaw: 0
       pitch: 0
     snow-position-1:
       x: 0
-      y: 70
+      y: 0
       z: 0
     snow-position-2:
       x: 0
-      y: 70
+      y: 0
       z: 0
-    region: spleef
 
   tdm:
     enabled: false
     spec-location:
       x: 0
-      y: 70
+      y: 0
       z: 0
       yaw: 0
       pitch: 0
     blue-start-location:
       x: 0
-      y: 70
+      y: 0
       z: 0
       yaw: 0
       pitch: 0
     red-start-location:
       x: 0
-      y: 70
+      y: 0
       z: 0
       yaw: 0
       pitch: 0
@@ -250,13 +249,13 @@ events:
     enabled: false
     spec-location:
       x: 0
-      y: 70
+      y: 0
       z: 0
       yaw: 0
       pitch: 0
     start-location:
       x: 0
-      y: 70
+      y: 0
       z: 0
       yaw: 0
       pitch: 0
@@ -265,28 +264,37 @@ events:
     enabled: false
     spec-location:
       x: 0
-      y: 70
+      y: 0
       z: 0
       yaw: 0
       pitch: 0
     start-location:
       x: 0
-      y: 70
+      y: 0
       z: 0
       yaw: 0
       pitch: 0
+    water-position-1:
+      x: 0
+      y: 0
+      z: 0
+    water-position-2:
+      x: 0
+      y: 0
+      z: 0
+    safe-region: waterdrop
 
   woolshuffle:
     enabled: false
     spec-location:
       x: 0
-      y: 70
+      y: 0
       z: 0
       yaw: 0
       pitch: 0
     start-location:
       x: 0
-      y: 70
+      y: 0
       z: 0
       yaw: 0
       pitch: 0

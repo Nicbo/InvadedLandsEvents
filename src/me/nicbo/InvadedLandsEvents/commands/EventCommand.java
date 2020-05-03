@@ -400,5 +400,6 @@ public class EventCommand implements CommandExecutor, TabCompleter {
     TODO:
         - Host command needs a GUI
         - Needs optimizing
+        - econfig reload and save don't work as intended
      */
 }

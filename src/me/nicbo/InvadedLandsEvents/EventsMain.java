@@ -21,6 +21,8 @@ import java.util.logging.Logger;
  */
 
 public class EventsMain extends JavaPlugin {
+    private static EventsMain instance;
+
     private Logger log;
     private ManagerHandler managerHandler;
     private WorldGuardPlugin worldGuardPlugin;
@@ -29,6 +31,7 @@ public class EventsMain extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        instance = this;
         log = getLogger();
         worldGuardPlugin = getWorldGuard();
         saveDefaultConfig();
@@ -38,6 +41,7 @@ public class EventsMain extends JavaPlugin {
         this.managerHandler = new ManagerHandler(this);
         registerCommands();
         getServer().getPluginManager().registerEvents(new GeneralEventListener(this), this);
+
         log.info("Plugin enabled!");
     }
 
@@ -78,6 +82,10 @@ public class EventsMain extends JavaPlugin {
 
     public ManagerHandler getManagerHandler() {
         return this.managerHandler;
+    }
+
+    public static EventsMain getInstance() {
+        return instance;
     }
 
     public static ConfigFile getMessages() {
