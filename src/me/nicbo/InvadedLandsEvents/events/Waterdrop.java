@@ -5,17 +5,10 @@ import me.nicbo.InvadedLandsEvents.EventsMain;
 import me.nicbo.InvadedLandsEvents.utils.ConfigUtils;
 import me.nicbo.InvadedLandsEvents.utils.EventUtils;
 import me.nicbo.InvadedLandsEvents.utils.GeneralUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerVelocityEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.BlockVector;
 
@@ -46,7 +39,7 @@ public class Waterdrop extends InvadedEvent {
     private List<Player> eliminated;
 
     private BukkitRunnable fallCheck;
-    private BukkitRunnable waterdropTimers;
+    private BukkitRunnable waterdropTimer;
 
     private final String ROUND_START;
     private final String SUCCESS_JUMP;
@@ -92,7 +85,7 @@ public class Waterdrop extends InvadedEvent {
         initPlayerCheck();
         this.round = 1;
         this.timer = 20;
-        this.waterdropTimers = new BukkitRunnable() {
+        this.waterdropTimer = new BukkitRunnable() {
             private int[] times = new int[] { 20, 20, 19, 19, 18, 17, 17, 16, 15, 14, 14, 13, 12, 12, 10, 10, 10, 9, 8, 7, 7, 6 };
 
             @Override
@@ -135,14 +128,14 @@ public class Waterdrop extends InvadedEvent {
     public void start() {
         playerCheck.runTaskTimerAsynchronously(plugin, 0, 1);
         fallCheck.runTaskTimerAsynchronously(plugin, 0, 1);
-        waterdropTimers.runTaskTimerAsynchronously(plugin, 0, 20);
+        waterdropTimer.runTaskTimerAsynchronously(plugin, 0, 20);
         newRound();
     }
 
     @Override
     public void stop() {
         started = false;
-        waterdropTimers.cancel();
+        waterdropTimer.cancel();
         fallCheck.cancel();
         playerCheck.cancel();
         jumped.clear();
