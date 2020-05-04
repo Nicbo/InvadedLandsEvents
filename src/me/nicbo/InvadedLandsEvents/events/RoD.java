@@ -10,6 +10,15 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
+/**
+ * RoD event:
+ * All players are tp'd to a start location
+ * Once player enters win region they win event
+ *
+ * @author Nicbo
+ * @since 2020-03-10
+ */
+
 public final class RoD extends InvadedEvent {
     private WorldGuardPlugin worldGuardPlugin;
 
@@ -65,7 +74,7 @@ public final class RoD extends InvadedEvent {
         started = false;
         didPlayerFinish.cancel();
         playerCheck.cancel();
-        removePlayers();
+        removeParticipants();
     }
 
     private void tpApplyInvisibility() {

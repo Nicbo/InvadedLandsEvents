@@ -10,11 +10,21 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.List;
+
+/**
+ * Brackets event:
+ * 2 players tp'd and get kit
+ * Whoever wins duel moves on to next round
+ *
+ * @author Nicbo
+ * @since 2020-04-30
+ */
 
 public final class Brackets extends InvadedEvent {
     private Location startLoc1;
@@ -25,7 +35,11 @@ public final class Brackets extends InvadedEvent {
 
     private List<Player> fightingPlayers;
 
+    private boolean fighting;
     private boolean frozen;
+
+    private BukkitRunnable leaveCheck;
+    private BukkitRunnable playerFreeze;
 
     private final String MATCH_START;
     private final String MATCH_COUNTER;
@@ -62,23 +76,34 @@ public final class Brackets extends InvadedEvent {
 
     @Override
     public void init(EventsMain plugin) {
-
+        this.leaveCheck = new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (fightingPlayers.size() == 1 && fighting) {
+                    roundOver(fightingPlayers.get(0));
+                    if (frozen)
+                        playerFreeze.cancel();
+                }
+            }
+        };
     }
 
     @Override
     public void start() {
+        leaveCheck.runTaskTimerAsynchronously(plugin, 0, 1);
         newRound();
     }
 
     @Override
     public void stop() {
         started = false;
+        leaveCheck.cancel();
         fightingPlayers.clear();
-        removePlayers();
+        removeParticipants();
     }
 
     private void restartPlayerFreeze() {
-        new BukkitRunnable() {
+        this.playerFreeze = new BukkitRunnable() {
             private int timer = 5;
 
             @Override
@@ -97,6 +122,8 @@ public final class Brackets extends InvadedEvent {
                 }
             }
         };
+
+        this.playerFreeze.runTaskTimerAsynchronously(plugin, 0, 20);
     }
 
     private void newRound() {
@@ -107,6 +134,7 @@ public final class Brackets extends InvadedEvent {
             addTwoPlayers();
             applyKitAndTp();
             restartPlayerFreeze();
+            fighting = true;
         }
     }
 
@@ -135,15 +163,23 @@ public final class Brackets extends InvadedEvent {
     }
 
     private void roundOver(Player loser) {
+        fighting = false;
         Player winner = fightingPlayers.get(0);
         EventUtils.broadcastEventMessage(MATCH_ENDED.replace("{loser}", loser.getName())
                 .replace("{winner}", winner.getName())
                 .replace("{remaining}", String.valueOf(players.size())));
+        EventUtils.clear(winner);
         winner.teleport(specLoc);
         newRound();
     }
 
 
+
+    @EventHandler
+    public void onLeave(PlayerQuitEvent event) {
+        Player player = event.getPlayer();
+        fightingPlayers.remove(player);
+    }
 
     @EventHandler
     public void onMove(PlayerMoveEvent event) {
@@ -166,20 +202,12 @@ public final class Brackets extends InvadedEvent {
 
             if (event.getDamage() >= player.getHealth()) {
                 fightingPlayers.remove(player);
-                roundOver(player);
                 plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
                     player.spigot().respawn();
                     loseEvent(player);
+                    roundOver(player);
                 }, 1);
             }
         }
     }
-
-    /*
-    TODO:
-        - heads up this event is completely broken I just had to commit cause im going to sleep
-        - if player leaves in a match the event breaks
-        - everythign is bnroken errors are everywhere oh god oh no
-        - im annoyed at this event star you fix it ok thanks
-     */
 }

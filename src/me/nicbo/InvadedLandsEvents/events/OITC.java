@@ -74,7 +74,7 @@ public final class OITC extends InvadedEvent {
     public void stop() {
         started = false;
         playerCheck.cancel();
-        removePlayers();
+        removeParticipants();
         points.clear();
         respawningPlayers.clear();
     }

@@ -206,7 +206,7 @@ public abstract class InvadedEvent implements Listener {
         }
     }
 
-    protected void removePlayers() {
+    protected void removeParticipants() {
         for (Player player : getParticipants()) {
             EventUtils.clear(player);
             player.teleport(spawnLoc);

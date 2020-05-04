@@ -95,7 +95,7 @@ public final class Spleef extends InvadedEvent {
         started = false;
         heightCheck.cancel();
         playerCheck.cancel();
-        removePlayers();
+        removeParticipants();
     }
 
     private void tpPlayers() {

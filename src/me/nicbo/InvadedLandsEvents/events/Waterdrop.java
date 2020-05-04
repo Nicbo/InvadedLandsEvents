@@ -16,6 +16,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Waterdrop event:
+ * All players are tp'd to a start location every round
+ * Once player enters safe region they pass the round
+ * Last player to fail wins
+ *
+ * @author Nicbo
+ * @since 2020-05-10
+ */
+
 public final class Waterdrop extends InvadedEvent {
     private ProtectedRegion region;
     private Location startLoc;
@@ -136,7 +146,7 @@ public final class Waterdrop extends InvadedEvent {
         fallCheck.cancel();
         jumped.clear();
         eliminated.clear();
-        removePlayers();
+        removeParticipants();
     }
 
     private void newRound() {
