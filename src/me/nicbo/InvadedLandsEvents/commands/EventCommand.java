@@ -1,6 +1,5 @@
 package me.nicbo.InvadedLandsEvents.commands;
 
-import me.nicbo.InvadedLandsEvents.messages.EventMessage;
 import me.nicbo.InvadedLandsEvents.messages.EventPartyMessage;
 import me.nicbo.InvadedLandsEvents.EventsMain;
 import me.nicbo.InvadedLandsEvents.managers.EventManager;
@@ -30,7 +29,7 @@ import java.util.*;
  * @since 2020-03-12
  */
 
-public class EventCommand implements CommandExecutor, TabCompleter {
+public final class EventCommand implements CommandExecutor, TabCompleter {
     private EventManager eventManager;
     private EventPartyManager eventPartyManager;
     private EventPartyRequestManager eventPartyRequestManager;

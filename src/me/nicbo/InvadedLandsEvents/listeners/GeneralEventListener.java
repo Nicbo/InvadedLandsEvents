@@ -24,7 +24,7 @@ import org.bukkit.inventory.ItemStack;
  * @since 2020-03-12
  */
 
-public class GeneralEventListener implements Listener {
+public final class GeneralEventListener implements Listener {
     private EventManager eventManager;
 
     public GeneralEventListener(EventsMain plugin) {

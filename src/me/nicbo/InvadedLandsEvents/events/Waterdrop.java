@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Waterdrop extends InvadedEvent {
+public final class Waterdrop extends InvadedEvent {
     private ProtectedRegion region;
     private Location startLoc;
     private BlockVector pos1;

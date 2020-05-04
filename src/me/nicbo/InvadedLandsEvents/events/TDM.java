@@ -2,7 +2,7 @@ package me.nicbo.InvadedLandsEvents.events;
 
 import me.nicbo.InvadedLandsEvents.EventsMain;
 
-public class TDM extends InvadedEvent {
+public final class TDM extends InvadedEvent {
     public TDM(EventsMain plugin) {
         super("Team Deathmatch", "tdm", plugin);
     }

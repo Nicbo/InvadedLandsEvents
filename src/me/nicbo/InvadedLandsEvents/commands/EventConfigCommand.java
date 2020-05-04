@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
  * @since 2020-03-12
  */
 
-public class EventConfigCommand implements CommandExecutor, TabCompleter {
+public final class EventConfigCommand implements CommandExecutor, TabCompleter {
     private EventsMain plugin;
     private FileConfiguration config;
 

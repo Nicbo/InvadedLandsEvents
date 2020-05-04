@@ -15,7 +15,7 @@ import java.io.File;
  * @since 2020-04-22
  */
 
-public class ConfigFile {
+public final class ConfigFile {
 
     private File file;
     private FileConfiguration config;

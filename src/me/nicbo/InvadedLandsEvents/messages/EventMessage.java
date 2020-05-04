@@ -2,7 +2,6 @@ package me.nicbo.InvadedLandsEvents.messages;
 
 import me.nicbo.InvadedLandsEvents.EventsMain;
 import org.bukkit.ChatColor;
-import org.bukkit.configuration.file.FileConfiguration;
 
 /**
  * All event messages
@@ -49,8 +48,8 @@ public final class EventMessage {
         CRAFT_IN_EVENT = getStringFromConfig("CRAFT_IN_EVENT");
         NO_PERMISSION = getStringFromConfig("NO_PERMS");
    }
-   
-   private static String getStringFromConfig(String path) {
-        return ChatColor.translateAlternateColorCodes('&', EventsMain.getMessages().getConfig().getString(path));
-   }
+
+    private static String getStringFromConfig(String path) {
+        return ChatColor.translateAlternateColorCodes('&', EventsMain.getMessages().getConfig().getString("event." + path));
+    }
 }

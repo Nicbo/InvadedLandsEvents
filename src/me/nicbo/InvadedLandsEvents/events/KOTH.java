@@ -2,7 +2,7 @@ package me.nicbo.InvadedLandsEvents.events;
 
 import me.nicbo.InvadedLandsEvents.EventsMain;
 
-public class KOTH extends InvadedEvent {
+public final class KOTH extends InvadedEvent {
     public KOTH(EventsMain plugin) {
         super("King Of The Hill", "koth", plugin);
     }

@@ -10,7 +10,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
-public class RoD extends InvadedEvent {
+public final class RoD extends InvadedEvent {
     private WorldGuardPlugin worldGuardPlugin;
 
     private BukkitRunnable didPlayerFinish;
@@ -74,4 +74,9 @@ public class RoD extends InvadedEvent {
              player.teleport(startLoc);
         }
     }
+
+    /*
+    TODO:
+        - add timer
+     */
 }

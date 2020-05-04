@@ -1,13 +1,10 @@
 package me.nicbo.InvadedLandsEvents.events;
 
-import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import me.nicbo.InvadedLandsEvents.EventsMain;
 import me.nicbo.InvadedLandsEvents.utils.ConfigUtils;
-import me.nicbo.InvadedLandsEvents.utils.EventUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
@@ -35,7 +32,7 @@ import java.util.List;
  * @since 2020-03-12
  */
 
-public class Spleef extends InvadedEvent {
+public final class Spleef extends InvadedEvent {
     private boolean matchCountdown;
     private BukkitRunnable heightCheck;
 

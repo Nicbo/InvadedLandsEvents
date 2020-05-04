@@ -2,7 +2,7 @@ package me.nicbo.InvadedLandsEvents.events;
 
 import me.nicbo.InvadedLandsEvents.EventsMain;
 
-public class RedRover extends InvadedEvent {
+public final class RedRover extends InvadedEvent {
     public RedRover(EventsMain plugin) {
         super("Red Rover", "redrover", plugin);
     }
