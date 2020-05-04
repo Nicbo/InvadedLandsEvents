@@ -104,9 +104,8 @@ public final class OITC extends InvadedEvent {
 
             if (event.getDamager() instanceof Arrow) {
                 if (player.isBlocking()) {
-                    event.setDamage(20);
-                }
-                else {
+                    event.setDamage(10);
+                } else {
                     event.setDamage(20);
                 }
             }
