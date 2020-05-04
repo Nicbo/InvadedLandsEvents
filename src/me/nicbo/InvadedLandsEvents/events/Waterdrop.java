@@ -82,7 +82,6 @@ public class Waterdrop extends InvadedEvent {
 
     @Override
     public void init(EventsMain plugin) {
-        initPlayerCheck();
         this.round = 1;
         this.timer = 20;
         this.waterdropTimer = new BukkitRunnable() {
@@ -126,7 +125,6 @@ public class Waterdrop extends InvadedEvent {
 
     @Override
     public void start() {
-        playerCheck.runTaskTimerAsynchronously(plugin, 0, 1);
         fallCheck.runTaskTimerAsynchronously(plugin, 0, 1);
         waterdropTimer.runTaskTimerAsynchronously(plugin, 0, 20);
         newRound();
@@ -137,7 +135,6 @@ public class Waterdrop extends InvadedEvent {
         started = false;
         waterdropTimer.cancel();
         fallCheck.cancel();
-        playerCheck.cancel();
         jumped.clear();
         eliminated.clear();
         removePlayers();
@@ -162,6 +159,12 @@ public class Waterdrop extends InvadedEvent {
             EventUtils.broadcastEventMessage(ELIMINATED.replace("{player}", player.getName())
                     .replace("{players_left}", String.valueOf(players.size())));
             loseEvent(player);
+        }
+
+        if (players.size() == eliminated.size() || players.size() == 0) {
+            playerWon(null);
+        } else if (players.size() == 1) {
+            playerWon(players.get(0));
         }
     }
 

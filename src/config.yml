@@ -282,7 +282,7 @@ events:
       x: 0
       y: 0
       z: 0
-    safe-region: waterdrop
+    safe-region: waterdrop-safe
 
   woolshuffle:
     enabled: false
