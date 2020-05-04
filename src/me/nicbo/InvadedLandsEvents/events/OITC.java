@@ -21,6 +21,7 @@ import java.util.*;
  * Arrows one shot and when you get a kill you receive an arrow
  *
  * @author Nicbo
+ * @author StarZorrow
  * @since 2020-03-13
  */
 
@@ -102,7 +103,12 @@ public final class OITC extends InvadedEvent {
                 return;
 
             if (event.getDamager() instanceof Arrow) {
-                event.setDamage(20);
+                if (player.isBlocking()) {
+                    event.setDamage(20);
+                }
+                else {
+                    event.setDamage(20);
+                }
             }
 
             if (event.getDamage() >= player.getHealth()) {
@@ -134,10 +140,5 @@ public final class OITC extends InvadedEvent {
         event.setRespawnLocation(getRandomLocation());
         respawningPlayers.remove(player);
     }
-
-    /*
-    TODO:
-        - Blocking with sword glitches event
-     */
 
 }
