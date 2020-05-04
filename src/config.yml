@@ -2,7 +2,7 @@
 # All of this can be edited in game using commands
 # Command placeholders: {winner}
 
-event-world: event
+event-world: world
 win-command: msg {winner} you win
 
 spawn-location:

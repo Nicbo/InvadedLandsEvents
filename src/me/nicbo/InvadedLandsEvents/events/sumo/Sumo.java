@@ -4,7 +4,7 @@ import me.nicbo.InvadedLandsEvents.EventsMain;
 import me.nicbo.InvadedLandsEvents.events.InvadedEvent;
 
 public class Sumo extends InvadedEvent {
-    Sumo(String name, EventsMain plugin) {
+    Sumo(String name, EventsMain plugin, int teamSize) {
         super(name, "sumo", plugin);
     }
 

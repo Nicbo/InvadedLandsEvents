@@ -187,7 +187,6 @@ public abstract class InvadedEvent implements Listener {
 
     protected void loseEvent(Player player) {
         players.remove(player);
-        EventUtils.clear(player);
         specEvent(player);
     }
 

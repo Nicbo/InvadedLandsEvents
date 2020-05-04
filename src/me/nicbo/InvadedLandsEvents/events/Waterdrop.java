@@ -125,8 +125,8 @@ public final class Waterdrop extends InvadedEvent {
 
     @Override
     public void start() {
-        fallCheck.runTaskTimerAsynchronously(plugin, 0, 1);
-        waterdropTimer.runTaskTimerAsynchronously(plugin, 0, 20);
+        fallCheck.runTaskTimerAsynchronously(plugin,0, 1);
+        waterdropTimer.runTaskTimer(plugin, 0, 20);
         newRound();
     }
 
@@ -143,29 +143,35 @@ public final class Waterdrop extends InvadedEvent {
     private void newRound() {
         EventUtils.broadcastEventMessage(ROUND_START.replace("{round}", String.valueOf(round)));
         jumped.clear();
-        eliminatePlayers();
-        eliminated = new ArrayList<>(players);
-        setMainCover();
-        buildMainCover();
-        tpPlayers();
+        if (!eliminatePlayers()) {
+            eliminated = new ArrayList<>(players);
+            setMainCover();
+            buildMainCover();
+            tpPlayers();
+        }
     }
 
     private void tpPlayers() {
         players.forEach(player -> player.teleport(startLoc));
     }
 
-    private void eliminatePlayers() {
+    private boolean eliminatePlayers() {
+        int playersSize = players.size();
+
         for (Player player : eliminated) {
             EventUtils.broadcastEventMessage(ELIMINATED.replace("{player}", player.getName())
                     .replace("{players_left}", String.valueOf(players.size())));
             loseEvent(player);
         }
 
-        if (players.size() == eliminated.size() || players.size() == 0) {
+        if (eliminated.size() == playersSize || players.size() == 0) {
             playerWon(null);
         } else if (players.size() == 1) {
             playerWon(players.get(0));
+        } else {
+            return false;
         }
+        return true;
     }
 
     private void setMainCover() {
