@@ -38,6 +38,7 @@ public final class Waterdrop extends InvadedEvent {
     private List<Player> jumped;
     private List<Player> eliminated;
 
+    private boolean eventOver;
     private BukkitRunnable fallCheck;
     private BukkitRunnable waterdropTimer;
 
@@ -84,6 +85,7 @@ public final class Waterdrop extends InvadedEvent {
     public void init(EventsMain plugin) {
         this.round = 1;
         this.timer = 20;
+        this.eventOver = false;
         this.waterdropTimer = new BukkitRunnable() {
             private int[] times = new int[] { 20, 20, 19, 19, 18, 17, 17, 16, 15, 14, 14, 13, 12, 12, 10, 10, 10, 9, 8, 7, 7, 6 };
 
@@ -106,10 +108,7 @@ public final class Waterdrop extends InvadedEvent {
             @Override
             public void run() {
                 for (Player player : players) {
-                    if (blockListener(player))
-                        return;
-
-                    if (startLoc.getBlockY() - player.getLocation().getBlockY() > 2 && player.isOnGround() && !jumped.contains(player)) {
+                    if (!eventOver && startLoc.getBlockY() - player.getLocation().getBlockY() > 2 && player.isOnGround() && !jumped.contains(player)) {
                         if (EventUtils.isLocInRegion(player.getLocation(), region)) { // Player is in safe zone
                             EventUtils.broadcastEventMessage(SUCCESS_JUMP.replace("{player}", player.getName()));
                             eliminated.remove(player);
@@ -141,10 +140,11 @@ public final class Waterdrop extends InvadedEvent {
     }
 
     private void newRound() {
-        EventUtils.broadcastEventMessage(ROUND_START.replace("{round}", String.valueOf(round)));
-        jumped.clear();
-        if (!eliminatePlayers()) {
+        eliminatePlayers();
+        if (!eventOver) {
             eliminated = new ArrayList<>(players);
+            EventUtils.broadcastEventMessage(ROUND_START.replace("{round}", String.valueOf(round)));
+            jumped.clear();
             setMainCover();
             buildMainCover();
             tpPlayers();
@@ -155,7 +155,7 @@ public final class Waterdrop extends InvadedEvent {
         players.forEach(player -> player.teleport(startLoc));
     }
 
-    private boolean eliminatePlayers() {
+    private void eliminatePlayers() {
         int playersSize = players.size();
 
         for (Player player : eliminated) {
@@ -169,9 +169,10 @@ public final class Waterdrop extends InvadedEvent {
         } else if (players.size() == 1) {
             playerWon(players.get(0));
         } else {
-            return false;
+            return;
         }
-        return true;
+
+        eventOver = true;
     }
 
     private void setMainCover() {
