@@ -90,6 +90,7 @@ public final class Spleef extends InvadedEvent {
         players.forEach(player -> player.getInventory().setItem(0, shovel));
     }
 
+    @Override
     public void over() {
         heightCheck.cancel();
         playerCheck.cancel();
