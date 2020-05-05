@@ -8,7 +8,7 @@ import org.bukkit.entity.*;
 /**
  * Handles party requests
  *
- * @author StarZorroww
+ * @author StarZorrow
  * @since 2020-03-12
  */
 

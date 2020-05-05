@@ -1,9 +1,10 @@
 package me.nicbo.InvadedLandsEvents.managers;
 
+import me.nicbo.InvadedLandsEvents.events.duels.brackets.Brackets;
 import me.nicbo.InvadedLandsEvents.messages.EventMessage;
 import me.nicbo.InvadedLandsEvents.EventsMain;
 import me.nicbo.InvadedLandsEvents.events.*;
-import me.nicbo.InvadedLandsEvents.events.sumo.*;
+import me.nicbo.InvadedLandsEvents.events.duels.sumo.*;
 import me.nicbo.InvadedLandsEvents.utils.GeneralUtils;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -19,7 +20,7 @@ import java.util.HashMap;
  * Event manager handles hosting, spectating, joining etc.
  *
  * @author Nicbo
- * @author StarZorroww
+ * @author StarZorrow
  * @since 2020-03-12
  */
 

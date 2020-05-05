@@ -10,7 +10,7 @@ import org.bukkit.entity.*;
 /**
  * Handles parties
  *
- * @author StarZorroww
+ * @author StarZorrow
  * @since 2020-03-12
  */
 

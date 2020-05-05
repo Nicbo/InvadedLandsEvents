@@ -24,8 +24,8 @@ import java.util.*;
 /**
  * Event Command class, handles commands for /event
  *
- * @author StarZorroww
  * @author Nicbo
+ * @author StarZorrow
  * @since 2020-03-12
  */
 

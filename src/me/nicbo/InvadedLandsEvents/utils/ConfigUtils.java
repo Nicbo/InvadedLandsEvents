@@ -13,7 +13,7 @@ import java.util.*;
  * Utility class for config files
  *
  * @author Nicbo
- * @author StarZorroww
+ * @author StarZorrow
  * @since 2020-03-12
  */
 

@@ -61,12 +61,14 @@ public final class RoD extends InvadedEvent {
         this.plugin.getServer().getScheduler().runTask(this.plugin, this::tpApplyInvisibility);
         didPlayerFinish.runTaskTimerAsynchronously(plugin, 0, 1);
         playerCheck.runTaskTimerAsynchronously(plugin, 0, 1);
+        startTimer(eventTimeLimit);
     }
 
     @Override
     public void over() {
         didPlayerFinish.cancel();
         playerCheck.cancel();
+        eventTimer.cancel();;
     }
 
     @Override

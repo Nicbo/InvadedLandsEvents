@@ -9,7 +9,7 @@ import me.nicbo.InvadedLandsEvents.managers.EventPartyRequestManager;
 /**
  * Handles managers
  *
- * @author StarZorroww
+ * @author StarZorrow
  * @since 2020-03-12
  */
 

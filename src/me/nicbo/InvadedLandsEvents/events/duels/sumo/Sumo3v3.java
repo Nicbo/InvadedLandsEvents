@@ -1,4 +1,4 @@
-package me.nicbo.InvadedLandsEvents.events.sumo;
+package me.nicbo.InvadedLandsEvents.events.duels.sumo;
 
 import me.nicbo.InvadedLandsEvents.EventsMain;
 

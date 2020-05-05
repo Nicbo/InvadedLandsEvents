@@ -2,7 +2,6 @@ package me.nicbo.InvadedLandsEvents.utils;
 
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import me.nicbo.InvadedLandsEvents.EventsMain;
-import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -12,8 +11,8 @@ import org.bukkit.potion.PotionEffect;
 /**
  * Utility class for events
  *
- * @author StarZorroww
  * @author Nicbo
+ * @author StarZorrow
  * @since 2020-03-12
  */
 

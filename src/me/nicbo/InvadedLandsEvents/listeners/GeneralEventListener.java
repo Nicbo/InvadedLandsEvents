@@ -20,7 +20,7 @@ import org.bukkit.inventory.ItemStack;
  * This listener is active on all events
  *
  * @author Nicbo
- * @author StarZorroww
+ * @author StarZorrow
  * @since 2020-03-12
  */
 

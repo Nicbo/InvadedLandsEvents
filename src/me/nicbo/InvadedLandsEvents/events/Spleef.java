@@ -29,6 +29,7 @@ import java.util.List;
  * Thrown snowballs break whatever block is hit
  *
  * @author Nicbo
+ * @author StarZorrow
  * @since 2020-03-12
  */
 

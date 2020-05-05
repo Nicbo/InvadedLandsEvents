@@ -8,6 +8,7 @@ import java.util.List;
 
 /**
  * Manages EventScoreboards
+ *
  * @author Nicbo
  * @since 2020-05-04
  */

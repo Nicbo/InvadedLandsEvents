@@ -6,6 +6,7 @@ import org.bukkit.scoreboard.*;
 
 /**
  * Handles teams and scoreboard
+ *
  * @author Nicbo
  * @since 2020-05-04
  */

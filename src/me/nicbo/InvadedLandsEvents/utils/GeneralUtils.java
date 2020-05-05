@@ -11,7 +11,7 @@ import java.util.Random;
  * Utility class for events
  *
  * @author Nicbo
- * @author StarZorroww
+ * @author StarZorrow
  * @since 2020-03-12
  */
 

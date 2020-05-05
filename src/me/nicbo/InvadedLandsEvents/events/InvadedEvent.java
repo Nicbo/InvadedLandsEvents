@@ -25,7 +25,7 @@ import java.util.logging.Logger;
  * Abstract event class, all events extend this class
  *
  * @author Nicbo
- * @author StarZorroww
+ * @author StarZorrow
  * @since 2020-03-12
  */
 
@@ -52,6 +52,7 @@ public abstract class InvadedEvent implements Listener {
     protected List<Player> spectators;
 
     protected BukkitRunnable playerCheck;
+    protected BukkitRunnable eventTimer;
 
     protected ItemStack star;
 
@@ -247,7 +248,7 @@ public abstract class InvadedEvent implements Listener {
         this.timeLeft = timeInSeconds;
         // start runnable counting down
         // if it reaches end and no one one call playerWon(null)
-        plugin.getServer().getScheduler().runTaskTimer(plugin, new BukkitRunnable() {
+        eventTimer = new BukkitRunnable() {
             @Override
             public void run() {
                 EventUtils.broadcastEventMessage(ChatColor.YELLOW + "timer: " + GeneralUtils.formatSeconds(timeLeft--));
@@ -256,7 +257,8 @@ public abstract class InvadedEvent implements Listener {
                     this.cancel();
                 }
             }
-        }, 0, 20);
+        };
+        eventTimer.runTaskTimer(plugin, 0, 20);
     }
 
     protected boolean blockListener(Player player) {

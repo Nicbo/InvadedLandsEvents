@@ -3,7 +3,7 @@ package me.nicbo.InvadedLandsEvents.party;
 /**
  * State of the party
  *
- * @author StarZorroww
+ * @author StarZorrow
  * @since 2020-03-12
  */
 
