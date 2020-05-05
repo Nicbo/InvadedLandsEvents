@@ -24,23 +24,19 @@ public final class ManagerHandler {
         this.plugin = plugin;
         this.eventManager = new EventManager(plugin);
         this.eventScoreboardManager = new EventScoreboardManager(eventManager);
-        this.partyManager = new EventPartyManager();
+        this.partyManager = new EventPartyManager(this);
         this.eventPartyRequestManager = new EventPartyRequestManager();
     }
 
-    public EventManager getEventManager() {
-        return this.eventManager;
-    }
+    public EventsMain getPlugin() { return this.plugin; }
+
+    public EventManager getEventManager() { return this.eventManager; }
 
     public EventPartyManager getEventPartyManager() {
         return this.partyManager;
     }
 
-    public EventPartyRequestManager getEventPartyRequestManager() {
-        return this.eventPartyRequestManager;
-    }
+    public EventPartyRequestManager getEventPartyRequestManager() { return this.eventPartyRequestManager; }
 
-    public EventScoreboardManager getEventScoreboardManager() {
-        return this.eventScoreboardManager;
-    }
+    public EventScoreboardManager getEventScoreboardManager() { return this.eventScoreboardManager; }
 }

@@ -52,7 +52,7 @@ public abstract class Duel extends InvadedEvent {
         this.MATCH_ENDED = getEventMessage("MATCH_ENDED");
     }
 
-    public abstract void applyKitandTp();
+    public abstract void tpFightingPlayers();
 
     protected void setupLeaveCheck() {
         this.leaveCheck = new BukkitRunnable() {
@@ -97,7 +97,7 @@ public abstract class Duel extends InvadedEvent {
         } else {
             fightingPlayers.clear();
             addTwoPlayers();
-            applyKitandTp();
+            tpFightingPlayers();
             restartPlayerFreeze();
             fighting = true;
         }

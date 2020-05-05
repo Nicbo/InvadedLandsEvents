@@ -40,6 +40,7 @@ public final class EventPartyMessage {
     public static String PLAYER_NOT_FOUND;
     public static String PLAYER_NEVER_JOINED;
     public static String CANNOT_ACTION_SELF;
+    public static String CANNOT_JOIN_SELF;
     public static String NO_PERMISSION;
 
     public static void reload() {
@@ -71,6 +72,7 @@ public final class EventPartyMessage {
         PLAYER_NOT_FOUND = getStringFromConfig("PLAYER_NOT_FOUND");
         PLAYER_NEVER_JOINED = getStringFromConfig("PLAYER_NEVER_JOINED");
         CANNOT_ACTION_SELF = getStringFromConfig("CANNOT_ACTION_SELF");
+        CANNOT_JOIN_SELF = getStringFromConfig("CANNOT_JOIN_SELF");
         NO_PERMISSION = getStringFromConfig("NO_PERMISSION");
     }
 

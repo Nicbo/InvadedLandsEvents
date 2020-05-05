@@ -1,6 +1,6 @@
 package me.nicbo.InvadedLandsEvents.managers;
 
-import me.nicbo.InvadedLandsEvents.events.duels.brackets.Brackets;
+import me.nicbo.InvadedLandsEvents.events.duels.Brackets;
 import me.nicbo.InvadedLandsEvents.messages.EventMessage;
 import me.nicbo.InvadedLandsEvents.EventsMain;
 import me.nicbo.InvadedLandsEvents.events.*;

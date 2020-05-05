@@ -45,6 +45,7 @@ party:
   PLAYER_NOT_FOUND: '&e{player} &cis not online.'
   PLAYER_NEVER_JOINED: '&e{player} &chas never joined the server before.'
   CANNOT_ACTION_SELF: '&cYou cannot {action} yourself.'
+  CANNOT_JOIN_SELF: '&cYou cannot join your own party.'
   NO_PERMISSION: '&cI''m sorry, but you do not have permission to perform this command.'
 
 oitc:
