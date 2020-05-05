@@ -83,9 +83,4 @@ public final class RoD extends InvadedEvent {
              player.teleport(startLoc);
         }
     }
-
-    /*
-    TODO:
-        - add timer
-     */
 }
