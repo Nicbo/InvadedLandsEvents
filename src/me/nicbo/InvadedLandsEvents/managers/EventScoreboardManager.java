@@ -6,6 +6,12 @@ import org.bukkit.entity.Player;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Manages EventScoreboards
+ * @author Nicbo
+ * @since 2020-05-04
+ */
+
 public final class EventScoreboardManager {
     private EventManager eventManager;
     private HashMap<Player, EventScoreboard> scoreboards;

@@ -4,13 +4,15 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.*;
 
+/**
+ * Handles teams and scoreboard
+ * @author Nicbo
+ * @since 2020-05-04
+ */
+
 public final class EventScoreboard {
     private Scoreboard scoreboard;
     private Objective objective;
-
-    private Team players;
-    private Team spectators;
-    private Team playing;
 
     private int lines;
 
@@ -18,11 +20,6 @@ public final class EventScoreboard {
         this.scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
         this.objective = scoreboard.registerNewObjective("event", "dummy");
         this.objective.setDisplaySlot(DisplaySlot.SIDEBAR);
-        this.players = scoreboard.registerNewTeam("players");
-        this.spectators = scoreboard.registerNewTeam("spectators");
-
-        this.players.setAllowFriendlyFire(true);
-        this.spectators.setAllowFriendlyFire(false);
         this.lines = 0;
     }
 

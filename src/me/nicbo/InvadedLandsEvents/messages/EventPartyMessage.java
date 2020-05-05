@@ -6,6 +6,7 @@ import org.bukkit.ChatColor;
 /**
  * All event party messages
  *
+ * @author Nicbo
  * @author StarZorroww
  * @since 2020-03-12
  */

@@ -55,6 +55,8 @@ public abstract class InvadedEvent implements Listener {
 
     protected ItemStack star;
 
+    private int timeLeft;
+
     /**
      *
      * @param eventName Name that gets broadcasted
@@ -239,6 +241,26 @@ public abstract class InvadedEvent implements Listener {
         for (Player player : players) {
             EventUtils.clear(player);
         }
+    }
+
+    protected void startTimer(int timeInSeconds) {
+        this.timeLeft = timeInSeconds;
+        // start runnable counting down
+        // if it reaches end and no one one call playerWon(null)
+        plugin.getServer().getScheduler().runTaskTimer(plugin, new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (plugin.getManagerHandler().getEventManager().getCurrentEvent() == null) {
+                    this.cancel();
+                    return;
+                }
+                EventUtils.broadcastEventMessage(ChatColor.YELLOW + "timer: " + GeneralUtils.formatSeconds(timeLeft--));
+                if (timeLeft <= 0) {
+                    playerWon(null);
+                    this.cancel();
+                }
+            }
+        }, 0, 20);
     }
 
     protected boolean blockListener(Player player) {
