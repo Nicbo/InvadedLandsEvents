@@ -246,8 +246,6 @@ public abstract class InvadedEvent implements Listener {
 
     protected void startTimer(int timeInSeconds) {
         this.timeLeft = timeInSeconds;
-        // start runnable counting down
-        // if it reaches end and no one one call playerWon(null)
         eventTimer = new BukkitRunnable() {
             @Override
             public void run() {
