@@ -18,12 +18,12 @@ public final class RedRover extends InvadedEvent {
     }
 
     @Override
-    public void over() {
+    public void stop() {
 
     }
 
     @Override
-    public void stop() {
+    public void over() {
 
     }
 }

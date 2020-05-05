@@ -27,4 +27,9 @@ public class Sumo extends InvadedEvent {
     public void stop() {
 
     }
+
+    @Override
+    public void over() {
+
+    }
 }

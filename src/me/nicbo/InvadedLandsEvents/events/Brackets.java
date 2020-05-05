@@ -94,7 +94,6 @@ public final class Brackets extends InvadedEvent {
         newRound();
     }
 
-    @Override
     public void over() {
         leaveCheck.cancel();
         fightingPlayers.clear();

@@ -63,7 +63,6 @@ public final class RoD extends InvadedEvent {
         playerCheck.runTaskTimerAsynchronously(plugin, 0, 1);
     }
 
-    @Override
     public void over() {
         didPlayerFinish.cancel();
         playerCheck.cancel();

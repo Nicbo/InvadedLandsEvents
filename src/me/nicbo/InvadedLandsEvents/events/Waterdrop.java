@@ -137,7 +137,6 @@ public final class Waterdrop extends InvadedEvent {
         newRound();
     }
 
-    @Override
     public void over() {
         waterdropTimer.cancel();
         fallCheck.cancel();
