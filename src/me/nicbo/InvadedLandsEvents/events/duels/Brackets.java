@@ -1,4 +1,4 @@
-package me.nicbo.InvadedLandsEvents.events.duels.brackets;
+package me.nicbo.InvadedLandsEvents.events.duels;
 
 import me.nicbo.InvadedLandsEvents.EventsMain;
 import me.nicbo.InvadedLandsEvents.events.duels.Duel;
