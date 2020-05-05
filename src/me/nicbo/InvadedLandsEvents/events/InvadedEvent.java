@@ -1,6 +1,7 @@
 package me.nicbo.InvadedLandsEvents.events;
 
 import com.sk89q.worldguard.protection.managers.RegionManager;
+import me.nicbo.InvadedLandsEvents.managers.EventScoreboardManager;
 import me.nicbo.InvadedLandsEvents.messages.EventMessage;
 import me.nicbo.InvadedLandsEvents.EventsMain;
 import me.nicbo.InvadedLandsEvents.utils.ConfigUtils;
@@ -14,6 +15,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scoreboard.ScoreboardManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +31,8 @@ import java.util.logging.Logger;
 
 public abstract class InvadedEvent implements Listener {
     protected EventsMain plugin;
+    private EventScoreboardManager eventScoreboardManager;
+
     protected Logger logger;
     protected RegionManager regionManager;
 
@@ -60,6 +64,8 @@ public abstract class InvadedEvent implements Listener {
 
     public InvadedEvent(String eventName, String configName, EventsMain plugin) {
         this.plugin = plugin;
+        this.eventScoreboardManager = plugin.getManagerHandler().getEventScoreboardManager();
+
         this.logger = plugin.getLogger();
         this.eventName = eventName;
         this.configName = configName;
@@ -96,6 +102,14 @@ public abstract class InvadedEvent implements Listener {
     public abstract void init(EventsMain plugin);
     public abstract void start();
     public abstract void stop();
+
+    public List<Player> getPlayers() {
+        return players;
+    }
+
+    public List<Player> getSpectators() {
+        return spectators;
+    }
 
     public List<Player> getParticipants() {
         List<Player> participants = new ArrayList<>(players);
@@ -153,6 +167,8 @@ public abstract class InvadedEvent implements Listener {
         player.teleport(specLoc);
         EventUtils.clear(player);
         player.getInventory().setItem(8, star);
+
+        eventScoreboardManager.giveWaterdropScoreboard(player);
         //add to team and scoreboard
     }
 

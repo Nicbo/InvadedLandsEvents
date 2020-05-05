@@ -1,7 +1,7 @@
 package me.nicbo.InvadedLandsEvents.handlers;
 
 import me.nicbo.InvadedLandsEvents.EventsMain;
-import me.nicbo.InvadedLandsEvents.managers.EventLeaderBoardManager;
+import me.nicbo.InvadedLandsEvents.managers.EventScoreboardManager;
 import me.nicbo.InvadedLandsEvents.managers.EventManager;
 import me.nicbo.InvadedLandsEvents.managers.EventPartyManager;
 import me.nicbo.InvadedLandsEvents.managers.EventPartyRequestManager;
@@ -18,14 +18,15 @@ public final class ManagerHandler {
     private EventPartyManager partyManager;
     private EventManager eventManager;
     private EventPartyRequestManager eventPartyRequestManager;
-    private EventLeaderBoardManager eventLeaderBoardManager;
+    private EventScoreboardManager eventScoreboardManager;
 
     public ManagerHandler(EventsMain plugin) {
         this.plugin = plugin;
+        this.eventScoreboardManager = new EventScoreboardManager();
         this.eventManager = new EventManager(plugin);
+        this.eventScoreboardManager.setEventManager(eventManager);
         this.partyManager = new EventPartyManager();
         this.eventPartyRequestManager = new EventPartyRequestManager();
-        this.eventLeaderBoardManager = new EventLeaderBoardManager();
     }
 
     public EventManager getEventManager() {
@@ -40,8 +41,8 @@ public final class ManagerHandler {
         return this.eventPartyRequestManager;
     }
 
-    public EventLeaderBoardManager getEventLeaderBoardManager() {
-        return this.eventLeaderBoardManager;
+    public EventScoreboardManager getEventScoreboardManager() {
+        return this.eventScoreboardManager;
     }
 
     public void restartEventManager() {
