@@ -250,10 +250,6 @@ public abstract class InvadedEvent implements Listener {
         plugin.getServer().getScheduler().runTaskTimer(plugin, new BukkitRunnable() {
             @Override
             public void run() {
-                if (plugin.getManagerHandler().getEventManager().getCurrentEvent() == null) {
-                    this.cancel();
-                    return;
-                }
                 EventUtils.broadcastEventMessage(ChatColor.YELLOW + "timer: " + GeneralUtils.formatSeconds(timeLeft--));
                 if (timeLeft <= 0) {
                     playerWon(null);
