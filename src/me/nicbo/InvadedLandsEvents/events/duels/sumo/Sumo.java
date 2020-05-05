@@ -29,7 +29,7 @@ public class Sumo extends Duel {
     }
 
     @Override
-    public void applyKitandTp() {
+    public void tpFightingPlayers() {
 
     }
 }

@@ -70,7 +70,7 @@ public final class Brackets extends Duel {
     }
 
     @Override
-    public void applyKitandTp() {
+    public void tpFightingPlayers() {
         Player player1 = fightingPlayers.get(0);
         Player player2 = fightingPlayers.get(1);
 

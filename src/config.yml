@@ -194,6 +194,7 @@ events:
       yaw: 0
       pitch: 0
     win-region: rod-win
+    int-seconds-time-limit: 300
 
   spleef:
     enabled: false

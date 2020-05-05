@@ -26,6 +26,8 @@ public final class RoD extends InvadedEvent {
     private ProtectedRegion winRegion;
     private Location startLoc;
 
+    private int eventTimeLimit;
+
     public RoD(EventsMain plugin) {
         super("Race of Death", "rod", plugin);
 
@@ -38,6 +40,7 @@ public final class RoD extends InvadedEvent {
         }
 
         this.startLoc = ConfigUtils.deserializeLoc(eventConfig.getConfigurationSection("start-location"), eventWorld);
+        this.eventTimeLimit = eventConfig.getInt("int-seconds-time-limit");
     }
 
     @Override
