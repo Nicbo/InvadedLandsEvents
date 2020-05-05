@@ -91,10 +91,14 @@ public final class Spleef extends InvadedEvent {
     }
 
     @Override
-    public void stop() {
-        started = false;
+    public void over() {
         heightCheck.cancel();
         playerCheck.cancel();
+    }
+
+    @Override
+    public void stop() {
+        started = false;
         removeParticipants();
     }
 

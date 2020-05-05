@@ -101,6 +101,7 @@ public abstract class InvadedEvent implements Listener {
      */
     public abstract void init(EventsMain plugin);
     public abstract void start();
+    public abstract void over();
     public abstract void stop();
 
     public List<Player> getPlayers() {
@@ -168,7 +169,7 @@ public abstract class InvadedEvent implements Listener {
         EventUtils.clear(player);
         player.getInventory().setItem(8, star);
 
-        eventScoreboardManager.giveWaterdropScoreboard(player);
+        //eventScoreboardManager.giveWaterdropScoreboard(player);
         //add to team and scoreboard
     }
 
@@ -197,6 +198,7 @@ public abstract class InvadedEvent implements Listener {
 
     public void forceEndEvent() {
         EventUtils.broadcastEventMessage(EventMessage.EVENT_FORCE_ENDED.replace("{event}", eventName));
+        over();
         stop();
         plugin.getManagerHandler().getEventManager().setCurrentEvent(null);
     }
@@ -207,6 +209,7 @@ public abstract class InvadedEvent implements Listener {
     }
 
     protected void playerWon(Player player) {
+        over();
         for (int i = 0; i < 4; i++) {
             Bukkit.broadcastMessage(ChatColor.GOLD + (player == null ? "No one" : player.getName()) + ChatColor.YELLOW + " won the " + ChatColor.GOLD + eventName + ChatColor.YELLOW + " event!");
         }

@@ -72,9 +72,13 @@ public final class OITC extends InvadedEvent {
     }
 
     @Override
+    public void over() {
+        playerCheck.cancel();
+    }
+
+    @Override
     public void stop() {
         started = false;
-        playerCheck.cancel();
         removeParticipants();
         points.clear();
         respawningPlayers.clear();

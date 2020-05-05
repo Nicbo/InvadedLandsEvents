@@ -95,10 +95,14 @@ public final class Brackets extends InvadedEvent {
     }
 
     @Override
-    public void stop() {
-        started = false;
+    public void over() {
         leaveCheck.cancel();
         fightingPlayers.clear();
+    }
+
+    @Override
+    public void stop() {
+        started = false;
         removeParticipants();
     }
 

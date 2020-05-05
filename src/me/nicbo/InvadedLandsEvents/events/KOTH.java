@@ -18,6 +18,11 @@ public final class KOTH extends InvadedEvent {
     }
 
     @Override
+    public void over() {
+
+    }
+
+    @Override
     public void stop() {
 
     }

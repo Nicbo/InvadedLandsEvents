@@ -18,6 +18,11 @@ public final class TNTTag extends InvadedEvent {
     }
 
     @Override
+    public void over() {
+
+    }
+
+    @Override
     public void stop() {
 
     }
