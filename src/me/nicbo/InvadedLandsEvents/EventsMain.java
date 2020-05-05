@@ -39,6 +39,7 @@ public class EventsMain extends JavaPlugin {
         EventMessage.reload();
 
         this.managerHandler = new ManagerHandler(this);
+        this.managerHandler.getEventManager().reloadEvents();
         registerCommands();
         getServer().getPluginManager().registerEvents(new GeneralEventListener(this), this);
 

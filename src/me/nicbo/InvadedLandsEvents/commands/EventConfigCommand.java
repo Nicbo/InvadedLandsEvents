@@ -143,8 +143,8 @@ public final class EventConfigCommand implements CommandExecutor, TabCompleter {
                             case "reload":
                                 plugin.reloadConfig();
                                 sender.sendMessage(ChatColor.GREEN + "Event config reloaded");
-                                plugin.getManagerHandler().restartEventManager();
-                                sender.sendMessage(ChatColor.GREEN + "Event manager reloaded");
+                                plugin.getManagerHandler().getEventManager().reloadEvents();
+                                sender.sendMessage(ChatColor.GREEN + "Events reloaded");
                                 break;
                             case "event-world":
                                 if (args.length == 1)

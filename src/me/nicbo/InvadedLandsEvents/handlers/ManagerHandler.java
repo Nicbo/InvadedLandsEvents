@@ -22,9 +22,8 @@ public final class ManagerHandler {
 
     public ManagerHandler(EventsMain plugin) {
         this.plugin = plugin;
-        this.eventScoreboardManager = new EventScoreboardManager();
         this.eventManager = new EventManager(plugin);
-        this.eventScoreboardManager.setEventManager(eventManager);
+        this.eventScoreboardManager = new EventScoreboardManager(eventManager);
         this.partyManager = new EventPartyManager();
         this.eventPartyRequestManager = new EventPartyRequestManager();
     }
@@ -43,9 +42,5 @@ public final class ManagerHandler {
 
     public EventScoreboardManager getEventScoreboardManager() {
         return this.eventScoreboardManager;
-    }
-
-    public void restartEventManager() {
-        this.eventManager = new EventManager(plugin);
     }
 }

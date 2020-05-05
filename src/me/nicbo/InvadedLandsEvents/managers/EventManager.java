@@ -43,10 +43,10 @@ public final class EventManager {
     public EventManager(EventsMain plugin) {
         this.plugin = plugin;
         this.events = new HashMap<>();
-        addEventsToMap();
     }
     
-    private void addEventsToMap() {
+    public void reloadEvents() {
+        events.clear();
         events.put(eventNames[0], new Brackets(plugin));
         events.put(eventNames[1], new KOTH(plugin));
         events.put(eventNames[2], new LMS(plugin));

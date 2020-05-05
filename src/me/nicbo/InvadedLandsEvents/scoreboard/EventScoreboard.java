@@ -2,14 +2,15 @@ package me.nicbo.InvadedLandsEvents.scoreboard;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.scoreboard.DisplaySlot;
-import org.bukkit.scoreboard.Objective;
-import org.bukkit.scoreboard.Score;
-import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.*;
 
 public final class EventScoreboard {
     private Scoreboard scoreboard;
     private Objective objective;
+
+    private Team players;
+    private Team spectators;
+    private Team playing;
 
     private int lines;
 
@@ -17,6 +18,11 @@ public final class EventScoreboard {
         this.scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
         this.objective = scoreboard.registerNewObjective("event", "dummy");
         this.objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+        this.players = scoreboard.registerNewTeam("players");
+        this.spectators = scoreboard.registerNewTeam("spectators");
+
+        this.players.setAllowFriendlyFire(true);
+        this.spectators.setAllowFriendlyFire(false);
         this.lines = 0;
     }
 
