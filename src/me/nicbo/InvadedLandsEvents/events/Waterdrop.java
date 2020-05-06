@@ -431,25 +431,19 @@ public final class Waterdrop extends InvadedEvent {
         private Track headerTrack;
         private Track roundTrack;
         private Track timerTrack;
-        private Track blankTrack;
         private Track playerCountTrack;
         private Track specCountTrack;
         private Track footerTrack;
 
-        private String headerFooter;
-
         public WaterdropSB() {
-            this.headerFooter = ChatColor.GRAY.toString() + ChatColor.STRIKETHROUGH.toString() + "----------";
-
-            this.headerTrack = new Track("headerTrack", ChatColor.GOLD.toString(), 7, headerFooter, headerFooter);
+            this.headerTrack = new Track("headerTrack", ChatColor.GOLD.toString(), 7, LINE, LINE);
             this.roundTrack = new Track("roundTrack", ChatColor.GREEN.toString(), 6, ChatColor.YELLOW + "Round: ", ChatColor.GOLD + String.valueOf(round));
             this.timerTrack = new Track("timerTrack", "Remaining: ", 5, ChatColor.YELLOW + "Time ", ChatColor.GOLD + String.valueOf(timer));
-            this.blankTrack = new Track("blankTrack", ChatColor.AQUA.toString(), 4, "", ChatColor.RESET.toString());
             this.playerCountTrack = new Track("playerCountWD", ChatColor.DARK_AQUA.toString(), 3, ChatColor.YELLOW + "Players: ", ChatColor.GOLD + String.valueOf(players.size()));
             this.specCountTrack = new Track("specCountWD", ChatColor.WHITE.toString(), 2, ChatColor.YELLOW + "Spectators: ", ChatColor.GOLD + String.valueOf(spectators.size()));
-            this.footerTrack = new Track("footerTrack", ChatColor.DARK_RED.toString(), 1, headerFooter, headerFooter);
-
-            super.scoreboard = new FlickerlessScoreboard(ChatColor.GOLD.toString() + ChatColor.BOLD.toString() + "NAME", DisplaySlot.SIDEBAR, headerTrack, roundTrack, timerTrack, blankTrack, playerCountTrack, specCountTrack, footerTrack);
+            this.footerTrack = new Track("footerTrack", ChatColor.DARK_RED.toString(), 1, LINE, LINE);
+            super.scoreboard = new FlickerlessScoreboard(ChatColor.GOLD.toString() + ChatColor.BOLD.toString() + "NAME", DisplaySlot.SIDEBAR, headerTrack, roundTrack, timerTrack, playerCountTrack, specCountTrack, footerTrack);
+            super.scoreboard.addBlankLine(4, ChatColor.AQUA);
         }
 
         @Override

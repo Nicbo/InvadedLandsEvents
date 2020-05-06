@@ -13,6 +13,7 @@ import org.bukkit.*;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -288,6 +289,12 @@ public abstract class InvadedEvent implements Listener {
         protected FlickerlessScoreboard scoreboard;
         private BukkitRunnable refresher;
 
+        protected final String LINE;
+
+        protected EventScoreboard() {
+            this.LINE = ChatColor.GRAY.toString() + ChatColor.STRIKETHROUGH.toString() + "----------";
+        }
+
         public abstract void refresh();
 
         public void startRefreshing() {
@@ -326,23 +333,17 @@ public abstract class InvadedEvent implements Listener {
         private EventManager eventManager;
         private Track headerTrack;
         private Track playerCountTrack;
-        private Track blankTrack;
         private Track countDownTrack;
         private Track footerTrack;
 
-        private String headerFooter;
-
         public CountdownSB(EventManager eventManager) {
             this.eventManager = eventManager;
-            this.headerFooter = ChatColor.GRAY.toString() + ChatColor.STRIKETHROUGH.toString() + "----------";
-
-            this.headerTrack = new FlickerlessScoreboard.Track("headerCD", ChatColor.GOLD.toString(), 5, headerFooter, headerFooter);
+            this.headerTrack = new FlickerlessScoreboard.Track("headerCD", ChatColor.GOLD.toString(), 5, LINE, LINE);
             this.playerCountTrack = new FlickerlessScoreboard.Track("playerCountCD", ChatColor.RESET.toString(), 4, ChatColor.YELLOW + "Players: ", ChatColor.GOLD + String.valueOf(spectators.size()));
-            this.blankTrack = new FlickerlessScoreboard.Track("blankCD", ChatColor.AQUA.toString(), 3, "", ChatColor.RESET.toString());
             this.countDownTrack = new FlickerlessScoreboard.Track("countDownCD", ChatColor.DARK_AQUA.toString(), 2, ChatColor.YELLOW + "Starting in ", ChatColor.GOLD + String.valueOf(eventManager.getCountDown()));
-            this.footerTrack = new FlickerlessScoreboard.Track("footerCD", ChatColor.WHITE.toString(), 1, headerFooter, headerFooter);
-
-            super.scoreboard = new FlickerlessScoreboard(ChatColor.GOLD.toString() + ChatColor.BOLD.toString() + "NAME", DisplaySlot.SIDEBAR, headerTrack, playerCountTrack, blankTrack, countDownTrack, footerTrack);
+            this.footerTrack = new FlickerlessScoreboard.Track("footerCD", ChatColor.WHITE.toString(), 1, LINE, LINE);
+            super.scoreboard = new FlickerlessScoreboard(ChatColor.GOLD.toString() + ChatColor.BOLD.toString() + "NAME", DisplaySlot.SIDEBAR, headerTrack, playerCountTrack, countDownTrack, footerTrack);
+            super.scoreboard.addBlankLine(3, ChatColor.BOLD);
         }
 
         @Override
@@ -356,5 +357,6 @@ public abstract class InvadedEvent implements Listener {
     /*
     TODO:
         - Scoreboards/Teams
+        - Need per player sbs (oitc, tdm, etc.)
      */
 }

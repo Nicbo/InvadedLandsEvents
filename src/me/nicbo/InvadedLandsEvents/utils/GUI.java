@@ -24,16 +24,16 @@ public class GUI {
     private final Map<Integer, Action> actions;
 
     public GUI(final String title, final int size, final Player owner) {
-        this.inv = Bukkit.createInventory((InventoryHolder)owner, size, ChatColor.translateAlternateColorCodes('&', title));
-        this.actions = new HashMap<Integer, Action>();
+        this.inv = Bukkit.createInventory(owner, size, ChatColor.translateAlternateColorCodes('&', title));
+        this.actions = new HashMap<>();
     }
 
     public void setItem(final int slot, final Material material, final String name, final ArrayList<String> lore, final Action action) {
         final ItemStack item = new ItemStack(material);
         final ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', name));
-        meta.setLore((List)lore);
-        meta.addItemFlags(new ItemFlag[] { ItemFlag.HIDE_ATTRIBUTES });
+        meta.setLore(lore);
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         item.setItemMeta(meta);
         this.inv.setItem(slot, item);
         this.actions.put(slot, action);
@@ -43,8 +43,8 @@ public class GUI {
         final ItemStack item = new ItemStack(material);
         final ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', name));
-        meta.setLore((List)lore);
-        meta.addItemFlags(new ItemFlag[] { ItemFlag.HIDE_ATTRIBUTES });
+        meta.setLore(lore);
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         item.setItemMeta(meta);
         item.setDurability((short) dataId);
         this.inv.setItem(slot, item);
@@ -56,7 +56,7 @@ public class GUI {
         item.setDurability((short)15);
         final ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(" ");
-        meta.addItemFlags(new ItemFlag[] { ItemFlag.HIDE_ATTRIBUTES });
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         item.setItemMeta(meta);
         this.inv.setItem(slot, item);
     }

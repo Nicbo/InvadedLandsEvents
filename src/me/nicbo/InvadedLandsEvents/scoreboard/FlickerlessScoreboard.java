@@ -14,6 +14,8 @@ import org.bukkit.scoreboard.Team;
 
 public class FlickerlessScoreboard {
     private Scoreboard sb;
+    private Objective obj;
+
     private String name;
     private DisplaySlot ds;
     private Track[] tracks;
@@ -28,7 +30,7 @@ public class FlickerlessScoreboard {
         this.tracks = tracks;
         this.sb = sb;
 
-        Objective obj = this.sb.registerNewObjective(ChatColor.stripColor(name), "dummy");
+        this.obj = this.sb.registerNewObjective(ChatColor.stripColor(name), "dummy");
         obj.setDisplaySlot(ds);
         obj.setDisplayName(name);
 
@@ -55,6 +57,10 @@ public class FlickerlessScoreboard {
                 team.setSuffix(t.getSuffix());
             }
         }
+    }
+
+    public void addBlankLine(int line, ChatColor invis) {
+        obj.getScore(invis.toString()).setScore(line);
     }
 
     /**
