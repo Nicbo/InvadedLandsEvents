@@ -431,18 +431,28 @@ public final class Waterdrop extends InvadedEvent {
    */
 
     private class WaterdropSB extends EventScoreboard {
+        private Track headerTrack;
         private Track roundTrack;
         private Track timerTrack;
+        private Track blankTrack;
         private Track playerCountTrack;
         private Track specCountTrack;
+        private Track footerTrack;
+
+        private String headerFooter;
 
         public WaterdropSB() {
-            this.roundTrack = new Track("roundTrack", ChatColor.GOLD.toString(), 6, ChatColor.YELLOW + "Round: ", ChatColor.GOLD + String.valueOf(round));
+            this.headerFooter = ChatColor.GRAY.toString() + ChatColor.STRIKETHROUGH.toString() + "----------";
+
+            this.headerTrack = new Track("headerTrack", ChatColor.GOLD.toString(), 7, headerFooter, headerFooter);
+            this.roundTrack = new Track("roundTrack", ChatColor.GREEN.toString(), 6, ChatColor.YELLOW + "Round: ", ChatColor.GOLD + String.valueOf(round));
             this.timerTrack = new Track("timerTrack", "Remaining: ", 5, ChatColor.YELLOW + "Time ", ChatColor.GOLD + String.valueOf(timer));
-            // blank line
-            this.playerCountTrack = new Track("playerCountWD", ChatColor.RED.toString(), 3, ChatColor.YELLOW + "Players: ", ChatColor.GOLD + String.valueOf(players.size()));
-            this.specCountTrack = new Track("specCountWD", ChatColor.YELLOW.toString(), 2, ChatColor.YELLOW + "Spectators: ", ChatColor.GOLD + String.valueOf(spectators.size()));
-            super.scoreboard = new FlickerlessScoreboard("NAME", DisplaySlot.SIDEBAR, roundTrack, timerTrack, playerCountTrack, specCountTrack);
+            this.blankTrack = new Track("blankTrack", ChatColor.AQUA.toString(), 4, "", ChatColor.RESET.toString());
+            this.playerCountTrack = new Track("playerCountWD", ChatColor.DARK_AQUA.toString(), 3, ChatColor.YELLOW + "Players: ", ChatColor.GOLD + String.valueOf(players.size()));
+            this.specCountTrack = new Track("specCountWD", ChatColor.WHITE.toString(), 2, ChatColor.YELLOW + "Spectators: ", ChatColor.GOLD + String.valueOf(spectators.size()));
+            this.footerTrack = new Track("footerTrack", ChatColor.DARK_RED.toString(), 1, headerFooter, headerFooter);
+
+            super.scoreboard = new FlickerlessScoreboard(ChatColor.GOLD.toString() + ChatColor.BOLD.toString() + "NAME", DisplaySlot.SIDEBAR, headerTrack, roundTrack, timerTrack, blankTrack, playerCountTrack, specCountTrack, footerTrack);
         }
 
         @Override
