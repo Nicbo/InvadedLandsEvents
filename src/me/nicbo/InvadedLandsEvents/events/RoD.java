@@ -2,7 +2,6 @@ package me.nicbo.InvadedLandsEvents.events;
 
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
-import me.nicbo.InvadedLandsEvents.EventsMain;
 import me.nicbo.InvadedLandsEvents.utils.ConfigUtils;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -10,15 +9,26 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
-public class RoD extends InvadedEvent {
+/**
+ * RoD event:
+ * All players are tp'd to a start location
+ * Once player enters win region they win event
+ *
+ * @author Nicbo
+ * @since 2020-03-10
+ */
+
+public final class RoD extends InvadedEvent {
     private WorldGuardPlugin worldGuardPlugin;
 
     private BukkitRunnable didPlayerFinish;
     private ProtectedRegion winRegion;
     private Location startLoc;
 
-    public RoD(EventsMain plugin) {
-        super("Race of Death", "rod", plugin);
+    private int eventTimeLimit;
+
+    public RoD() {
+        super("Race of Death", "rod");
 
         this.worldGuardPlugin = plugin.getWorldGuardPlugin();
         String regionName = eventConfig.getString("win-region");
@@ -29,10 +39,11 @@ public class RoD extends InvadedEvent {
         }
 
         this.startLoc = ConfigUtils.deserializeLoc(eventConfig.getConfigurationSection("start-location"), eventWorld);
+        this.eventTimeLimit = eventConfig.getInt("int-seconds-time-limit");
     }
 
     @Override
-    public void init(EventsMain plugin) {
+    public void init() {
         initPlayerCheck();
         this.didPlayerFinish = new BukkitRunnable() {
             @Override
@@ -49,24 +60,23 @@ public class RoD extends InvadedEvent {
 
     @Override
     public void start() {
-        this.plugin.getServer().getScheduler().runTask(this.plugin, new Runnable() {
-            @Override
-            public void run() {
-                tpApplyInvisibility();
-            }
-        });
-
+        plugin.getServer().getScheduler().runTask(plugin, this::tpApplyInvisibility);
         didPlayerFinish.runTaskTimerAsynchronously(plugin, 0, 1);
         playerCheck.runTaskTimerAsynchronously(plugin, 0, 1);
+        startTimer(eventTimeLimit);
+    }
+
+    @Override
+    public void over() {
+        didPlayerFinish.cancel();
+        playerCheck.cancel();
+        eventTimer.cancel();;
     }
 
     @Override
     public void stop() {
         started = false;
-        didPlayerFinish.cancel();
-        playerCheck.cancel();
-        removePlayers();
-        plugin.getManagerHandler().getEventManager().setCurrentEvent(null);
+        removeParticipants();
     }
 
     private void tpApplyInvisibility() {

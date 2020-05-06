@@ -2,13 +2,13 @@ package me.nicbo.InvadedLandsEvents.events;
 
 import me.nicbo.InvadedLandsEvents.EventsMain;
 
-public class RedRover extends InvadedEvent {
-    public RedRover(EventsMain plugin) {
-        super("Red Rover", "redrover", plugin);
+public final class RedRover extends InvadedEvent {
+    public RedRover() {
+        super("Red Rover", "redrover");
     }
 
     @Override
-    public void init(EventsMain plugin) {
+    public void init() {
 
     }
 
@@ -19,6 +19,11 @@ public class RedRover extends InvadedEvent {
 
     @Override
     public void stop() {
+
+    }
+
+    @Override
+    public void over() {
 
     }
 }

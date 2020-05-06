@@ -8,11 +8,11 @@ import me.nicbo.InvadedLandsEvents.managers.EventPartyRequestManager;
 /**
  * Handles managers
  *
- * @author StarZorroww
+ * @author StarZorrow
  * @since 2020-03-12
  */
 
-public class ManagerHandler {
+public final class ManagerHandler {
     private EventsMain plugin;
     private EventPartyManager partyManager;
     private EventManager eventManager;
@@ -21,24 +21,15 @@ public class ManagerHandler {
     public ManagerHandler(EventsMain plugin) {
         this.plugin = plugin;
         this.eventManager = new EventManager(plugin);
-        this.partyManager = new EventPartyManager();
         this.eventPartyRequestManager = new EventPartyRequestManager();
+        this.partyManager = new EventPartyManager(plugin, eventPartyRequestManager);
     }
 
-    public EventManager getEventManager() {
-        return this.eventManager;
-    }
+    public EventManager getEventManager() { return this.eventManager; }
 
     public EventPartyManager getEventPartyManager() {
         return this.partyManager;
     }
 
-    public EventPartyRequestManager getEventPartyRequestManager() {
-        return this.eventPartyRequestManager;
-    }
-
-
-    public void restartEventManager() {
-        this.eventManager = new EventManager(plugin);
-    }
+    public EventPartyRequestManager getEventPartyRequestManager() { return this.eventPartyRequestManager; }
 }

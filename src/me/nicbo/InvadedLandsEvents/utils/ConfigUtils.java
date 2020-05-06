@@ -13,7 +13,7 @@ import java.util.*;
  * Utility class for config files
  *
  * @author Nicbo
- * @author StarZorroww
+ * @author StarZorrow
  * @since 2020-03-12
  */
 
@@ -23,9 +23,9 @@ public final class ConfigUtils {
     public static void serializeLoc(ConfigurationSection section, Location loc, boolean includeWorld) {
         if (includeWorld)
             section.set("world", loc.getWorld().getName());
-        section.set("x", loc.getX());
-        section.set("y", loc.getY());
-        section.set("z", loc.getZ());
+        section.set("x", loc.getBlockX());
+        section.set("y", loc.getBlockY());
+        section.set("z", loc.getBlockZ());
         section.set("yaw", loc.getYaw());
         section.set("pitch", loc.getPitch());
     }
@@ -35,9 +35,9 @@ public final class ConfigUtils {
     }
 
     public static Location deserializeLoc(ConfigurationSection section, World world) {
-        double x = section.getDouble("x");
-        double y = section.getDouble("y");
-        double z = section.getDouble("z");
+        int x = section.getInt("x");
+        int y = section.getInt("y");
+        int z = section.getInt("z");
         float yaw = (float) section.getDouble("yaw");
         float pitch = (float) section.getDouble("pitch");
         return new Location(world, x, y, z, yaw, pitch);
@@ -70,9 +70,9 @@ public final class ConfigUtils {
             if (value instanceof ConfigurationSection) {
                 ConfigurationSection locSection = (ConfigurationSection) value;
 
-                val = "(" + String.format("%.2f", locSection.getDouble("x")) + ", "
-                        + String.format("%.2f", locSection.getDouble("y")) + ", "
-                        + String.format("%.2f", locSection.getDouble("z")) + ") ["
+                val = "(" + locSection.getInt("x") + ", "
+                        + locSection.getInt("y") + ", "
+                        + locSection.getInt("z") + ") ["
                         + String.format("%.2f", locSection.getDouble("yaw")) + ", "
                         + String.format("%.2f", locSection.getDouble("pitch")) + "]";
             }

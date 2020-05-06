@@ -1,29 +1,35 @@
 package me.nicbo.InvadedLandsEvents.managers;
 
-import me.nicbo.InvadedLandsEvents.EventMessage;
+import me.nicbo.InvadedLandsEvents.events.duels.Brackets;
+import me.nicbo.InvadedLandsEvents.messages.EventMessage;
 import me.nicbo.InvadedLandsEvents.EventsMain;
 import me.nicbo.InvadedLandsEvents.events.*;
-import me.nicbo.InvadedLandsEvents.events.sumo.*;
-import me.nicbo.InvadedLandsEvents.handlers.ManagerHandler;
-import org.bukkit.Bukkit;
+import me.nicbo.InvadedLandsEvents.events.duels.sumo.*;
+import me.nicbo.InvadedLandsEvents.utils.GeneralUtils;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-
 import java.util.HashMap;
 
 /**
  * Event manager handles hosting, spectating, joining etc.
  *
  * @author Nicbo
- * @author StarZorroww
+ * @author StarZorrow
  * @since 2020-03-12
  */
 
 public final class EventManager {
     private EventsMain plugin;
+
     private HashMap<String, InvadedEvent> events;
     private InvadedEvent currentEvent;
+
+    private int countDown;
 
     private static String[] eventNames;
 
@@ -40,27 +46,27 @@ public final class EventManager {
     public EventManager(EventsMain plugin) {
         this.plugin = plugin;
         this.events = new HashMap<>();
-        addEventsToMap();
-    }
-    
-    private void addEventsToMap() {
-        events.put(eventNames[0], new Brackets(plugin));
-        events.put(eventNames[1], new KOTH(plugin));
-        events.put(eventNames[2], new LMS(plugin));
-        events.put(eventNames[3], new OITC(plugin));
-        events.put(eventNames[4], new RedRover(plugin));
-        events.put(eventNames[5], new RoD(plugin));
-        events.put(eventNames[6], new Spleef(plugin));
-        events.put(eventNames[7], new TDM(plugin));
-        events.put(eventNames[8], new TNTTag(plugin));
-        events.put(eventNames[9], new Waterdrop(plugin));
-        events.put(eventNames[10], new WoolShuffle(plugin));
-        events.put(eventNames[11], new Sumo1v1(plugin));
-        events.put(eventNames[11], new Sumo2v2(plugin));
-        events.put(eventNames[11], new Sumo3v3(plugin));
     }
 
-    public EventMessage hostEvent(String name, String host) {
+    public void reloadEvents() {
+        events.clear();
+        events.put(eventNames[0], new Brackets());
+        events.put(eventNames[1], new KOTH());
+        events.put(eventNames[2], new LMS());
+        events.put(eventNames[3], new OITC());
+        events.put(eventNames[4], new RedRover());
+        events.put(eventNames[5], new RoD());
+        events.put(eventNames[6], new Spleef());
+        events.put(eventNames[7], new TDM());
+        events.put(eventNames[8], new TNTTag());
+        events.put(eventNames[9], new Waterdrop());
+        events.put(eventNames[10], new WoolShuffle());
+        events.put(eventNames[11], new Sumo1v1());
+        events.put(eventNames[11], new Sumo2v2());
+        events.put(eventNames[11], new Sumo3v3());
+    }
+
+    public String hostEvent(String name, String host) {
         if (currentEvent != null) {
             return EventMessage.HOST_STARTED;
         } else if (!events.containsKey(name)) {
@@ -74,12 +80,11 @@ public final class EventManager {
     }
 
     private void startCountDown(String host) {
-        currentEvent.init(plugin);
+        currentEvent.init();
         String name = currentEvent.getEventName();
+        countDown = 15; //for testing put back to 60
 
         new BukkitRunnable() {
-            int time = 15; //for testing put back to 60
-
             @Override
             public void run() {
                 if (currentEvent == null) {
@@ -87,23 +92,34 @@ public final class EventManager {
                     return;
                 }
 
-                if (time == 60 || time == 45 || time == 30 || time == 15 || time <= 5 && time >= 1) {
-                    Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&c&l"+ host + " is hosting a " + name + " event!"));
-                    Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&c&lStarting in " + time + " seconds " + "&a&l[Click to Join]"));
-                    // Add Click Event text
-                } else if (time == 0) {
+                if (countDown == 60 || countDown == 45 || countDown == 30 || countDown == 15 || countDown <= 5 && countDown >= 1) {
+                    for (Player player : GeneralUtils.getPlayers()) {
+                        TextComponent join = new TextComponent(ChatColor.translateAlternateColorCodes('&', "&c&lStarting in " + countDown + " seconds " + "&a&l[Click to Join]"));
+                        join.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.GREEN + "Click to join " + currentEvent.getEventName()).create()));
+                        join.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/event join"));
+                        player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&c&l" + host + " is hosting a " + name + " event!"));
+                        player.spigot().sendMessage(join);
+                    }
+                } else if (countDown == 0) {
 //                  if (!currentEvent.getSize() >= 6) { For testing disable this, will later allow customizing minimum event size.
+                    currentEvent.getScoreboard().giveScoreboard(currentEvent.getPlayers());
+                    currentEvent.getScoreboard().startRefreshing();
                     currentEvent.setStarted(true);
                     currentEvent.start();
                     this.cancel();
 //                  }
                 }
-                time--;
+                countDown--;
+                currentEvent.getCountDownScoreboard().refresh();
             }
-        }.runTaskTimerAsynchronously(plugin, 0, 20);
+        }.runTaskTimer(plugin, 0, 20);
     }
 
-    public EventMessage joinEvent(Player player) {
+    public int getCountDown() {
+        return countDown;
+    }
+
+    public String joinEvent(Player player) {
         if (currentEvent == null) {
             return EventMessage.NONE;
         } else if (currentEvent.isStarted()) {
@@ -115,7 +131,7 @@ public final class EventManager {
         return null;
     }
 
-    public EventMessage leaveEvent(Player player) {
+    public String leaveEvent(Player player) {
         if (currentEvent == null) {
             return EventMessage.NONE;
         } else if (!currentEvent.containsPlayer(player)) {
@@ -125,7 +141,7 @@ public final class EventManager {
         return null;
     }
 
-    public EventMessage specEvent(Player player) {
+    public String specEvent(Player player) {
         if (currentEvent == null) {
             return EventMessage.NONE;
         } else if (currentEvent.containsPlayer(player)) {
@@ -135,7 +151,7 @@ public final class EventManager {
         return EventMessage.SPECTATING;
     }
 
-    public EventMessage endEvent(Player player) {
+    public String endEvent() {
         if (currentEvent == null) {
             return EventMessage.NONE;
         } else if (!currentEvent.isStarted()) {
@@ -145,13 +161,13 @@ public final class EventManager {
         return EventMessage.ENDED;
     }
 
-    public EventMessage eventInfo(Player player) {
+    public String eventInfo(Player player) {
         if (currentEvent == null) {
             return EventMessage.NONE;
         } else if (!currentEvent.isStarted()) {
             return EventMessage.EVENT_ENDING;
         }
-        currentEvent.eventInfo(player);
+        currentEvent.sendEventInfo(player);
         return null;
     }
 

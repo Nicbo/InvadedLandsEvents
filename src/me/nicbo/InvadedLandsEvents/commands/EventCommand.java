@@ -1,7 +1,6 @@
 package me.nicbo.InvadedLandsEvents.commands;
 
-import me.nicbo.InvadedLandsEvents.EventMessage;
-import me.nicbo.InvadedLandsEvents.EventPartyMessage;
+import me.nicbo.InvadedLandsEvents.messages.EventPartyMessage;
 import me.nicbo.InvadedLandsEvents.EventsMain;
 import me.nicbo.InvadedLandsEvents.managers.EventManager;
 import me.nicbo.InvadedLandsEvents.managers.EventPartyManager;
@@ -25,12 +24,12 @@ import java.util.*;
 /**
  * Event Command class, handles commands for /event
  *
- * @author StarZorroww
  * @author Nicbo
+ * @author StarZorrow
  * @since 2020-03-12
  */
 
-public class EventCommand implements CommandExecutor, TabCompleter {
+public final class EventCommand implements CommandExecutor, TabCompleter {
     private EventManager eventManager;
     private EventPartyManager eventPartyManager;
     private EventPartyRequestManager eventPartyRequestManager;
@@ -77,7 +76,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
             if (sender instanceof Player) {
                 Player player = (Player) sender;
                 UUID uuid = player.getUniqueId();
-                String playername = player.getName();
+                String playerName = player.getName();
                 if (args.length >= 1) {
                     switch (args[0].toLowerCase()) {
                         case "p":
@@ -86,69 +85,24 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                                 switch (args[1].toLowerCase()) {
                                     case "c":
                                     case "create": {
-                                        if (eventPartyManager.getParty(uuid) != null) {
-                                            player.sendMessage(EventPartyMessage.ALREADY_IN_PARTY.toString());
-                                            break;
-                                        }
-                                        EventParty party = eventPartyManager.createParty(uuid, playername);
-                                        eventPartyManager.notifyParty(party, EventPartyMessage.PARTY_CREATE.toString().replace("{leader}", playername));
+                                        String createPartyMsg = eventPartyManager.createParty(player);
+                                        if (createPartyMsg != null)
+                                            player.sendMessage(createPartyMsg);
                                         break;
                                     }
                                     case "d":
                                     case "disband": {
-                                        if (eventPartyManager.getParty(uuid) != null) {
-                                            EventParty party = eventPartyManager.getParty(uuid);
-                                            if (party.getLeader() != uuid) {
-                                                player.sendMessage(EventPartyMessage.NOT_LEADER.toString());
-                                                break;
-                                            }
-                                            eventPartyManager.notifyParty(party, EventPartyMessage.PARTY_DISBAND.toString().replace("{leader}", playername));
-                                            eventPartyManager.destroyParty(uuid);
-                                            break;
-                                        }
-                                        player.sendMessage(EventPartyMessage.NOT_IN_PARTY.toString());
+                                        String disbandPartyMsg = eventPartyManager.disbandParty(player);
+                                        if (disbandPartyMsg != null)
+                                            player.sendMessage(disbandPartyMsg);
                                         break;
                                     }
                                     case "i":
                                     case "invite": {
                                         if (args.length >= 3) {
-                                            if (eventPartyManager.getParty(uuid) == null) {
-                                                player.sendMessage(EventPartyMessage.NOT_IN_PARTY.toString());
-                                                break;
-                                            }
-                                            EventParty party = eventPartyManager.getParty(uuid);
-                                            if (party.getLeader() != uuid) {
-                                                player.sendMessage(EventPartyMessage.NOT_LEADER.toString());
-                                                break;
-                                            }
-                                            Player target = this.plugin.getServer().getPlayer(args[2]);
-                                            if (target == null || !target.isOnline()) {
-                                                player.sendMessage(EventPartyMessage.PLAYER_NOT_FOUND.toString().replace("{player}", args[2]));
-                                                break;
-                                            }
-                                            String targetname = target.getName();
-                                            UUID uuid1 = target.getUniqueId();
-                                            if (party.getLeader() == uuid1) {
-                                                player.sendMessage(EventPartyMessage.CANNOT_ACTION_SELF.toString().replace("{action}", "invite"));
-                                                break;
-                                            }
-                                            if (eventPartyManager.getParty(uuid1) != null) {
-                                                player.sendMessage(EventPartyMessage.PLAYER_ALREADY_IN_PARTY.toString().replace("{player}", targetname));
-                                                break;
-                                            }
-                                            if (eventPartyRequestManager.hasPartyRequests(target) && eventPartyRequestManager.hasPartyRequestFromPlayer(target, player)) {
-                                                player.sendMessage(EventPartyMessage.INVITE_ALREADY_SENT.toString().replace("{player}", targetname));
-                                                break;
-                                            }
-                                            eventPartyManager.notifyParty(party, EventPartyMessage.PARTY_INVITE_PLAYER.toString().replace("{player}", targetname));
-                                            eventPartyRequestManager.addPartyRequest(target, player);
-
-                                            TextComponent invite = new TextComponent(EventPartyMessage.PARTY_INVITE.toString().replace("{leader}", playername));
-                                            TextComponent part = new TextComponent(EventPartyMessage.CLICK_TO_JOIN_FORMATTED.toString().replace("{leader}", playername));
-                                            part.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(EventPartyMessage.CLICK_TO_JOIN.toString()).create()));
-                                            part.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, EventPartyMessage.CLICK_COMMAND.toString().replace("{leader}", playername)));
-                                            invite.addExtra(part);
-                                            target.spigot().sendMessage(invite);
+                                            String invitePartyMsg = eventPartyManager.invitePlayer(player, args[2]);
+                                            if (invitePartyMsg != null)
+                                                player.sendMessage(invitePartyMsg);
                                             break;
                                         }
                                         player.sendMessage(usage + "/event <join|leave|spectate|info|host> (event)");
@@ -157,34 +111,9 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                                     case "ui":
                                     case "uninvite": {
                                         if (args.length >= 3) {
-                                            if (eventPartyManager.getParty(uuid) == null) {
-                                                player.sendMessage(EventPartyMessage.NOT_IN_PARTY.toString());
-                                                break;
-                                            }
-                                            EventParty party = eventPartyManager.getParty(uuid);
-                                            if (party.getLeader() != uuid) {
-                                                player.sendMessage(EventPartyMessage.NOT_LEADER.toString());
-                                                break;
-                                            }
-                                            Player target = this.plugin.getServer().getPlayer(args[2]);
-                                            if (target == null || !target.isOnline()) {
-                                                player.sendMessage(EventPartyMessage.PLAYER_NOT_FOUND.toString().replace("{player}", args[2]));
-                                                break;
-                                            }
-                                            UUID uuid1 = target.getUniqueId();
-                                            String targetname = target.getName();
-                                            if (party.getLeader() == uuid1) {
-                                                player.sendMessage(EventPartyMessage.CANNOT_ACTION_SELF.toString().replace("{action}", "deinvite"));
-                                                break;
-                                            }
-                                            if (eventPartyRequestManager.hasPartyRequests(target) && eventPartyRequestManager.hasPartyRequestFromPlayer(target, player)) {
-                                                eventPartyManager.notifyParty(party, EventPartyMessage.PARTY_UNINVITE_PLAYER.toString().replace("{player}", targetname));
-                                                eventPartyRequestManager.removePartyRequest(target, player);
-
-                                                target.sendMessage(EventPartyMessage.PARTY_UNINVITE.toString().replace("{leader}", playername));
-                                                break;
-                                            }
-                                            player.sendMessage(EventPartyMessage.INVITE_DOES_NOT_EXIST.toString().replace("{player}", targetname));
+                                            String uninvitePartyMsg = eventPartyManager.uninvitePlayer(player, args[2]);
+                                            if (uninvitePartyMsg != null)
+                                                player.sendMessage(uninvitePartyMsg);
                                             break;
                                         }
                                         player.sendMessage(usage + "/event <join|leave|spectate|info|host> (event)");
@@ -193,38 +122,9 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                                     case "k":
                                     case "kick": {
                                         if (args.length >= 3) {
-                                            if (eventPartyManager.getParty(uuid) == null) {
-                                                player.sendMessage(EventPartyMessage.NOT_IN_PARTY.toString());
-                                                break;
-                                            }
-                                            EventParty party = eventPartyManager.getParty(uuid);
-                                            if (party.getLeader() != uuid) {
-                                                player.sendMessage(EventPartyMessage.NOT_LEADER.toString());
-                                                break;
-                                            }
-                                            OfflinePlayer target = this.plugin.getServer().getOfflinePlayer(args[2]);
-                                            if (target == null) {
-                                                player.sendMessage(EventPartyMessage.PLAYER_NEVER_JOINED.toString().replace("{player}", args[2]));
-                                                break;
-                                            }
-                                            UUID uuid1 = target.getUniqueId();
-                                            String targetname = target.getName();
-                                            if (party.getLeader() == uuid1) {
-                                                player.sendMessage(EventPartyMessage.CANNOT_ACTION_SELF.toString().replace("{action}", "kick"));
-                                                break;
-                                            }
-                                            if (eventPartyManager.getParty(uuid1) == null) {
-                                                player.sendMessage(EventPartyMessage.PLAYER_NOT_IN_PARTY.toString().replace("{player}", targetname));
-                                                break;
-                                            }
-                                            if (eventPartyManager.getParty(uuid1).getLeader() == uuid) {
-                                                eventPartyManager.notifyParty(party, EventPartyMessage.PARTY_KICK_MEMBER.toString().replace("{member}", targetname));
-                                                eventPartyManager.leaveParty(uuid1);
-
-                                                if (target.isOnline()) this.plugin.getServer().getPlayer(target.getUniqueId()).sendMessage(EventPartyMessage.PARTY_KICK.toString().replace("{leader}", playername));
-                                                break;
-                                            }
-                                            player.sendMessage(EventPartyMessage.NOT_LEADER.toString());
+                                            String kickPartyMsg = eventPartyManager.kickPlayer(player, args[2]);
+                                            if (kickPartyMsg != null)
+                                                player.sendMessage(kickPartyMsg);
                                             break;
                                         }
                                         player.sendMessage(usage + "/event <join|leave|spectate|info|host> (event)");
@@ -233,120 +133,72 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                                     case "j":
                                     case "join": {
                                         if (args.length >= 3) {
-                                            if (this.plugin.getServer().getPlayer(args[2]) == null) {
-                                                player.sendMessage(EventPartyMessage.PLAYER_NOT_FOUND.toString().replace("{player}", args[2]));
-                                                break;
-                                            }
-                                            if (eventPartyManager.getParty(uuid) != null) {
-                                                player.sendMessage(EventPartyMessage.ALREADY_IN_PARTY.toString());
-                                                break;
-                                            }
-                                            Player target = this.plugin.getServer().getPlayer(args[2]);
-                                            UUID uuid1 = target.getUniqueId();
-                                            String targetname = target.getName();
-                                            if (eventPartyManager.getParty(uuid1) == null) {
-                                                player.sendMessage(EventPartyMessage.PARTY_DOES_NOT_EXIST.toString().replace("{player}", targetname));
-                                                break;
-                                            }
-                                            EventParty party = eventPartyManager.getParty(uuid1);
-                                            if (party.getLeader() == uuid) {
-                                                player.sendMessage(EventPartyMessage.CANNOT_ACTION_SELF.toString().replace("{action} yourself", "join your own party"));
-                                                break;
-                                            }
-                                            if (eventPartyRequestManager.hasPartyRequests(player) && eventPartyRequestManager.hasPartyRequestFromPlayer(player, target)) {
-                                                eventPartyManager.joinParty(uuid1, uuid);
-                                                eventPartyManager.notifyParty(party, EventPartyMessage.PARTY_JOIN.toString().replace("{member}", playername));
-                                                eventPartyRequestManager.removePartyRequest(player, target);
-                                                break;
-                                            } else {
-                                                player.sendMessage(EventPartyMessage.NO_INVITE.toString().replace("{leader}", targetname));
-                                                break;
-                                            }
+                                            String joinPartyMsg = eventPartyManager.joinParty(player, args[2]);
+                                            if (joinPartyMsg != null)
+                                                player.sendMessage(joinPartyMsg);
+                                            break;
                                         }
                                         player.sendMessage(usage + "/event <join|leave|spectate|info|host> (event)");
                                         break;
                                     }
                                     case "l":
                                     case "leave": {
-                                        if (eventPartyManager.getParty(uuid) != null) {
-                                            EventParty party = eventPartyManager.getParty(uuid);
-                                            if (party.getLeader() == uuid) {
-                                                eventPartyManager.notifyParty(party, EventPartyMessage.PARTY_DISBAND.toString().replace("{leader}", playername));
-                                                eventPartyManager.destroyParty(uuid);
-                                                break;
-                                            } else {
-                                                eventPartyManager.notifyParty(party, EventPartyMessage.PARTY_LEFT.toString().replace("{member}", playername));
-                                                eventPartyManager.leaveParty(uuid);
-                                                break;
-                                            }
-                                        }
-                                        player.sendMessage(EventPartyMessage.NOT_IN_PARTY.toString());
+                                        String leavePartyMsg = eventPartyManager.leaveParty(player);
+                                        if (leavePartyMsg != null)
+                                            player.sendMessage(leavePartyMsg);
                                         break;
                                     }
                                 }
                                 return true;
                             } else if (eventPartyManager.getParty(uuid) != null) {
-                                EventParty party = eventPartyManager.getParty(uuid);
-                                Player leader = this.plugin.getServer().getPlayer(party.getLeader());
-                                StringJoiner members = new StringJoiner(", ");
-                                for (UUID memberUUID : party.getMembers()) {
-                                    Player member = this.plugin.getServer().getPlayer(memberUUID);
-                                    members.add(member.getName());
-                                }
-                                String[] information = { ChatColor.GRAY + "" + ChatColor.STRIKETHROUGH + "----------------------------------------------------",
-                                        ChatColor.GOLD + "" + ChatColor.BOLD + "Party Information:",
-                                        ChatColor.YELLOW + "Leader: " + ChatColor.GOLD + leader.getName(),
-                                        ChatColor.YELLOW + "Members " + ChatColor.GRAY + "[" +
-                                        ChatColor.GOLD + "" + (party.getMembers().size()) + ChatColor.GRAY + "]" + ChatColor.YELLOW + ":",
-                                        ChatColor.GOLD + ((party.getSize() >= 2) ? "" + members : "None"),
-                                        ChatColor.GRAY  + "" + ChatColor.STRIKETHROUGH + "----------------------------------------------------" };
-                                player.sendMessage(information);
+                                String[] partyInfoMsg = eventPartyManager.partyInfo(player);
+                                player.sendMessage(partyInfoMsg);
                                 break;
                             }
-                            player.sendMessage(EventPartyMessage.NOT_IN_PARTY.toString());
+                            player.sendMessage(EventPartyMessage.NOT_IN_PARTY);
                             break;
                         }
                         case "j":
                         case "join": {
-                            EventMessage joinMsg = eventManager.joinEvent(player);
+                            String joinMsg = eventManager.joinEvent(player);
                             if (joinMsg != null)
-                                player.sendMessage(joinMsg.toString());
+                                player.sendMessage(joinMsg);
                             break;
                         }
                         case "l":
                         case "leave": {
-                            EventMessage leaveMsg = eventManager.leaveEvent(player);
+                            String leaveMsg = eventManager.leaveEvent(player);
                             if (leaveMsg != null)
-                                player.sendMessage(leaveMsg.toString());
+                                player.sendMessage(leaveMsg);
                             break;
                         }
                         case "s":
                         case "spec":
                         case "spectate": {
-                            EventMessage spectateMsg = eventManager.specEvent(player);
-                            player.sendMessage(spectateMsg.toString());
+                            String spectateMsg = eventManager.specEvent(player);
+                            player.sendMessage(spectateMsg);
                             break;
                         }
                         case "i":
                         case "info": {
-                            EventMessage infoMsg = eventManager.eventInfo(player);
+                            String infoMsg = eventManager.eventInfo(player);
                             if (infoMsg != null)
-                                player.sendMessage(infoMsg.toString());
+                                player.sendMessage(infoMsg);
                             break;
                         }
                         case "fe":
                         case "stop":
                         case "forceend": {
-                            EventMessage forceEndMsg = eventManager.endEvent(player);
-                            player.sendMessage(forceEndMsg.toString());
+                            String forceEndMsg = eventManager.endEvent();
+                            player.sendMessage(forceEndMsg);
                             break;
                         }
                         case "h":
                         case "host": {
                             if (args.length >= 2) {
-                                EventMessage hostMsg = eventManager.hostEvent(args[1], player.getName());
+                                String hostMsg = eventManager.hostEvent(args[1], player.getName());
                                 if (hostMsg != null)
-                                    player.sendMessage(hostMsg.toString().replace("{event}", args[1]));
+                                    player.sendMessage(hostMsg.replace("{event}", args[1]));
                                 break;
                             }
                             // If only 1 arg then go to default case.
@@ -401,5 +253,6 @@ public class EventCommand implements CommandExecutor, TabCompleter {
     TODO:
         - Host command needs a GUI
         - Needs optimizing
+        - econfig reload and save don't work as intended
      */
 }

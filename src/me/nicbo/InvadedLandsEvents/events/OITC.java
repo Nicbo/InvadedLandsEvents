@@ -2,9 +2,8 @@ package me.nicbo.InvadedLandsEvents.events;
 
 import me.nicbo.InvadedLandsEvents.EventsMain;
 import me.nicbo.InvadedLandsEvents.utils.ConfigUtils;
+import me.nicbo.InvadedLandsEvents.utils.EventUtils;
 import me.nicbo.InvadedLandsEvents.utils.GeneralUtils;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Arrow;
@@ -22,31 +21,43 @@ import java.util.*;
  * Arrows one shot and when you get a kill you receive an arrow
  *
  * @author Nicbo
+ * @author StarZorrow
  * @since 2020-03-13
  */
 
-public class OITC extends InvadedEvent {
+public final class OITC extends InvadedEvent {
     private List<Location> locations;
-    private List<ItemStack> kit;
+    private ItemStack[] kit;
 
     private HashMap<Player, Integer> points;
     private Set<Player> respawningPlayers;
 
-    public OITC(EventsMain plugin) {
-        super("One in the Chamber", "oitc", plugin);
+    private final String killMessage;
+    private final int WIN_POINTS;
+
+    public OITC() {
+        super("One in the Chamber", "oitc");
         this.locations = new ArrayList<>();
 
         for (int i = 1; i < 9; i++) {
             this.locations.add(ConfigUtils.deserializeLoc(eventConfig.getConfigurationSection("start-location-" + i), eventWorld));
         }
 
-        this.kit = Arrays.asList(new ItemStack(Material.WOOD_SWORD, 1), new ItemStack(Material.BOW, 1), new ItemStack(Material.ARROW, 1));
+        this.kit = new ItemStack[] {
+                new ItemStack(Material.WOOD_SWORD, 1),
+                new ItemStack(Material.BOW, 1),
+                new ItemStack(Material.ARROW, 1)
+        };
+
         this.points = new HashMap<>();
         this.respawningPlayers = new HashSet<>();
+
+        this.killMessage = getEventMessage("KILL_MESSAGE");
+        this.WIN_POINTS = eventConfig.getInt("int-win-points");
     }
 
     @Override
-    public void init(EventsMain plugin) {
+    public void init() {
         initPlayerCheck();
     }
 
@@ -61,21 +72,31 @@ public class OITC extends InvadedEvent {
     }
 
     @Override
+    public void over() {
+        playerCheck.cancel();
+    }
+
+    @Override
     public void stop() {
         started = false;
-        playerCheck.cancel();
-        removePlayers();
+        removeParticipants();
+        points.clear();
         respawningPlayers.clear();
-        plugin.getManagerHandler().getEventManager().setCurrentEvent(null);
     }
 
     private void preparePlayer(Player player) {
-        player.getInventory().clear();
-        kit.forEach(item -> player.getInventory().addItem(item));
+        player.getInventory().setContents(kit);
     }
 
     private Location getRandomLocation() {
-        return locations.get(GeneralUtils.randomMinMax(0, 7));
+        return GeneralUtils.getRandom(locations);
+    }
+
+    private String getKillMessage(Player killer, int killerPoints, Player player, int playerPoints) {
+        return killMessage.replace("{killer}", killer.getName())
+                .replace("{killer_points}", String.valueOf(killerPoints))
+                .replace("{player}", player.getName())
+                .replace("{player_points}", String.valueOf(playerPoints));
     }
 
     @EventHandler
@@ -86,17 +107,17 @@ public class OITC extends InvadedEvent {
                 return;
 
             if (event.getDamager() instanceof Arrow) {
-                event.setDamage(20);
+                if (player.isBlocking()) {
+                    event.setDamage(10);
+                } else {
+                    event.setDamage(20);
+                }
             }
 
             if (event.getDamage() >= player.getHealth()) {
+                player.getInventory().clear();
                 respawningPlayers.add(player);
-                plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-                    @Override
-                    public void run() {
-                        player.spigot().respawn();
-                    }
-                }, 1);
+                plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> player.spigot().respawn(), 1);
             }
         }
     }
@@ -111,10 +132,10 @@ public class OITC extends InvadedEvent {
         Player killer = player.getKiller();
         if (killer != null && player != killer) {
             points.put(killer, points.get(killer) + 1);
-            Bukkit.broadcastMessage(ChatColor.YELLOW + player.getName() + "[" + points.get(player) + "]" + " has been killed by " + killer.getName() + "[" + points.get(killer) + "]");
+            EventUtils.broadcastEventMessage(getKillMessage(killer, points.get(killer), player, points.get(player)));
             killer.setHealth(20);
-            killer.getInventory().addItem(kit.get(2));
-            if (points.get(killer) == 20)
+            killer.getInventory().addItem(kit[2]);
+            if (points.get(killer) == WIN_POINTS)
                 playerWon(killer);
         }
 
@@ -122,10 +143,5 @@ public class OITC extends InvadedEvent {
         event.setRespawnLocation(getRandomLocation());
         respawningPlayers.remove(player);
     }
-
-    /*
-    TODO:
-        - Make point cap configurable (20)
-     */
 
 }

@@ -1,6 +1,6 @@
 package me.nicbo.InvadedLandsEvents.listeners;
 
-import me.nicbo.InvadedLandsEvents.EventMessage;
+import me.nicbo.InvadedLandsEvents.messages.EventMessage;
 import me.nicbo.InvadedLandsEvents.EventsMain;
 import me.nicbo.InvadedLandsEvents.managers.EventManager;
 import org.bukkit.Material;
@@ -20,11 +20,11 @@ import org.bukkit.inventory.ItemStack;
  * This listener is active on all events
  *
  * @author Nicbo
- * @author StarZorroww
+ * @author StarZorrow
  * @since 2020-03-12
  */
 
-public class GeneralEventListener implements Listener {
+public final class GeneralEventListener implements Listener {
     private EventManager eventManager;
 
     public GeneralEventListener(EventsMain plugin) {

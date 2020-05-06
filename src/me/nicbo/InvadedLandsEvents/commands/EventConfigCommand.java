@@ -2,7 +2,9 @@ package me.nicbo.InvadedLandsEvents.commands;
 
 import me.nicbo.InvadedLandsEvents.EventsMain;
 import me.nicbo.InvadedLandsEvents.managers.EventManager;
+import me.nicbo.InvadedLandsEvents.messages.EventMessage;
 import me.nicbo.InvadedLandsEvents.utils.ConfigUtils;
+import me.nicbo.InvadedLandsEvents.utils.GeneralUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -16,6 +18,7 @@ import org.bukkit.util.BlockVector;
 import org.bukkit.util.StringUtil;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Event Config command class, handles commands for /eventconfig
@@ -24,9 +27,10 @@ import java.util.*;
  * @since 2020-03-12
  */
 
-public class EventConfigCommand implements CommandExecutor, TabCompleter {
+public final class EventConfigCommand implements CommandExecutor, TabCompleter {
     private EventsMain plugin;
     private FileConfiguration config;
+
     private List<String> args0;
     private HashMap<String, List<String>> args1;
 
@@ -49,111 +53,126 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
 
         this.args1 = new HashMap<>();
 
-        for (String event : config.getConfigurationSection("events").getKeys(false)) {
-            List<String> keys = new ArrayList<>(config.getConfigurationSection("events." + event).getKeys(false));
-            this.args1.put(event, keys);
+        for (String eventName : config.getConfigurationSection("events").getKeys(false)) {
+            List<String> eventKeys = new ArrayList<>(config.getConfigurationSection("events." + eventName).getKeys(false));
+            this.args1.put(eventName, eventKeys);
         }
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String s, String[] args) { // perm check @ top
         if (cmd.getName().equalsIgnoreCase("eventconfig") || cmd.getName().equalsIgnoreCase("econfig")) {
-            sender.sendMessage("\n");
-
             if (!(sender instanceof Player)) {
                 sender.sendMessage(ChatColor.RED + "You must be a player to execute this command!");
                 return true;
             }
 
             Player player = (Player) sender;
-            if (args.length == 0) { // No arguments show first key values
+            if (args.length == 0) { // No args, show possible args0
                 sender.sendMessage(ConfigUtils.getConfigMessage(config));
-                possibleArgs(player, null, true, false);
+                possibleArgs(player, null, true);
             } else {
-                String eventSetting = args[0].toLowerCase();
-
-                if (args0.contains(eventSetting)) { // Is an existing arg[0]
-                    if (EventManager.eventExists(eventSetting)) { // Arg[0] is an event
-                        ConfigurationSection section = config.getConfigurationSection("events." + eventSetting);
-                        if (args.length == 1) { // Event preview, send event config
-                            player.sendMessage(ConfigUtils.getConfigMessage(section));
+                args[0] = args[0].toLowerCase();
+                if (args0.contains(args[0])) { // Is an existing arg[0]
+                    if (EventManager.eventExists(args[0])) { // Arg[0] is an event
+                        ConfigurationSection eventConfigSection = config.getConfigurationSection("events." + args[0]);
+                        if (args.length == 1) { // Event preview, send event config (probably change later it is ugly)
+                            player.sendMessage(ChatColor.YELLOW + "-=-=-=-=-=-=-=-=- " + ChatColor.GOLD + args[0] + " config" + ChatColor.YELLOW + " -=-=-=-=-=-=-=-=-");
+                            player.sendMessage(ConfigUtils.getConfigMessage(eventConfigSection));
+                            player.sendMessage(ChatColor.YELLOW + "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-");
                             return true;
                         }
 
-                        String path = eventSetting + "." + args[1].toLowerCase();
                         String key = args[1].toLowerCase();
+                        String path = "events." + args[0] + "." + key;
 
-                        if (args[1].contains("location")) { // Event config target is a location
-                            try { // set section to player's location
-                                ConfigUtils.serializeLoc(config.getConfigurationSection("events." + path), player.getLocation(), false);
+                        if (args1.get(args[0]).contains(key)) { // Arg1 exists
+                            if (key.contains("location")) { // Set section to players location
+                                ConfigUtils.serializeLoc(config.getConfigurationSection(path), player.getLocation(), false);
                                 player.sendMessage(ChatColor.GOLD + key + ChatColor.YELLOW + " set to " + ChatColor.GOLD + "your location" + ChatColor.YELLOW + "!");
-                            } catch (NullPointerException npe) { // had location in string but config section does not exist
-                                possibleArgs(player, eventSetting, false, true);
-                            }
-                        } else if (args[1].contains("position")) {
-                            try { // set section to player's block vector under them
+                            } else if (key.contains("position")) { // Set section to block under player
                                 Location loc = player.getLocation();
                                 loc.setY(loc.getBlockY() - 1);
-                                ConfigUtils.serializeBlockVector(config.getConfigurationSection("events." + path), new BlockVector(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
+                                ConfigUtils.serializeBlockVector(config.getConfigurationSection(path), new BlockVector(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
                                 player.sendMessage(ChatColor.GOLD + key + ChatColor.YELLOW + " set to " + ChatColor.GOLD + "the block under you" + ChatColor.YELLOW + "!");
-                            } catch (NullPointerException npe) { // had position in string but config section does not exist
-                                possibleArgs(player, eventSetting, false, true);
-                            }
-                        } else if (args[1].contains("region")) { // Event config target is a region
-                            if (args.length == 2) // Send usage message, not enough arguments
-                                player.sendMessage(USAGE + "/econfig " + eventSetting + " " + key + " <string>");
-                            else { // set region to args[2]
-                                try {
-                                    section.set(key, args[2].toLowerCase());
+                            } else if (key.contains("region")) { // Set section to region name
+                                if (args.length == 2)
+                                    player.sendMessage(getUsageMessage(args[0], key, "string"));
+                                else {
+                                    eventConfigSection.set(key, args[2].toLowerCase());
                                     player.sendMessage(ChatColor.GOLD + key + ChatColor.YELLOW + " set to '" + ChatColor.GOLD + key + ChatColor.YELLOW + "'!");
-                                } catch (NullPointerException npe) { // had region in string but config section does not exist
-                                    possibleArgs(player, eventSetting, false, true);
+                                }
+                            } else if (key.equals("enabled")) { // Set section to boolean
+                                if (args.length == 2)
+                                    player.sendMessage(getUsageMessage(args[0], key, "boolean"));
+                                else {
+                                    boolean bool = Boolean.parseBoolean(args[2].toLowerCase());
+                                    eventConfigSection.set(key, bool);
+                                    player.sendMessage(ChatColor.GOLD + key + ChatColor.YELLOW + " set to '" + ChatColor.GOLD + bool + ChatColor.YELLOW + "'!");
+                                }
+                            } else if (key.contains("int")) { // Set section to int
+                                if (args.length == 2)
+                                    player.sendMessage(getUsageMessage(args[0], key, "int"));
+                                else {
+                                    if (GeneralUtils.isInt(args[2])) {
+                                        eventConfigSection.set(key, args[2]);
+                                        player.sendMessage(ChatColor.GOLD + key + ChatColor.YELLOW + " set to '" + ChatColor.GOLD + args[2] + ChatColor.YELLOW + "'!");
+
+                                    } else {
+                                        player.sendMessage(getUsageMessage(args[0], key, "int"));
+                                    }
                                 }
                             }
-                        } else if (args[1].equalsIgnoreCase("enabled")) { // Event config target is enabled
-                            if (args.length == 2) // Send usage message, not enough arguments
-                                player.sendMessage(USAGE + "/econfig " + eventSetting + " " + key + " <boolean>");
-                            else { // set enabled to parsed args[2]
-                                boolean bool = Boolean.parseBoolean(args[2].toLowerCase());
-                                section.set(key, bool);
-                                player.sendMessage(ChatColor.GOLD + key + ChatColor.YELLOW + " set to '" + ChatColor.GOLD + bool + ChatColor.YELLOW + "'!");
-                            }
-                        } else { // not a possible arg[1]
-                            possibleArgs(player, eventSetting, false, true);
+                        } else { // Not an arg1
+                            player.sendMessage(DOES_NOT_EXIST);
+                            possibleArgs(player, args[0], false);
                         }
                     } else { // Not configuring event
-                        switch (eventSetting) {
+                        switch (args[0]) {
                             case "save":
                                 plugin.saveConfig();
                                 sender.sendMessage(ChatColor.GREEN + "Event config saved");
                                 plugin.reloadConfig();
                                 sender.sendMessage(ChatColor.GREEN + "Event config reloaded");
+                                EventsMain.getMessages().save();
+                                sender.sendMessage(ChatColor.GREEN + "Event messages saved");
+                                EventsMain.getMessages().reload();
+                                EventMessage.reload();
+                                sender.sendMessage(ChatColor.GREEN + "Event messages reloaded");
                                 break;
                             case "reload":
                                 plugin.reloadConfig();
                                 sender.sendMessage(ChatColor.GREEN + "Event config reloaded");
-                                plugin.getManagerHandler().restartEventManager();
-                                sender.sendMessage(ChatColor.GREEN + "Event manager reloaded");
+                                plugin.getManagerHandler().getEventManager().reloadEvents();
+                                sender.sendMessage(ChatColor.GREEN + "Events reloaded");
                                 break;
                             case "event-world":
+                                if (args.length == 1)
+                                    player.sendMessage(USAGE + "/econfig " + args[0]  + " <string>");
+                                else {
+                                    config.set(args[0], args[1]);
+                                    player.sendMessage(ChatColor.GOLD + args[0] + ChatColor.YELLOW + " set to '" + ChatColor.GOLD + args[1] + ChatColor.YELLOW + "'!");
+                                }
+                                break;
                             case "win-command":
                                 if (args.length == 1) { // Send usage message, not enough arguments
-                                    if (eventSetting.equalsIgnoreCase("win-command"))
-                                        player.sendMessage(ChatColor.GOLD + "win-command placeholders: " + ChatColor.YELLOW + "{winner}");
-                                    player.sendMessage(USAGE + "/econfig " + eventSetting  + " <string>");
+                                    player.sendMessage(ChatColor.GOLD + "win-command placeholders: " + ChatColor.YELLOW + "{winner}");
+                                    player.sendMessage(USAGE + "/econfig " + args[0]  + " <string>");
                                 } else { // Set eventSetting to args[1]
-                                    config.set(eventSetting, args[1]);
-                                    player.sendMessage(ChatColor.GOLD + eventSetting + ChatColor.YELLOW + " set to '" + ChatColor.GOLD + args[1] + ChatColor.YELLOW + "'!");
+                                    String winCommand = prepareWinCommand(args);
+                                    config.set(args[0], winCommand);
+                                    player.sendMessage(ChatColor.GOLD + args[0] + ChatColor.YELLOW + " set to '" + ChatColor.GOLD + winCommand + ChatColor.YELLOW + "'!");
                                 }
                                 break;
                             case "spawn-location":
-                                ConfigUtils.serializeLoc(config.getConfigurationSection(eventSetting), player.getLocation(), true);
-                                player.sendMessage(ChatColor.GOLD + eventSetting + ChatColor.YELLOW + " set to " + ChatColor.GOLD + "your location!");
+                                ConfigUtils.serializeLoc(config.getConfigurationSection(args[0]), player.getLocation(), true);
+                                player.sendMessage(ChatColor.GOLD + args[0] + ChatColor.YELLOW + " set to " + ChatColor.GOLD + "your location!");
                                 break;
                         }
                     }
                 } else { // not a possible args[0]
-                    possibleArgs(player, eventSetting, true, true);
+                    player.sendMessage(DOES_NOT_EXIST);
+                    possibleArgs(player, args[0], true);
                 }
             }
             plugin.saveConfig();
@@ -162,19 +181,32 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
         return false;
     }
 
+    private String prepareWinCommand(String[] args) {
+        return Arrays.stream(args).skip(1).collect(Collectors.joining(" "));
+    }
+
+    /**
+     * Returns usage message for event config
+     * @param eventSetting Event name
+     * @param key Config section key
+     * @param type Type being set
+     * @return String usage message
+     */
+
+    private String getUsageMessage(String eventSetting, String key, String type) {
+        return USAGE + "/econfig " + eventSetting + " " + key + " <" + type + ">";
+    }
+
     /**
      * Sends player list of possible sub commands
      * @param player Player to send message to
-     * @param eventSetting Used for getting args1 sub commands
-     * @param first Boolean that decides between sub commands for args0 or args1
-     * @param error Send error message or not
+     * @param arg0 Used for getting args1 sub commands
+     * @param checkArgs0 Boolean that decides between sub commands for args0 or args1
      */
 
-    private void possibleArgs(Player player, String eventSetting, boolean first, boolean error) {
-        if (error)
-            player.sendMessage(DOES_NOT_EXIST);
+    private void possibleArgs(Player player, String arg0, boolean checkArgs0) {
         player.sendMessage(POSSIBLE_SUB_COMMANDS);
-        for (String subCommand : first ? args0 : args1.get(eventSetting)) {
+        for (String subCommand : checkArgs0 ? args0 : args1.get(arg0)) {
             player.sendMessage(ChatColor.YELLOW + "- " + subCommand);
         }
     }
@@ -188,17 +220,15 @@ public class EventConfigCommand implements CommandExecutor, TabCompleter {
                     StringUtil.copyPartialMatches(args[0], args0, completions);
                     Collections.sort(completions);
                 } else if (!args[0].equals("") && args.length == 2) {
-                    StringUtil.copyPartialMatches(args[1], args1.get(args[0]), completions);
-                    Collections.sort(completions);
+                    List<String> possibleArgs = args1.get(args[0]);
+                    if (possibleArgs != null) {
+                        StringUtil.copyPartialMatches(args[1], args1.get(args[0]), completions);
+                        Collections.sort(completions);
+                    }
                 }
                 return completions;
             }
         }
         return null;
     }
-
-    /*
-    TODO:
-        - Allow int to be set (sumo min y, oitc max points, max players, etc.)
-     */
 }

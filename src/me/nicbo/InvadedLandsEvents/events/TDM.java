@@ -1,14 +1,12 @@
 package me.nicbo.InvadedLandsEvents.events;
 
-import me.nicbo.InvadedLandsEvents.EventsMain;
-
-public class TDM extends InvadedEvent {
-    public TDM(EventsMain plugin) {
-        super("Team Deathmatch", "tdm", plugin);
+public final class TDM extends InvadedEvent {
+    public TDM() {
+        super("Team Deathmatch", "tdm");
     }
 
     @Override
-    public void init(EventsMain plugin) {
+    public void init() {
 
     }
 
@@ -19,6 +17,11 @@ public class TDM extends InvadedEvent {
 
     @Override
     public void stop() {
+
+    }
+
+    @Override
+    public void over() {
 
     }
 }

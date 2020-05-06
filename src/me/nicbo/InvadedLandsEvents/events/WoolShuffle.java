@@ -1,14 +1,12 @@
 package me.nicbo.InvadedLandsEvents.events;
 
-import me.nicbo.InvadedLandsEvents.EventsMain;
-
-public class WoolShuffle extends InvadedEvent {
-    public WoolShuffle(EventsMain plugin) {
-        super("Wool Shuffle", "woolshuffle", plugin);
+public final class WoolShuffle extends InvadedEvent {
+    public WoolShuffle() {
+        super("Wool Shuffle", "woolshuffle");
     }
 
     @Override
-    public void init(EventsMain plugin) {
+    public void init() {
 
     }
 
@@ -19,6 +17,11 @@ public class WoolShuffle extends InvadedEvent {
 
     @Override
     public void stop() {
+
+    }
+
+    @Override
+    public void over() {
 
     }
 }

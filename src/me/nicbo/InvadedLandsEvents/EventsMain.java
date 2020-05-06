@@ -3,7 +3,8 @@ package me.nicbo.InvadedLandsEvents;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import me.nicbo.InvadedLandsEvents.commands.EventCommand;
 import me.nicbo.InvadedLandsEvents.commands.EventConfigCommand;
-import me.nicbo.InvadedLandsEvents.handlers.EventFile;
+import me.nicbo.InvadedLandsEvents.messages.EventMessage;
+import me.nicbo.InvadedLandsEvents.utils.ConfigFile;
 import me.nicbo.InvadedLandsEvents.listeners.GeneralEventListener;
 import me.nicbo.InvadedLandsEvents.handlers.ManagerHandler;
 import org.bukkit.plugin.Plugin;
@@ -15,33 +16,40 @@ import java.util.logging.Logger;
  * Main class
  *
  * @author Nicbo
- * @author StarZorroww
+ * @author StarZorrow
  * @since 2020-03-12
  */
 
 public class EventsMain extends JavaPlugin {
+    private static EventsMain instance;
+
     private Logger log;
     private ManagerHandler managerHandler;
     private WorldGuardPlugin worldGuardPlugin;
 
-    public static EventFile messages;
+    private static ConfigFile messages;
 
     @Override
     public void onEnable() {
+        instance = this;
         log = getLogger();
         worldGuardPlugin = getWorldGuard();
-
-        messages = new EventFile("messages.yml", this);
+        saveDefaultConfig();
+        messages = new ConfigFile("messages.yml", this);
+        EventMessage.reload();
 
         this.managerHandler = new ManagerHandler(this);
+        this.managerHandler.getEventManager().reloadEvents();
         registerCommands();
         getServer().getPluginManager().registerEvents(new GeneralEventListener(this), this);
+
         log.info("Plugin enabled!");
     }
 
     @Override
     public void onDisable() {
         saveDefaultConfig();
+        messages.save();
 
         if (managerHandler.getEventManager().isEventRunning())
             managerHandler.getEventManager().getCurrentEvent().forceEndEvent();
@@ -75,5 +83,13 @@ public class EventsMain extends JavaPlugin {
 
     public ManagerHandler getManagerHandler() {
         return this.managerHandler;
+    }
+
+    public static EventsMain getInstance() {
+        return instance;
+    }
+
+    public static ConfigFile getMessages() {
+        return messages;
     }
 }

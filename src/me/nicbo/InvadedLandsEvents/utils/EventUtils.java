@@ -1,6 +1,9 @@
 package me.nicbo.InvadedLandsEvents.utils;
 
+import com.sk89q.worldguard.protection.regions.ProtectedRegion;
+import me.nicbo.InvadedLandsEvents.EventsMain;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -8,8 +11,8 @@ import org.bukkit.potion.PotionEffect;
 /**
  * Utility class for events
  *
- * @author StarZorroww
  * @author Nicbo
+ * @author StarZorrow
  * @since 2020-03-12
  */
 
@@ -38,5 +41,13 @@ public final class EventUtils {
         player.getOpenInventory().getTopInventory().clear();
         player.getOpenInventory().getBottomInventory().clear();
         player.getInventory().setArmorContents(null);
+    }
+
+    public static void broadcastEventMessage(String msg) {
+        EventsMain.getInstance().getManagerHandler().getEventManager().getCurrentEvent().getParticipants().forEach(player -> player.sendMessage(msg));
+    }
+
+    public static boolean isLocInRegion(Location loc, ProtectedRegion region) {
+        return region.contains(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
     }
 }
