@@ -80,7 +80,7 @@ public class GUI {
     }
 
     static {
-        openInventories = new HashMap<UUID, GUI>();
+        openInventories = new HashMap<>();
     }
 
     public interface Action
