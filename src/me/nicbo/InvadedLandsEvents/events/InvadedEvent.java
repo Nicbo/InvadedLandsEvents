@@ -331,14 +331,13 @@ public abstract class InvadedEvent implements Listener {
 
         public CountdownSB(EventManager eventManager) {
             this.eventManager = eventManager;
+            this.headerFooter = ChatColor.GRAY.toString() + ChatColor.STRIKETHROUGH.toString() + "----------";
 
-            this.headerFooter = ChatColor.GRAY.toString() + ChatColor.GRAY.toString() + "----------";
-
-            this.headerTrack = new FlickerlessScoreboard.Track("headerCD", ChatColor.GOLD.toString(), 1, headerFooter, headerFooter);
-            this.playerCountTrack = new FlickerlessScoreboard.Track("playerCountCD", ChatColor.RESET.toString(), 2, ChatColor.YELLOW + "Players: ", ChatColor.GOLD + String.valueOf(spectators.size()));
+            this.headerTrack = new FlickerlessScoreboard.Track("headerCD", ChatColor.GOLD.toString(), 5, headerFooter, headerFooter);
+            this.playerCountTrack = new FlickerlessScoreboard.Track("playerCountCD", ChatColor.RESET.toString(), 4, ChatColor.YELLOW + "Players: ", ChatColor.GOLD + String.valueOf(spectators.size()));
             this.blankTrack = new FlickerlessScoreboard.Track("blankCD", ChatColor.AQUA.toString(), 3, "", ChatColor.RESET.toString());
-            this.countDownTrack = new FlickerlessScoreboard.Track("countDownCD", ChatColor.DARK_AQUA.toString(), 4, ChatColor.YELLOW + "Starting in ", ChatColor.GOLD + String.valueOf(eventManager.getCountDown()));
-            this.footerTrack = new FlickerlessScoreboard.Track("footerCD", ChatColor.WHITE.toString(), 5, headerFooter, headerFooter);
+            this.countDownTrack = new FlickerlessScoreboard.Track("countDownCD", ChatColor.DARK_AQUA.toString(), 2, ChatColor.YELLOW + "Starting in ", ChatColor.GOLD + String.valueOf(eventManager.getCountDown()));
+            this.footerTrack = new FlickerlessScoreboard.Track("footerCD", ChatColor.WHITE.toString(), 1, headerFooter, headerFooter);
 
             super.scoreboard = new FlickerlessScoreboard(ChatColor.GOLD.toString() + ChatColor.BOLD.toString() + "NAME", DisplaySlot.SIDEBAR, headerTrack, playerCountTrack, blankTrack, countDownTrack, footerTrack);
         }
