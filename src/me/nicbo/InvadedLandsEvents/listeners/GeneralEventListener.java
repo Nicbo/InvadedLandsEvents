@@ -3,6 +3,7 @@ package me.nicbo.InvadedLandsEvents.listeners;
 import me.nicbo.InvadedLandsEvents.messages.EventMessage;
 import me.nicbo.InvadedLandsEvents.EventsMain;
 import me.nicbo.InvadedLandsEvents.managers.EventManager;
+import me.nicbo.InvadedLandsEvents.utils.GUI;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -40,6 +41,10 @@ public final class GeneralEventListener implements Listener {
         Player player = event.getPlayer();
         if (runEvent(player)) {
             eventManager.leaveEvent(player);
+        }
+        final GUI gui = GUI.getOpenInventories().get(player.getUniqueId());
+        if (gui != null) {
+            GUI.getOpenInventories().remove(player.getUniqueId());
         }
     }
 
