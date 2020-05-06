@@ -1,6 +1,5 @@
 package me.nicbo.InvadedLandsEvents.events;
 
-import me.nicbo.InvadedLandsEvents.EventsMain;
 import me.nicbo.InvadedLandsEvents.utils.ConfigUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -45,8 +44,8 @@ public final class Spleef extends InvadedEvent {
 
     private ItemStack shovel;
 
-    public Spleef(EventsMain plugin) {
-        super("Spleef", "spleef", plugin);
+    public Spleef() {
+        super("Spleef", "spleef");
 
         this.shovel = new ItemStack(Material.DIAMOND_SPADE);
         ItemMeta itemMeta = shovel.getItemMeta();
@@ -61,7 +60,7 @@ public final class Spleef extends InvadedEvent {
     }
 
     @Override
-    public void init(EventsMain plugin) {
+    public void init() {
         buildSnow(pos1, pos2);
         this.heightCheck = new BukkitRunnable() {
             private List<Player> toLose = new ArrayList<>();

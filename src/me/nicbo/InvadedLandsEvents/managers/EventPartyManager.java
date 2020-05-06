@@ -2,6 +2,7 @@ package me.nicbo.InvadedLandsEvents.managers;
 
 import java.util.*;
 
+import me.nicbo.InvadedLandsEvents.EventsMain;
 import me.nicbo.InvadedLandsEvents.handlers.ManagerHandler;
 import me.nicbo.InvadedLandsEvents.messages.EventPartyMessage;
 import me.nicbo.InvadedLandsEvents.party.EventParty;
@@ -22,12 +23,15 @@ import org.bukkit.entity.*;
  */
 
 public final class EventPartyManager {
+    private EventsMain plugin;
+    private EventPartyRequestManager eventPartyRequestManager;
+
     private Map<UUID, EventParty> leaderUUIDtoParty;
     private Map<UUID, UUID> playerUUIDtoLeaderUUID;
-    private ManagerHandler managerHandler;
 
-    public EventPartyManager(ManagerHandler managerHandler) {
-        this.managerHandler = managerHandler;
+    public EventPartyManager(EventsMain plugin, EventPartyRequestManager eventPartyRequestManager) {
+        this.plugin = plugin;
+        this.eventPartyRequestManager = eventPartyRequestManager;
         this.leaderUUIDtoParty = new HashMap<>();
         this.playerUUIDtoLeaderUUID = new HashMap<>();
     }
@@ -131,11 +135,11 @@ public final class EventPartyManager {
         if (getParty(uuidTarget) != null) {
             return EventPartyMessage.PLAYER_ALREADY_IN_PARTY.replace("{player}", targetName);
         }
-        if (managerHandler.getEventPartyRequestManager().hasPartyRequests(target) && managerHandler.getEventPartyRequestManager().hasPartyRequestFromPlayer(target, player)) {
+        if (eventPartyRequestManager.hasPartyRequests(target) && eventPartyRequestManager.hasPartyRequestFromPlayer(target, player)) {
             return EventPartyMessage.INVITE_ALREADY_SENT.replace("{player}", targetName);
         }
         notifyParty(party, EventPartyMessage.PARTY_INVITE_PLAYER.replace("{player}", targetName));
-        managerHandler.getEventPartyRequestManager().addPartyRequest(target, player);
+        eventPartyRequestManager.addPartyRequest(target, player);
 
         TextComponent invite = new TextComponent(EventPartyMessage.PARTY_INVITE.replace("{leader}", playerName));
         TextComponent part = new TextComponent(EventPartyMessage.CLICK_TO_JOIN_FORMATTED.replace("{leader}", playerName));
@@ -157,7 +161,7 @@ public final class EventPartyManager {
         if (party.getLeader() != uuid) {
             return EventPartyMessage.NOT_LEADER;
         }
-        Player target = managerHandler.getPlugin().getServer().getPlayer(targetName);
+        Player target = plugin.getServer().getPlayer(targetName);
         if (target == null || !target.isOnline()) {
             return EventPartyMessage.PLAYER_NOT_FOUND.replace("{player}", targetName);
         }
@@ -166,9 +170,9 @@ public final class EventPartyManager {
         if (party.getLeader() == uuid1) {
             return EventPartyMessage.CANNOT_ACTION_SELF.replace("{action}", "uninvite");
         }
-        if (managerHandler.getEventPartyRequestManager().hasPartyRequests(target) && managerHandler.getEventPartyRequestManager().hasPartyRequestFromPlayer(target, player)) {
+        if (eventPartyRequestManager.hasPartyRequests(target) && eventPartyRequestManager.hasPartyRequestFromPlayer(target, player)) {
             notifyParty(party, EventPartyMessage.PARTY_UNINVITE_PLAYER.replace("{player}", targetName));
-            managerHandler.getEventPartyRequestManager().removePartyRequest(target, player);
+            eventPartyRequestManager.removePartyRequest(target, player);
 
             target.sendMessage(EventPartyMessage.PARTY_UNINVITE.replace("{leader}", playerName));
             return null;
@@ -187,7 +191,7 @@ public final class EventPartyManager {
         if (party.getLeader() != uuid) {
             return EventPartyMessage.NOT_LEADER;
         }
-        OfflinePlayer target = managerHandler.getPlugin().getServer().getOfflinePlayer(targetName);
+        OfflinePlayer target = plugin.getServer().getOfflinePlayer(targetName);
         if (target == null) {
             return EventPartyMessage.PLAYER_NEVER_JOINED.replace("{player}", targetName);
         }
@@ -203,7 +207,8 @@ public final class EventPartyManager {
             notifyParty(party, EventPartyMessage.PARTY_KICK_MEMBER.replace("{member}", targetName));
             leaveParty(uuid1);
 
-            if (target.isOnline()) managerHandler.getPlugin().getServer().getPlayer(target.getUniqueId()).sendMessage(EventPartyMessage.PARTY_KICK.replace("{leader}", playerName));
+            if (target.isOnline())
+                plugin.getServer().getPlayer(target.getUniqueId()).sendMessage(EventPartyMessage.PARTY_KICK.replace("{leader}", playerName));
             return null;
         }
         return EventPartyMessage.NOT_LEADER;
@@ -213,13 +218,13 @@ public final class EventPartyManager {
         UUID uuid = player.getUniqueId();
         String playerName = player.getName();
 
-        if (managerHandler.getPlugin().getServer().getPlayer(targetName) == null) {
+        if (plugin.getServer().getPlayer(targetName) == null) {
             return EventPartyMessage.PLAYER_NOT_FOUND.replace("{player}", targetName);
         }
         if (getParty(uuid) != null) {
             return EventPartyMessage.ALREADY_IN_PARTY;
         }
-        Player target = managerHandler.getPlugin().getServer().getPlayer(targetName);
+        Player target = plugin.getServer().getPlayer(targetName);
         UUID uuid1 = target.getUniqueId();
         targetName = target.getName();
         if (getParty(uuid1) == null) {
@@ -229,10 +234,10 @@ public final class EventPartyManager {
         if (party.getLeader() == uuid) {
             return EventPartyMessage.CANNOT_JOIN_SELF;
         }
-        if (managerHandler.getEventPartyRequestManager().hasPartyRequests(player) && managerHandler.getEventPartyRequestManager().hasPartyRequestFromPlayer(player, target)) {
+        if (eventPartyRequestManager.hasPartyRequests(player) && eventPartyRequestManager.hasPartyRequestFromPlayer(player, target)) {
             joinParty(uuid1, uuid);
             notifyParty(party, EventPartyMessage.PARTY_JOIN.replace("{member}", playerName));
-            managerHandler.getEventPartyRequestManager().removePartyRequest(player, target);
+            eventPartyRequestManager.removePartyRequest(player, target);
 
             return null;
         } else {
@@ -263,10 +268,10 @@ public final class EventPartyManager {
         String playerName = player.getName();
 
         EventParty party = getParty(uuid);
-        Player leader = managerHandler.getPlugin().getServer().getPlayer(party.getLeader());
+        Player leader = plugin.getServer().getPlayer(party.getLeader());
         StringJoiner members = new StringJoiner(", ");
         for (UUID memberUUID : party.getMembers()) {
-            Player member = managerHandler.getPlugin().getServer().getPlayer(memberUUID);
+            Player member = plugin.getServer().getPlayer(memberUUID);
             members.add(member.getName());
         }
         String[] information = { ChatColor.GRAY + "" + ChatColor.STRIKETHROUGH + "----------------------------------------------------",

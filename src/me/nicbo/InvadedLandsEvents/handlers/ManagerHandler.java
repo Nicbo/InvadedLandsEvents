@@ -21,11 +21,9 @@ public final class ManagerHandler {
     public ManagerHandler(EventsMain plugin) {
         this.plugin = plugin;
         this.eventManager = new EventManager(plugin);
-        this.partyManager = new EventPartyManager(this);
         this.eventPartyRequestManager = new EventPartyRequestManager();
+        this.partyManager = new EventPartyManager(plugin, eventPartyRequestManager);
     }
-
-    public EventsMain getPlugin() { return this.plugin; }
 
     public EventManager getEventManager() { return this.eventManager; }
 

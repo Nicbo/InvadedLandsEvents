@@ -1,6 +1,5 @@
 package me.nicbo.InvadedLandsEvents.events.duels;
 
-import me.nicbo.InvadedLandsEvents.EventsMain;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -25,8 +24,8 @@ public final class Brackets extends Duel {
     private ItemStack[] armour;
     private ItemStack[] kit;
 
-    public Brackets(EventsMain plugin) {
-        super("1v1 Brackets", "brackets", plugin);
+    public Brackets() {
+        super("1v1 Brackets", "brackets");
 
         this.armour = new ItemStack[] {
                 new ItemStack(Material.IRON_BOOTS, 1),
@@ -44,7 +43,7 @@ public final class Brackets extends Duel {
     }
 
     @Override
-    public void init(EventsMain plugin) {
+    public void init() {
         setupLeaveCheck();
     }
 

@@ -1,15 +1,14 @@
 package me.nicbo.InvadedLandsEvents.events.duels.sumo;
 
-import me.nicbo.InvadedLandsEvents.EventsMain;
 import me.nicbo.InvadedLandsEvents.events.duels.Duel;
 
 public class Sumo extends Duel {
-    Sumo(String name, EventsMain plugin, int teamSize) {
-        super(name, "sumo", plugin);
+    Sumo(String name, int teamSize) {
+        super(name, "sumo");
     }
 
     @Override
-    public void init(EventsMain plugin) {
+    public void init() {
 
     }
 

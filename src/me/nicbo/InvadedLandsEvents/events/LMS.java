@@ -1,14 +1,12 @@
 package me.nicbo.InvadedLandsEvents.events;
 
-import me.nicbo.InvadedLandsEvents.EventsMain;
-
 public final class LMS extends InvadedEvent {
-    public LMS(EventsMain plugin) {
-        super("Last Man Standing", "lms", plugin);
+    public LMS() {
+        super("Last Man Standing", "lms");
     }
 
     @Override
-    public void init(EventsMain plugin) {
+    public void init() {
 
     }
 

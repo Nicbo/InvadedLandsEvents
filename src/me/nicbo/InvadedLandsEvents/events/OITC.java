@@ -35,8 +35,8 @@ public final class OITC extends InvadedEvent {
     private final String killMessage;
     private final int WIN_POINTS;
 
-    public OITC(EventsMain plugin) {
-        super("One in the Chamber", "oitc", plugin);
+    public OITC() {
+        super("One in the Chamber", "oitc");
         this.locations = new ArrayList<>();
 
         for (int i = 1; i < 9; i++) {
@@ -57,7 +57,7 @@ public final class OITC extends InvadedEvent {
     }
 
     @Override
-    public void init(EventsMain plugin) {
+    public void init() {
         initPlayerCheck();
     }
 

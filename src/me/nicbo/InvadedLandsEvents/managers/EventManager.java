@@ -50,20 +50,20 @@ public final class EventManager {
 
     public void reloadEvents() {
         events.clear();
-        events.put(eventNames[0], new Brackets(plugin));
-        events.put(eventNames[1], new KOTH(plugin));
-        events.put(eventNames[2], new LMS(plugin));
-        events.put(eventNames[3], new OITC(plugin));
-        events.put(eventNames[4], new RedRover(plugin));
-        events.put(eventNames[5], new RoD(plugin));
-        events.put(eventNames[6], new Spleef(plugin));
-        events.put(eventNames[7], new TDM(plugin));
-        events.put(eventNames[8], new TNTTag(plugin));
-        events.put(eventNames[9], new Waterdrop(plugin));
-        events.put(eventNames[10], new WoolShuffle(plugin));
-        events.put(eventNames[11], new Sumo1v1(plugin));
-        events.put(eventNames[11], new Sumo2v2(plugin));
-        events.put(eventNames[11], new Sumo3v3(plugin));
+        events.put(eventNames[0], new Brackets());
+        events.put(eventNames[1], new KOTH());
+        events.put(eventNames[2], new LMS());
+        events.put(eventNames[3], new OITC());
+        events.put(eventNames[4], new RedRover());
+        events.put(eventNames[5], new RoD());
+        events.put(eventNames[6], new Spleef());
+        events.put(eventNames[7], new TDM());
+        events.put(eventNames[8], new TNTTag());
+        events.put(eventNames[9], new Waterdrop());
+        events.put(eventNames[10], new WoolShuffle());
+        events.put(eventNames[11], new Sumo1v1());
+        events.put(eventNames[11], new Sumo2v2());
+        events.put(eventNames[11], new Sumo3v3());
     }
 
     public String hostEvent(String name, String host) {
@@ -80,7 +80,7 @@ public final class EventManager {
     }
 
     private void startCountDown(String host) {
-        currentEvent.init(plugin);
+        currentEvent.init();
         String name = currentEvent.getEventName();
         countDown = 15; //for testing put back to 60
 
@@ -102,7 +102,8 @@ public final class EventManager {
                     }
                 } else if (countDown == 0) {
 //                  if (!currentEvent.getSize() >= 6) { For testing disable this, will later allow customizing minimum event size.
-                    currentEvent.getCountDownScoreboard().removeScoreboard(currentEvent.getPlayers());
+                    currentEvent.getScoreboard().giveScoreboard(currentEvent.getPlayers());
+                    currentEvent.getScoreboard().startRefreshing();
                     currentEvent.setStarted(true);
                     currentEvent.start();
                     this.cancel();

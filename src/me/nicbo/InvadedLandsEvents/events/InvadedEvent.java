@@ -13,7 +13,6 @@ import org.bukkit.*;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -33,12 +32,12 @@ import java.util.logging.Logger;
  */
 
 public abstract class InvadedEvent implements Listener {
-    protected EventsMain plugin;
+    protected static EventsMain plugin;
+    protected static Logger logger;
 
     protected EventScoreboard scoreboard;
     private EventScoreboard countDownScoreboard;
 
-    protected Logger logger;
     protected RegionManager regionManager;
 
     protected Location spawnLoc;
@@ -63,21 +62,22 @@ public abstract class InvadedEvent implements Listener {
 
     private int timeLeft;
 
+    static {
+        plugin = EventsMain.getInstance();
+        logger = plugin.getLogger();
+    }
+
     /**
      *
      * @param eventName Name that gets broadcasted
      * @param configName Path is events.eventName
-     * @param plugin Instance of main class
      */
 
-    public InvadedEvent(String eventName, String configName, EventsMain plugin) {
-        this.plugin = plugin;
-
-        this.logger = plugin.getLogger();
+    public InvadedEvent(String eventName, String configName) {
         this.eventName = eventName;
         this.configName = configName;
 
-        FileConfiguration config = this.plugin.getConfig();
+        FileConfiguration config = plugin.getConfig();
         this.eventConfig = config.getConfigurationSection("events." + configName);
 
         this.eventWorld = Bukkit.getWorld(config.getString("event-world"));
@@ -107,6 +107,10 @@ public abstract class InvadedEvent implements Listener {
         this.scoreboard = scoreboard;
     }
 
+    public EventScoreboard getScoreboard() {
+        return scoreboard;
+    }
+
     public CountdownSB getCountDownScoreboard() {
         return (CountdownSB) countDownScoreboard;
     }
@@ -115,9 +119,8 @@ public abstract class InvadedEvent implements Listener {
     /**
      * Gets called every time event is hosted (start of countdown)
      * Init variables and call methods that need to be run before event starts here
-     * @param plugin Plugin instance
      */
-    public abstract void init(EventsMain plugin);
+    public abstract void init();
     public abstract void start();
     public abstract void over();
     public abstract void stop();
@@ -281,7 +284,7 @@ public abstract class InvadedEvent implements Listener {
         return !started || !players.contains(player);
     }
 
-    protected abstract class EventScoreboard {
+    public abstract class EventScoreboard {
         protected FlickerlessScoreboard scoreboard;
         private BukkitRunnable refresher;
 

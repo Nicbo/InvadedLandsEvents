@@ -1,6 +1,5 @@
 package me.nicbo.InvadedLandsEvents.events.duels;
 
-import me.nicbo.InvadedLandsEvents.EventsMain;
 import me.nicbo.InvadedLandsEvents.events.InvadedEvent;
 import me.nicbo.InvadedLandsEvents.utils.ConfigUtils;
 import me.nicbo.InvadedLandsEvents.utils.EventUtils;
@@ -38,8 +37,8 @@ public abstract class Duel extends InvadedEvent {
     protected final String MATCH_STARTED;
     protected final String MATCH_ENDED;
 
-    public Duel(String eventName, String configName, EventsMain plugin) {
-        super(eventName, configName, plugin);
+    public Duel(String eventName, String configName) {
+        super(eventName, configName);
 
         this.startLoc1 = ConfigUtils.deserializeLoc(eventConfig.getConfigurationSection("start-location-1"), eventWorld);
         this.startLoc2 = ConfigUtils.deserializeLoc(eventConfig.getConfigurationSection("start-location-2"), eventWorld);

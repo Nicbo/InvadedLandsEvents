@@ -1,7 +1,6 @@
 package me.nicbo.InvadedLandsEvents.events;
 
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
-import me.nicbo.InvadedLandsEvents.EventsMain;
 import me.nicbo.InvadedLandsEvents.scoreboard.FlickerlessScoreboard;
 import me.nicbo.InvadedLandsEvents.scoreboard.FlickerlessScoreboard.Track;
 import me.nicbo.InvadedLandsEvents.utils.ConfigUtils;
@@ -59,8 +58,8 @@ public final class Waterdrop extends InvadedEvent {
     private final String FAIL_JUMP;
     private final String ELIMINATED;
 
-    public Waterdrop(EventsMain plugin) {
-        super("Waterdrop", "waterdrop", plugin);
+    public Waterdrop() {
+        super("Waterdrop", "waterdrop");
 
         super.setScoreboard(new WaterdropSB());
 
@@ -96,7 +95,7 @@ public final class Waterdrop extends InvadedEvent {
     }
 
     @Override
-    public void init(EventsMain plugin) {
+    public void init() {
         this.round = 1;
         this.timer = 20;
         this.waterdropTimer = new BukkitRunnable() {
@@ -137,8 +136,6 @@ public final class Waterdrop extends InvadedEvent {
 
     @Override
     public void start() {
-        scoreboard.giveScoreboard(players);
-        scoreboard.startRefreshing();
         fallCheck.runTaskTimerAsynchronously(plugin,0, 1);
         waterdropTimer.runTaskTimer(plugin, 0, 20);
         newRound();
