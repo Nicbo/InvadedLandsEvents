@@ -321,14 +321,26 @@ public abstract class InvadedEvent implements Listener {
 
     public class CountdownSB extends EventScoreboard {
         private EventManager eventManager;
-        private Track countDownTrack;
+        private Track headerTrack;
         private Track playerCountTrack;
+        private Track blankTrack;
+        private Track countDownTrack;
+        private Track footerTrack;
+
+        private String headerFooter;
 
         public CountdownSB(EventManager eventManager) {
             this.eventManager = eventManager;
-            this.countDownTrack = new FlickerlessScoreboard.Track("playerCountCD", ChatColor.RED.toString(), 3, ChatColor.YELLOW + "Starting in ", ChatColor.GOLD + String.valueOf(eventManager.getCountDown()));
-            this.playerCountTrack = new FlickerlessScoreboard.Track("countDownCD", ChatColor.YELLOW.toString(), 2, ChatColor.YELLOW + "Players: ", ChatColor.GOLD + String.valueOf(spectators.size()));
-            super.scoreboard = new FlickerlessScoreboard("NAME", DisplaySlot.SIDEBAR, countDownTrack, playerCountTrack);
+
+            this.headerFooter = ChatColor.GRAY.toString() + ChatColor.GRAY.toString() + "----------";
+
+            this.headerTrack = new FlickerlessScoreboard.Track("headerCD", ChatColor.GOLD.toString(), 1, headerFooter, headerFooter);
+            this.playerCountTrack = new FlickerlessScoreboard.Track("playerCountCD", ChatColor.RESET.toString(), 2, ChatColor.YELLOW + "Players: ", ChatColor.GOLD + String.valueOf(spectators.size()));
+            this.blankTrack = new FlickerlessScoreboard.Track("blankCD", ChatColor.AQUA.toString(), 3, "", ChatColor.RESET.toString());
+            this.countDownTrack = new FlickerlessScoreboard.Track("countDownCD", ChatColor.DARK_AQUA.toString(), 4, ChatColor.YELLOW + "Starting in ", ChatColor.GOLD + String.valueOf(eventManager.getCountDown()));
+            this.footerTrack = new FlickerlessScoreboard.Track("headerCD", ChatColor.WHITE.toString(), 1, headerFooter, headerFooter);
+
+            super.scoreboard = new FlickerlessScoreboard(ChatColor.GOLD.toString() + ChatColor.BOLD.toString() + "NAME", DisplaySlot.SIDEBAR, headerTrack, playerCountTrack, blankTrack, countDownTrack, footerTrack);
         }
 
         @Override
