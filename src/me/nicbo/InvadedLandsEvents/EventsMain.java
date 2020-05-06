@@ -3,6 +3,7 @@ package me.nicbo.InvadedLandsEvents;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import me.nicbo.InvadedLandsEvents.commands.EventCommand;
 import me.nicbo.InvadedLandsEvents.commands.EventConfigCommand;
+import me.nicbo.InvadedLandsEvents.listeners.GUIListener;
 import me.nicbo.InvadedLandsEvents.messages.EventMessage;
 import me.nicbo.InvadedLandsEvents.utils.ConfigFile;
 import me.nicbo.InvadedLandsEvents.listeners.GeneralEventListener;
@@ -42,6 +43,7 @@ public class EventsMain extends JavaPlugin {
         this.managerHandler.getEventManager().reloadEvents();
         registerCommands();
         getServer().getPluginManager().registerEvents(new GeneralEventListener(this), this);
+        getServer().getPluginManager().registerEvents(new GUIListener(), this);
 
         log.info("Plugin enabled!");
     }
