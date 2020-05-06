@@ -26,8 +26,11 @@ import java.util.HashMap;
 
 public final class EventManager {
     private EventsMain plugin;
+
     private HashMap<String, InvadedEvent> events;
     private InvadedEvent currentEvent;
+
+    private int countDown;
 
     private static String[] eventNames;
 
@@ -45,7 +48,7 @@ public final class EventManager {
         this.plugin = plugin;
         this.events = new HashMap<>();
     }
-    
+
     public void reloadEvents() {
         events.clear();
         events.put(eventNames[0], new Brackets(plugin));
@@ -80,10 +83,9 @@ public final class EventManager {
     private void startCountDown(String host) {
         currentEvent.init(plugin);
         String name = currentEvent.getEventName();
+        countDown = 15; //for testing put back to 60
 
         new BukkitRunnable() {
-            int time = 15; //for testing put back to 60
-
             @Override
             public void run() {
                 if (currentEvent == null) {
@@ -91,24 +93,30 @@ public final class EventManager {
                     return;
                 }
 
-                if (time == 60 || time == 45 || time == 30 || time == 15 || time <= 5 && time >= 1) {
+                if (countDown == 60 || countDown == 45 || countDown == 30 || countDown == 15 || countDown <= 5 && countDown >= 1) {
                     for (Player player : GeneralUtils.getPlayers()) {
-                        TextComponent join = new TextComponent(ChatColor.translateAlternateColorCodes('&', "&c&lStarting in " + time + " seconds " + "&a&l[Click to Join]"));
+                        TextComponent join = new TextComponent(ChatColor.translateAlternateColorCodes('&', "&c&lStarting in " + countDown + " seconds " + "&a&l[Click to Join]"));
                         join.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.GREEN + "Click to join " + currentEvent.getEventName()).create()));
                         join.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/event join"));
                         player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&c&l" + host + " is hosting a " + name + " event!"));
                         player.spigot().sendMessage(join);
                     }
-                } else if (time == 0) {
+                } else if (countDown == 0) {
 //                  if (!currentEvent.getSize() >= 6) { For testing disable this, will later allow customizing minimum event size.
+                    currentEvent.getCountDownScoreboard().removeScoreboard(currentEvent.getPlayers());
                     currentEvent.setStarted(true);
                     currentEvent.start();
                     this.cancel();
 //                  }
                 }
-                time--;
+                countDown--;
+                currentEvent.getCountDownScoreboard().refresh();
             }
-        }.runTaskTimerAsynchronously(plugin, 0, 20);
+        }.runTaskTimer(plugin, 0, 20);
+    }
+
+    public int getCountDown() {
+        return countDown;
     }
 
     public String joinEvent(Player player) {

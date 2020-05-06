@@ -2,6 +2,8 @@ package me.nicbo.InvadedLandsEvents.events;
 
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import me.nicbo.InvadedLandsEvents.EventsMain;
+import me.nicbo.InvadedLandsEvents.scoreboard.FlickerlessScoreboard;
+import me.nicbo.InvadedLandsEvents.scoreboard.FlickerlessScoreboard.Track;
 import me.nicbo.InvadedLandsEvents.utils.ConfigUtils;
 import me.nicbo.InvadedLandsEvents.utils.EventUtils;
 import me.nicbo.InvadedLandsEvents.utils.GeneralUtils;
@@ -10,6 +12,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.util.BlockVector;
 
 import java.util.ArrayList;
@@ -58,6 +61,8 @@ public final class Waterdrop extends InvadedEvent {
 
     public Waterdrop(EventsMain plugin) {
         super("Waterdrop", "waterdrop", plugin);
+
+        super.setScoreboard(new WaterdropSB());
 
         String regionName = eventConfig.getString("safe-region");
         try {
@@ -132,6 +137,8 @@ public final class Waterdrop extends InvadedEvent {
 
     @Override
     public void start() {
+        scoreboard.giveScoreboard(players);
+        scoreboard.startRefreshing();
         fallCheck.runTaskTimerAsynchronously(plugin,0, 1);
         waterdropTimer.runTaskTimer(plugin, 0, 20);
         newRound();
@@ -145,6 +152,8 @@ public final class Waterdrop extends InvadedEvent {
 
     @Override
     public void stop() {
+        scoreboard.removeScoreboard(players);
+        scoreboard.stopRefreshing();
         started = false;
         jumped.clear();
         eliminated.clear();
@@ -152,33 +161,40 @@ public final class Waterdrop extends InvadedEvent {
     }
 
     private void newRound() {
-        eliminatePlayers();
-        eliminated = new ArrayList<>(players);
-        EventUtils.broadcastEventMessage(ROUND_START.replace("{round}", String.valueOf(round)));
-        jumped.clear();
-        setMainCover();
-        buildMainCover();
-        tpPlayers();
+        if (eliminatePlayers()) {
+            eliminated = new ArrayList<>(players);
+            EventUtils.broadcastEventMessage(ROUND_START.replace("{round}", String.valueOf(round)));
+            jumped.clear();
+            setMainCover();
+            buildMainCover();
+            tpPlayers();
+        }
     }
 
     private void tpPlayers() {
         players.forEach(player -> player.teleport(startLoc));
     }
 
-    private void eliminatePlayers() {
-        int playersSize = players.size();
+    /**
+     * Removes eliminated players and checks if new round should start
+     * @return true if new round should start
+     */
 
+    private boolean eliminatePlayers() {
         for (Player player : eliminated) {
             EventUtils.broadcastEventMessage(ELIMINATED.replace("{player}", player.getName())
                     .replace("{players_left}", String.valueOf(players.size())));
             loseEvent(player);
         }
 
-        if (eliminated.size() == playersSize || players.size() == 0) {
+        if (players.size() == 0) {
             playerWon(null);
         } else if (players.size() == 1) {
             playerWon(players.get(0));
+        } else {
+            return true;
         }
+        return false;
     }
 
     private void setMainCover() {
@@ -412,5 +428,30 @@ public final class Waterdrop extends InvadedEvent {
     easyCovers - up to round 8
     mediumCovers - up to round 14
     hardCovers - up to round 20
-    */
+   */
+
+    private class WaterdropSB extends EventScoreboard {
+        private Track roundTrack;
+        private Track timerTrack;
+        private Track playerCountTrack;
+        private Track specCountTrack;
+
+        public WaterdropSB() {
+            this.roundTrack = new Track("roundTrack", ChatColor.GOLD.toString(), 6, ChatColor.YELLOW + "Round: ", ChatColor.GOLD + String.valueOf(round));
+            this.timerTrack = new Track("timerTrack", "Remaining: ", 5, ChatColor.YELLOW + "Time ", ChatColor.GOLD + String.valueOf(timer));
+            // blank line
+            this.playerCountTrack = new Track("playerCountWD", ChatColor.RED.toString(), 3, ChatColor.YELLOW + "Players: ", ChatColor.GOLD + String.valueOf(players.size()));
+            this.specCountTrack = new Track("specCountWD", ChatColor.YELLOW.toString(), 2, ChatColor.YELLOW + "Spectators: ", ChatColor.GOLD + String.valueOf(spectators.size()));
+            super.scoreboard = new FlickerlessScoreboard("NAME", DisplaySlot.SIDEBAR, roundTrack, timerTrack, playerCountTrack, specCountTrack);
+        }
+
+        @Override
+        public void refresh() {
+            roundTrack.setSuffix(ChatColor.GOLD + String.valueOf(round));
+            timerTrack.setSuffix(ChatColor.GOLD + String.valueOf(timer));
+            playerCountTrack.setSuffix(ChatColor.GOLD + String.valueOf(players.size()));
+            specCountTrack.setSuffix(ChatColor.GOLD + String.valueOf(spectators.size()));
+            scoreboard.updateScoreboard();
+        }
+    }
 }

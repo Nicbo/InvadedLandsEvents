@@ -57,6 +57,12 @@ brackets:
   MATCH_STARTED: '&eThe match has started!'
   MATCH_ENDED: '&6{loser} &ewas eliminated by &6{winner}&e. (&6{remaining}&e)'
 
+sumo:
+  MATCH_START: '&eStarting a sumo match: &6{player1} &evs. &6{player2}&e.'
+  MATCH_COUNTER: '&eThe match starts in &6{seconds} &esecond(s)...'
+  MATCH_STARTED: '&eThe match has started!'
+  MATCH_ENDED: '&6{loser} &ewas eliminated by &6{winner}&e. (&6{remaining}&e)'
+
 waterdrop:
   ROUND_START: '&eStarting round &6{round}&e.'
   SUCCESS_JUMP: '&f{player} &ehas successfully jumped.'

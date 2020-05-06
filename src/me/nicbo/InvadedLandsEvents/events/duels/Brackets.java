@@ -1,7 +1,6 @@
 package me.nicbo.InvadedLandsEvents.events.duels;
 
 import me.nicbo.InvadedLandsEvents.EventsMain;
-import me.nicbo.InvadedLandsEvents.events.duels.Duel;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -23,8 +22,6 @@ import org.bukkit.inventory.ItemStack;
 
 
 public final class Brackets extends Duel {
-
-
     private ItemStack[] armour;
     private ItemStack[] kit;
 

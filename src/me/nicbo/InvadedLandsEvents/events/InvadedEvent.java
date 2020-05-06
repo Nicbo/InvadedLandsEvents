@@ -1,9 +1,11 @@
 package me.nicbo.InvadedLandsEvents.events;
 
 import com.sk89q.worldguard.protection.managers.RegionManager;
-import me.nicbo.InvadedLandsEvents.managers.EventScoreboardManager;
+import me.nicbo.InvadedLandsEvents.managers.EventManager;
 import me.nicbo.InvadedLandsEvents.messages.EventMessage;
 import me.nicbo.InvadedLandsEvents.EventsMain;
+import me.nicbo.InvadedLandsEvents.scoreboard.FlickerlessScoreboard;
+import me.nicbo.InvadedLandsEvents.scoreboard.FlickerlessScoreboard.Track;
 import me.nicbo.InvadedLandsEvents.utils.ConfigUtils;
 import me.nicbo.InvadedLandsEvents.utils.EventUtils;
 import me.nicbo.InvadedLandsEvents.utils.GeneralUtils;
@@ -11,11 +13,12 @@ import org.bukkit.*;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scoreboard.ScoreboardManager;
+import org.bukkit.scoreboard.DisplaySlot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +34,9 @@ import java.util.logging.Logger;
 
 public abstract class InvadedEvent implements Listener {
     protected EventsMain plugin;
-    private EventScoreboardManager eventScoreboardManager;
+
+    protected EventScoreboard scoreboard;
+    private EventScoreboard countDownScoreboard;
 
     protected Logger logger;
     protected RegionManager regionManager;
@@ -67,7 +72,6 @@ public abstract class InvadedEvent implements Listener {
 
     public InvadedEvent(String eventName, String configName, EventsMain plugin) {
         this.plugin = plugin;
-        this.eventScoreboardManager = plugin.getManagerHandler().getEventScoreboardManager();
 
         this.logger = plugin.getLogger();
         this.eventName = eventName;
@@ -92,10 +96,21 @@ public abstract class InvadedEvent implements Listener {
         im.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&c&lLeave Event"));
         this.star.setItemMeta(im);
 
+        this.countDownScoreboard = new CountdownSB(plugin.getManagerHandler().getEventManager());
+
         Bukkit.getPluginManager().registerEvents(this, plugin);
         if (!this.enabled)
             logger.info(eventName + " not enabled!");
     }
+
+    public void setScoreboard(EventScoreboard scoreboard) {
+        this.scoreboard = scoreboard;
+    }
+
+    public CountdownSB getCountDownScoreboard() {
+        return (CountdownSB) countDownScoreboard;
+    }
+
 
     /**
      * Gets called every time event is hosted (start of countdown)
@@ -172,7 +187,8 @@ public abstract class InvadedEvent implements Listener {
         EventUtils.clear(player);
         player.getInventory().setItem(8, star);
 
-        //eventScoreboardManager.giveWaterdropScoreboard(player);
+        if (!started)
+            countDownScoreboard.giveScoreboard(player);
         //add to team and scoreboard
     }
 
@@ -182,6 +198,8 @@ public abstract class InvadedEvent implements Listener {
         spectators.remove(player);
         player.teleport(spawnLoc);
         EventUtils.clear(player);
+
+        player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
         //remove from team and scoreboard
     }
 
@@ -261,6 +279,64 @@ public abstract class InvadedEvent implements Listener {
 
     protected boolean blockListener(Player player) {
         return !started || !players.contains(player);
+    }
+
+    protected abstract class EventScoreboard {
+        protected FlickerlessScoreboard scoreboard;
+        private BukkitRunnable refresher;
+
+        public abstract void refresh();
+
+        public void startRefreshing() {
+            this.refresher = new BukkitRunnable() {
+                @Override
+                public void run() {
+                    refresh();
+                }
+            };
+
+            this.refresher.runTaskTimerAsynchronously(plugin, 0, 20);
+        }
+
+        public void stopRefreshing() {
+            this.refresher.cancel();
+        }
+
+        public void giveScoreboard(Player player) {
+            player.setScoreboard(scoreboard.getScoreboard());
+        }
+
+        public void giveScoreboard(List<Player> players) {
+            players.forEach(player -> player.setScoreboard(scoreboard.getScoreboard()));
+        }
+
+        public void removeScoreboard(Player player) {
+            player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+        }
+
+        public void removeScoreboard(List<Player> players) {
+            players.forEach(player -> player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard()));
+        }
+    }
+
+    public class CountdownSB extends EventScoreboard {
+        private EventManager eventManager;
+        private Track countDownTrack;
+        private Track playerCountTrack;
+
+        public CountdownSB(EventManager eventManager) {
+            this.eventManager = eventManager;
+            this.countDownTrack = new FlickerlessScoreboard.Track("playerCountCD", ChatColor.RED.toString(), 3, ChatColor.YELLOW + "Starting in ", ChatColor.GOLD + String.valueOf(eventManager.getCountDown()));
+            this.playerCountTrack = new FlickerlessScoreboard.Track("countDownCD", ChatColor.YELLOW.toString(), 2, ChatColor.YELLOW + "Players: ", ChatColor.GOLD + String.valueOf(spectators.size()));
+            super.scoreboard = new FlickerlessScoreboard("NAME", DisplaySlot.SIDEBAR, countDownTrack, playerCountTrack);
+        }
+
+        @Override
+        public void refresh() {
+            countDownTrack.setSuffix(ChatColor.GOLD + String.valueOf(eventManager.getCountDown()));
+            playerCountTrack.setSuffix(ChatColor.GOLD + String.valueOf(players.size()));
+            scoreboard.updateScoreboard();
+        }
     }
 
     /*
