@@ -183,6 +183,11 @@ public final class Spleef extends InvadedEvent {
         }
     }
 
+
+    private class SpleefSB {
+
+    }
+
     /*
     TODO:
         - Make ProjectileHitEvent event more reliable

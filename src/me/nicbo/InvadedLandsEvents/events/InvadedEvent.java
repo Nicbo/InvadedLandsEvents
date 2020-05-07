@@ -1,6 +1,7 @@
 package me.nicbo.InvadedLandsEvents.events;
 
 import com.sk89q.worldguard.protection.managers.RegionManager;
+import javafx.print.PageLayout;
 import me.nicbo.InvadedLandsEvents.managers.EventManager;
 import me.nicbo.InvadedLandsEvents.messages.EventMessage;
 import me.nicbo.InvadedLandsEvents.EventsMain;
@@ -21,6 +22,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.DisplaySlot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -304,7 +306,6 @@ public abstract class InvadedEvent implements Listener {
                     refresh();
                 }
             };
-
             this.refresher.runTaskTimerAsynchronously(plugin, 0, 20);
         }
 
@@ -329,7 +330,7 @@ public abstract class InvadedEvent implements Listener {
         }
     }
 
-    public class CountdownSB extends EventScoreboard {
+    public final class CountdownSB extends EventScoreboard {
         private EventManager eventManager;
         private Track headerTrack;
         private Track playerCountTrack;

@@ -7,6 +7,9 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Flickerless scoreboard util
  * @author knoapp
@@ -18,7 +21,7 @@ public class FlickerlessScoreboard {
 
     private String name;
     private DisplaySlot ds;
-    private Track[] tracks;
+    private List<Track> tracks;
 
     public FlickerlessScoreboard(String name, DisplaySlot ds, Track... tracks) {
         this(Bukkit.getScoreboardManager().getNewScoreboard(), name, ds, tracks);
@@ -27,7 +30,7 @@ public class FlickerlessScoreboard {
     public FlickerlessScoreboard(Scoreboard sb, String name, DisplaySlot ds, Track... tracks) {
         this.name = name;
         this.ds = ds;
-        this.tracks = tracks;
+        this.tracks = Arrays.asList(tracks);
         this.sb = sb;
 
         this.obj = this.sb.registerNewObjective(ChatColor.stripColor(name), "dummy");
@@ -59,6 +62,10 @@ public class FlickerlessScoreboard {
         }
     }
 
+    public void removeTrack(Track track) {
+        tracks.remove(track);
+    }
+
     public void addBlankLine(int line, ChatColor invis) {
         obj.getScore(invis.toString()).setScore(line);
     }
@@ -74,7 +81,7 @@ public class FlickerlessScoreboard {
         return ds;
     }
 
-    public Track[] getTracks() {
+    public List<Track> getTracks() {
         return tracks;
     }
 
@@ -156,4 +163,9 @@ public class FlickerlessScoreboard {
             this.suffix = suffix;
         }
     }
+
+    /*
+    TODO:
+        - Add way to remove track
+     */
 }
