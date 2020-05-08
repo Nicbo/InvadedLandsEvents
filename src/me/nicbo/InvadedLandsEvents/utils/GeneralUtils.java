@@ -52,28 +52,12 @@ public final class GeneralUtils {
         return new ArrayList<>(Bukkit.getOnlinePlayers());
     }
 
-    public static String formatSeconds(int secondsInt) { // CHANGE LATER format should be like 1:03
+    public static String formatSeconds(int secondsInt) {
         long seconds = secondsInt;
-        long days = seconds / (24 * 60 * 60);
-        seconds %= 24 * 60 * 60;
-        long hh = seconds / (60 * 60);
-        seconds %= 60 * 60;
         long mm = seconds / 60;
         seconds %= 60;
         long ss = seconds;
-
-        if (days > 0) {
-            return days + ":" + hh + ":" + mm + ":" + ss;
-        }
-
-        if (hh > 0) {
-            return hh + ":" + mm + ":" + ss;
-        }
-
-        if (mm > 0) {
-            return mm + ":" + ss;
-        }
-
-        return "00:" + ss;
+        
+        return ((mm > 0) ? "" : mm + "m ") + ((ss > 0) ? "" : ss + "s");
     }
 }

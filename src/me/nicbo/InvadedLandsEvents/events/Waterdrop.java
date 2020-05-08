@@ -1,8 +1,7 @@
 package me.nicbo.InvadedLandsEvents.events;
 
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
-import me.nicbo.InvadedLandsEvents.scoreboard.FlickerlessScoreboard;
-import me.nicbo.InvadedLandsEvents.scoreboard.FlickerlessScoreboard.Track;
+import me.nicbo.InvadedLandsEvents.scoreboard.EventScoreboard;
 import me.nicbo.InvadedLandsEvents.utils.ConfigUtils;
 import me.nicbo.InvadedLandsEvents.utils.EventUtils;
 import me.nicbo.InvadedLandsEvents.utils.GeneralUtils;
@@ -11,7 +10,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.util.BlockVector;
 
 import java.util.ArrayList;
@@ -61,8 +59,6 @@ public final class Waterdrop extends InvadedEvent {
     public Waterdrop() {
         super("Waterdrop", "waterdrop");
 
-        super.setScoreboard(new WaterdropSB());
-
         String regionName = eventConfig.getString("safe-region");
         try {
             this.region = regionManager.getRegion(regionName);
@@ -103,8 +99,6 @@ public final class Waterdrop extends InvadedEvent {
 
             @Override
             public void run() {
-                // When scoreboards are added use timer on sb instead of broadcasting
-                EventUtils.broadcastEventMessage(ChatColor.YELLOW + "timer: " + timer--);
                 if (timer <= 0) {
                     round++;
                     if (round >= times.length)
@@ -136,6 +130,8 @@ public final class Waterdrop extends InvadedEvent {
 
     @Override
     public void start() {
+        players.forEach(player -> giveScoreboard(player, new WaterdropSB(player)));
+        startRefreshing();
         fallCheck.runTaskTimerAsynchronously(plugin,0, 1);
         waterdropTimer.runTaskTimer(plugin, 0, 20);
         newRound();
@@ -143,14 +139,16 @@ public final class Waterdrop extends InvadedEvent {
 
     @Override
     public void over() {
+        // give event is over sb
+        stopRefreshing();
         waterdropTimer.cancel();
         fallCheck.cancel();
     }
 
     @Override
     public void stop() {
-        scoreboard.removeScoreboard(players);
-        scoreboard.stopRefreshing();
+        removeAllScoreboards();
+        scoreboards.clear();
         started = false;
         jumped.clear();
         eliminated.clear();
@@ -427,32 +425,34 @@ public final class Waterdrop extends InvadedEvent {
     hardCovers - up to round 20
    */
 
-    private final class WaterdropSB extends EventScoreboard {
-        private Track headerTrack;
-        private Track roundTrack;
-        private Track timerTrack;
-        private Track playerCountTrack;
-        private Track specCountTrack;
-        private Track footerTrack;
+    public class WaterdropSB extends EventScoreboard {
+        private TrackRow roundTrack;
+        private TrackRow timerTrack;
+        private TrackRow playerCount;
+        private TrackRow specCount;
 
-        public WaterdropSB() {
-            this.headerTrack = new Track("headerTrack", ChatColor.GOLD.toString(), 7, LINE, LINE);
-            this.roundTrack = new Track("roundTrack", ChatColor.GREEN.toString(), 6, ChatColor.YELLOW + "Round: ", ChatColor.GOLD + String.valueOf(round));
-            this.timerTrack = new Track("timerTrack", "Remaining: ", 5, ChatColor.YELLOW + "Time ", ChatColor.GOLD + String.valueOf(timer));
-            this.playerCountTrack = new Track("playerCountWD", ChatColor.DARK_AQUA.toString(), 3, ChatColor.YELLOW + "Players: ", ChatColor.GOLD + String.valueOf(players.size()));
-            this.specCountTrack = new Track("specCountWD", ChatColor.WHITE.toString(), 2, ChatColor.YELLOW + "Spectators: ", ChatColor.GOLD + String.valueOf(spectators.size()));
-            this.footerTrack = new Track("footerTrack", ChatColor.DARK_RED.toString(), 1, LINE, LINE);
-            super.scoreboard = new FlickerlessScoreboard(ChatColor.GOLD.toString() + ChatColor.BOLD.toString() + "NAME", DisplaySlot.SIDEBAR, headerTrack, roundTrack, timerTrack, playerCountTrack, specCountTrack, footerTrack);
-            super.scoreboard.addBlankLine(4, ChatColor.AQUA);
+        private Row header;
+        private Row footer;
+        private Row blank;
+
+        public WaterdropSB(Player player) {
+            super(player, "waterdrop");
+            this.header = new Row("header", HEADERFOOTER, ChatColor.BOLD.toString(), HEADERFOOTER, 7);
+            this.roundTrack = new TrackRow("round", ChatColor.YELLOW + "Round: ", ChatColor.GOLD.toString(), String.valueOf(0), 6);
+            this.timerTrack = new TrackRow("timer", ChatColor.YELLOW + "Time Remain", "ing: " + ChatColor.GOLD, String.valueOf(20), 5);
+            this.blank = new Row("blank", "", ChatColor.AQUA.toString(), "", 4);
+            this.playerCount = new TrackRow("playerCount", ChatColor.YELLOW + "Players: ", ChatColor.DARK_PURPLE + "" + ChatColor.GOLD, String.valueOf(0), 3);
+            this.specCount = new TrackRow("specCount", ChatColor.YELLOW + "Spectators: ", ChatColor.LIGHT_PURPLE + "" + ChatColor.GOLD, String.valueOf(0), 2);
+            this.footer = new Row("footer", HEADERFOOTER, ChatColor.DARK_GRAY.toString(), HEADERFOOTER, 1);
+            super.init(ChatColor.GOLD + "Waterdrop", header, roundTrack, timerTrack, blank, playerCount, specCount, footer);
         }
 
         @Override
         public void refresh() {
-            roundTrack.setSuffix(ChatColor.GOLD + String.valueOf(round));
-            timerTrack.setSuffix(ChatColor.GOLD + String.valueOf(timer));
-            playerCountTrack.setSuffix(ChatColor.GOLD + String.valueOf(players.size()));
-            specCountTrack.setSuffix(ChatColor.GOLD + String.valueOf(spectators.size()));
-            scoreboard.updateScoreboard();
+            specCount.setSuffix(String.valueOf(spectators.size()));
+            roundTrack.setSuffix(String.valueOf(round));
+            timerTrack.setSuffix(String.valueOf(timer));
+            playerCount.setSuffix(String.valueOf(players.size()));
         }
     }
 }

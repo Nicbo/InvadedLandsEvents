@@ -69,3 +69,9 @@ waterdrop:
   FAIL_JUMP: '&f{player} &c&lhas failed!'
   ELIMINATED: '&6{player} &ewas eliminated. (&6{players_left}&e)'
 
+lms:
+  MATCH_STARTING: '&eThe Last Man Starting will begin in &65 seconds&e.'
+  MATCH_COUNTER: '&eThe game starts in &6{seconds} &esecond(s)...'
+  MATCH_START: '&eThe match has started!'
+  ELIMINATED: '&6{player} &ewas eliminated. &e(&6{players_left}&e)'
+

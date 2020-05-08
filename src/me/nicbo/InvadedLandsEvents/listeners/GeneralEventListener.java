@@ -13,6 +13,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -34,6 +35,12 @@ public final class GeneralEventListener implements Listener {
 
     private boolean runEvent(Player player) {
         return eventManager.isEventRunning() && eventManager.getCurrentEvent().containsPlayer(player);
+    }
+
+    @EventHandler
+    public void itemDamage(PlayerItemDamageEvent event) {
+        if (runEvent(event.getPlayer()))
+            event.setCancelled(true);
     }
 
     @EventHandler

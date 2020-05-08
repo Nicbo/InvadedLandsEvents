@@ -102,15 +102,13 @@ public final class EventManager {
                     }
                 } else if (countDown == 0) {
 //                  if (!currentEvent.getSize() >= 6) { For testing disable this, will later allow customizing minimum event size.
-                    currentEvent.getScoreboard().giveScoreboard(currentEvent.getPlayers());
-                    currentEvent.getScoreboard().startRefreshing();
                     currentEvent.setStarted(true);
                     currentEvent.start();
                     this.cancel();
 //                  }
                 }
+                currentEvent.getCountdownSB().refresh();
                 countDown--;
-                currentEvent.getCountDownScoreboard().refresh();
             }
         }.runTaskTimer(plugin, 0, 20);
     }

@@ -1,6 +1,5 @@
 package me.nicbo.InvadedLandsEvents.events;
 
-import me.nicbo.InvadedLandsEvents.EventsMain;
 import me.nicbo.InvadedLandsEvents.utils.ConfigUtils;
 import me.nicbo.InvadedLandsEvents.utils.EventUtils;
 import me.nicbo.InvadedLandsEvents.utils.GeneralUtils;
@@ -143,5 +142,4 @@ public final class OITC extends InvadedEvent {
         event.setRespawnLocation(getRandomLocation());
         respawningPlayers.remove(player);
     }
-
 }

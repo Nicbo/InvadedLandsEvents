@@ -97,12 +97,19 @@ events:
       z: 0
       yaw: 0
       pitch: 0
-    start-location:
+    start-location-1:
       x: 0
       y: 0
       z: 0
       yaw: 0
       pitch: 0
+    start-location-2:
+      x: 0
+      y: 0
+      z: 0
+      yaw: 0
+      pitch: 0
+    int-seconds-time-limit: 300
 
   oitc:
     enabled: false
