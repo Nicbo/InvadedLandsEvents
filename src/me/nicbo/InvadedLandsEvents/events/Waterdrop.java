@@ -99,6 +99,7 @@ public final class Waterdrop extends InvadedEvent {
 
             @Override
             public void run() {
+                timer--;
                 if (timer <= 0) {
                     round++;
                     if (round >= times.length)
