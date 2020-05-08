@@ -167,7 +167,7 @@ events:
       z: 0
       yaw: 0
       pitch: 0
-    int-win-points: 20e
+    int-win-points: 20
 
   redrover:
     enabled: false
