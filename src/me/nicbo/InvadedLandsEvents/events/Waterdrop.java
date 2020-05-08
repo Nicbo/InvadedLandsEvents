@@ -139,7 +139,6 @@ public final class Waterdrop extends InvadedEvent {
 
     @Override
     public void over() {
-        stopRefreshing();
         waterdropTimer.cancel();
         fallCheck.cancel();
         jumped.clear();
@@ -169,7 +168,7 @@ public final class Waterdrop extends InvadedEvent {
     private boolean eliminatePlayers() {
         for (Player player : eliminated) {
             EventUtils.broadcastEventMessage(ELIMINATED.replace("{player}", player.getName())
-                    .replace("{players_left}", String.valueOf(players.size())));
+                    .replace("{remaining}", String.valueOf(players.size())));
             loseEvent(player);
         }
 

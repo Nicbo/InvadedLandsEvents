@@ -53,7 +53,7 @@ public abstract class Duel extends InvadedEvent {
 
     public abstract void tpFightingPlayers();
 
-    protected void setupLeaveCheck() {
+    protected void initLeaveCheck() {
         this.leaveCheck = new BukkitRunnable() {
             @Override
             public void run() {

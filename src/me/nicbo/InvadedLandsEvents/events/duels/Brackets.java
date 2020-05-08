@@ -44,7 +44,7 @@ public final class Brackets extends Duel {
 
     @Override
     public void init() {
-        setupLeaveCheck();
+        initLeaveCheck();
     }
 
     @Override

@@ -35,9 +35,11 @@ public abstract class InvadedEvent implements Listener {
     protected static Logger logger;
 
     private CountdownSB countdownSB;
-    protected HashMap<Player, EventScoreboard> scoreboards;
+    private EventOverSB eventOverSB;
     private EventScoreboard spectatorSB;
+    protected HashMap<Player, EventScoreboard> scoreboards;
     private BukkitRunnable refresher;
+
 
     protected RegionManager regionManager;
 
@@ -79,6 +81,7 @@ public abstract class InvadedEvent implements Listener {
         this.configName = configName;
 
         this.countdownSB = new CountdownSB(plugin.getManagerHandler().getEventManager(), null);
+        this.eventOverSB = new EventOverSB(null);
         this.scoreboards = new HashMap<>();
 
         FileConfiguration config = plugin.getConfig();
@@ -145,6 +148,12 @@ public abstract class InvadedEvent implements Listener {
         scoreboards.clear();
     }
 
+    private void giveAllEventOverSB() {
+        for (Player player : getParticipants()) {
+            player.setScoreboard(eventOverSB.getScoreboard());
+        }
+    }
+
     public void setSpectatorSB(EventScoreboard spectatorSB) {
         this.spectatorSB = spectatorSB;
     }
@@ -158,7 +167,6 @@ public abstract class InvadedEvent implements Listener {
     public abstract void over();
 
     public void stop() {
-        removeAllScoreboards();
         removeParticipants();
         started = false;
     }
@@ -262,6 +270,7 @@ public abstract class InvadedEvent implements Listener {
     public void forceEndEvent() {
         EventUtils.broadcastEventMessage(EventMessage.EVENT_FORCE_ENDED.replace("{event}", eventName));
         over();
+        removeAllScoreboards();
         stopRefreshing();
         stop();
         plugin.getManagerHandler().getEventManager().setCurrentEvent(null);
@@ -275,12 +284,13 @@ public abstract class InvadedEvent implements Listener {
     protected void playerWon(Player player) {
         over();
         stopRefreshing();
-        // Give event is over scoreboard
+        giveAllEventOverSB();
         for (int i = 0; i < 4; i++) {
             Bukkit.broadcastMessage(ChatColor.GOLD + (player == null ? "No one" : player.getName()) + ChatColor.YELLOW + " won the " + ChatColor.GOLD + eventName + ChatColor.YELLOW + " event!");
         }
 
         plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+            removeAllScoreboards();
             stop();
             plugin.getManagerHandler().getEventManager().setCurrentEvent(null);
         }, 100);
@@ -352,14 +362,21 @@ public abstract class InvadedEvent implements Listener {
     // event is over scoreboard
 
     public class EventOverSB extends EventScoreboard {
+        private Row header;
+        private Row message;
+        private Row footer;
 
         public EventOverSB(Player player) {
             super(player, "eventover");
+            this.header = new Row("header", HEADERFOOTER, ChatColor.BOLD.toString(), HEADERFOOTER, 3);
+            this.message = new Row("message", ChatColor.YELLOW + "Event has ", "ended", "", 2);
+            this.footer = new Row("footer", HEADERFOOTER, ChatColor.DARK_GRAY.toString(), HEADERFOOTER, 1);
+            super.init("EventOverSB", header, message, footer);
         }
 
         @Override
         public void refresh() {
-
+            throw new UnsupportedOperationException("Can't refresh EventOverSB");
         }
     }
 }

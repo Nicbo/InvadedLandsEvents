@@ -77,7 +77,6 @@ public final class LMS extends InvadedEvent {
     @Override
     public void start() {
         players.forEach(player -> giveScoreboard(player, new LMSSB(player)));
-        startRefreshing();
         playerCheck.runTaskTimerAsynchronously(plugin, 0, 20);
         startTimer(TIME_LIMIT);
         startMatchCountdown();
@@ -87,7 +86,6 @@ public final class LMS extends InvadedEvent {
 
     @Override
     public void over() {
-        stopRefreshing();
         eventTimer.cancel();
         playerCheck.cancel();
     }
