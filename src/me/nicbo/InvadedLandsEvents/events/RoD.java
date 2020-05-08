@@ -25,7 +25,7 @@ public final class RoD extends InvadedEvent {
     private ProtectedRegion winRegion;
     private Location startLoc;
 
-    private int eventTimeLimit;
+    private final int TIME_LIMIT;
 
     public RoD() {
         super("Race of Death", "rod");
@@ -39,7 +39,7 @@ public final class RoD extends InvadedEvent {
         }
 
         this.startLoc = ConfigUtils.deserializeLoc(eventConfig.getConfigurationSection("start-location"), eventWorld);
-        this.eventTimeLimit = eventConfig.getInt("int-seconds-time-limit");
+        this.TIME_LIMIT = eventConfig.getInt("int-seconds-time-limit");
     }
 
     @Override
@@ -63,7 +63,7 @@ public final class RoD extends InvadedEvent {
         plugin.getServer().getScheduler().runTask(plugin, this::tpApplyInvisibility);
         didPlayerFinish.runTaskTimerAsynchronously(plugin, 0, 1);
         playerCheck.runTaskTimerAsynchronously(plugin, 0, 1);
-        startTimer(eventTimeLimit);
+        startTimer(TIME_LIMIT);
     }
 
     @Override
@@ -71,12 +71,6 @@ public final class RoD extends InvadedEvent {
         didPlayerFinish.cancel();
         playerCheck.cancel();
         eventTimer.cancel();;
-    }
-
-    @Override
-    public void stop() {
-        started = false;
-        removeParticipants();
     }
 
     private void tpApplyInvisibility() {

@@ -16,11 +16,6 @@ public final class WoolShuffle extends InvadedEvent {
     }
 
     @Override
-    public void stop() {
-
-    }
-
-    @Override
     public void over() {
 
     }

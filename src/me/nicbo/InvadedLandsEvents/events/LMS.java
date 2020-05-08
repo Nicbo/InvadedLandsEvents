@@ -26,8 +26,6 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 
 public final class LMS extends InvadedEvent {
-    private int timeLimit;
-
     private Location start1;
     private Location start2;
 
@@ -36,6 +34,8 @@ public final class LMS extends InvadedEvent {
 
     private boolean matchCountdown;
 
+    private final int TIME_LIMIT;
+
     private final String MATCH_STARTING;
     private final String MATCH_COUNTER;
     private final String MATCH_START;
@@ -43,7 +43,6 @@ public final class LMS extends InvadedEvent {
 
     public LMS() {
         super("Last Man Standing", "lms");
-        this.timeLimit = eventConfig.getInt("int-seconds-time-limit");
 
         this.start1 = ConfigUtils.deserializeLoc(eventConfig.getConfigurationSection("start-location-1"), eventWorld);
         this.start2 = ConfigUtils.deserializeLoc(eventConfig.getConfigurationSection("start-location-2"), eventWorld);
@@ -62,6 +61,8 @@ public final class LMS extends InvadedEvent {
                 new ItemStack(Material.ARROW, 32)
         };
 
+        this.TIME_LIMIT = eventConfig.getInt("int-seconds-time-limit");
+
         this.MATCH_STARTING = getEventMessage("MATCH_STARTING");
         this.MATCH_COUNTER = getEventMessage("MATCH_COUNTER");
         this.MATCH_START = getEventMessage("MATCH_START");
@@ -78,7 +79,7 @@ public final class LMS extends InvadedEvent {
         players.forEach(player -> giveScoreboard(player, new LMSSB(player)));
         startRefreshing();
         playerCheck.runTaskTimerAsynchronously(plugin, 0, 20);
-        startTimer(timeLimit);
+        startTimer(TIME_LIMIT);
         startMatchCountdown();
         tpPlayers();
         applyKit();
@@ -89,11 +90,6 @@ public final class LMS extends InvadedEvent {
         stopRefreshing();
         eventTimer.cancel();
         playerCheck.cancel();
-    }
-
-    @Override
-    public void stop() {
-        removeAllScoreboards();
     }
 
     private void tpPlayers() {

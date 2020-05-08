@@ -16,11 +16,6 @@ public final class TDM extends InvadedEvent {
     }
 
     @Override
-    public void stop() {
-
-    }
-
-    @Override
     public void over() {
 
     }

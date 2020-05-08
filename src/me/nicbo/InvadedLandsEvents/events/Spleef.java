@@ -1,6 +1,9 @@
 package me.nicbo.InvadedLandsEvents.events;
 
+import me.nicbo.InvadedLandsEvents.scoreboard.EventScoreboard;
 import me.nicbo.InvadedLandsEvents.utils.ConfigUtils;
+import me.nicbo.InvadedLandsEvents.utils.EventUtils;
+import me.nicbo.InvadedLandsEvents.utils.GeneralUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -44,6 +47,12 @@ public final class Spleef extends InvadedEvent {
 
     private ItemStack shovel;
 
+    private final int TIME_LIMIT;
+
+    private final String MATCH_COUNTER;
+    private final String MATCH_START;
+    private final String ELIMINATED;
+
     public Spleef() {
         super("Spleef", "spleef");
 
@@ -57,6 +66,12 @@ public final class Spleef extends InvadedEvent {
 
         this.pos1 = ConfigUtils.deserializeBlockVector(eventConfig.getConfigurationSection("snow-position-1"));
         this.pos2 = ConfigUtils.deserializeBlockVector(eventConfig.getConfigurationSection("snow-position-2"));
+
+        this.TIME_LIMIT = eventConfig.getInt("int-seconds-time-limit");
+
+        this.MATCH_COUNTER = getEventMessage("MATCH_COUNTER");
+        this.MATCH_START = getEventMessage("MATCH_START");
+        this.ELIMINATED = getEventMessage("ELIMINATED");
     }
 
     @Override
@@ -72,7 +87,11 @@ public final class Spleef extends InvadedEvent {
                         toLose.add(player);
                     }
                 }
-                toLose.forEach(player -> loseEvent(player));
+                for (Player player : toLose) {
+                    loseEvent(player);
+                    EventUtils.broadcastEventMessage(ELIMINATED.replace("{player}", player.getName())
+                            .replace("{remaining}", String.valueOf(players.size())));
+                }
                 toLose.clear();
             }
         };
@@ -82,8 +101,15 @@ public final class Spleef extends InvadedEvent {
 
     @Override
     public void start() {
-        clearPlayers();
-        tpPlayers();
+        startTimer(TIME_LIMIT);
+
+        for (int i = 0; i < players.size(); i++) {
+            Player player = players.get(i);
+            giveScoreboard(player, new SpleefSB(player));
+            player.getInventory().clear();
+            player.teleport(i % 2 == 0 ? start1 : start2);
+        }
+
         heightCheck.runTaskTimerAsynchronously(plugin, 0, 1);
         playerCheck.runTaskTimerAsynchronously(plugin, 0, 1);
         startMatchCountdown();
@@ -92,20 +118,9 @@ public final class Spleef extends InvadedEvent {
 
     @Override
     public void over() {
+        eventTimer.cancel();
         heightCheck.cancel();
         playerCheck.cancel();
-    }
-
-    @Override
-    public void stop() {
-        started = false;
-        removeParticipants();
-    }
-
-    private void tpPlayers() {
-        for (int i = 0; i < players.size(); i++) {
-            players.get(i).teleport(i % 2 == 0 ? start1 : start2);
-        }
     }
 
     public void buildSnow(BlockVector pos1, BlockVector pos2) {
@@ -137,11 +152,13 @@ public final class Spleef extends InvadedEvent {
                     return;
                 }
 
+                EventUtils.broadcastEventMessage(MATCH_COUNTER.replace("{seconds}", String.valueOf(timer)));
                 if (timer == 1) {
+                    EventUtils.broadcastEventMessage(MATCH_START);
                     matchCountdown = false;
                     this.cancel();
                 }
-                players.forEach(player -> player.sendMessage(ChatColor.YELLOW + "You can break blocks in " + ChatColor.GOLD + timer));
+
                 timer--;
             }
 
@@ -184,8 +201,30 @@ public final class Spleef extends InvadedEvent {
     }
 
 
-    private class SpleefSB {
+    private class SpleefSB extends EventScoreboard {
+        private TrackRow playerCount;
+        private TrackRow specCount;
+        private TrackRow timeRemaining;
 
+        private Row header;
+        private Row footer;
+
+        public SpleefSB(Player player) {
+            super(player, "spleef");
+            this.header = new Row("header", HEADERFOOTER, ChatColor.BOLD.toString(), HEADERFOOTER, 5);
+            this.playerCount = new TrackRow("playerCount", ChatColor.YELLOW + "Players: ", ChatColor.DARK_PURPLE + "" + ChatColor.GOLD, String.valueOf(0), 4);
+            this.specCount = new TrackRow("specCount", ChatColor.YELLOW + "Spectators: ", ChatColor.LIGHT_PURPLE + "" + ChatColor.GOLD, String.valueOf(0), 3);
+            this.timeRemaining = new TrackRow("timeRemaining", ChatColor.YELLOW + "Time Remain", "ing: " + ChatColor.GOLD, String.valueOf(0), 2);
+            this.footer = new Row("footer", HEADERFOOTER, ChatColor.DARK_GRAY.toString(), HEADERFOOTER, 1);
+            super.init("Spleef", header, playerCount, specCount, timeRemaining, footer);
+        }
+
+        @Override
+        public void refresh() {
+            playerCount.setSuffix(String.valueOf(players.size()));
+            specCount.setSuffix(String.valueOf(spectators.size()));
+            timeRemaining.setSuffix(GeneralUtils.formatSeconds(timeLeft));
+        }
     }
 
     /*

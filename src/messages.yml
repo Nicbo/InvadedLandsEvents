@@ -67,11 +67,28 @@ waterdrop:
   ROUND_START: '&eStarting round &6{round}&e.'
   SUCCESS_JUMP: '&f{player} &ehas successfully jumped.'
   FAIL_JUMP: '&f{player} &c&lhas failed!'
-  ELIMINATED: '&6{player} &ewas eliminated. (&6{players_left}&e)'
+  ELIMINATED: '&6{player} &ewas eliminated. (&6{remaining}&e)'
 
 lms:
   MATCH_STARTING: '&eThe Last Man Starting will begin in &65 seconds&e.'
   MATCH_COUNTER: '&eThe game starts in &6{seconds} &esecond(s)...'
   MATCH_START: '&eThe match has started!'
-  ELIMINATED: '&6{player} &ewas eliminated. &e(&6{players_left}&e)'
+  ELIMINATED: '&6{player} &ewas eliminated. &e(&6{remaining}&e)'
 
+spleef:
+  MATCH_COUNTER: '&eBlock breaking commences in &{seconds} seconds&e.'
+  MATCH_START: '&a&lYOU MAY NOW BREAK BLOCKS!'
+  ELIMINATED: '&6{player} &ewas eliminated. (&6{remaining}&e)'
+
+koth:
+  CAPTURING: '&6&l{player} &eis now controlling the point!'
+  CAPTURING_POINTS: '&6&l{player} &eis capturing the point and has &6{points} points&e!'
+  LOST: '&6&l{player} &eis no longer controlling the point!'
+
+rod:
+  START: '&eRUN!'
+
+tnttag:
+  ROUND_START: '&eTNT Tag round &6{round} &ehas started!'
+  TAG: '&c&lYOU''RE TAGGED!!!!'
+  ELIMINATED: '&6{player} &ewas eliminated. (&6{remaining}&e)'

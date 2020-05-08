@@ -52,12 +52,9 @@ public final class GeneralUtils {
         return new ArrayList<>(Bukkit.getOnlinePlayers());
     }
 
-    public static String formatSeconds(int secondsInt) {
-        long seconds = secondsInt;
-        long mm = seconds / 60;
-        seconds %= 60;
-        long ss = seconds;
-        
-        return ((mm > 0) ? "" : mm + "m ") + ((ss > 0) ? "" : ss + "s");
+    public static String formatSeconds(int sec) {
+        int minutes = (int) Math.floor(sec / 60);
+        int seconds = sec - minutes * 60;
+        return (minutes == 0 ? "" : minutes + "m ") + (seconds == 0 ? "" : seconds + "s");
     }
 }

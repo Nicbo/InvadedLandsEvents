@@ -168,6 +168,7 @@ events:
       yaw: 0
       pitch: 0
     int-win-points: 20
+    int-seconds-time-limit: 300
 
   redrover:
     enabled: false
@@ -231,6 +232,7 @@ events:
       x: 0
       y: 0
       z: 0
+    int-seconds-time-limit: 300
 
   tdm:
     enabled: false

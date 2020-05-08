@@ -132,7 +132,6 @@ public final class Waterdrop extends InvadedEvent {
     @Override
     public void start() {
         players.forEach(player -> giveScoreboard(player, new WaterdropSB(player)));
-        startRefreshing();
         fallCheck.runTaskTimerAsynchronously(plugin,0, 1);
         waterdropTimer.runTaskTimer(plugin, 0, 20);
         newRound();
@@ -140,20 +139,11 @@ public final class Waterdrop extends InvadedEvent {
 
     @Override
     public void over() {
-        // give event is over sb
         stopRefreshing();
         waterdropTimer.cancel();
         fallCheck.cancel();
-    }
-
-    @Override
-    public void stop() {
-        removeAllScoreboards();
-        scoreboards.clear();
-        started = false;
         jumped.clear();
         eliminated.clear();
-        removeParticipants();
     }
 
     private void newRound() {

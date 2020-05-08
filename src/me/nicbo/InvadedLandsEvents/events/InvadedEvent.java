@@ -109,7 +109,7 @@ public abstract class InvadedEvent implements Listener {
         return countdownSB;
     }
 
-    protected void startRefreshing() {
+    public void startRefreshing() {
         this.refresher = new BukkitRunnable() {
             @Override
             public void run() {
@@ -156,7 +156,12 @@ public abstract class InvadedEvent implements Listener {
     public abstract void init();
     public abstract void start();
     public abstract void over();
-    public abstract void stop();
+
+    public void stop() {
+        removeAllScoreboards();
+        removeParticipants();
+        started = false;
+    }
 
     public List<Player> getPlayers() {
         return players;
@@ -257,6 +262,7 @@ public abstract class InvadedEvent implements Listener {
     public void forceEndEvent() {
         EventUtils.broadcastEventMessage(EventMessage.EVENT_FORCE_ENDED.replace("{event}", eventName));
         over();
+        stopRefreshing();
         stop();
         plugin.getManagerHandler().getEventManager().setCurrentEvent(null);
     }
@@ -268,6 +274,8 @@ public abstract class InvadedEvent implements Listener {
 
     protected void playerWon(Player player) {
         over();
+        stopRefreshing();
+        // Give event is over scoreboard
         for (int i = 0; i < 4; i++) {
             Bukkit.broadcastMessage(ChatColor.GOLD + (player == null ? "No one" : player.getName()) + ChatColor.YELLOW + " won the " + ChatColor.GOLD + eventName + ChatColor.YELLOW + " event!");
         }
@@ -291,12 +299,6 @@ public abstract class InvadedEvent implements Listener {
 
         players.clear();
         spectators.clear();
-    }
-
-    protected void clearPlayers() {
-        for (Player player : players) {
-            EventUtils.clear(player);
-        }
     }
 
     protected void startTimer(int timeInSeconds) {

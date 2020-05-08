@@ -115,9 +115,8 @@ public final class EventConfigCommand implements CommandExecutor, TabCompleter {
                                     player.sendMessage(getUsageMessage(args[0], key, "int"));
                                 else {
                                     if (GeneralUtils.isInt(args[2])) {
-                                        eventConfigSection.set(key, args[2]);
+                                        eventConfigSection.set(key, Integer.parseInt(args[2]));
                                         player.sendMessage(ChatColor.GOLD + key + ChatColor.YELLOW + " set to '" + ChatColor.GOLD + args[2] + ChatColor.YELLOW + "'!");
-
                                     } else {
                                         player.sendMessage(getUsageMessage(args[0], key, "int"));
                                     }
