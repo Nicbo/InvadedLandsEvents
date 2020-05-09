@@ -16,6 +16,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scoreboard.Team;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,7 +38,12 @@ public abstract class InvadedEvent implements Listener {
     private CountdownSB countdownSB;
     private EventOverSB eventOverSB;
     private EventScoreboard spectatorSB;
+
     protected HashMap<Player, EventScoreboard> scoreboards;
+
+    private Team playerTeam;
+    private Team specTeam;
+
     private BukkitRunnable refresher;
 
 
@@ -121,6 +127,8 @@ public abstract class InvadedEvent implements Listener {
                     scoreboard.refresh();
                     scoreboard.updateScoreboard();
                 }
+                spectatorSB.refresh();
+                spectatorSB.updateScoreboard();
             }
         };
 
@@ -156,6 +164,10 @@ public abstract class InvadedEvent implements Listener {
 
     public void setSpectatorSB(EventScoreboard spectatorSB) {
         this.spectatorSB = spectatorSB;
+    }
+
+    public void giveSpectatorsSB() {
+        spectators.forEach(player -> player.setScoreboard(spectatorSB.getScoreboard()));
     }
 
     /**
@@ -258,6 +270,7 @@ public abstract class InvadedEvent implements Listener {
         player.teleport(specLoc);
         EventUtils.clear(player);
         player.getInventory().setItem(8, star);
+        player.setScoreboard(started ? spectatorSB.getScoreboard() : countdownSB.getScoreboard());
     }
 
     public void sendEventInfo(Player player) {

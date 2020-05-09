@@ -67,6 +67,8 @@ public final class LMS extends InvadedEvent {
         this.MATCH_COUNTER = getEventMessage("MATCH_COUNTER");
         this.MATCH_START = getEventMessage("MATCH_START");
         this.ELIMINATED = getEventMessage("ELIMINATED");
+
+        setSpectatorSB(new LMSSB(null));
     }
 
     @Override

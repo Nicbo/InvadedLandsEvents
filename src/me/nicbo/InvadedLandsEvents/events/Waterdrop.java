@@ -88,6 +88,8 @@ public final class Waterdrop extends InvadedEvent {
         this.SUCCESS_JUMP = getEventMessage("SUCCESS_JUMP");
         this.FAIL_JUMP = getEventMessage("FAIL_JUMP");
         this.ELIMINATED = getEventMessage("ELIMINATED");
+
+        setSpectatorSB(new WaterdropSB(null));
     }
 
     @Override

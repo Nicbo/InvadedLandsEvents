@@ -8,12 +8,12 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
-import sun.java2d.loops.FillRect;
 
 import java.util.*;
 
@@ -62,6 +62,8 @@ public final class OITC extends InvadedEvent {
         this.TIME_LIMIT = eventConfig.getInt("int-seconds-time-limit");
 
         this.KILL_MESSAGE = getEventMessage("KILL_MESSAGE");
+
+        setSpectatorSB(new OITCSB(null));
     }
 
     @Override
@@ -77,7 +79,7 @@ public final class OITC extends InvadedEvent {
         playerCheck.runTaskTimerAsynchronously(plugin, 0, 1);
         for (Player player : players) {
             points.put(player, 0);
-            preparePlayer(player);
+            giveKit(player);
             player.teleport(getRandomLocation());
         }
     }
@@ -90,7 +92,7 @@ public final class OITC extends InvadedEvent {
         respawningPlayers.clear();
     }
 
-    private void preparePlayer(Player player) {
+    private void giveKit(Player player) {
         player.getInventory().setContents(kit);
     }
 
@@ -112,14 +114,38 @@ public final class OITC extends InvadedEvent {
             if (blockListener(player))
                 return;
 
-            if (event.getDamager() instanceof Arrow) {
+            Entity damager = event.getDamager();
+            Player shooter = null;
+
+
+            // Player hit with arrow shot from another player
+            if (damager instanceof Arrow && ((Arrow) damager).getShooter() instanceof Player && !((Arrow) damager).getShooter().equals(player)) {
+                shooter = (Player) ((Arrow) damager).getShooter();
                 event.setDamage(20);
             }
 
-            if (event.getFinalDamage() >= player.getHealth()) {
-                player.getInventory().clear();
+            if (event.getFinalDamage() >= player.getHealth()) { // Damage will kill player
                 respawningPlayers.add(player);
                 plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> player.spigot().respawn(), 1);
+
+                Player killer = null;
+                if (shooter != null) { // Killer shot arrow
+                    killer = shooter;
+                } else if (damager instanceof Player) {
+                    killer = (Player) damager;
+                }
+
+                if (killer != null && player != killer) { // Killer is not the same player
+                    points.put(killer, points.get(killer) + 1);
+                    EventUtils.broadcastEventMessage(getKillMessage(killer, points.get(killer), player, points.get(player)));
+                    killer.setHealth(20);
+                    killer.getInventory().addItem(kit[2]);
+                    if (points.get(killer) >= points.get(leader)) // Killer is now in the lead
+                        leader = killer;
+
+                    if (points.get(killer) == WIN_POINTS) // Killer wins
+                        playerWon(killer);
+                }
             }
         }
     }
@@ -127,26 +153,11 @@ public final class OITC extends InvadedEvent {
     @EventHandler
     public void onRespawn(PlayerRespawnEvent event) {
         Player player = event.getPlayer();
-
-        if (!respawningPlayers.contains(player))
-            return;
-
-        Player killer = player.getKiller();
-        if (killer != null && player != killer) {
-            points.put(killer, points.get(killer) + 1);
-            EventUtils.broadcastEventMessage(getKillMessage(killer, points.get(killer), player, points.get(player)));
-            killer.setHealth(20);
-            killer.getInventory().addItem(kit[2]);
-            if (points.get(player) >= points.get(leader))
-                leader = killer;
-
-            if (points.get(killer) == WIN_POINTS)
-                playerWon(killer);
+        if (respawningPlayers.contains(player)) {
+            giveKit(player);
+            event.setRespawnLocation(getRandomLocation());
+            respawningPlayers.remove(player);
         }
-
-        preparePlayer(player);
-        event.setRespawnLocation(getRandomLocation());
-        respawningPlayers.remove(player);
     }
 
     public class OITCSB extends EventScoreboard {
@@ -170,7 +181,7 @@ public final class OITC extends InvadedEvent {
             this.pointsTrack = new TrackRow("pointsTrack", ChatColor.YELLOW + "Your Points: ", ChatColor.BLACK + "" + ChatColor.GOLD, String.valueOf(0), 5);
             this.blank = new Row("blank", "", ChatColor.AQUA.toString(), "", 4);
             this.lead = new Row("lead", "", ChatColor.YELLOW + "In the Lead:", "", 3);
-            this.leadTrack = new TrackRow("leadTrack", player.getName(), ChatColor.GRAY.toString(), ": " + ChatColor.GOLD + "0/20", 2);
+            this.leadTrack = new TrackRow("leadTrack", "None", ChatColor.GRAY.toString(), ": " + ChatColor.GOLD + "0/20", 2);
             this.footer = new Row("footer", HEADERFOOTER, ChatColor.DARK_GRAY.toString(), HEADERFOOTER, 1);
             super.init("OITC", header, playerCount, specCount, timeRemaining, pointsTrack, blank, lead, leadTrack, footer);
         }
@@ -180,7 +191,7 @@ public final class OITC extends InvadedEvent {
             playerCount.setSuffix(String.valueOf(players.size()));
             specCount.setSuffix(String.valueOf(spectators.size()));
             timeRemaining.setSuffix(GeneralUtils.formatSeconds(timeLeft));
-            pointsTrack.setSuffix(String.valueOf(points.get(player)));
+            pointsTrack.setSuffix(String.valueOf(player == null ? 0 : points.get(player)));
 
             String leaderName = leader.getName();
             ChatColor colour = leader == player ? ChatColor.GREEN : ChatColor.RED;
