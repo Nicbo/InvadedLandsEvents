@@ -55,6 +55,7 @@ events:
       z: 0
       yaw: 0
       pitch: 0
+    int-min-y: 0
 
   koth:
     enabled: false
@@ -88,6 +89,9 @@ events:
       z: 0
       yaw: 0
       pitch: 0
+    cap-region: cap-koth
+    int-seconds-time-limit: 300
+    int-win-points: 60
 
   lms:
     enabled: false

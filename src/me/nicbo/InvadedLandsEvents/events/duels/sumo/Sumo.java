@@ -3,8 +3,6 @@ package me.nicbo.InvadedLandsEvents.events.duels.sumo;
 import me.nicbo.InvadedLandsEvents.events.duels.Duel;
 
 public class Sumo extends Duel {
-
-
     Sumo(String name, int teamSize) {
         super(name, "sumo");
     }

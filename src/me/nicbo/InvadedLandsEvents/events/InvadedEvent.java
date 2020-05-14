@@ -1,6 +1,7 @@
 package me.nicbo.InvadedLandsEvents.events;
 
 import com.sk89q.worldguard.protection.managers.RegionManager;
+import me.nicbo.InvadedLandsEvents.listeners.EventLeaveEvent;
 import me.nicbo.InvadedLandsEvents.managers.EventManager;
 import me.nicbo.InvadedLandsEvents.messages.EventMessage;
 import me.nicbo.InvadedLandsEvents.EventsMain;
@@ -41,11 +42,7 @@ public abstract class InvadedEvent implements Listener {
 
     protected HashMap<Player, EventScoreboard> scoreboards;
 
-    private Team playerTeam;
-    private Team specTeam;
-
     private BukkitRunnable refresher;
-
 
     protected RegionManager regionManager;
 
@@ -150,7 +147,7 @@ public abstract class InvadedEvent implements Listener {
     }
 
     protected void removeAllScoreboards() {
-        for (Player player : scoreboards.keySet()) {
+        for (Player player : getParticipants()) {
             player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
         }
         scoreboards.clear();
@@ -262,7 +259,8 @@ public abstract class InvadedEvent implements Listener {
         player.teleport(spawnLoc);
         EventUtils.clear(player);
         removeScoreboard(player);
-        //remove from team and scoreboard
+
+        Bukkit.getPluginManager().callEvent(new EventLeaveEvent(player));
     }
 
     public void specEvent(Player player) {
