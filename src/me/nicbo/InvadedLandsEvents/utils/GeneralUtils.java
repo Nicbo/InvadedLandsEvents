@@ -45,7 +45,7 @@ public final class GeneralUtils {
     }
 
     public static <T> T getRandom(List<T> list) {
-        return list.get(random.nextInt(list.size()));
+        return list.isEmpty() ? null : list.get(random.nextInt(list.size()));
     }
 
     public static List<Player> getPlayers() {

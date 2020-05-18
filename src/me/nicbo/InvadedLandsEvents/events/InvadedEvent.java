@@ -1,7 +1,8 @@
 package me.nicbo.InvadedLandsEvents.events;
 
 import com.sk89q.worldguard.protection.managers.RegionManager;
-import me.nicbo.InvadedLandsEvents.listeners.EventLeaveEvent;
+import com.sk89q.worldguard.protection.regions.ProtectedRegion;
+import me.nicbo.InvadedLandsEvents.event.EventLeaveEvent;
 import me.nicbo.InvadedLandsEvents.managers.EventManager;
 import me.nicbo.InvadedLandsEvents.messages.EventMessage;
 import me.nicbo.InvadedLandsEvents.EventsMain;
@@ -17,7 +18,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scoreboard.Team;
+import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,12 +36,11 @@ import java.util.logging.Logger;
 public abstract class InvadedEvent implements Listener {
     protected static EventsMain plugin;
     protected static Logger logger;
+    protected static ItemStack star;
 
     private CountdownSB countdownSB;
     private EventOverSB eventOverSB;
     private EventScoreboard spectatorSB;
-
-    protected HashMap<Player, EventScoreboard> scoreboards;
 
     private BukkitRunnable refresher;
 
@@ -61,16 +61,18 @@ public abstract class InvadedEvent implements Listener {
     protected List<Player> players;
     protected List<Player> spectators;
 
-    protected BukkitRunnable playerCheck;
     protected BukkitRunnable eventTimer;
-
-    protected ItemStack star;
 
     protected int timeLeft;
 
     static {
         plugin = EventsMain.getInstance();
         logger = plugin.getLogger();
+        star = new ItemStack(Material.NETHER_STAR);
+        ItemMeta im = star.getItemMeta();
+        im.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&c&lLeave Event"));
+        star.setItemMeta(im);
+
     }
 
     /**
@@ -84,8 +86,7 @@ public abstract class InvadedEvent implements Listener {
         this.configName = configName;
 
         this.countdownSB = new CountdownSB(plugin.getManagerHandler().getEventManager(), null);
-        this.eventOverSB = new EventOverSB(null);
-        this.scoreboards = new HashMap<>();
+        this.eventOverSB = new EventOverSB();
 
         FileConfiguration config = plugin.getConfig();
         this.eventConfig = config.getConfigurationSection("events." + configName);
@@ -100,22 +101,40 @@ public abstract class InvadedEvent implements Listener {
         this.enabled = eventConfig.getBoolean("enabled");
         this.players = new ArrayList<>();
         this.spectators = new ArrayList<>();
-
-        this.star = new ItemStack(Material.NETHER_STAR);
-        ItemMeta im = star.getItemMeta();
-        im.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&c&lLeave Event"));
-        this.star.setItemMeta(im);
-
         Bukkit.getPluginManager().registerEvents(this, plugin);
+
         if (!this.enabled)
-            logger.info(eventName + " not enabled!");
+            logger.info(eventName + " is not enabled!");
+    }
+
+    protected ProtectedRegion getRegion(String name) {
+        ProtectedRegion region = regionManager.getRegion(name);
+        if (region == null) {
+            logger.severe(eventName + " region '" + name + "' does not exist. Disabling...");
+            enabled = false;
+        }
+        return region;
     }
 
     public CountdownSB getCountdownSB() {
         return countdownSB;
     }
 
-    public void startRefreshing() {
+    protected void startRefreshing(EventScoreboard scoreboard) {
+        this.refresher = new BukkitRunnable() {
+            @Override
+            public void run() {
+                scoreboard.refresh();
+                scoreboard.updateScoreboard();
+                spectatorSB.refresh();
+                spectatorSB.updateScoreboard();
+            }
+        };
+
+        this.refresher.runTaskTimerAsynchronously(plugin, 0, 20);
+    }
+
+    protected void startRefreshing(HashMap<Player, ? extends EventScoreboard> scoreboards) {
         this.refresher = new BukkitRunnable() {
             @Override
             public void run() {
@@ -136,35 +155,15 @@ public abstract class InvadedEvent implements Listener {
         this.refresher.cancel();
     }
 
-    protected void giveScoreboard(Player player, EventScoreboard scoreboard) {
-        scoreboards.put(player, scoreboard);
-        player.setScoreboard(scoreboard.getScoreboard());
-    }
-
-    protected void removeScoreboard(Player player) {
-        scoreboards.remove(player);
-        player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
-    }
-
-    protected void removeAllScoreboards() {
-        for (Player player : getParticipants()) {
-            player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
-        }
-        scoreboards.clear();
-    }
-
-    private void giveAllEventOverSB() {
-        for (Player player : getParticipants()) {
-            player.setScoreboard(eventOverSB.getScoreboard());
-        }
-    }
-
-    public void setSpectatorSB(EventScoreboard spectatorSB) {
+    protected void setSpectatorSB(EventScoreboard spectatorSB) {
         this.spectatorSB = spectatorSB;
     }
 
-    public void giveSpectatorsSB() {
-        spectators.forEach(player -> player.setScoreboard(spectatorSB.getScoreboard()));
+    // Don't use this if you loop through players already in start()
+    protected void giveAllScoreboard(Scoreboard sb) {
+        for (Player player : players) {
+            player.setScoreboard(sb);
+        }
     }
 
     /**
@@ -178,14 +177,6 @@ public abstract class InvadedEvent implements Listener {
     public void stop() {
         removeParticipants();
         started = false;
-    }
-
-    public List<Player> getPlayers() {
-        return players;
-    }
-
-    public List<Player> getSpectators() {
-        return spectators;
     }
 
     public List<Player> getParticipants() {
@@ -218,19 +209,6 @@ public abstract class InvadedEvent implements Listener {
         return ChatColor.translateAlternateColorCodes('&', EventsMain.getMessages().getConfig().getString(configName + "." + message));
     }
 
-    protected void initPlayerCheck() {
-        this.playerCheck = new BukkitRunnable() {
-            @Override
-            public void run() {
-                int playerCount = players.size();
-                if (playerCount < 2) {
-                    playerWon(playerCount == 1 ? players.get(0) : null);
-                    this.cancel();
-                }
-            }
-        };
-    }
-
     public boolean containsPlayer(Player player) {
         return players.contains(player) || spectators.contains(player);
     }
@@ -248,8 +226,6 @@ public abstract class InvadedEvent implements Listener {
         if (!started) {
             player.setScoreboard(countdownSB.getScoreboard());
         }
-
-        //add to team and scoreboard
     }
 
     public void leaveEvent(Player player) {
@@ -258,7 +234,9 @@ public abstract class InvadedEvent implements Listener {
         spectators.remove(player);
         player.teleport(spawnLoc);
         EventUtils.clear(player);
-        removeScoreboard(player);
+        player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+
+        checkPlayerCount();
 
         Bukkit.getPluginManager().callEvent(new EventLeaveEvent(player));
     }
@@ -281,7 +259,7 @@ public abstract class InvadedEvent implements Listener {
     public void forceEndEvent() {
         EventUtils.broadcastEventMessage(EventMessage.EVENT_FORCE_ENDED.replace("{event}", eventName));
         over();
-        removeAllScoreboards();
+        giveAllScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
         stopRefreshing();
         stop();
         plugin.getManagerHandler().getEventManager().setCurrentEvent(null);
@@ -290,18 +268,30 @@ public abstract class InvadedEvent implements Listener {
     protected void loseEvent(Player player) {
         players.remove(player);
         specEvent(player);
+        checkPlayerCount();
+    }
+
+    /**
+     * Called when a player is removed or leaves event
+     * Will call playerWon() if playerCount is under 2
+     */
+    private void checkPlayerCount() {
+        int playerCount = players.size();
+        if (playerCount < 2) {
+            playerWon(playerCount == 1 ? players.get(0) : null);
+        }
     }
 
     protected void playerWon(Player player) {
         over();
         stopRefreshing();
-        giveAllEventOverSB();
+        giveAllScoreboard(eventOverSB.getScoreboard());
         for (int i = 0; i < 4; i++) {
             Bukkit.broadcastMessage(ChatColor.GOLD + (player == null ? "No one" : player.getName()) + ChatColor.YELLOW + " won the " + ChatColor.GOLD + eventName + ChatColor.YELLOW + " event!");
         }
 
         plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
-            removeAllScoreboards();
+            giveAllScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
             stop();
             plugin.getManagerHandler().getEventManager().setCurrentEvent(null);
         }, 100);
@@ -329,7 +319,11 @@ public abstract class InvadedEvent implements Listener {
             public void run() {
                 timeLeft--;
                 if (timeLeft <= 0) {
-                    playerWon(null);
+                    if (InvadedEvent.this instanceof KOTH)
+                        playerWon(((KOTH) InvadedEvent.this).getLeader());
+                    else
+                        playerWon(null);
+
                     this.cancel();
                 }
             }
@@ -370,15 +364,13 @@ public abstract class InvadedEvent implements Listener {
         }
     }
 
-    // event is over scoreboard
-
-    public class EventOverSB extends EventScoreboard {
+    private class EventOverSB extends EventScoreboard {
         private Row header;
         private Row message;
         private Row footer;
 
-        public EventOverSB(Player player) {
-            super(player, "eventover");
+        public EventOverSB() {
+            super(null, "eventover");
             this.header = new Row("header", HEADERFOOTER, ChatColor.BOLD.toString(), HEADERFOOTER, 3);
             this.message = new Row("message", ChatColor.YELLOW + "Event has ", "ended", "", 2);
             this.footer = new Row("footer", HEADERFOOTER, ChatColor.DARK_GRAY.toString(), HEADERFOOTER, 1);

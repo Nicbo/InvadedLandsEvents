@@ -2,7 +2,11 @@ package me.nicbo.InvadedLandsEvents.events;
 
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
+import me.nicbo.InvadedLandsEvents.scoreboard.EventScoreboard;
 import me.nicbo.InvadedLandsEvents.utils.ConfigUtils;
+import me.nicbo.InvadedLandsEvents.utils.EventUtils;
+import me.nicbo.InvadedLandsEvents.utils.GeneralUtils;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -19,7 +23,7 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 
 public final class RoD extends InvadedEvent {
-    private WorldGuardPlugin worldGuardPlugin;
+    private RoDSB rodSB;
 
     private BukkitRunnable didPlayerFinish;
     private ProtectedRegion winRegion;
@@ -29,27 +33,20 @@ public final class RoD extends InvadedEvent {
 
     public RoD() {
         super("Race of Death", "rod");
-
-        this.worldGuardPlugin = plugin.getWorldGuardPlugin();
-        String regionName = eventConfig.getString("win-region");
-        try {
-            this.winRegion = regionManager.getRegion(regionName);
-        } catch (NullPointerException npe) {
-            logger.severe("RoD region '" + regionName + "' does not exist");
-        }
-
+        this.rodSB = new RoDSB();
+        this.winRegion = getRegion(eventConfig.getString("win-region"));
         this.startLoc = ConfigUtils.deserializeLoc(eventConfig.getConfigurationSection("start-location"), eventWorld);
         this.TIME_LIMIT = eventConfig.getInt("int-seconds-time-limit");
+        setSpectatorSB(rodSB);
     }
 
     @Override
     public void init() {
-        initPlayerCheck();
         this.didPlayerFinish = new BukkitRunnable() {
             @Override
             public void run() {
                 for (Player player : players) {
-                    if (winRegion.contains(worldGuardPlugin.wrapPlayer(player).getPosition())) {
+                    if (EventUtils.isLocInRegion(player.getLocation(), winRegion)) {
                         playerWon(player);
                         this.cancel();
                     }
@@ -60,16 +57,17 @@ public final class RoD extends InvadedEvent {
 
     @Override
     public void start() {
+        giveAllScoreboard(rodSB.getScoreboard());
+        startRefreshing(rodSB);
         plugin.getServer().getScheduler().runTask(plugin, this::tpApplyInvisibility);
         didPlayerFinish.runTaskTimerAsynchronously(plugin, 0, 1);
-        playerCheck.runTaskTimerAsynchronously(plugin, 0, 1);
         startTimer(TIME_LIMIT);
     }
 
     @Override
     public void over() {
+        stopRefreshing();
         didPlayerFinish.cancel();
-        playerCheck.cancel();
         eventTimer.cancel();;
     }
 
@@ -77,6 +75,32 @@ public final class RoD extends InvadedEvent {
         for (Player player : players) {
              player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 6000, 1, false, false));
              player.teleport(startLoc);
+        }
+    }
+
+    private class RoDSB extends EventScoreboard {
+        private TrackRow playerCount;
+        private TrackRow specCount;
+        private TrackRow timeRemaining;
+
+        private Row header;
+        private Row footer;
+
+        public RoDSB() {
+            super(null, "lms");
+            this.header = new Row("header", HEADERFOOTER, ChatColor.BOLD.toString(), HEADERFOOTER, 5);
+            this.playerCount = new TrackRow("playerCount", ChatColor.YELLOW + "Players: ", ChatColor.DARK_PURPLE + "" + ChatColor.GOLD, String.valueOf(0), 4);
+            this.specCount = new TrackRow("specCount", ChatColor.YELLOW + "Spectators: ", ChatColor.LIGHT_PURPLE + "" + ChatColor.GOLD, String.valueOf(0), 3);
+            this.timeRemaining = new TrackRow("timeRemaining", ChatColor.YELLOW + "Time Remain", "ing: " + ChatColor.GOLD, String.valueOf(0), 2);
+            this.footer = new Row("footer", HEADERFOOTER, ChatColor.DARK_PURPLE.toString(), HEADERFOOTER, 1);
+            super.init(ChatColor.GOLD + "RoD", header, playerCount, specCount, timeRemaining, footer);
+        }
+
+        @Override
+        public void refresh() {
+            playerCount.setSuffix(String.valueOf(players.size()));
+            specCount.setSuffix(String.valueOf(spectators.size()));
+            timeRemaining.setSuffix(GeneralUtils.formatSeconds(timeLeft));
         }
     }
 }

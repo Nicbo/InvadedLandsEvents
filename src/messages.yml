@@ -76,7 +76,7 @@ lms:
   ELIMINATED: '&6{player} &ewas eliminated. &e(&6{remaining}&e)'
 
 spleef:
-  MATCH_COUNTER: '&eBlock breaking commences in &{seconds} seconds&e.'
+  MATCH_COUNTER: '&eBlock breaking commences in &6{seconds} seconds&e.'
   MATCH_START: '&a&lYOU MAY NOW BREAK BLOCKS!'
   ELIMINATED: '&6{player} &ewas eliminated. (&6{remaining}&e)'
 

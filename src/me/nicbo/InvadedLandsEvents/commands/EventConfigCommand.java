@@ -77,9 +77,9 @@ public final class EventConfigCommand implements CommandExecutor, TabCompleter {
                     if (EventManager.eventExists(args[0])) { // Arg[0] is an event
                         ConfigurationSection eventConfigSection = config.getConfigurationSection("events." + args[0]);
                         if (args.length == 1) { // Event preview, send event config (probably change later it is ugly)
-                            player.sendMessage(ChatColor.YELLOW + "-=-=-=-=-=-=-=-=- " + ChatColor.GOLD + args[0] + " config" + ChatColor.YELLOW + " -=-=-=-=-=-=-=-=-");
+                            player.sendMessage("");
                             player.sendMessage(ConfigUtils.getConfigMessage(eventConfigSection));
-                            player.sendMessage(ChatColor.YELLOW + "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-");
+                            player.sendMessage("");
                             return true;
                         }
 
@@ -100,7 +100,7 @@ public final class EventConfigCommand implements CommandExecutor, TabCompleter {
                                     player.sendMessage(getUsageMessage(args[0], key, "string"));
                                 else {
                                     eventConfigSection.set(key, args[2].toLowerCase());
-                                    player.sendMessage(ChatColor.GOLD + key + ChatColor.YELLOW + " set to '" + ChatColor.GOLD + key + ChatColor.YELLOW + "'!");
+                                    player.sendMessage(ChatColor.GOLD + key + ChatColor.YELLOW + " set to '" + ChatColor.GOLD + args[2].toLowerCase() + ChatColor.YELLOW + "'!");
                                 }
                             } else if (key.equals("enabled")) { // Set section to boolean
                                 if (args.length == 2)

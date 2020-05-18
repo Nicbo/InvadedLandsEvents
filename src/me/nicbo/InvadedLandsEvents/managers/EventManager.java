@@ -104,8 +104,6 @@ public final class EventManager {
 //                  if (!currentEvent.getSize() >= 6) { For testing disable this, will later allow customizing minimum event size.
                     currentEvent.setStarted(true);
                     currentEvent.start();
-                    currentEvent.giveSpectatorsSB();
-                    currentEvent.startRefreshing();
                     this.cancel();
 //                  }
                 }

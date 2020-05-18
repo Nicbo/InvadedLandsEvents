@@ -1,5 +1,6 @@
 package me.nicbo.InvadedLandsEvents.events;
 
+import me.nicbo.InvadedLandsEvents.event.EventLeaveEvent;
 import me.nicbo.InvadedLandsEvents.scoreboard.EventScoreboard;
 import me.nicbo.InvadedLandsEvents.utils.ConfigUtils;
 import me.nicbo.InvadedLandsEvents.utils.EventUtils;
@@ -17,6 +18,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
 
+
 /**
  * OITC event:
  * All players have a wooden sword, a bow, and 1 arrow
@@ -28,6 +30,8 @@ import java.util.*;
  */
 
 public final class OITC extends InvadedEvent {
+    private HashMap<Player, OITCSB> scoreboards;
+
     private List<Location> locations;
     private ItemStack[] kit;
 
@@ -43,6 +47,9 @@ public final class OITC extends InvadedEvent {
 
     public OITC() {
         super("One in the Chamber", "oitc");
+
+        this.scoreboards = new HashMap<>();
+
         this.locations = new ArrayList<>();
 
         for (int i = 1; i < 9; i++) {
@@ -68,26 +75,29 @@ public final class OITC extends InvadedEvent {
 
     @Override
     public void init() {
-        initPlayerCheck();
+
     }
 
     @Override
     public void start() {
-        players.forEach(player -> giveScoreboard(player, new OITCSB(player)));
         this.leader = GeneralUtils.getRandom(players);
         startTimer(TIME_LIMIT);
-        playerCheck.runTaskTimerAsynchronously(plugin, 0, 1);
+
         for (Player player : players) {
+            OITCSB oitcSB = new OITCSB(player);
+            scoreboards.put(player, oitcSB);
+            player.setScoreboard(oitcSB.getScoreboard());
             points.put(player, 0);
             giveKit(player);
             player.teleport(getRandomLocation());
         }
+
+        startRefreshing(scoreboards);
     }
 
     @Override
     public void over() {
         eventTimer.cancel();
-        playerCheck.cancel();
         points.clear();
         respawningPlayers.clear();
     }
@@ -111,7 +121,7 @@ public final class OITC extends InvadedEvent {
     public void playerHurt(EntityDamageByEntityEvent event) {
         if (event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();
-            if (blockListener(player))
+            if (blockListener(player) || points.isEmpty())
                 return;
 
             Entity damager = event.getDamager();
@@ -125,6 +135,7 @@ public final class OITC extends InvadedEvent {
             }
 
             if (event.getFinalDamage() >= player.getHealth()) { // Damage will kill player
+                player.getInventory().clear();
                 respawningPlayers.add(player);
                 plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> player.spigot().respawn(), 1);
 
@@ -143,8 +154,10 @@ public final class OITC extends InvadedEvent {
                     if (points.get(killer) >= points.get(leader)) // Killer is now in the lead
                         leader = killer;
 
-                    if (points.get(killer) == WIN_POINTS) // Killer wins
+                    if (points.get(killer) == WIN_POINTS) { // Killer wins
+                        event.setCancelled(true);
                         playerWon(killer);
+                    }
                 }
             }
         }
@@ -160,7 +173,12 @@ public final class OITC extends InvadedEvent {
         }
     }
 
-    public class OITCSB extends EventScoreboard {
+    @EventHandler
+    public void onEventLeave(EventLeaveEvent event) {
+        scoreboards.remove(event.getPlayer());
+    }
+
+    private class OITCSB extends EventScoreboard {
         private TrackRow playerCount;
         private TrackRow specCount;
         private TrackRow timeRemaining;
@@ -181,7 +199,7 @@ public final class OITC extends InvadedEvent {
             this.pointsTrack = new TrackRow("pointsTrack", ChatColor.YELLOW + "Your Points: ", ChatColor.BLACK + "" + ChatColor.GOLD, String.valueOf(0), 5);
             this.blank = new Row("blank", "", ChatColor.AQUA.toString(), "", 4);
             this.lead = new Row("lead", "", ChatColor.YELLOW + "In the Lead:", "", 3);
-            this.leadTrack = new TrackRow("leadTrack", "None", ChatColor.GRAY.toString(), ": " + ChatColor.GOLD + "0/20", 2);
+            this.leadTrack = new TrackRow("leadTrack", "None", ChatColor.GRAY.toString(), ": " + ChatColor.GOLD + "0/0", 2);
             this.footer = new Row("footer", HEADERFOOTER, ChatColor.DARK_GRAY.toString(), HEADERFOOTER, 1);
             super.init("OITC", header, playerCount, specCount, timeRemaining, pointsTrack, blank, lead, leadTrack, footer);
         }

@@ -36,6 +36,8 @@ import java.util.List;
  */
 
 public final class Spleef extends InvadedEvent {
+    private SpleefSB spleefSB;
+
     private boolean matchCountdown;
     private BukkitRunnable heightCheck;
 
@@ -56,6 +58,8 @@ public final class Spleef extends InvadedEvent {
     public Spleef() {
         super("Spleef", "spleef");
 
+        this.spleefSB = new SpleefSB();
+
         this.shovel = new ItemStack(Material.DIAMOND_SPADE);
         ItemMeta itemMeta = shovel.getItemMeta();
         itemMeta.addEnchant(Enchantment.DIG_SPEED, 5, true);
@@ -72,6 +76,8 @@ public final class Spleef extends InvadedEvent {
         this.MATCH_COUNTER = getEventMessage("MATCH_COUNTER");
         this.MATCH_START = getEventMessage("MATCH_START");
         this.ELIMINATED = getEventMessage("ELIMINATED");
+
+        setSpectatorSB(spleefSB);
     }
 
     @Override
@@ -87,16 +93,16 @@ public final class Spleef extends InvadedEvent {
                         toLose.add(player);
                     }
                 }
+
                 for (Player player : toLose) {
+                    EventUtils.broadcastEventMessage(ELIMINATED
+                            .replace("{player}", player.getName())
+                            .replace("{remaining}", String.valueOf(players.size() - 1)));
                     loseEvent(player);
-                    EventUtils.broadcastEventMessage(ELIMINATED.replace("{player}", player.getName())
-                            .replace("{remaining}", String.valueOf(players.size())));
                 }
                 toLose.clear();
             }
         };
-
-        initPlayerCheck();
     }
 
     @Override
@@ -105,13 +111,14 @@ public final class Spleef extends InvadedEvent {
 
         for (int i = 0; i < players.size(); i++) {
             Player player = players.get(i);
-            giveScoreboard(player, new SpleefSB(player));
+            player.setScoreboard(spleefSB.getScoreboard());
             player.getInventory().clear();
             player.teleport(i % 2 == 0 ? start1 : start2);
         }
 
+        startRefreshing(spleefSB);
+
         heightCheck.runTaskTimerAsynchronously(plugin, 0, 1);
-        playerCheck.runTaskTimerAsynchronously(plugin, 0, 1);
         startMatchCountdown();
         players.forEach(player -> player.getInventory().setItem(0, shovel));
     }
@@ -120,7 +127,6 @@ public final class Spleef extends InvadedEvent {
     public void over() {
         eventTimer.cancel();
         heightCheck.cancel();
-        playerCheck.cancel();
     }
 
     public void buildSnow(BlockVector pos1, BlockVector pos2) {
@@ -176,7 +182,7 @@ public final class Spleef extends InvadedEvent {
         }
 
         Block block = event.getBlock();
-        if (event.getBlock().getType() == Material.SNOW_BLOCK) {
+        if (block.getType() == Material.SNOW_BLOCK) {
             block.setType(Material.AIR);
             event.getPlayer().getInventory().addItem(new ItemStack(Material.SNOW_BALL, 4));
         }
@@ -209,8 +215,8 @@ public final class Spleef extends InvadedEvent {
         private Row header;
         private Row footer;
 
-        public SpleefSB(Player player) {
-            super(player, "spleef");
+        public SpleefSB() {
+            super(null, "spleef");
             this.header = new Row("header", HEADERFOOTER, ChatColor.BOLD.toString(), HEADERFOOTER, 5);
             this.playerCount = new TrackRow("playerCount", ChatColor.YELLOW + "Players: ", ChatColor.DARK_PURPLE + "" + ChatColor.GOLD, String.valueOf(0), 4);
             this.specCount = new TrackRow("specCount", ChatColor.YELLOW + "Spectators: ", ChatColor.LIGHT_PURPLE + "" + ChatColor.GOLD, String.valueOf(0), 3);

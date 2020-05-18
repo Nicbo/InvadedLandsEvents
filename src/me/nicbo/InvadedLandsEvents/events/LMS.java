@@ -26,6 +26,8 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 
 public final class LMS extends InvadedEvent {
+    private LMSSB lmsSB;
+
     private Location start1;
     private Location start2;
 
@@ -43,6 +45,8 @@ public final class LMS extends InvadedEvent {
 
     public LMS() {
         super("Last Man Standing", "lms");
+
+        this.lmsSB = new LMSSB();
 
         this.start1 = ConfigUtils.deserializeLoc(eventConfig.getConfigurationSection("start-location-1"), eventWorld);
         this.start2 = ConfigUtils.deserializeLoc(eventConfig.getConfigurationSection("start-location-2"), eventWorld);
@@ -68,42 +72,35 @@ public final class LMS extends InvadedEvent {
         this.MATCH_START = getEventMessage("MATCH_START");
         this.ELIMINATED = getEventMessage("ELIMINATED");
 
-        setSpectatorSB(new LMSSB(null));
+        setSpectatorSB(lmsSB);
     }
 
     @Override
     public void init() {
-        initPlayerCheck();
+
     }
 
     @Override
     public void start() {
-        players.forEach(player -> giveScoreboard(player, new LMSSB(player)));
-        playerCheck.runTaskTimerAsynchronously(plugin, 0, 20);
+        for (int i = 0; i < players.size(); i++) {
+            Player player = players.get(i);
+            player.setScoreboard(lmsSB.getScoreboard());
+
+            player.teleport(i % 2 == 0 ? start1 : start2);
+            player.getInventory().setArmorContents(armour);
+            player.getInventory().setContents(kit);
+        }
+
+        startRefreshing(lmsSB);
         startTimer(TIME_LIMIT);
         startMatchCountdown();
-        tpPlayers();
-        applyKit();
     }
 
     @Override
     public void over() {
         eventTimer.cancel();
-        playerCheck.cancel();
     }
 
-    private void tpPlayers() {
-        for (int i = 0; i < players.size(); i++) {
-            players.get(i).teleport(i % 2 == 0 ? start1 : start2);
-        }
-    }
-
-    private void applyKit() {
-        for (Player player : players) {
-            player.getInventory().setArmorContents(armour);
-            player.getInventory().setContents(kit);
-        }
-    }
 
     private void startMatchCountdown() {
         matchCountdown = true;
@@ -142,7 +139,7 @@ public final class LMS extends InvadedEvent {
 
             if (event.getDamage() >= player.getHealth()) {
                 EventUtils.broadcastEventMessage(ELIMINATED.replace("{player}", player.getName())
-                        .replace("{players_left}", String.valueOf(players.size() - 1)));
+                        .replace("{remaining}", String.valueOf(players.size() - 1)));
                 plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
                     player.spigot().respawn();
                     loseEvent(player);
@@ -151,7 +148,7 @@ public final class LMS extends InvadedEvent {
         }
     }
 
-    public class LMSSB extends EventScoreboard {
+    private class LMSSB extends EventScoreboard {
         private TrackRow playerCount;
         private TrackRow specCount;
         private TrackRow timeRemaining;
@@ -159,8 +156,8 @@ public final class LMS extends InvadedEvent {
         private Row header;
         private Row footer;
 
-        public LMSSB(Player player) {
-            super(player, "lms");
+        public LMSSB() {
+            super(null, "lms");
             this.header = new Row("header", HEADERFOOTER, ChatColor.BOLD.toString(), HEADERFOOTER, 5);
             this.playerCount = new TrackRow("playerCount", ChatColor.YELLOW + "Players: ", ChatColor.DARK_PURPLE + "" + ChatColor.GOLD, String.valueOf(0), 4);
             this.specCount = new TrackRow("specCount", ChatColor.YELLOW + "Spectators: ", ChatColor.LIGHT_PURPLE + "" + ChatColor.GOLD, String.valueOf(0), 3);

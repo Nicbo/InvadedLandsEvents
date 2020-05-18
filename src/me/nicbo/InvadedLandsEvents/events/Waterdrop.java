@@ -27,6 +27,8 @@ import java.util.List;
  */
 
 public final class Waterdrop extends InvadedEvent {
+    private WaterdropSB waterdropSB;
+
     private ProtectedRegion region;
     private Location startLoc;
     private BlockVector pos1;
@@ -59,12 +61,9 @@ public final class Waterdrop extends InvadedEvent {
     public Waterdrop() {
         super("Waterdrop", "waterdrop");
 
-        String regionName = eventConfig.getString("safe-region");
-        try {
-            this.region = regionManager.getRegion(regionName);
-        } catch (NullPointerException npe) {
-            logger.severe("Waterdrop region '" + regionName + "' does not exist");
-        }
+        this.waterdropSB = new WaterdropSB();
+
+        this.region = getRegion(eventConfig.getString("safe-region"));
 
         this.startLoc = ConfigUtils.deserializeLoc(eventConfig.getConfigurationSection("start-location"), eventWorld);
         this.pos1 = ConfigUtils.deserializeBlockVector(eventConfig.getConfigurationSection("water-position-1"));
@@ -89,7 +88,7 @@ public final class Waterdrop extends InvadedEvent {
         this.FAIL_JUMP = getEventMessage("FAIL_JUMP");
         this.ELIMINATED = getEventMessage("ELIMINATED");
 
-        setSpectatorSB(new WaterdropSB(null));
+        setSpectatorSB(waterdropSB);
     }
 
     @Override
@@ -97,7 +96,7 @@ public final class Waterdrop extends InvadedEvent {
         this.round = 1;
         this.timer = 20;
         this.waterdropTimer = new BukkitRunnable() {
-            private int[] times = new int[] { 20, 20, 19, 19, 18, 17, 17, 16, 15, 14, 14, 13, 12, 12, 10, 10, 10, 9, 8, 7, 7, 6 };
+            private final int[] times = new int[] { 20, 20, 19, 19, 18, 17, 17, 16, 15, 14, 14, 13, 12, 12, 10, 10, 10, 9, 8, 7, 7, 6 };
 
             @Override
             public void run() {
@@ -133,7 +132,8 @@ public final class Waterdrop extends InvadedEvent {
 
     @Override
     public void start() {
-        players.forEach(player -> giveScoreboard(player, new WaterdropSB(player)));
+        players.forEach(player -> player.setScoreboard(waterdropSB.getScoreboard()));
+        startRefreshing(waterdropSB);
         fallCheck.runTaskTimerAsynchronously(plugin,0, 1);
         waterdropTimer.runTaskTimer(plugin, 0, 20);
         newRound();
@@ -417,7 +417,7 @@ public final class Waterdrop extends InvadedEvent {
     hardCovers - up to round 20
    */
 
-    public class WaterdropSB extends EventScoreboard {
+    private class WaterdropSB extends EventScoreboard {
         private TrackRow roundTrack;
         private TrackRow timerTrack;
         private TrackRow playerCount;
@@ -427,8 +427,8 @@ public final class Waterdrop extends InvadedEvent {
         private Row footer;
         private Row blank;
 
-        public WaterdropSB(Player player) {
-            super(player, "waterdrop");
+        public WaterdropSB() {
+            super(null, "waterdrop");
             this.header = new Row("header", HEADERFOOTER, ChatColor.BOLD.toString(), HEADERFOOTER, 7);
             this.roundTrack = new TrackRow("round", ChatColor.YELLOW + "Round: ", ChatColor.GOLD.toString(), String.valueOf(0), 6);
             this.timerTrack = new TrackRow("timer", ChatColor.YELLOW + "Time Remain", "ing: " + ChatColor.GOLD, String.valueOf(20), 5);

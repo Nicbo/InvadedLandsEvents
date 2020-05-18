@@ -49,6 +49,8 @@ public final class Brackets extends Duel {
 
     @Override
     public void start() {
+        //giveAllScoreboard(bracketsSB.getScoreboard());
+        // startRefreshing(bracketsSB);
         leaveCheck.runTaskTimerAsynchronously(plugin, 0, 1);
         newRound();
     }
@@ -108,4 +110,8 @@ public final class Brackets extends Duel {
             }
         }
     }
+    /*
+    TODO:
+        - Scoreboard for matches (Player vs. Player)
+     */
 }

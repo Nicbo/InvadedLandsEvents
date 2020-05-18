@@ -1,4 +1,4 @@
-package me.nicbo.InvadedLandsEvents.listeners;
+package me.nicbo.InvadedLandsEvents.event;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
