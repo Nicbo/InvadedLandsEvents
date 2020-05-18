@@ -8,7 +8,9 @@ import me.nicbo.InvadedLandsEvents.utils.EventUtils;
 import me.nicbo.InvadedLandsEvents.utils.GeneralUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -29,6 +31,8 @@ public final class RoD extends InvadedEvent {
     private ProtectedRegion winRegion;
     private Location startLoc;
 
+    private ItemStack boots;
+
     private final int TIME_LIMIT;
 
     public RoD() {
@@ -36,6 +40,7 @@ public final class RoD extends InvadedEvent {
         this.rodSB = new RoDSB();
         this.winRegion = getRegion(eventConfig.getString("win-region"));
         this.startLoc = ConfigUtils.deserializeLoc(eventConfig.getConfigurationSection("start-location"), eventWorld);
+        this.boots = new ItemStack(Material.LEATHER_BOOTS, 1);
         this.TIME_LIMIT = eventConfig.getInt("int-seconds-time-limit");
         setSpectatorSB(rodSB);
     }
@@ -57,7 +62,11 @@ public final class RoD extends InvadedEvent {
 
     @Override
     public void start() {
-        giveAllScoreboard(rodSB.getScoreboard());
+        for (Player player : players) {
+            player.setScoreboard(rodSB.getScoreboard());
+            player.getInventory().setBoots(boots);
+        }
+
         startRefreshing(rodSB);
         plugin.getServer().getScheduler().runTask(plugin, this::tpApplyInvisibility);
         didPlayerFinish.runTaskTimerAsynchronously(plugin, 0, 1);

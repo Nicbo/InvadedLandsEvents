@@ -1,10 +1,10 @@
 package me.nicbo.InvadedLandsEvents.events;
 
-import org.bukkit.scoreboard.Team;
+import me.nicbo.InvadedLandsEvents.events.utils.EventTeam;
 
 public final class TDM extends InvadedEvent {
-    private Team red;
-    private Team blue;
+    private EventTeam red;
+    private EventTeam blue;
 
     public TDM() {
         super("Team Deathmatch", "tdm");
