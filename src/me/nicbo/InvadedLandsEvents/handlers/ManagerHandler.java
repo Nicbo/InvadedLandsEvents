@@ -13,13 +13,11 @@ import me.nicbo.InvadedLandsEvents.managers.EventPartyRequestManager;
  */
 
 public final class ManagerHandler {
-    private EventsMain plugin;
     private EventPartyManager partyManager;
     private EventManager eventManager;
     private EventPartyRequestManager eventPartyRequestManager;
 
     public ManagerHandler(EventsMain plugin) {
-        this.plugin = plugin;
         this.eventManager = new EventManager(plugin);
         this.eventPartyRequestManager = new EventPartyRequestManager();
         this.partyManager = new EventPartyManager(plugin, eventPartyRequestManager);

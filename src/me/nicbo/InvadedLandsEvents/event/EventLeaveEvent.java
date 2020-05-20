@@ -4,6 +4,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+/**
+ * Gets called when player leaves the event
+ *
+ * @author Nicbo
+ * @since 2020-05-17
+ */
+
 public final class EventLeaveEvent extends Event {
     private static final HandlerList HANDLERS;
 

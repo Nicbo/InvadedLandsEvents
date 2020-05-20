@@ -8,7 +8,7 @@ import org.bukkit.ChatColor;
  *
  * @author Nicbo
  * @author StarZorrow
- * @since 2020-03-12
+ * @since 2020-05-01
  */
 
 public final class EventPartyMessage {

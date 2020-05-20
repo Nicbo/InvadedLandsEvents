@@ -26,7 +26,7 @@ import java.util.*;
  *
  * @author Nicbo
  * @author StarZorrow
- * @since 2020-03-12
+ * @since 2020-02-07
  */
 
 public final class EventCommand implements CommandExecutor, TabCompleter {
@@ -252,7 +252,6 @@ public final class EventCommand implements CommandExecutor, TabCompleter {
     /*
     TODO:
         - Host command needs a GUI
-        - Needs optimizing
-        - econfig reload and save don't work as intended
+        - Permissions
      */
 }

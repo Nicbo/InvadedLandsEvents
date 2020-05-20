@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
  * Event Config command class, handles commands for /eventconfig
  *
  * @author Nicbo
- * @since 2020-03-12
+ * @since 2020-02-10
  */
 
 public final class EventConfigCommand implements CommandExecutor, TabCompleter {
@@ -230,4 +230,10 @@ public final class EventConfigCommand implements CommandExecutor, TabCompleter {
         }
         return null;
     }
+
+    /*
+    TODO:
+        - Making econfigs look cleaner/easier to read
+        - Permissions
+     */
 }

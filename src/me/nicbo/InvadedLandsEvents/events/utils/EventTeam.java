@@ -4,6 +4,15 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+
+/**
+ * Team class
+ * Used by team sumos and tdm
+ *
+ * @author Nicbo
+ * @since 2020-05-18
+ */
+
 public class EventTeam {
     protected List<Player> players;
 

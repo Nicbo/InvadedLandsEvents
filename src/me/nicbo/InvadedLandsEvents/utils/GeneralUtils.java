@@ -8,11 +8,11 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Utility class for events
+ * Utility class for general purposes
  *
  * @author Nicbo
  * @author StarZorrow
- * @since 2020-03-12
+ * @since 2020-02-11
  */
 
 public final class GeneralUtils {

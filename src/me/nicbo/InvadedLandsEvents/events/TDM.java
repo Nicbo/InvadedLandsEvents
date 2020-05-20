@@ -232,6 +232,7 @@ public final class TDM extends InvadedEvent {
     }
 
     /*
-    This entire event is 100% untested
+    TODO:
+        - Rest of event
      */
 }

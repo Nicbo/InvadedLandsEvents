@@ -21,7 +21,7 @@ import java.util.Map;
  *
  * @author Nicbo
  * @author StarZorrow
- * @since 2020-03-12
+ * @since 2020-02-06
  */
 
 public final class EventManager {
@@ -196,6 +196,9 @@ public final class EventManager {
 
     /*
     TODO:
+        - Send event description when player joins event
         - Make descriptions editable based on config (later version)
+        - Allow /e forceend during countdown
+        - Possibly add /e forcestart
      */
 }

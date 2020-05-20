@@ -23,7 +23,7 @@ import java.util.List;
  * Last player to fail wins
  *
  * @author Nicbo
- * @since 2020-05-10
+ * @since 2020-02-29
  */
 
 public final class Waterdrop extends InvadedEvent {

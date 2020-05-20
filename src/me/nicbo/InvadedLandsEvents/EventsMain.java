@@ -18,7 +18,7 @@ import java.util.logging.Logger;
  *
  * @author Nicbo
  * @author StarZorrow
- * @since 2020-03-12
+ * @since 2020-02-05
  */
 
 public class EventsMain extends JavaPlugin {
@@ -94,4 +94,9 @@ public class EventsMain extends JavaPlugin {
     public static ConfigFile getMessages() {
         return messages;
     }
+
+    /*
+    TODO:
+        - clean this up
+     */
 }

@@ -14,8 +14,9 @@ import java.util.List;
 /**
  * Flickerless scoreboard class
  * Inspired by knoapp
+ *
  * @author Nicbo
- * @since 2020-05-07
+ * @since 2020-05-04
  */
 
 public abstract class EventScoreboard {

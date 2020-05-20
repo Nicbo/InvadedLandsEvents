@@ -8,6 +8,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 
+/**
+ * Listener for GUIs
+ *
+ * @author thehydrogen
+ * @since 2020-05-05
+ */
+
 public class GUIListener implements Listener {
     
     @EventHandler(priority = EventPriority.HIGHEST)

@@ -17,8 +17,9 @@ import java.util.List;
  *
  * @author Nicbo
  * @author StarZorrow
- * @since 2020-05-5
+ * @since 2020-05-05
  */
+
 public abstract class Duel extends InvadedEvent {
 
     protected Location startLoc1;
@@ -125,4 +126,9 @@ public abstract class Duel extends InvadedEvent {
 
         fightingPlayers.add(player2);
     }
+
+    /*
+    TODO:
+        - Make this class compatible w/ team sumos
+     */
 }

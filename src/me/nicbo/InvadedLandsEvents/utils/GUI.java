@@ -18,6 +18,7 @@ import java.util.*;
  * @author thehydrogen
  * @since 2020-05-06
  */
+
 public class GUI {
     private final Inventory inv;
     public static final Map<UUID, GUI> openInventories;

@@ -13,7 +13,7 @@ import org.bukkit.potion.PotionEffect;
  *
  * @author Nicbo
  * @author StarZorrow
- * @since 2020-03-12
+ * @since 2020-02-08
  */
 
 public final class EventUtils {

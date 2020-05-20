@@ -32,7 +32,7 @@ import java.util.logging.Logger;
  *
  * @author Nicbo
  * @author StarZorrow
- * @since 2020-03-12
+ * @since 2020-02-05
  */
 
 public abstract class InvadedEvent implements Listener {
@@ -297,7 +297,7 @@ public abstract class InvadedEvent implements Listener {
         }
     }
 
-    private void playerWon(Player player) {
+    protected void playerWon(Player player) {
         endEvent();
         broadcastWinner(player == null ? "No one" : player.getName());
 

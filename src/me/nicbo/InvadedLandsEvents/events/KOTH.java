@@ -295,10 +295,4 @@ public final class KOTH extends InvadedEvent {
             }
         }
     }
-
-    /*
-    TODO:
-        - sb
-        - test if this acc works
-     */
 }
