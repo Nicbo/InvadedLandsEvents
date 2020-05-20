@@ -35,7 +35,7 @@ public abstract class Duel extends InvadedEvent {
     protected final String MATCH_START;
     protected final String MATCH_COUNTER;
     protected final String MATCH_STARTED;
-    protected final String MATCH_ENDED;
+    protected final String ELIMINATED;
 
     public Duel(String eventName, String configName) {
         super(eventName, configName);
@@ -48,12 +48,12 @@ public abstract class Duel extends InvadedEvent {
         this.MATCH_START = getEventMessage("MATCH_START");
         this.MATCH_COUNTER = getEventMessage("MATCH_COUNTER");
         this.MATCH_STARTED = getEventMessage("MATCH_STARTED");
-        this.MATCH_ENDED = getEventMessage("MATCH_ENDED");
+        this.ELIMINATED = getEventMessage("ELIMINATED");
     }
 
     public abstract void tpFightingPlayers();
 
-    // Use EventLeaveEvent event
+    // Use EventLeaveEvent event instead
     protected void initLeaveCheck() {
         this.leaveCheck = new BukkitRunnable() {
             @Override
@@ -106,7 +106,8 @@ public abstract class Duel extends InvadedEvent {
     protected void roundOver(Player loser) {
         fighting = false;
         Player winner = fightingPlayers.get(0);
-        EventUtils.broadcastEventMessage(MATCH_ENDED.replace("{loser}", loser.getName())
+        EventUtils.broadcastEventMessage(ELIMINATED
+                .replace("{loser}", loser.getName())
                 .replace("{winner}", winner.getName())
                 .replace("{remaining}", String.valueOf(players.size())));
         EventUtils.clear(winner);

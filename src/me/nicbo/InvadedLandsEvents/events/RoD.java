@@ -75,7 +75,6 @@ public final class RoD extends InvadedEvent {
 
     @Override
     public void over() {
-        stopRefreshing();
         didPlayerFinish.cancel();
         eventTimer.cancel();;
     }

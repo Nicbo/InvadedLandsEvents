@@ -30,12 +30,12 @@ import java.util.*;
  */
 
 public final class OITC extends InvadedEvent {
-    private HashMap<Player, OITCSB> scoreboards;
+    private Map<Player, OITCSB> scoreboards;
 
     private List<Location> locations;
     private ItemStack[] kit;
 
-    private HashMap<Player, Integer> points;
+    private Map<Player, Integer> points;
     private Player leader;
 
     private Set<Player> respawningPlayers;

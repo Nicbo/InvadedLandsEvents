@@ -39,6 +39,7 @@ public final class Spleef extends InvadedEvent {
     private SpleefSB spleefSB;
 
     private boolean matchCountdown;
+    private BukkitRunnable matchCountdownRunnable;
     private BukkitRunnable heightCheck;
 
     private int minY;
@@ -83,6 +84,24 @@ public final class Spleef extends InvadedEvent {
     @Override
     public void init() {
         buildSnow(pos1, pos2);
+
+        this.matchCountdownRunnable = new BukkitRunnable() {
+            private int timer = 5;
+
+            @Override
+            public void run() {
+                EventUtils.broadcastEventMessage(MATCH_COUNTER.replace("{seconds}", String.valueOf(timer)));
+                if (timer == 1) {
+                    EventUtils.broadcastEventMessage(MATCH_START);
+                    matchCountdown = false;
+                    this.cancel();
+                }
+
+                timer--;
+            }
+
+        };
+
         this.heightCheck = new BukkitRunnable() {
             private List<Player> toLose = new ArrayList<>();
 
@@ -114,17 +133,20 @@ public final class Spleef extends InvadedEvent {
             player.setScoreboard(spleefSB.getScoreboard());
             player.getInventory().clear();
             player.teleport(i % 2 == 0 ? start1 : start2);
+            player.getInventory().setItem(0, shovel);
         }
 
         startRefreshing(spleefSB);
 
         heightCheck.runTaskTimerAsynchronously(plugin, 0, 1);
         startMatchCountdown();
-        players.forEach(player -> player.getInventory().setItem(0, shovel));
     }
 
     @Override
     public void over() {
+        if (matchCountdown)
+            matchCountdownRunnable.cancel();
+
         eventTimer.cancel();
         heightCheck.cancel();
     }
@@ -148,27 +170,7 @@ public final class Spleef extends InvadedEvent {
 
     private void startMatchCountdown() {
         matchCountdown = true;
-        new BukkitRunnable() {
-            private int timer = 5;
-
-            @Override
-            public void run() {
-                if (!matchCountdown) {
-                    this.cancel();
-                    return;
-                }
-
-                EventUtils.broadcastEventMessage(MATCH_COUNTER.replace("{seconds}", String.valueOf(timer)));
-                if (timer == 1) {
-                    EventUtils.broadcastEventMessage(MATCH_START);
-                    matchCountdown = false;
-                    this.cancel();
-                }
-
-                timer--;
-            }
-
-        }.runTaskTimerAsynchronously(plugin, 0, 20);
+        matchCountdownRunnable.runTaskTimerAsynchronously(plugin, 0, 20);
     }
 
     @EventHandler

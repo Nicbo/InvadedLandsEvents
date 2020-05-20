@@ -55,13 +55,13 @@ brackets:
   MATCH_START: '&eStarting a brackets match: &6{player1} &evs. &6{player2}&e.'
   MATCH_COUNTER: '&eThe match starts in &6{seconds} &esecond(s)...'
   MATCH_STARTED: '&eThe match has started!'
-  MATCH_ENDED: '&6{loser} &ewas eliminated by &6{winner}&e. (&6{remaining}&e)'
+  ELIMINATED: '&6{loser} &ewas eliminated by &6{winner}&e. (&6{remaining}&e)'
 
 sumo:
   MATCH_START: '&eStarting a sumo match: &6{player1} &evs. &6{player2}&e.'
   MATCH_COUNTER: '&eThe match starts in &6{seconds} &esecond(s)...'
   MATCH_STARTED: '&eThe match has started!'
-  MATCH_ENDED: '&6{loser} &ewas eliminated by &6{winner}&e. (&6{remaining}&e)'
+  ELIMINATED: '&6{loser} &ewas eliminated by &6{winner}&e. (&6{remaining}&e)'
 
 waterdrop:
   ROUND_START: '&eStarting round &6{round}&e.'
@@ -92,3 +92,15 @@ tnttag:
   ROUND_START: '&eTNT Tag round &6{round} &ehas started!'
   TAG: '&c&lYOU''RE TAGGED!!!!'
   ELIMINATED: '&6{player} &ewas eliminated. (&6{remaining}&e)'
+
+tdm:
+  MATCH_COUNTER: '&eThe game starts in &6{seconds} &esecond(s)...'
+  MATCH_START: '&eThe match has started'
+  ELIMINATED: '&6{player} &ewas eliminated by &6{winner}&e. (&6{killer}&e)'
+  WINNERS:
+    - '&e&lTop 5 Killers on the Winning Team:'
+    - '&e&l1) &r&6{winner1}&e: &6{kills1}'
+    - '&e&l2) &r&6{winner2}&e: &6{kills2}'
+    - '&e&l3) &r&6{winner3}&e: &6{kills3}'
+    - '&e&l4) &r&6{winner4}&e: &6{kills4}'
+    - '&e&l5) &r&6{winner5}&e: &6{kills5}'

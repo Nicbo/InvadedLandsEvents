@@ -44,6 +44,7 @@ public final class Brackets extends Duel {
 
     @Override
     public void init() {
+        frozen = false;
         initLeaveCheck();
     }
 
@@ -99,6 +100,9 @@ public final class Brackets extends Duel {
             Player player = (Player) event.getEntity();
             if (blockListener(player))
                 return;
+
+            if (frozen)
+                event.setCancelled(true);
 
             if (event.getDamage() >= player.getHealth()) {
                 fightingPlayers.remove(player);

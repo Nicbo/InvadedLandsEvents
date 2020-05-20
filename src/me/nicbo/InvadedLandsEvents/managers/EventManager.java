@@ -14,6 +14,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Event manager handles hosting, spectating, joining etc.
@@ -26,7 +27,7 @@ import java.util.HashMap;
 public final class EventManager {
     private EventsMain plugin;
 
-    private HashMap<String, InvadedEvent> events;
+    private Map<String, InvadedEvent> events;
     private InvadedEvent currentEvent;
 
     private int countDown;

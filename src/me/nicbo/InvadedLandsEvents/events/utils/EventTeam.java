@@ -4,12 +4,15 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+public class EventTeam {
+    protected List<Player> players;
 
-public final class EventTeam {
-    private List<Player> players;
-
-    public EventTeam() {
+    protected EventTeam() {
         this.players = new ArrayList<>();
+    }
+
+    public boolean contains(Player player) {
+        return players.contains(player);
     }
 
     public void addPlayer(Player player) {
@@ -20,7 +23,19 @@ public final class EventTeam {
         players.remove(player);
     }
 
+    public boolean isEmpty() {
+        return players.isEmpty();
+    }
+
+    public int getSize() {
+        return players.size();
+    }
+
     public List<Player> getPlayers() {
         return players;
+    }
+
+    public void clear() {
+        players.clear();
     }
 }

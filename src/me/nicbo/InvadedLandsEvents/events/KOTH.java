@@ -31,7 +31,7 @@ import java.util.*;
  */
 
 public final class KOTH extends InvadedEvent {
-    private HashMap<Player, KOTHSB> scoreboards;
+    private Map<Player, KOTHSB> scoreboards;
 
     private ProtectedRegion region;
 
@@ -41,7 +41,7 @@ public final class KOTH extends InvadedEvent {
 
     private Set<Player> respawningPlayers;
 
-    private HashMap<Player, Integer> points;
+    private Map<Player, Integer> points;
     private List<Player> playersInRegion;
     private BukkitRunnable regionChecker;
     private BukkitRunnable incrementPoints;
@@ -169,7 +169,6 @@ public final class KOTH extends InvadedEvent {
     @Override
     public void over() {
         eventTimer.cancel();
-        stopRefreshing();
         points.clear();
         regionChecker.cancel();
         incrementPoints.cancel();

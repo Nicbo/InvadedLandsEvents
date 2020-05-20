@@ -32,7 +32,7 @@ public final class EventConfigCommand implements CommandExecutor, TabCompleter {
     private FileConfiguration config;
 
     private List<String> args0;
-    private HashMap<String, List<String>> args1;
+    private Map<String, List<String>> args1;
 
     private final String DOES_NOT_EXIST = ChatColor.RED + "Sub command does not exist!";
     private final String POSSIBLE_SUB_COMMANDS = ChatColor.GOLD + "Possible sub commands: ";

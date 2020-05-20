@@ -80,11 +80,12 @@ public final class GeneralEventListener implements Listener {
     public void itemCraft(CraftItemEvent event) {
         if (runEvent((Player) event.getWhoClicked())) {
             ItemStack item = event.getCurrentItem();
-            if (item == null || item.getType() == Material.AIR) return;
+            if (item == null || item.getType() == Material.AIR)
+                return;
 
             event.setCancelled(true);
             Player player = (Player) event.getWhoClicked();
-            player.sendMessage(EventMessage.CRAFT_IN_EVENT.toString());
+            player.sendMessage(EventMessage.CRAFT_IN_EVENT);
         }
     }
 
