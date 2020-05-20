@@ -19,6 +19,15 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
 
+/**
+ * TDM Event:
+ * 2 teams with kits
+ * 5 players with the top kills from the winning team get rewards
+ *
+ * @author Nicbo
+ * @since 2020-05-18
+ */
+
 public final class TDM extends InvadedEvent {
     private TDMTeam red;
     private TDMTeam blue;

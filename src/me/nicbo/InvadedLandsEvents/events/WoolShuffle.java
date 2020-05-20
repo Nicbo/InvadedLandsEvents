@@ -19,4 +19,12 @@ public final class WoolShuffle extends InvadedEvent {
     public void over() {
 
     }
+
+    private void newRound() {
+
+    }
+
+    private boolean isPlayerOnWool() {
+        return true;
+    }
 }
