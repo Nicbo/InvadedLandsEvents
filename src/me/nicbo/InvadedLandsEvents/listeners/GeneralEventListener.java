@@ -95,4 +95,9 @@ public final class GeneralEventListener implements Listener {
             event.setDeathMessage("");
         }
     }
+
+    /*
+    TODO:
+        - CommandPreProcessEvent make sure command is in config (enabled commands in event) (auto allow event cmds and add perm to bypass)
+     */
 }

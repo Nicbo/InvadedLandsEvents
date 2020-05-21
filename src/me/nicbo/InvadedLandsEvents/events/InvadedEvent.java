@@ -308,7 +308,7 @@ public abstract class InvadedEvent implements Listener {
         }, 100);
     }
 
-    private void tdmTeamWon(TDMTeam team) {
+    protected void tdmTeamWon(TDMTeam team) {
         endEvent();
         broadcastWinner(team.getName());
         plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {

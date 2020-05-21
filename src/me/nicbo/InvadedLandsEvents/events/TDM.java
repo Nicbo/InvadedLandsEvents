@@ -1,5 +1,6 @@
 package me.nicbo.InvadedLandsEvents.events;
 
+import me.nicbo.InvadedLandsEvents.event.EventLeaveEvent;
 import me.nicbo.InvadedLandsEvents.events.utils.EventTeam;
 import me.nicbo.InvadedLandsEvents.utils.ConfigUtils;
 import me.nicbo.InvadedLandsEvents.utils.EventUtils;
@@ -122,6 +123,24 @@ public final class TDM extends InvadedEvent {
         return (red.contains(player1) && red.contains(player2)) || (blue.contains(player1) && red.contains(player2));
     }
 
+    /**
+     * Removes player from their team and checks if team is empty after removal
+     * If team is empty the other team wins
+     * @param player to be removed
+     */
+
+    private void removeFromTeam(Player player) {
+        if (red.contains(player))
+            red.removePlayer(player);
+        else if (blue.contains(player))
+            blue.removePlayer(player);
+
+        if (red.isEmpty())
+            tdmTeamWon(blue);
+        else if (blue.isEmpty())
+            tdmTeamWon(red);
+    }
+
     @EventHandler
     public void playerHurt(EntityDamageByEntityEvent event) {
         if (event.getEntity() instanceof Player) {
@@ -148,9 +167,16 @@ public final class TDM extends InvadedEvent {
                 plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
                     player.spigot().respawn();
                     loseEvent(player);
+                    removeFromTeam(player);
                 }, 1);
             }
         }
+    }
+
+    @EventHandler
+    public void onEventLeave(EventLeaveEvent event) {
+        Player player = event.getPlayer();
+        removeFromTeam(player);
     }
 
 
@@ -189,7 +215,7 @@ public final class TDM extends InvadedEvent {
         }
 
         public void preparePlayers() {
-            for (Player player : players) {
+            for (Player player : super.players) {
                 player.teleport(spawnLoc);
                 player.getInventory().setArmorContents(armour);
                 player.getInventory().setContents(kit);
@@ -199,7 +225,7 @@ public final class TDM extends InvadedEvent {
         public List<TDMPlayer> getTopKillers() {
             Set<TDMPlayer> sorted = new TreeSet<>();
 
-            for (Player player : kills.keySet()) {
+            for (Player player : super.players) {
                 sorted.add(new TDMPlayer(player, kills.get(player)));
             }
 
@@ -234,5 +260,6 @@ public final class TDM extends InvadedEvent {
     /*
     TODO:
         - Rest of event
+        - getTopKillers() might not work
      */
 }

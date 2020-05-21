@@ -104,3 +104,9 @@ tdm:
     - '&e&l3) &r&6{winner3}&e: &6{kills3}'
     - '&e&l4) &r&6{winner4}&e: &6{kills4}'
     - '&e&l5) &r&6{winner5}&e: &6{kills5}'
+
+woolshuffle:
+  ROUND_START: '&eStarting round &6{round}&e.'
+  FAILED: '&6{player} &c&lhas failed!'
+  ELIMINATED: '&6{player} &ewas eliminated. (&6{remaining}&e)'
+  COLOUR: '&eYou must get onto the {colour} &ewool side!'
