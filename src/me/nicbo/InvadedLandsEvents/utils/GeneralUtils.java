@@ -48,6 +48,11 @@ public final class GeneralUtils {
         return list.isEmpty() ? null : list.get(random.nextInt(list.size()));
     }
 
+    @SafeVarargs
+    public static <T> T getRandom(T... items) {
+        return items[random.nextInt(items.length)];
+    }
+
     public static List<Player> getPlayers() {
         return new ArrayList<>(Bukkit.getOnlinePlayers());
     }

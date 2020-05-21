@@ -110,3 +110,5 @@ woolshuffle:
   FAILED: '&6{player} &c&lhas failed!'
   ELIMINATED: '&6{player} &ewas eliminated. (&6{remaining}&e)'
   COLOUR: '&eYou must get onto the {colour} &ewool side!'
+  PVP_ENABLED: '&c&lPvp is enabled this round!'
+  PVP_DISABLED: '&c&lPvp is disabled this round!'

@@ -6,6 +6,7 @@ import me.nicbo.InvadedLandsEvents.managers.EventManager;
 import me.nicbo.InvadedLandsEvents.managers.EventPartyManager;
 import me.nicbo.InvadedLandsEvents.managers.EventPartyRequestManager;
 import me.nicbo.InvadedLandsEvents.party.EventParty;
+import me.nicbo.InvadedLandsEvents.utils.GeneralUtils;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -70,7 +71,6 @@ public final class EventCommand implements CommandExecutor, TabCompleter {
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public boolean onCommand(CommandSender sender, Command cmd, String s, String[] args) {
         if (cmd.getName().toLowerCase().equalsIgnoreCase("event")) {
             if (sender instanceof Player) {
