@@ -417,7 +417,7 @@ public final class Waterdrop extends InvadedEvent {
     hardCovers - up to round 20
    */
 
-    private class WaterdropSB extends EventScoreboard {
+    private final class WaterdropSB extends EventScoreboard {
         private TrackRow roundTrack;
         private TrackRow timerTrack;
         private TrackRow playerCount;

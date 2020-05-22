@@ -261,5 +261,6 @@ public final class TDM extends InvadedEvent {
     TODO:
         - Rest of event
         - getTopKillers() might not work
+        - scoreboard
      */
 }

@@ -31,12 +31,12 @@ public final class EventConfigCommand implements CommandExecutor, TabCompleter {
     private EventsMain plugin;
     private FileConfiguration config;
 
-    private List<String> args0;
-    private Map<String, List<String>> args1;
+    private final List<String> args0;
+    private final Map<String, List<String>> args1;
 
-    private final String DOES_NOT_EXIST = ChatColor.RED + "Sub command does not exist!";
-    private final String POSSIBLE_SUB_COMMANDS = ChatColor.GOLD + "Possible sub commands: ";
-    private final String USAGE = ChatColor.GOLD + "Usage: " + ChatColor.YELLOW;
+    private final String DOES_NOT_EXIST;
+    private final String POSSIBLE_SUB_COMMANDS;
+    private final String USAGE;
 
     public EventConfigCommand(EventsMain plugin) {
         this.plugin = plugin;
@@ -57,6 +57,10 @@ public final class EventConfigCommand implements CommandExecutor, TabCompleter {
             List<String> eventKeys = new ArrayList<>(config.getConfigurationSection("events." + eventName).getKeys(false));
             this.args1.put(eventName, eventKeys);
         }
+
+        this.DOES_NOT_EXIST = ChatColor.RED + "Sub command does not exist!";
+        this.POSSIBLE_SUB_COMMANDS = ChatColor.GOLD + "Possible sub commands: ";
+        this.USAGE = ChatColor.GOLD + "Usage: " + ChatColor.YELLOW;
     }
 
     @Override

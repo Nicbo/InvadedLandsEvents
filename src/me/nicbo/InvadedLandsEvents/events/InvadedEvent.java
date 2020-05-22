@@ -372,7 +372,7 @@ public abstract class InvadedEvent implements Listener {
         return !started || !players.contains(player);
     }
 
-    public class CountdownSB extends EventScoreboard {
+    public final class CountdownSB extends EventScoreboard {
         private EventManager eventManager;
 
         private TrackRow playerCount;
@@ -401,7 +401,7 @@ public abstract class InvadedEvent implements Listener {
         }
     }
 
-    private class EventOverSB extends EventScoreboard {
+    private final class EventOverSB extends EventScoreboard {
         private Row header;
         private Row message;
         private Row footer;

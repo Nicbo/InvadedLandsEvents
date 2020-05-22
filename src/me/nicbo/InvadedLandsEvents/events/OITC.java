@@ -178,7 +178,7 @@ public final class OITC extends InvadedEvent {
         scoreboards.remove(event.getPlayer());
     }
 
-    private class OITCSB extends EventScoreboard {
+    private final class OITCSB extends EventScoreboard {
         private TrackRow playerCount;
         private TrackRow specCount;
         private TrackRow timeRemaining;

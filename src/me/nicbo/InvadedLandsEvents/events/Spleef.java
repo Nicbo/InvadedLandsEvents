@@ -209,7 +209,7 @@ public final class Spleef extends InvadedEvent {
     }
 
 
-    private class SpleefSB extends EventScoreboard {
+    private final class SpleefSB extends EventScoreboard {
         private TrackRow playerCount;
         private TrackRow specCount;
         private TrackRow timeRemaining;

@@ -21,8 +21,8 @@ import org.bukkit.inventory.ItemStack;
 
 
 public final class Brackets extends Duel {
-    private ItemStack[] armour;
-    private ItemStack[] kit;
+    private final ItemStack[] armour;
+    private final ItemStack[] kit;
 
     public Brackets() {
         super("1v1 Brackets", "brackets");

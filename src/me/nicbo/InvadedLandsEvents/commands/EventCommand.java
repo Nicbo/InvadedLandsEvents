@@ -5,14 +5,7 @@ import me.nicbo.InvadedLandsEvents.EventsMain;
 import me.nicbo.InvadedLandsEvents.managers.EventManager;
 import me.nicbo.InvadedLandsEvents.managers.EventPartyManager;
 import me.nicbo.InvadedLandsEvents.managers.EventPartyRequestManager;
-import me.nicbo.InvadedLandsEvents.party.EventParty;
-import me.nicbo.InvadedLandsEvents.utils.GeneralUtils;
 import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.ComponentBuilder;
-import net.md_5.bungee.api.chat.HoverEvent;
-import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -34,15 +27,13 @@ public final class EventCommand implements CommandExecutor, TabCompleter {
     private EventManager eventManager;
     private EventPartyManager eventPartyManager;
     private EventPartyRequestManager eventPartyRequestManager;
-    private final String usage;
-    private EventsMain plugin;
 
-    private List<String> args0;
-    private List<String> args1;
-    private List<String> events;
+    private final String usage;
+    private final List<String> args0;
+    private final List<String> args1;
+    private final List<String> events;
 
     public EventCommand(EventsMain plugin) {
-        this.plugin = plugin;
         this.eventManager = plugin.getManagerHandler().getEventManager();
         this.eventPartyManager = plugin.getManagerHandler().getEventPartyManager();
         this.eventPartyRequestManager = plugin.getManagerHandler().getEventPartyRequestManager();
@@ -76,7 +67,6 @@ public final class EventCommand implements CommandExecutor, TabCompleter {
             if (sender instanceof Player) {
                 Player player = (Player) sender;
                 UUID uuid = player.getUniqueId();
-                String playerName = player.getName();
                 if (args.length >= 1) {
                     switch (args[0].toLowerCase()) {
                         case "p":

@@ -148,7 +148,7 @@ public final class LMS extends InvadedEvent {
         }
     }
 
-    private class LMSSB extends EventScoreboard {
+    private final class LMSSB extends EventScoreboard {
         private TrackRow playerCount;
         private TrackRow specCount;
         private TrackRow timeRemaining;

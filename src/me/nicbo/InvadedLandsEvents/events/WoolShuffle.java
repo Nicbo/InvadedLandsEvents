@@ -12,7 +12,6 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Wool;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -34,7 +33,7 @@ public final class WoolShuffle extends InvadedEvent {
 
     private int index;
 
-    private Wool[] wools;
+    private final Wool[] wools;
     private final String[] woolNames;
 
     private boolean pvpEnabled;
@@ -204,7 +203,7 @@ public final class WoolShuffle extends InvadedEvent {
         }
     }
 
-    private class WoolShuffleSB extends EventScoreboard {
+    private final class WoolShuffleSB extends EventScoreboard {
         private TrackRow roundTrack;
         private TrackRow countDown;
         private TrackRow colourTrack;
