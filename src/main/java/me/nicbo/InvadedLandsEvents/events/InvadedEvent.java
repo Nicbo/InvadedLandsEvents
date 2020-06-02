@@ -401,7 +401,7 @@ public abstract class InvadedEvent implements Listener {
         }
     }
 
-    private final class EventOverSB extends EventScoreboard {
+    private static final class EventOverSB extends EventScoreboard {
         private Row header;
         private Row message;
         private Row footer;

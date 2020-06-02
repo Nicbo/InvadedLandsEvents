@@ -5,7 +5,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -21,7 +20,7 @@ import java.util.*;
 
 public class GUI {
     private final Inventory inv;
-    public static final Map<UUID, GUI> openInventories;
+    private static final Map<UUID, GUI> openInventories;
     private final Map<Integer, Action> actions;
 
     public GUI(final String title, final int size, final Player owner) {
@@ -77,7 +76,7 @@ public class GUI {
     }
 
     public static Map<UUID, GUI> getOpenInventories() {
-        return GUI.openInventories;
+        return openInventories;
     }
 
     static {
