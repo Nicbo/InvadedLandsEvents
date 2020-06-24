@@ -2,7 +2,6 @@ package me.nicbo.InvadedLandsEvents.managers;
 
 import java.util.*;
 
-import me.nicbo.InvadedLandsEvents.handlers.ManagerHandler;
 import org.bukkit.entity.*;
 
 /**

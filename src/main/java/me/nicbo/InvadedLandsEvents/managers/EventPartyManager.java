@@ -3,7 +3,6 @@ package me.nicbo.InvadedLandsEvents.managers;
 import java.util.*;
 
 import me.nicbo.InvadedLandsEvents.EventsMain;
-import me.nicbo.InvadedLandsEvents.handlers.ManagerHandler;
 import me.nicbo.InvadedLandsEvents.messages.EventPartyMessage;
 import me.nicbo.InvadedLandsEvents.party.EventParty;
 import net.md_5.bungee.api.ChatColor;
@@ -274,13 +273,12 @@ public final class EventPartyManager {
             Player member = plugin.getServer().getPlayer(memberUUID);
             members.add(member.getName());
         }
-        String[] information = { ChatColor.GRAY + "" + ChatColor.STRIKETHROUGH + "----------------------------------------------------",
+        return new String[]{ ChatColor.GRAY + "" + ChatColor.STRIKETHROUGH + "----------------------------------------------------",
                 ChatColor.GOLD + "" + ChatColor.BOLD + "Party Information:",
                 ChatColor.YELLOW + "Leader: " + ChatColor.GOLD + leader.getName(),
                 ChatColor.YELLOW + "Members " + ChatColor.GRAY + "[" +
                         ChatColor.GOLD + "" + (party.getMembers().size()) + ChatColor.GRAY + "]" + ChatColor.YELLOW + ":",
                 ChatColor.GOLD + ((party.getSize() >= 2) ? "" + members : "None"),
                 ChatColor.GRAY  + "" + ChatColor.STRIKETHROUGH + "----------------------------------------------------" };
-        return information;
     }
 }

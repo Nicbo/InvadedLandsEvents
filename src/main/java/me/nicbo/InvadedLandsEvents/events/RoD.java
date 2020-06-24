@@ -1,6 +1,5 @@
 package me.nicbo.InvadedLandsEvents.events;
 
-import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import me.nicbo.InvadedLandsEvents.scoreboard.EventScoreboard;
 import me.nicbo.InvadedLandsEvents.utils.ConfigUtils;
@@ -76,7 +75,7 @@ public final class RoD extends InvadedEvent {
     @Override
     public void over() {
         didPlayerFinish.cancel();
-        eventTimer.cancel();;
+        eventTimer.cancel();
     }
 
     private void tpApplyInvisibility() {
