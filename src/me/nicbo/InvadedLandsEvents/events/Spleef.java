@@ -36,19 +36,19 @@ import java.util.List;
  */
 
 public final class Spleef extends InvadedEvent {
-    private SpleefSB spleefSB;
+    private final SpleefSB spleefSB;
 
     private boolean matchCountdown;
     private BukkitRunnable matchCountdownRunnable;
     private BukkitRunnable heightCheck;
 
-    private int minY;
-    private Location start1;
-    private Location start2;
-    private BlockVector pos1;
-    private BlockVector pos2;
+    private final int minY;
+    private final Location start1;
+    private final Location start2;
+    private final BlockVector pos1;
+    private final BlockVector pos2;
 
-    private ItemStack shovel;
+    private final ItemStack shovel;
 
     private final int TIME_LIMIT;
 
@@ -71,6 +71,8 @@ public final class Spleef extends InvadedEvent {
 
         this.pos1 = ConfigUtils.deserializeBlockVector(eventConfig.getConfigurationSection("snow-position-1"));
         this.pos2 = ConfigUtils.deserializeBlockVector(eventConfig.getConfigurationSection("snow-position-2"));
+
+        this.minY = (int) Math.min(pos1.getY(), pos2.getY());
 
         this.TIME_LIMIT = eventConfig.getInt("int-seconds-time-limit");
 
@@ -153,7 +155,6 @@ public final class Spleef extends InvadedEvent {
 
     public void buildSnow(BlockVector pos1, BlockVector pos2) {
         int minX = (int) Math.min(pos1.getX(), pos2.getX());
-        this.minY = (int) Math.min(pos1.getY(), pos2.getY());
         int minZ = (int) Math.min(pos1.getZ(), pos2.getZ());
         int maxX = (int) Math.max(pos1.getX(), pos2.getX());
         int maxY = (int) Math.max(pos1.getY(), pos2.getY());
@@ -218,7 +219,7 @@ public final class Spleef extends InvadedEvent {
         private Row footer;
 
         public SpleefSB() {
-            super(null, "spleef");
+            super("spleef");
             this.header = new Row("header", HEADERFOOTER, ChatColor.BOLD.toString(), HEADERFOOTER, 5);
             this.playerCount = new TrackRow("playerCount", ChatColor.YELLOW + "Players: ", ChatColor.DARK_PURPLE + "" + ChatColor.GOLD, String.valueOf(0), 4);
             this.specCount = new TrackRow("specCount", ChatColor.YELLOW + "Spectators: ", ChatColor.LIGHT_PURPLE + "" + ChatColor.GOLD, String.valueOf(0), 3);

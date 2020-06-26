@@ -7,6 +7,7 @@ import me.nicbo.InvadedLandsEvents.utils.ConfigUtils;
 import me.nicbo.InvadedLandsEvents.utils.EventUtils;
 import me.nicbo.InvadedLandsEvents.utils.GeneralUtils;
 import me.nicbo.InvadedLandsEvents.utils.ItemUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -31,20 +32,20 @@ import java.util.*;
  */
 
 public final class KOTH extends InvadedEvent {
-    private Map<Player, KOTHSB> scoreboards;
+    private final ProtectedRegion region;
 
-    private ProtectedRegion region;
+    private final List<Location> locations;
+    private final ItemStack[] armour;
+    private final ItemStack[] kit;
 
-    private List<Location> locations;
-    private ItemStack[] armour;
-    private ItemStack[] kit;
+    private BukkitRunnable regionChecker;
+    private BukkitRunnable incrementPoints;
 
     private Set<Player> respawningPlayers;
 
+    private Map<Player, KOTHSB> scoreboards;
     private Map<Player, Integer> points;
     private List<Player> playersInRegion;
-    private BukkitRunnable regionChecker;
-    private BukkitRunnable incrementPoints;
 
     private Player capturing;
     private Player leader;
@@ -58,8 +59,6 @@ public final class KOTH extends InvadedEvent {
 
     public KOTH() {
         super("King Of The Hill", "koth");
-
-        this.scoreboards = new HashMap<>();
 
         this.region = getRegion(eventConfig.getString("cap-region"));
 
@@ -83,10 +82,6 @@ public final class KOTH extends InvadedEvent {
                 new ItemStack(Material.ARROW, 32)
         };
 
-        this.respawningPlayers = new HashSet<>();
-
-        this.points = new HashMap<>();
-
         this.TIME_LIMIT = eventConfig.getInt("int-seconds-time-limit");
         this.WIN_POINTS = eventConfig.getInt("int-win-points");
 
@@ -103,7 +98,10 @@ public final class KOTH extends InvadedEvent {
 
     @Override
     public void init() {
+        this.scoreboards = new HashMap<>();
+        this.points = new HashMap<>();
         this.playersInRegion = new ArrayList<>();
+        this.respawningPlayers = new HashSet<>();
         this.regionChecker = new BukkitRunnable() {
             @Override
             public void run() {
@@ -157,7 +155,6 @@ public final class KOTH extends InvadedEvent {
             KOTHSB kothSB = new KOTHSB(player);
             scoreboards.put(player, kothSB);
             player.setScoreboard(kothSB.getScoreboard());
-
             points.put(player, 0);
             giveKit(player);
             player.teleport(getRandomLocation());
@@ -169,9 +166,16 @@ public final class KOTH extends InvadedEvent {
     @Override
     public void over() {
         eventTimer.cancel();
-        points.clear();
         regionChecker.cancel();
         incrementPoints.cancel();
+
+        this.scoreboards.clear();
+        this.points.clear();
+        this.playersInRegion.clear();
+        this.respawningPlayers.clear();
+
+        this.capturing = null;
+        this.leader = null;
     }
 
     private void lostCapturingPoint(Player player) {
@@ -201,8 +205,12 @@ public final class KOTH extends InvadedEvent {
             if (blockListener(player))
                 return;
 
-            if (event.getFinalDamage() >= player.getHealth()) { // Damage will kill player
-                lostCapturingPoint(player);
+            if (event.getFinalDamage() >= player.getHealth()) {
+                player.getInventory().clear();
+                player.getInventory().setArmorContents(null);
+                if (player.equals(capturing)) {
+                    lostCapturingPoint(player);
+                }
                 setRandomCapturing();
                 respawningPlayers.add(player);
                 plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> player.spigot().respawn(), 1);
@@ -222,6 +230,10 @@ public final class KOTH extends InvadedEvent {
 
     @EventHandler
     public void onEventLeave(EventLeaveEvent event) {
+        if (blockListener(event.getPlayer())) {
+            return;
+        }
+
         Player player = event.getPlayer();
         playersInRegion.remove(player);
         scoreboards.remove(player);

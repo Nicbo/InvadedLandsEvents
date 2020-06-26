@@ -3,6 +3,7 @@ package me.nicbo.InvadedLandsEvents.scoreboard;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
@@ -30,6 +31,10 @@ public abstract class EventScoreboard {
 
     static {
         HEADERFOOTER = ChatColor.GRAY.toString() + ChatColor.STRIKETHROUGH.toString() + "----------";
+    }
+
+    public EventScoreboard(String name) {
+        this(null, name);
     }
 
     public EventScoreboard(Player player, String name) {

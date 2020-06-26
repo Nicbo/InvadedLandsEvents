@@ -26,13 +26,13 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 
 public final class LMS extends InvadedEvent {
-    private LMSSB lmsSB;
+    private final LMSSB lmsSB;
 
-    private Location start1;
-    private Location start2;
+    private final Location start1;
+    private final Location start2;
 
-    private ItemStack[] armour;
-    private ItemStack[] kit;
+    private final ItemStack[] armour;
+    private final ItemStack[] kit;
 
     private boolean matchCountdown;
 
@@ -157,7 +157,7 @@ public final class LMS extends InvadedEvent {
         private Row footer;
 
         public LMSSB() {
-            super(null, "lms");
+            super("lms");
             this.header = new Row("header", HEADERFOOTER, ChatColor.BOLD.toString(), HEADERFOOTER, 5);
             this.playerCount = new TrackRow("playerCount", ChatColor.YELLOW + "Players: ", ChatColor.DARK_PURPLE + "" + ChatColor.GOLD, String.valueOf(0), 4);
             this.specCount = new TrackRow("specCount", ChatColor.YELLOW + "Spectators: ", ChatColor.LIGHT_PURPLE + "" + ChatColor.GOLD, String.valueOf(0), 3);

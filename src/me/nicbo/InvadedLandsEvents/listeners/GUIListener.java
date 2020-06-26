@@ -1,6 +1,6 @@
 package me.nicbo.InvadedLandsEvents.listeners;
 
-import me.nicbo.InvadedLandsEvents.utils.GUI;
+import me.nicbo.InvadedLandsEvents.gui.GUI;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;

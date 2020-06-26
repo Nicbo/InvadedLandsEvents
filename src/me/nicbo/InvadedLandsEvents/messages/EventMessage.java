@@ -1,6 +1,7 @@
 package me.nicbo.InvadedLandsEvents.messages;
 
 import me.nicbo.InvadedLandsEvents.EventsMain;
+import me.nicbo.InvadedLandsEvents.utils.EventUtils;
 import org.bukkit.ChatColor;
 
 /**
@@ -50,6 +51,6 @@ public final class EventMessage {
    }
 
     private static String getStringFromConfig(String path) {
-        return ChatColor.translateAlternateColorCodes('&', EventsMain.getMessages().getConfig().getString("event." + path));
+        return EventUtils.getEventMessage("event." + path);
     }
 }

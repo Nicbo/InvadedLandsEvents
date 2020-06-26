@@ -23,29 +23,25 @@ import java.util.logging.Logger;
 
 public class EventsMain extends JavaPlugin {
     private static EventsMain instance;
-
-    private Logger log;
-    private ManagerHandler managerHandler;
-    private WorldGuardPlugin worldGuardPlugin;
-
     private static ConfigFile messages;
+    private static ManagerHandler managerHandler;
+    private static WorldGuardPlugin worldGuardPlugin;
 
     @Override
     public void onEnable() {
         instance = this;
-        log = getLogger();
         worldGuardPlugin = getWorldGuard();
         saveDefaultConfig();
         messages = new ConfigFile("messages.yml", this);
         EventMessage.reload();
 
-        this.managerHandler = new ManagerHandler(this);
-        this.managerHandler.getEventManager().reloadEvents();
+        managerHandler = new ManagerHandler();
+        managerHandler.getEventManager().reloadEvents();
         registerCommands();
-        getServer().getPluginManager().registerEvents(new GeneralEventListener(this), this);
+        getServer().getPluginManager().registerEvents(new GeneralEventListener(), this);
         getServer().getPluginManager().registerEvents(new GUIListener(), this);
 
-        log.info("Plugin enabled!");
+        getLogger().info("Plugin enabled!");
     }
 
     @Override
@@ -56,35 +52,35 @@ public class EventsMain extends JavaPlugin {
         if (managerHandler.getEventManager().isEventRunning())
             managerHandler.getEventManager().getCurrentEvent().forceEndEvent();
 
-        log.info("Plugin disabled!");
+        getLogger().info("Plugin disabled!");
     }
 
     private void registerCommands() {
-        EventConfigCommand eventConfigCommand = new EventConfigCommand(this);
-        EventCommand eventCommand = new EventCommand(this);
+        EventConfigCommand eventConfigCommand = new EventConfigCommand();
+        EventCommand eventCommand = new EventCommand();
         getCommand("event").setExecutor(eventCommand);
+        getCommand("event").setTabCompleter(eventCommand);
         getCommand("eventconfig").setExecutor(eventConfigCommand);
         getCommand("eventconfig").setTabCompleter(eventConfigCommand);
-        getCommand("event").setTabCompleter(eventCommand);
     }
 
     private WorldGuardPlugin getWorldGuard() {
         Plugin plugin = getServer().getPluginManager().getPlugin("WorldGuard");
 
         if (!(plugin instanceof WorldGuardPlugin)) {
-            log.severe("WorldGuard not found!");
+            getLogger().severe("WorldGuard not found!");
             return null;
         }
 
         return (WorldGuardPlugin) plugin;
     }
 
-    public WorldGuardPlugin getWorldGuardPlugin() {
+    public static WorldGuardPlugin getWorldGuardPlugin() {
         return worldGuardPlugin;
     }
 
-    public ManagerHandler getManagerHandler() {
-        return this.managerHandler;
+    public static ManagerHandler getManagerHandler() {
+        return managerHandler;
     }
 
     public static EventsMain getInstance() {

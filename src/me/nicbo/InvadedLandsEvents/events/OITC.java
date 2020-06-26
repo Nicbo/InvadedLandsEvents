@@ -30,11 +30,10 @@ import java.util.*;
  */
 
 public final class OITC extends InvadedEvent {
+    private final List<Location> locations;
+    private final ItemStack[] kit;
+
     private Map<Player, OITCSB> scoreboards;
-
-    private List<Location> locations;
-    private ItemStack[] kit;
-
     private Map<Player, Integer> points;
     private Player leader;
 
@@ -48,8 +47,6 @@ public final class OITC extends InvadedEvent {
     public OITC() {
         super("One in the Chamber", "oitc");
 
-        this.scoreboards = new HashMap<>();
-
         this.locations = new ArrayList<>();
 
         for (int i = 1; i < 9; i++) {
@@ -62,6 +59,7 @@ public final class OITC extends InvadedEvent {
                 new ItemStack(Material.ARROW, 1)
         };
 
+        this.scoreboards = new HashMap<>();
         this.points = new HashMap<>();
         this.respawningPlayers = new HashSet<>();
 
@@ -98,8 +96,10 @@ public final class OITC extends InvadedEvent {
     @Override
     public void over() {
         eventTimer.cancel();
-        points.clear();
-        respawningPlayers.clear();
+        this.scoreboards.clear();
+        this.points.clear();
+        this.respawningPlayers.clear();
+        this.leader = null;
     }
 
     private void giveKit(Player player) {

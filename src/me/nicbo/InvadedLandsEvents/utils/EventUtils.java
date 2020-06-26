@@ -2,6 +2,7 @@ package me.nicbo.InvadedLandsEvents.utils;
 
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import me.nicbo.InvadedLandsEvents.EventsMain;
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -38,16 +39,18 @@ public final class EventUtils {
         player.setFireTicks(0);
         player.setFallDistance(0.0f);
         player.getInventory().clear();
-        player.getOpenInventory().getTopInventory().clear();
-        player.getOpenInventory().getBottomInventory().clear();
         player.getInventory().setArmorContents(null);
     }
 
     public static void broadcastEventMessage(String msg) {
-        EventsMain.getInstance().getManagerHandler().getEventManager().getCurrentEvent().getParticipants().forEach(player -> player.sendMessage(msg));
+        EventsMain.getManagerHandler().getEventManager().getCurrentEvent().getParticipants().forEach(player -> player.sendMessage(msg));
     }
 
     public static boolean isLocInRegion(Location loc, ProtectedRegion region) {
         return region.contains(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
+    }
+
+    public static String getEventMessage(String path) {
+        return ChatColor.translateAlternateColorCodes('&', EventsMain.getMessages().getConfig().getString(path));
     }
 }

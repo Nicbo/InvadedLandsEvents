@@ -10,6 +10,7 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -27,12 +28,14 @@ import java.util.Map;
 public final class EventManager {
     private EventsMain plugin;
 
+    private BukkitRunnable countDownRunnable;
+
     private Map<String, InvadedEvent> events;
     private InvadedEvent currentEvent;
 
     private int countDown;
 
-    private static String[] eventNames;
+    private static final String[] eventNames;
 
     static {
         eventNames = new String[]{
@@ -44,8 +47,8 @@ public final class EventManager {
         };
     }
 
-    public EventManager(EventsMain plugin) {
-        this.plugin = plugin;
+    public EventManager() {
+        this.plugin = EventsMain.getInstance();
         this.events = new HashMap<>();
     }
 
@@ -85,7 +88,7 @@ public final class EventManager {
         String name = currentEvent.getEventName();
         countDown = 15; //for testing put back to 60
 
-        new BukkitRunnable() {
+        this.countDownRunnable = new BukkitRunnable() {
             @Override
             public void run() {
                 if (currentEvent == null) {
@@ -94,7 +97,7 @@ public final class EventManager {
                 }
 
                 if (countDown == 60 || countDown == 45 || countDown == 30 || countDown == 15 || countDown <= 5 && countDown >= 1) {
-                    for (Player player : GeneralUtils.getPlayers()) {
+                    for (Player player : Bukkit.getOnlinePlayers()) {
                         TextComponent join = new TextComponent(ChatColor.translateAlternateColorCodes('&', "&c&lStarting in " + countDown + " seconds " + "&a&l[Click to Join]"));
                         join.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.GREEN + "Click to join " + currentEvent.getEventName()).create()));
                         join.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/event join"));
@@ -111,7 +114,9 @@ public final class EventManager {
                 currentEvent.getCountdownSB().refresh();
                 countDown--;
             }
-        }.runTaskTimer(plugin, 0, 20);
+        };
+
+        this.countDownRunnable.runTaskTimer(plugin, 0, 20);
     }
 
     public int getCountDown() {
@@ -154,7 +159,7 @@ public final class EventManager {
         if (currentEvent == null) {
             return EventMessage.NONE;
         } else if (!currentEvent.isStarted()) {
-            return EventMessage.EVENT_ENDING;
+            countDownRunnable.cancel();
         }
         currentEvent.forceEndEvent();
         return EventMessage.ENDED;
