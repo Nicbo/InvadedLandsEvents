@@ -48,17 +48,8 @@ public final class GeneralUtils {
         return list.isEmpty() ? null : list.get(random.nextInt(list.size()));
     }
 
-    @SafeVarargs
-    public static <T> T getRandom(T... items) {
-        return items[random.nextInt(items.length)];
-    }
-
-    public static List<Player> getPlayers() {
-        return new ArrayList<>(Bukkit.getOnlinePlayers());
-    }
-
     public static String formatSeconds(int sec) {
-        int minutes = (int) Math.floor(sec / 60);
+        int minutes = sec / 60;
         int seconds = sec - minutes * 60;
         return (minutes == 0 ? "" : minutes + "m ") + (seconds == 0 ? "" : seconds + "s");
     }

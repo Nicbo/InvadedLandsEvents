@@ -1,5 +1,6 @@
 package me.nicbo.InvadedLandsEvents.events;
 
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import me.nicbo.InvadedLandsEvents.scoreboard.EventScoreboard;
 import me.nicbo.InvadedLandsEvents.utils.ConfigUtils;
@@ -24,13 +25,14 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 
 public final class RoD extends InvadedEvent {
-    private RoDSB rodSB;
+    private final RoDSB rodSB;
+
+    private final ProtectedRegion winRegion;
+    private final Location startLoc;
+
+    private final ItemStack boots;
 
     private BukkitRunnable didPlayerFinish;
-    private ProtectedRegion winRegion;
-    private Location startLoc;
-
-    private ItemStack boots;
 
     private final int TIME_LIMIT;
 
@@ -94,7 +96,7 @@ public final class RoD extends InvadedEvent {
         private Row footer;
 
         public RoDSB() {
-            super(null, "lms");
+            super("lms");
             this.header = new Row("header", HEADERFOOTER, ChatColor.BOLD.toString(), HEADERFOOTER, 5);
             this.playerCount = new TrackRow("playerCount", ChatColor.YELLOW + "Players: ", ChatColor.DARK_PURPLE + "" + ChatColor.GOLD, String.valueOf(0), 4);
             this.specCount = new TrackRow("specCount", ChatColor.YELLOW + "Spectators: ", ChatColor.LIGHT_PURPLE + "" + ChatColor.GOLD, String.valueOf(0), 3);

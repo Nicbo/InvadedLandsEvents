@@ -28,8 +28,8 @@ import java.util.stream.Collectors;
  */
 
 public final class EventConfigCommand implements CommandExecutor, TabCompleter {
-    private EventsMain plugin;
-    private FileConfiguration config;
+    private final EventsMain plugin;
+    private final FileConfiguration config;
 
     private final List<String> args0;
     private final Map<String, List<String>> args1;
@@ -38,8 +38,8 @@ public final class EventConfigCommand implements CommandExecutor, TabCompleter {
     private final String POSSIBLE_SUB_COMMANDS;
     private final String USAGE;
 
-    public EventConfigCommand(EventsMain plugin) {
-        this.plugin = plugin;
+    public EventConfigCommand() {
+        this.plugin = EventsMain.getInstance();
         this.config = plugin.getConfig();
         this.args0 = new ArrayList<>(Arrays.asList(EventManager.getEventNames()));
         this.args0.addAll(Arrays.asList(
@@ -146,7 +146,7 @@ public final class EventConfigCommand implements CommandExecutor, TabCompleter {
                             case "reload":
                                 plugin.reloadConfig();
                                 sender.sendMessage(ChatColor.GREEN + "Event config reloaded");
-                                plugin.getManagerHandler().getEventManager().reloadEvents();
+                                EventsMain.getManagerHandler().getEventManager().reloadEvents();
                                 sender.sendMessage(ChatColor.GREEN + "Events reloaded");
                                 break;
                             case "event-world":
@@ -222,7 +222,7 @@ public final class EventConfigCommand implements CommandExecutor, TabCompleter {
                 if (args.length == 1) {
                     StringUtil.copyPartialMatches(args[0], args0, completions);
                     Collections.sort(completions);
-                } else if (!args[0].equals("") && args.length == 2) {
+                } else if (!args[0].isEmpty() && args.length == 2) {
                     List<String> possibleArgs = args1.get(args[0]);
                     if (possibleArgs != null) {
                         StringUtil.copyPartialMatches(args[1], args1.get(args[0]), completions);

@@ -14,6 +14,7 @@ import org.bukkit.util.BlockVector;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -74,14 +75,14 @@ public final class Waterdrop extends InvadedEvent {
         this.water = Material.WATER;
         this.redstone = Material.REDSTONE_BLOCK;
 
+        this.jumped = new ArrayList<>();
+        this.eliminated = new ArrayList<>();
+
         this.easyCovers = new ArrayList<>();
         this.mediumCovers = new ArrayList<>();
         this.hardCovers = new ArrayList<>();
 
         loadCovers();
-
-        this.jumped = new ArrayList<>();
-        this.eliminated = new ArrayList<>();
 
         this.ROUND_START = getEventMessage("ROUND_START");
         this.SUCCESS_JUMP = getEventMessage("SUCCESS_JUMP");
@@ -144,6 +145,11 @@ public final class Waterdrop extends InvadedEvent {
         waterdropTimer.cancel();
         fallCheck.cancel();
         jumped.clear();
+    }
+
+    @Override
+    public void stop() {
+        super.stop();
         eliminated.clear();
     }
 
@@ -418,24 +424,20 @@ public final class Waterdrop extends InvadedEvent {
    */
 
     private final class WaterdropSB extends EventScoreboard {
-        private TrackRow roundTrack;
-        private TrackRow timerTrack;
-        private TrackRow playerCount;
-        private TrackRow specCount;
-
-        private Row header;
-        private Row footer;
-        private Row blank;
+        private final TrackRow roundTrack;
+        private final TrackRow timerTrack;
+        private final TrackRow playerCount;
+        private final TrackRow specCount;
 
         public WaterdropSB() {
-            super(null, "waterdrop");
-            this.header = new Row("header", HEADERFOOTER, ChatColor.BOLD.toString(), HEADERFOOTER, 7);
+            super("waterdrop");
+            Row header = new Row("header", HEADERFOOTER, ChatColor.BOLD.toString(), HEADERFOOTER, 7);
             this.roundTrack = new TrackRow("round", ChatColor.YELLOW + "Round: ", ChatColor.GOLD.toString(), String.valueOf(0), 6);
             this.timerTrack = new TrackRow("timer", ChatColor.YELLOW + "Time Remain", "ing: " + ChatColor.GOLD, String.valueOf(20), 5);
-            this.blank = new Row("blank", "", ChatColor.AQUA.toString(), "", 4);
+            Row blank = new Row("blank", "", ChatColor.AQUA.toString(), "", 4);
             this.playerCount = new TrackRow("playerCount", ChatColor.YELLOW + "Players: ", ChatColor.DARK_PURPLE + "" + ChatColor.GOLD, String.valueOf(0), 3);
             this.specCount = new TrackRow("specCount", ChatColor.YELLOW + "Spectators: ", ChatColor.LIGHT_PURPLE + "" + ChatColor.GOLD, String.valueOf(0), 2);
-            this.footer = new Row("footer", HEADERFOOTER, ChatColor.DARK_GRAY.toString(), HEADERFOOTER, 1);
+            Row footer = new Row("footer", HEADERFOOTER, ChatColor.DARK_GRAY.toString(), HEADERFOOTER, 1);
             super.init(ChatColor.GOLD + "Waterdrop", header, roundTrack, timerTrack, blank, playerCount, specCount, footer);
         }
 

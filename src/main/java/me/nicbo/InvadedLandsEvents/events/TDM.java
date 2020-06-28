@@ -180,7 +180,7 @@ public final class TDM extends InvadedEvent {
     }
 
 
-    public class TDMTeam extends EventTeam {
+    public final class TDMTeam extends EventTeam {
         private final String name;
 
         private final ItemStack[] armour;
@@ -262,5 +262,6 @@ public final class TDM extends InvadedEvent {
         - Rest of event
         - getTopKillers() might not work
         - scoreboard
+        - this is 100% completely broken
      */
 }

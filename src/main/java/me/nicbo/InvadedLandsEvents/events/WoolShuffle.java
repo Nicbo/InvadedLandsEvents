@@ -29,7 +29,7 @@ import java.util.Iterator;
 public final class WoolShuffle extends InvadedEvent {
     private WoolShuffleSB woolShuffleSB;
 
-    private Location startLoc;
+    private final Location startLoc;
 
     private int index;
 
@@ -92,7 +92,7 @@ public final class WoolShuffle extends InvadedEvent {
         this.timer = 15;
 
         this.roundTimer = new BukkitRunnable() {
-            private final int[] times = new int[]{15, 15, 14, 14, 13, 13, 12, 12, 11, 11, 10, 10, 9, 9, 8, 7, 7, 6, 6, 5, 5, 4, 4, 3, 2};
+            private final int[] times = {15, 15, 14, 14, 13, 13, 12, 12, 11, 11, 10, 10, 9, 9, 8, 7, 7, 6, 6, 5, 5, 4, 4, 3, 2};
 
             @Override
             public void run() {
@@ -138,7 +138,6 @@ public final class WoolShuffle extends InvadedEvent {
                     EventUtils.broadcastEventMessage(FAILED.replace("{player}", player.getName()));
                     EventUtils.broadcastEventMessage(ELIMINATED.replace("{player}", player.getName()).replace("{remaining}", String.valueOf(players.size())));
                 }
-
             }
         }
 
@@ -180,7 +179,7 @@ public final class WoolShuffle extends InvadedEvent {
         Block block = loc.getWorld().getBlockAt(loc);
         loc.setY(loc.getY() - 1);
         Block blockUnder = loc.getWorld().getBlockAt(loc);
-        return isEqual(block, wools[index])|| isEqual(blockUnder, wools[index]);
+        return isEqual(block, wools[index]) || isEqual(blockUnder, wools[index]);
     }
 
     private boolean isEqual(Block block, Wool wool) {
@@ -216,7 +215,7 @@ public final class WoolShuffle extends InvadedEvent {
         private Row footer;
 
         public WoolShuffleSB() {
-            super(null, "woolshuffle");
+            super("woolshuffle");
             this.header = new Row("header", HEADERFOOTER, ChatColor.BOLD.toString(), HEADERFOOTER, 7);
             this.roundTrack = new TrackRow("round", ChatColor.YELLOW + "Round: ", ChatColor.GOLD.toString(), String.valueOf(0), 6);
             this.countDown = new TrackRow("countDown", ChatColor.YELLOW + "Time Remain", "ing: " + ChatColor.GOLD, String.valueOf(20), 5);

@@ -8,7 +8,6 @@ import me.nicbo.InvadedLandsEvents.managers.EventManager;
 import me.nicbo.InvadedLandsEvents.messages.EventMessage;
 import me.nicbo.InvadedLandsEvents.EventsMain;
 import me.nicbo.InvadedLandsEvents.scoreboard.EventScoreboard;
-import me.nicbo.InvadedLandsEvents.utils.ConfigFile;
 import me.nicbo.InvadedLandsEvents.utils.ConfigUtils;
 import me.nicbo.InvadedLandsEvents.utils.EventUtils;
 import me.nicbo.InvadedLandsEvents.utils.GeneralUtils;
@@ -37,7 +36,6 @@ import java.util.logging.Logger;
 
 public abstract class InvadedEvent implements Listener {
     protected static EventsMain plugin;
-    private static ConfigFile messages;
     protected static Logger logger;
     protected static ItemStack star;
 
@@ -70,13 +68,11 @@ public abstract class InvadedEvent implements Listener {
 
     static {
         plugin = EventsMain.getInstance();
-        messages = EventsMain.getMessages();
         logger = plugin.getLogger();
         star = new ItemStack(Material.NETHER_STAR);
         ItemMeta im = star.getItemMeta();
         im.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&c&lLeave Event"));
         star.setItemMeta(im);
-
     }
 
     /**
@@ -89,7 +85,7 @@ public abstract class InvadedEvent implements Listener {
         this.eventName = eventName;
         this.configName = configName;
 
-        this.countdownSB = new CountdownSB(plugin.getManagerHandler().getEventManager(), null);
+        this.countdownSB = new CountdownSB(EventsMain.getManagerHandler().getEventManager(), null);
         this.eventOverSB = new EventOverSB();
 
         FileConfiguration config = plugin.getConfig();
@@ -100,7 +96,7 @@ public abstract class InvadedEvent implements Listener {
         this.specLoc = ConfigUtils.deserializeLoc(this.eventConfig.getConfigurationSection("spec-location"), this.eventWorld);
         this.winCommand = config.getString("win-command");
 
-        this.regionManager = plugin.getWorldGuardPlugin().getRegionManager(eventWorld);
+        this.regionManager = EventsMain.getWorldGuardPlugin().getRegionManager(eventWorld);
 
         this.enabled = eventConfig.getBoolean("enabled");
         this.players = new ArrayList<>();
@@ -210,14 +206,13 @@ public abstract class InvadedEvent implements Listener {
     }
 
     protected String getEventMessage(String message) {
-        return ChatColor.translateAlternateColorCodes('&', messages.getConfig().getString(configName + "." + message));
+        return EventUtils.getEventMessage(configName + "." + message);
     }
 
     protected List<String> getEventMessages(String message) {
-        List<String> msgs = messages.getConfig().getStringList(configName + "." + message);
         List<String> colouredMessages = new ArrayList<>();
 
-        for (String msg : msgs) {
+        for (String msg : EventsMain.getMessages().getConfig().getStringList(configName + "." + message)) {
             colouredMessages.add(ChatColor.translateAlternateColorCodes('&', msg));
         }
 
@@ -228,8 +223,12 @@ public abstract class InvadedEvent implements Listener {
         return players.contains(player) || spectators.contains(player);
     }
 
+    public boolean isPlayerSpectating(Player player) {
+        return spectators.contains(player);
+    }
+
     public void joinEvent(Player player) {
-        for (Player p : GeneralUtils.getPlayers()) {
+        for (Player p : Bukkit.getOnlinePlayers()) {
             p.sendMessage(EventMessage.JOINED_EVENT.replace("{player}", player.getName()));
         }
 
@@ -277,7 +276,7 @@ public abstract class InvadedEvent implements Listener {
         giveAllScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
         stopRefreshing();
         stop();
-        plugin.getManagerHandler().getEventManager().setCurrentEvent(null);
+        EventsMain.getManagerHandler().getEventManager().setCurrentEvent(null);
     }
 
     protected void loseEvent(Player player) {
@@ -291,9 +290,11 @@ public abstract class InvadedEvent implements Listener {
      * Will call playerWon() if playerCount is under 2
      */
     private void checkPlayerCount() {
-        int playerCount = players.size();
-        if (playerCount < 2) {
-            playerWon(playerCount == 1 ? players.get(0) : null);
+        if (started) {
+            int playerCount = players.size();
+            if (playerCount < 2) {
+                playerWon(playerCount == 1 ? players.get(0) : null);
+            }
         }
     }
 
@@ -309,14 +310,14 @@ public abstract class InvadedEvent implements Listener {
     }
 
     protected void tdmTeamWon(TDMTeam team) {
-        endEvent();
-        broadcastWinner(team.getName());
-        plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
-            stopEvent();
-
-            for (TDMPlayer player : team.getTopKillers())
-                plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), winCommand.replace("{winner}", player.getPlayer().getName()));
-        }, 100);
+//        endEvent();
+//        broadcastWinner(team.getName());
+//        plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+//            stopEvent();
+//
+//            for (TDMPlayer player : team.getTopKillers())
+//                plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), winCommand.replace("{winner}", player.getPlayer().getName()));
+//        }, 100);
     }
 
     // Calls over() and gives eventoverSB
@@ -328,9 +329,9 @@ public abstract class InvadedEvent implements Listener {
 
     // Calls stop and remove all players scoreboards
     private void stopEvent() {
-        stop();
         giveAllScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
-        plugin.getManagerHandler().getEventManager().setCurrentEvent(null);
+        stop();
+        EventsMain.getManagerHandler().getEventManager().setCurrentEvent(null);
     }
 
     private void broadcastWinner(String winner) {
@@ -373,23 +374,19 @@ public abstract class InvadedEvent implements Listener {
     }
 
     public final class CountdownSB extends EventScoreboard {
-        private EventManager eventManager;
+        private final EventManager eventManager;
 
-        private TrackRow playerCount;
-        private TrackRow countDown;
-
-        private Row header;
-        private Row footer;
-        private Row blank;
+        private final TrackRow playerCount;
+        private final TrackRow countDown;
 
         public CountdownSB(EventManager eventManager, Player player) {
             super(player, "countdown");
             this.eventManager = eventManager;
-            this.header = new Row("header", HEADERFOOTER, ChatColor.RED.toString(), HEADERFOOTER, 5);
+            Row header = new Row("header", HEADERFOOTER, ChatColor.RED.toString(), HEADERFOOTER, 5);
             this.playerCount = new TrackRow("playerCount", ChatColor.YELLOW + "Players: ", ChatColor.GRAY + "" + ChatColor.GOLD, String.valueOf(0), 4);
-            this.blank = new Row("blank", "", ChatColor.BOLD + "" + ChatColor.BLUE, "", 3);
+            Row blank = new Row("blank", "", ChatColor.BOLD + "" + ChatColor.BLUE, "", 3);
             this.countDown = new TrackRow("countDown", ChatColor.YELLOW + "Starting in ", ChatColor.ITALIC + "" + ChatColor.GOLD, 60 + "s", 2);
-            this.footer = new Row("footer", HEADERFOOTER, ChatColor.DARK_BLUE.toString(), HEADERFOOTER, 1);
+            Row footer = new Row("footer", HEADERFOOTER, ChatColor.DARK_BLUE.toString(), HEADERFOOTER, 1);
             super.init("Countdown", header, playerCount, blank, countDown, footer);
         }
 
@@ -401,16 +398,12 @@ public abstract class InvadedEvent implements Listener {
         }
     }
 
-    private static final class EventOverSB extends EventScoreboard {
-        private Row header;
-        private Row message;
-        private Row footer;
-
+    private final class EventOverSB extends EventScoreboard {
         public EventOverSB() {
-            super(null, "eventover");
-            this.header = new Row("header", HEADERFOOTER, ChatColor.BOLD.toString(), HEADERFOOTER, 3);
-            this.message = new Row("message", ChatColor.YELLOW + "Event has ", "ended", "", 2);
-            this.footer = new Row("footer", HEADERFOOTER, ChatColor.DARK_GRAY.toString(), HEADERFOOTER, 1);
+            super("eventover");
+            Row header = new Row("header", HEADERFOOTER, ChatColor.BOLD.toString(), HEADERFOOTER, 3);
+            Row message = new Row("message", ChatColor.YELLOW + "Event has ", "ended", "", 2);
+            Row footer = new Row("footer", HEADERFOOTER, ChatColor.DARK_GRAY.toString(), HEADERFOOTER, 1);
             super.init("EventOverSB", header, message, footer);
         }
 

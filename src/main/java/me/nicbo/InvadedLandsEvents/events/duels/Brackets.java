@@ -25,7 +25,7 @@ public final class Brackets extends Duel {
     private final ItemStack[] kit;
 
     public Brackets() {
-        super("1v1 Brackets", "brackets");
+        super("1v1 Brackets", "brackets", 1);
 
         this.armour = new ItemStack[] {
                 new ItemStack(Material.IRON_BOOTS, 1),
@@ -45,20 +45,17 @@ public final class Brackets extends Duel {
     @Override
     public void init() {
         frozen = false;
-        initLeaveCheck();
     }
 
     @Override
     public void start() {
         //giveAllScoreboard(bracketsSB.getScoreboard());
         // startRefreshing(bracketsSB);
-        leaveCheck.runTaskTimerAsynchronously(plugin, 0, 1);
         newRound();
     }
 
     @Override
     public void over() {
-        leaveCheck.cancel();
         fightingPlayers.clear();
     }
 

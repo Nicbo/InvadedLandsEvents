@@ -3,18 +3,17 @@ package me.nicbo.InvadedLandsEvents.listeners;
 import me.nicbo.InvadedLandsEvents.messages.EventMessage;
 import me.nicbo.InvadedLandsEvents.EventsMain;
 import me.nicbo.InvadedLandsEvents.managers.EventManager;
-import me.nicbo.InvadedLandsEvents.utils.GUI;
+import me.nicbo.InvadedLandsEvents.gui.GUI;
 import org.bukkit.Material;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
-import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerItemDamageEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 
 /**
@@ -27,14 +26,20 @@ import org.bukkit.inventory.ItemStack;
  */
 
 public final class GeneralEventListener implements Listener {
+    private EventsMain plugin;
     private EventManager eventManager;
 
-    public GeneralEventListener(EventsMain plugin) {
-        this.eventManager = plugin.getManagerHandler().getEventManager();
+    public GeneralEventListener() {
+        this.plugin = EventsMain.getInstance();
+        this.eventManager = EventsMain.getManagerHandler().getEventManager();
     }
 
     private boolean runEvent(Player player) {
         return eventManager.isEventRunning() && eventManager.getCurrentEvent().containsPlayer(player);
+    }
+
+    private boolean isSpectating(Player player) {
+        return eventManager.isEventRunning() && eventManager.getCurrentEvent().isPlayerSpectating(player);
     }
 
     @EventHandler
@@ -93,6 +98,25 @@ public final class GeneralEventListener implements Listener {
     public void onPlayerDeath(PlayerDeathEvent event) {
         if (runEvent(event.getEntity())) {
             event.setDeathMessage("");
+        }
+    }
+
+    @EventHandler
+    public void commandPreProcess(PlayerCommandPreprocessEvent event) {
+        if (runEvent(event.getPlayer())) {
+            // check allowed cmds list
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onHit(EntityDamageByEntityEvent event) {
+        Entity damager = event.getDamager();
+        Entity entity = event.getEntity();
+
+        if (damager instanceof Player && entity instanceof Player) {
+            if (isSpectating((Player) damager) || isSpectating((Player) entity)) {
+                event.setCancelled(true);
+            }
         }
     }
 

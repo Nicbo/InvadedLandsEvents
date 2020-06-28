@@ -1,11 +1,13 @@
 package me.nicbo.InvadedLandsEvents.events.duels;
 
+import me.nicbo.InvadedLandsEvents.event.EventLeaveEvent;
 import me.nicbo.InvadedLandsEvents.events.InvadedEvent;
 import me.nicbo.InvadedLandsEvents.utils.ConfigUtils;
 import me.nicbo.InvadedLandsEvents.utils.EventUtils;
 import me.nicbo.InvadedLandsEvents.utils.GeneralUtils;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
@@ -21,6 +23,7 @@ import java.util.List;
  */
 
 public abstract class Duel extends InvadedEvent {
+    protected final int teamSize;
 
     protected Location startLoc1;
     protected Location startLoc2;
@@ -30,7 +33,6 @@ public abstract class Duel extends InvadedEvent {
     protected boolean fighting;
     protected boolean frozen;
 
-    protected BukkitRunnable leaveCheck;
     protected BukkitRunnable playerFreeze;
 
     protected final String MATCH_START;
@@ -38,8 +40,9 @@ public abstract class Duel extends InvadedEvent {
     protected final String MATCH_STARTED;
     protected final String ELIMINATED;
 
-    public Duel(String eventName, String configName) {
+    public Duel(String eventName, String configName, int teamSize) {
         super(eventName, configName);
+        this.teamSize = teamSize;
 
         this.startLoc1 = ConfigUtils.deserializeLoc(eventConfig.getConfigurationSection("start-location-1"), eventWorld);
         this.startLoc2 = ConfigUtils.deserializeLoc(eventConfig.getConfigurationSection("start-location-2"), eventWorld);
@@ -53,20 +56,6 @@ public abstract class Duel extends InvadedEvent {
     }
 
     public abstract void tpFightingPlayers();
-
-    // Use EventLeaveEvent event instead
-    protected void initLeaveCheck() {
-        this.leaveCheck = new BukkitRunnable() {
-            @Override
-            public void run() {
-                if (fightingPlayers.size() == 1 && fighting) {
-                    roundOver(fightingPlayers.get(0));
-                    if (frozen)
-                        playerFreeze.cancel();
-                }
-            }
-        };
-    }
 
     protected void restartPlayerFreeze() {
         this.playerFreeze = new BukkitRunnable() {
@@ -97,7 +86,7 @@ public abstract class Duel extends InvadedEvent {
             playerWon(players.get(0));
         } else {
             fightingPlayers.clear();
-            addTwoPlayers();
+            addFightingPlayers(1);
             tpFightingPlayers();
             restartPlayerFreeze();
             fighting = true;
@@ -116,7 +105,7 @@ public abstract class Duel extends InvadedEvent {
         newRound();
     }
 
-    protected void addTwoPlayers() {
+    protected void addFightingPlayers(int teamSize) {
         fightingPlayers.add(GeneralUtils.getRandom(players));
         Player player2 = GeneralUtils.getRandom(players);
 
@@ -125,6 +114,15 @@ public abstract class Duel extends InvadedEvent {
         }
 
         fightingPlayers.add(player2);
+    }
+
+    @EventHandler
+    public void onEventLeave(EventLeaveEvent e) {
+        if (fightingPlayers.size() == 1 && fighting) {
+            roundOver(fightingPlayers.get(0));
+            if (frozen)
+                playerFreeze.cancel();
+        }
     }
 
     /*
