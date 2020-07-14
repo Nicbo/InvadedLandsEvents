@@ -3,7 +3,6 @@ package me.nicbo.InvadedLandsEvents.scoreboard;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
@@ -21,9 +20,9 @@ import java.util.List;
  */
 
 public abstract class EventScoreboard {
-    protected Player player;
-    private Scoreboard scoreboard;
-    private Objective objective;
+    protected final Player player;
+    private final Scoreboard scoreboard;
+    private final Objective objective;
 
     private List<Line> lines;
 
@@ -34,10 +33,10 @@ public abstract class EventScoreboard {
     }
 
     public EventScoreboard(String name) {
-        this(null, name);
+        this(name, null);
     }
 
-    public EventScoreboard(Player player, String name) {
+    public EventScoreboard(String name, Player player) {
         this.player = player;
         this.scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
         this.objective = scoreboard.registerNewObjective(name, "dummy");

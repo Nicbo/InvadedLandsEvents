@@ -1,5 +1,6 @@
 package me.nicbo.InvadedLandsEvents.gui;
 
+import me.nicbo.InvadedLandsEvents.utils.GeneralUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -19,16 +20,23 @@ import java.util.*;
  */
 
 public class GUI {
-    private final Inventory inv;
     public static final Map<UUID, GUI> openInventories;
+
+    protected final Player player;
+    private final Inventory inv;
     private final Map<Integer, Action> actions;
 
-    public GUI(final String title, final int size, final Player owner) {
-        this.inv = Bukkit.createInventory(owner, size, ChatColor.translateAlternateColorCodes('&', title));
+    static {
+        openInventories = new HashMap<>();
+    }
+
+    public GUI(final String title, final int size, final Player player) {
+        this.player = player;
+        this.inv = Bukkit.createInventory(null, size, ChatColor.translateAlternateColorCodes('&', title));
         this.actions = new HashMap<>();
     }
 
-    public void setItem(final int slot, final Material material, final String name, final ArrayList<String> lore, final Action action) {
+    public void setItem(final int slot, final Material material, final String name, final List<String> lore, final Action action) {
         final ItemStack item = new ItemStack(material);
         final ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', name));
@@ -39,21 +47,25 @@ public class GUI {
         this.actions.put(slot, action);
     }
 
-    public void setItem(final int slot, final Material material, int dataId, final String name, final ArrayList<String> lore, final Action action) {
+    public void setItem(final int slot, final Material material, int dataID, final String name, final List<String> lore, final Action action) {
         final ItemStack item = new ItemStack(material);
         final ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', name));
         meta.setLore(lore);
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         item.setItemMeta(meta);
-        item.setDurability((short) dataId);
+        item.setDurability((short) dataID);
         this.inv.setItem(slot, item);
         this.actions.put(slot, action);
     }
 
     public void setBlankItem(final int slot) {
+        setBlankItem(slot, 15);
+    }
+
+    public void setBlankItem(final int slot, final int dataID) {
         final ItemStack item = new ItemStack(Material.STAINED_GLASS_PANE);
-        item.setDurability((short)15);
+        item.setDurability((short) dataID);
         final ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(" ");
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
@@ -61,14 +73,18 @@ public class GUI {
         this.inv.setItem(slot, item);
     }
 
-    public void open(final Player toOpen) {
-        toOpen.openInventory(this.inv);
-        GUI.openInventories.put(toOpen.getUniqueId(), this);
+    public boolean isSlotEmpty(final int slot) {
+        return inv.getItem(slot) == null;
     }
 
-    public void close(final Player toClose) {
-        toClose.closeInventory();
-        GUI.openInventories.remove(toClose.getUniqueId());
+    public void open() {
+        player.openInventory(this.inv);
+        GUI.openInventories.put(player.getUniqueId(), this);
+    }
+
+    public void close() {
+        player.closeInventory();
+        GUI.openInventories.remove(player.getUniqueId());
     }
 
     public Map<Integer, Action> getActions() {
@@ -79,13 +95,7 @@ public class GUI {
         return GUI.openInventories;
     }
 
-    static {
-        openInventories = new HashMap<>();
+    public interface Action {
+        void click();
     }
-
-    public interface Action
-    {
-        void click(final Player p0);
-    }
-
 }

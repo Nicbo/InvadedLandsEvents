@@ -179,28 +179,23 @@ public final class OITC extends InvadedEvent {
     }
 
     private final class OITCSB extends EventScoreboard {
-        private TrackRow playerCount;
-        private TrackRow specCount;
-        private TrackRow timeRemaining;
-        private TrackRow pointsTrack;
-        private TrackRow leadTrack;
-
-        private Row blank;
-        private Row lead;
-        private Row header;
-        private Row footer;
+        private final TrackRow playerCount;
+        private final TrackRow specCount;
+        private final TrackRow timeRemaining;
+        private final TrackRow pointsTrack;
+        private final TrackRow leadTrack;
 
         public OITCSB(Player player) {
-            super(player, "oitc");
-            this.header = new Row("header", HEADERFOOTER, ChatColor.BOLD.toString(), HEADERFOOTER, 9);
+            super("oitc", player);
+            Row header = new Row("header", HEADERFOOTER, ChatColor.BOLD.toString(), HEADERFOOTER, 9);
             this.playerCount = new TrackRow("playerCount", ChatColor.YELLOW + "Players: ", ChatColor.DARK_PURPLE + "" + ChatColor.GOLD, String.valueOf(0), 8);
             this.specCount = new TrackRow("specCount", ChatColor.YELLOW + "Spectators: ", ChatColor.LIGHT_PURPLE + "" + ChatColor.GOLD, String.valueOf(0), 7);
             this.timeRemaining = new TrackRow("timeRemaining", ChatColor.YELLOW + "Time Remain", "ing: " + ChatColor.GOLD, String.valueOf(0), 6);
             this.pointsTrack = new TrackRow("pointsTrack", ChatColor.YELLOW + "Your Points: ", ChatColor.BLACK + "" + ChatColor.GOLD, String.valueOf(0), 5);
-            this.blank = new Row("blank", "", ChatColor.AQUA.toString(), "", 4);
-            this.lead = new Row("lead", "", ChatColor.YELLOW + "In the Lead:", "", 3);
+            Row blank = new Row("blank", "", ChatColor.AQUA.toString(), "", 4);
+            Row lead = new Row("lead", "", ChatColor.YELLOW + "In the Lead:", "", 3);
             this.leadTrack = new TrackRow("leadTrack", "None", ChatColor.GRAY.toString(), ": " + ChatColor.GOLD + "0/0", 2);
-            this.footer = new Row("footer", HEADERFOOTER, ChatColor.DARK_GRAY.toString(), HEADERFOOTER, 1);
+            Row footer = new Row("footer", HEADERFOOTER, ChatColor.DARK_GRAY.toString(), HEADERFOOTER, 1);
             super.init("OITC", header, playerCount, specCount, timeRemaining, pointsTrack, blank, lead, leadTrack, footer);
         }
 
@@ -224,5 +219,9 @@ public final class OITC extends InvadedEvent {
                 leadTrack.setSuffix(ChatColor.GRAY + ": " + ChatColor.GOLD + points.get(leader) + "/" + WIN_POINTS);
             }
         }
+    }
+
+    public int getWIN_POINTS() {
+        return WIN_POINTS;
     }
 }

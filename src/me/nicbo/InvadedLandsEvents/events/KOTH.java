@@ -82,6 +82,11 @@ public final class KOTH extends InvadedEvent {
                 new ItemStack(Material.ARROW, 32)
         };
 
+        this.scoreboards = new HashMap<>();
+        this.points = new HashMap<>();
+        this.playersInRegion = new ArrayList<>();
+        this.respawningPlayers = new HashSet<>();
+
         this.TIME_LIMIT = eventConfig.getInt("int-seconds-time-limit");
         this.WIN_POINTS = eventConfig.getInt("int-win-points");
 
@@ -98,10 +103,6 @@ public final class KOTH extends InvadedEvent {
 
     @Override
     public void init() {
-        this.scoreboards = new HashMap<>();
-        this.points = new HashMap<>();
-        this.playersInRegion = new ArrayList<>();
-        this.respawningPlayers = new HashSet<>();
         this.regionChecker = new BukkitRunnable() {
             @Override
             public void run() {
@@ -230,44 +231,33 @@ public final class KOTH extends InvadedEvent {
 
     @EventHandler
     public void onEventLeave(EventLeaveEvent event) {
-        if (blockListener(event.getPlayer())) {
-            return;
-        }
-
         Player player = event.getPlayer();
         playersInRegion.remove(player);
         scoreboards.remove(player);
     }
 
     public final class KOTHSB extends EventScoreboard {
-        private TrackRow playerCount;
-        private TrackRow specCount;
-        private TrackRow timeRemaining;
-        private TrackRow pointsTrack;
-        private TrackRow leadTrack;
-        private TrackRow capturingTrack;
-
-        private Row blank1;
-        private Row blank2;
-        private Row lead;
-        private Row header;
-        private Row footer;
-        private Row cap;
+        private final TrackRow playerCount;
+        private final TrackRow specCount;
+        private final TrackRow timeRemaining;
+        private final TrackRow pointsTrack;
+        private final TrackRow leadTrack;
+        private final TrackRow capturingTrack;
 
         public KOTHSB(Player player) {
-            super(player, "koth");
-            this.header = new Row("header", HEADERFOOTER, ChatColor.BOLD.toString(), HEADERFOOTER, 12);
+            super("koth", player);
+            Row header = new Row("header", HEADERFOOTER, ChatColor.BOLD.toString(), HEADERFOOTER, 12);
             this.playerCount = new TrackRow("playerCount", ChatColor.YELLOW + "Players: ", ChatColor.DARK_PURPLE + "" + ChatColor.GOLD, String.valueOf(0), 11);
             this.specCount = new TrackRow("specCount", ChatColor.YELLOW + "Spectators: ", ChatColor.LIGHT_PURPLE + "" + ChatColor.GOLD, String.valueOf(0), 10);
             this.timeRemaining = new TrackRow("timeRemaining", ChatColor.YELLOW + "Time Remain", "ing: " + ChatColor.GOLD, String.valueOf(0), 9);
             this.pointsTrack = new TrackRow("pointsTrack", ChatColor.YELLOW + "Your Points: ", ChatColor.GRAY + "" + ChatColor.GOLD, String.valueOf(0), 8);
-            this.blank1 = new Row("blank1", "", ChatColor.DARK_BLUE.toString(), "", 7);
-            this.lead = new Row("lead", ChatColor.YELLOW + "In the Lead:", ChatColor.ITALIC.toString(), ChatColor.RED.toString(), 6);
+            Row blank1 = new Row("blank1", "", ChatColor.DARK_BLUE.toString(), "", 7);
+            Row lead = new Row("lead", ChatColor.YELLOW + "In the Lead:", ChatColor.ITALIC.toString(), ChatColor.RED.toString(), 6);
             this.leadTrack = new TrackRow("leadTrack", "None", ChatColor.BLACK + "" + ChatColor.GRAY, ": " + ChatColor.GOLD + "0/0", 5);
-            this.blank2 = new Row("blank2", "", ChatColor.GREEN.toString(), "", 4);
-            this.cap = new Row("capturing", ChatColor.DARK_AQUA.toString(), ChatColor.YELLOW + "Capturing:", ChatColor.WHITE.toString(), 3);
+            Row blank2 = new Row("blank2", "", ChatColor.GREEN.toString(), "", 4);
+            Row cap = new Row("capturing", ChatColor.DARK_AQUA.toString(), ChatColor.YELLOW + "Capturing:", ChatColor.WHITE.toString(), 3);
             this.capturingTrack = new TrackRow("capturingTrack", ChatColor.AQUA.toString(), ChatColor.GRAY.toString(), ChatColor.RED + "No one" + ChatColor.GRAY + " (0)", 2);
-            this.footer = new Row("footer", HEADERFOOTER, ChatColor.DARK_PURPLE.toString(), HEADERFOOTER, 1);
+            Row footer = new Row("footer", HEADERFOOTER, ChatColor.DARK_PURPLE.toString(), HEADERFOOTER, 1);
             super.init(ChatColor.GOLD + "KOTH", header, playerCount, specCount, timeRemaining, pointsTrack, blank1, lead, leadTrack, blank2, cap, capturingTrack, footer);
         }
 
@@ -306,5 +296,9 @@ public final class KOTH extends InvadedEvent {
                 capturingTrack.setSuffix(" (" + points.get(capturing) + ")");
             }
         }
+    }
+
+    public int getWIN_POINTS() {
+        return WIN_POINTS;
     }
 }

@@ -12,8 +12,12 @@ import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
+import org.bukkit.event.HandlerList;
 import org.bukkit.scheduler.BukkitRunnable;
+import sun.plugin2.main.server.Plugin;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,11 +30,11 @@ import java.util.Map;
  */
 
 public final class EventManager {
-    private EventsMain plugin;
+    private static final EventsMain plugin;
 
     private BukkitRunnable countDownRunnable;
 
-    private Map<String, InvadedEvent> events;
+    private final Map<String, InvadedEvent> events;
     private InvadedEvent currentEvent;
 
     private int countDown;
@@ -38,22 +42,28 @@ public final class EventManager {
     private static final String[] eventNames;
 
     static {
+        plugin = EventsMain.getInstance();
+
         eventNames = new String[]{
                 "brackets", "koth", "lms",
                 "oitc", "redrover", "rod",
                 "spleef", "tdm", "tnttag",
                 "waterdrop", "woolshuffle",
-                "sumo"
+                "sumo1v1", "sumo2v2", "sumo3v3"
         };
     }
 
     public EventManager() {
-        this.plugin = EventsMain.getInstance();
         this.events = new HashMap<>();
     }
 
     public void reloadEvents() {
+        // Unregister event listeners
+        for (InvadedEvent event : events.values()) {
+            HandlerList.unregisterAll(event);
+        }
         events.clear();
+
         events.put(eventNames[0], new Brackets());
         events.put(eventNames[1], new KOTH());
         events.put(eventNames[2], new LMS());
@@ -66,20 +76,22 @@ public final class EventManager {
         events.put(eventNames[9], new Waterdrop());
         events.put(eventNames[10], new WoolShuffle());
         events.put(eventNames[11], new Sumo1v1());
-        events.put(eventNames[11], new Sumo2v2());
-        events.put(eventNames[11], new Sumo3v3());
+        events.put(eventNames[12], new Sumo2v2());
+        events.put(eventNames[13], new Sumo3v3());
     }
 
-    public String hostEvent(String name, String host) {
+    public String hostEvent(String name, Player host) {
+        // need perm checks
         if (currentEvent != null) {
             return EventMessage.HOST_STARTED;
         } else if (!events.containsKey(name)) {
             return EventMessage.DOES_NOT_EXIST;
         } else if (!events.get(name).isEnabled()) {
             return EventMessage.NOT_ENABLED;
-        }
+        } // sumo sub menu check
+
         currentEvent = events.get(name);
-        startCountDown(host);
+        startCountDown(host.getName());
         return null;
     }
 
@@ -99,7 +111,7 @@ public final class EventManager {
                 if (countDown == 60 || countDown == 45 || countDown == 30 || countDown == 15 || countDown <= 5 && countDown >= 1) {
                     for (Player player : Bukkit.getOnlinePlayers()) {
                         TextComponent join = new TextComponent(ChatColor.translateAlternateColorCodes('&', "&c&lStarting in " + countDown + " seconds " + "&a&l[Click to Join]"));
-                        join.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.GREEN + "Click to join " + currentEvent.getEventName()).create()));
+                        join.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.GREEN + "Click to join " + name).create()));
                         join.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/event join"));
                         player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&c&l" + host + " is hosting a " + name + " event!"));
                         player.spigot().sendMessage(join);
@@ -187,16 +199,16 @@ public final class EventManager {
         this.currentEvent = event;
     }
 
+    public ConfigurationSection getEventConfig() {
+        return plugin.getConfig().getConfigurationSection("events");
+    }
+
     public static String[] getEventNames() {
         return eventNames;   
     }
 
     public static boolean eventExists(String name) {
-        for (String event : eventNames) {
-            if (event.equalsIgnoreCase(name))
-                return true;
-        }
-        return false;
+        return GeneralUtils.contains(eventNames, name);
     }
 
     /*

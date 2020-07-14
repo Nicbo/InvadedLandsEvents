@@ -42,7 +42,7 @@ public class Sumo extends Duel {
                 while (iterator.hasNext()) {
                     Player player = iterator.next();
                     if (player.getLocation().getY() < MIN_Y) {
-                        fightingPlayers.remove(player);
+                        iterator.remove();
                         player.teleport(specLoc);
                     }
                 }

@@ -1,5 +1,6 @@
 package me.nicbo.InvadedLandsEvents.events;
 
+import com.sun.xml.internal.ws.model.wsdl.WSDLOutputImpl;
 import me.nicbo.InvadedLandsEvents.scoreboard.EventScoreboard;
 import me.nicbo.InvadedLandsEvents.utils.ConfigUtils;
 import me.nicbo.InvadedLandsEvents.utils.EventUtils;
@@ -11,11 +12,15 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.material.Wool;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * WoolShuffle event:
@@ -27,7 +32,7 @@ import java.util.Iterator;
  */
 
 public final class WoolShuffle extends InvadedEvent {
-    private WoolShuffleSB woolShuffleSB;
+    private final WoolShuffleSB woolShuffleSB;
 
     private final Location startLoc;
 
@@ -35,6 +40,7 @@ public final class WoolShuffle extends InvadedEvent {
 
     private final Wool[] wools;
     private final String[] woolNames;
+    private final int[] times;
 
     private boolean pvpEnabled;
 
@@ -59,7 +65,7 @@ public final class WoolShuffle extends InvadedEvent {
         this.wools = new Wool[] {
                 new Wool(DyeColor.ORANGE),
                 new Wool(DyeColor.YELLOW),
-                new Wool(DyeColor.GREEN),
+                new Wool(DyeColor.LIME),
                 new Wool(DyeColor.PINK),
                 new Wool(DyeColor.CYAN),
                 new Wool(DyeColor.PURPLE),
@@ -75,6 +81,8 @@ public final class WoolShuffle extends InvadedEvent {
                 ChatColor.DARK_PURPLE + "Purple",
                 ChatColor.BLUE + "Blue"
         };
+
+        this.times = new int[]{15, 15, 14, 14, 13, 13, 12, 12, 11, 11, 10, 10, 9, 9, 8, 7, 7, 6, 6, 5, 5, 4, 4, 3, 2};
 
         this.ROUND_START = getEventMessage("ROUND_START");
         this.FAILED = getEventMessage("FAILED");
@@ -92,8 +100,6 @@ public final class WoolShuffle extends InvadedEvent {
         this.timer = 15;
 
         this.roundTimer = new BukkitRunnable() {
-            private final int[] times = {15, 15, 14, 14, 13, 13, 12, 12, 11, 11, 10, 10, 9, 9, 8, 7, 7, 6, 6, 5, 5, 4, 4, 3, 2};
-
             @Override
             public void run() {
                 timer--;
@@ -111,7 +117,7 @@ public final class WoolShuffle extends InvadedEvent {
 
     @Override
     public void start() {
-        roundTimer.runTaskTimerAsynchronously(plugin, 0, 20);
+        roundTimer.runTaskTimer(plugin, 0, 20);
         for (Player player : players) {
             player.setScoreboard(woolShuffleSB.getScoreboard());
             player.teleport(startLoc);
@@ -129,16 +135,7 @@ public final class WoolShuffle extends InvadedEvent {
         // Check if all players are on correct wool
         EventUtils.broadcastEventMessage(ROUND_START.replace("{round}", String.valueOf(round)));
         if (round != 1) {
-            Iterator<Player> iterator = players.iterator();
-
-            while (iterator.hasNext()) {
-                Player player = iterator.next();
-                if (!isPlayerOnWool(player)) {
-                    loseEvent(player);
-                    EventUtils.broadcastEventMessage(FAILED.replace("{player}", player.getName()));
-                    EventUtils.broadcastEventMessage(ELIMINATED.replace("{player}", player.getName()).replace("{remaining}", String.valueOf(players.size())));
-                }
-            }
+            eliminatePlayers();
         }
 
         // Pick new wool
@@ -167,6 +164,19 @@ public final class WoolShuffle extends InvadedEvent {
         EventUtils.broadcastEventMessage(pvpEnabled ? PVP_ENABLED : PVP_DISABLED);
     }
 
+    private void eliminatePlayers() {
+        List<Player> toLose = new ArrayList<>();
+        for (Player player : players) {
+            if (!isPlayerOnWool(player)) {
+                toLose.add(player);
+                EventUtils.broadcastEventMessage(FAILED.replace("{player}", player.getName()));
+                EventUtils.broadcastEventMessage(ELIMINATED.replace("{player}", player.getName()).replace("{remaining}", String.valueOf(players.size())));
+            }
+        }
+        loseEvent(toLose);
+        toLose.clear();
+    }
+
     private void fillInvWool(Player player) {
         for (int i = 0; i < 9; i++) {
             player.getInventory().setItem(i, wools[index].toItemStack(1));
@@ -189,7 +199,7 @@ public final class WoolShuffle extends InvadedEvent {
         return false;
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR)
     public void playerHurt(EntityDamageByEntityEvent event) {
         if (event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();
@@ -203,28 +213,24 @@ public final class WoolShuffle extends InvadedEvent {
     }
 
     private final class WoolShuffleSB extends EventScoreboard {
-        private TrackRow roundTrack;
-        private TrackRow countDown;
-        private TrackRow colourTrack;
-        private TrackRow pvpTrack;
-        private TrackRow playerCount;
-        private TrackRow specCount;
-
-        private Row blank;
-        private Row header;
-        private Row footer;
+        private final TrackRow roundTrack;
+        private final TrackRow countDown;
+        private final TrackRow colourTrack;
+        private final TrackRow pvpTrack;
+        private final TrackRow playerCount;
+        private final TrackRow specCount;
 
         public WoolShuffleSB() {
             super("woolshuffle");
-            this.header = new Row("header", HEADERFOOTER, ChatColor.BOLD.toString(), HEADERFOOTER, 7);
+            Row header = new Row("header", HEADERFOOTER, ChatColor.BOLD.toString(), HEADERFOOTER, 7);
             this.roundTrack = new TrackRow("round", ChatColor.YELLOW + "Round: ", ChatColor.GOLD.toString(), String.valueOf(0), 6);
             this.countDown = new TrackRow("countDown", ChatColor.YELLOW + "Time Remain", "ing: " + ChatColor.GOLD, String.valueOf(20), 5);
             this.colourTrack = new TrackRow("colourTrack", ChatColor.YELLOW + "Run to: ", ChatColor.AQUA + "" + ChatColor.RESET, "None", 6);
             this.pvpTrack = new TrackRow("pvpTrack", ChatColor.YELLOW + "PvP: ", ChatColor.RED + "" + ChatColor.RESET, "None", 5);
-            this.blank = new Row("blank", "", ChatColor.AQUA.toString(), "", 4);
+            Row blank = new Row("blank", "", ChatColor.AQUA.toString(), "", 4);
             this.playerCount = new TrackRow("playerCount", ChatColor.YELLOW + "Players: ", ChatColor.DARK_PURPLE + "" + ChatColor.GOLD, String.valueOf(0), 3);
             this.specCount = new TrackRow("specCount", ChatColor.YELLOW + "Spectators: ", ChatColor.LIGHT_PURPLE + "" + ChatColor.GOLD, String.valueOf(0), 2);
-            this.footer = new Row("footer", HEADERFOOTER, ChatColor.DARK_GRAY.toString(), HEADERFOOTER, 1);
+            Row footer = new Row("footer", HEADERFOOTER, ChatColor.DARK_GRAY.toString(), HEADERFOOTER, 1);
             super.init(ChatColor.GOLD + "Wool Shuffle", header, roundTrack, countDown, colourTrack, pvpTrack, blank, playerCount, specCount, footer);
         }
 

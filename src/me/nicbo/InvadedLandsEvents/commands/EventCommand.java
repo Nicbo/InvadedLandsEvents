@@ -1,6 +1,7 @@
 package me.nicbo.InvadedLandsEvents.commands;
 
 import me.nicbo.InvadedLandsEvents.EventsMain;
+import me.nicbo.InvadedLandsEvents.gui.HostGUI;
 import me.nicbo.InvadedLandsEvents.managers.EventManager;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.command.Command;
@@ -44,7 +45,7 @@ public final class EventCommand implements CommandExecutor, TabCompleter {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String s, String[] args) {
-        if (cmd.getName().toLowerCase().equalsIgnoreCase("event")) {
+        if (cmd.getName().equalsIgnoreCase("event")) {
             if (sender instanceof Player) {
                 Player player = (Player) sender;
                 if (args.length >= 1) {
@@ -87,11 +88,14 @@ public final class EventCommand implements CommandExecutor, TabCompleter {
                         case "h":
                         case "host": {
                             if (args.length >= 2) {
-                                String hostMsg = eventManager.hostEvent(args[1], player.getName());
+                                String hostMsg = eventManager.hostEvent(args[1], player);
                                 if (hostMsg != null)
                                     player.sendMessage(hostMsg.replace("{event}", args[1]));
-                                break;
+                            } else {
+                                HostGUI gui = new HostGUI(player);
+                                gui.open();
                             }
+                            break;
                         }
                         default: {
                             player.sendMessage(usage);

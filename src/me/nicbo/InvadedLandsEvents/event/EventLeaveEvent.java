@@ -24,6 +24,7 @@ public final class EventLeaveEvent extends Event {
         this.player = player;
     }
 
+    @Override
     public HandlerList getHandlers() {
         return HANDLERS;
     }

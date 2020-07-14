@@ -34,7 +34,7 @@ public class GUIListener implements Listener {
             e.setCancelled(true);
             final GUI.Action action = gui.getActions().get(e.getSlot());
             if (action != null) {
-                action.click(player);
+                action.click();
             }
         }
     }

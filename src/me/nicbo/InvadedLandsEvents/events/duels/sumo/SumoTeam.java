@@ -5,8 +5,15 @@ import me.nicbo.InvadedLandsEvents.utils.EventUtils;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+
+/**
+ * Sumo team
+ *
+ * @author Nicbo
+ * @since 2020-06-26
+ */
 
 public final class SumoTeam extends EventTeam {
     private final List<Player> initialPlayers;
@@ -22,7 +29,7 @@ public final class SumoTeam extends EventTeam {
     }
 
     public SumoTeam() {
-        this.initialPlayers = new ArrayList<>(players);
+        this.initialPlayers = Collections.unmodifiableList(players);
     }
 
     public void preparePlayers(Location location) {
@@ -44,7 +51,7 @@ public final class SumoTeam extends EventTeam {
                         .replace("{player2}", initialPlayers.get(1).getName())
                         .replace("{player3}", initialPlayers.get(2).getName());
             default:
-                return null;
+                return "None";
         }
     }
 }

@@ -16,7 +16,6 @@ import java.io.File;
  */
 
 public final class ConfigFile {
-
     private File file;
     private FileConfiguration config;
     private String name;

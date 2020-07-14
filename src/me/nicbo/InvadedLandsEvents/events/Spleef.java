@@ -211,20 +211,17 @@ public final class Spleef extends InvadedEvent {
 
 
     private final class SpleefSB extends EventScoreboard {
-        private TrackRow playerCount;
-        private TrackRow specCount;
-        private TrackRow timeRemaining;
-
-        private Row header;
-        private Row footer;
+        private final TrackRow playerCount;
+        private final TrackRow specCount;
+        private final TrackRow timeRemaining;
 
         public SpleefSB() {
             super("spleef");
-            this.header = new Row("header", HEADERFOOTER, ChatColor.BOLD.toString(), HEADERFOOTER, 5);
+            Row header = new Row("header", HEADERFOOTER, ChatColor.BOLD.toString(), HEADERFOOTER, 5);
             this.playerCount = new TrackRow("playerCount", ChatColor.YELLOW + "Players: ", ChatColor.DARK_PURPLE + "" + ChatColor.GOLD, String.valueOf(0), 4);
             this.specCount = new TrackRow("specCount", ChatColor.YELLOW + "Spectators: ", ChatColor.LIGHT_PURPLE + "" + ChatColor.GOLD, String.valueOf(0), 3);
             this.timeRemaining = new TrackRow("timeRemaining", ChatColor.YELLOW + "Time Remain", "ing: " + ChatColor.GOLD, String.valueOf(0), 2);
-            this.footer = new Row("footer", HEADERFOOTER, ChatColor.DARK_GRAY.toString(), HEADERFOOTER, 1);
+            Row footer = new Row("footer", HEADERFOOTER, ChatColor.DARK_GRAY.toString(), HEADERFOOTER, 1);
             super.init("Spleef", header, playerCount, specCount, timeRemaining, footer);
         }
 

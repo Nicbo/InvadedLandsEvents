@@ -87,21 +87,18 @@ public final class RoD extends InvadedEvent {
         }
     }
 
-    private class RoDSB extends EventScoreboard {
-        private TrackRow playerCount;
-        private TrackRow specCount;
-        private TrackRow timeRemaining;
-
-        private Row header;
-        private Row footer;
+    private final class RoDSB extends EventScoreboard {
+        private final TrackRow playerCount;
+        private final TrackRow specCount;
+        private final TrackRow timeRemaining;
 
         public RoDSB() {
             super("lms");
-            this.header = new Row("header", HEADERFOOTER, ChatColor.BOLD.toString(), HEADERFOOTER, 5);
+            Row header = new Row("header", HEADERFOOTER, ChatColor.BOLD.toString(), HEADERFOOTER, 5);
             this.playerCount = new TrackRow("playerCount", ChatColor.YELLOW + "Players: ", ChatColor.DARK_PURPLE + "" + ChatColor.GOLD, String.valueOf(0), 4);
             this.specCount = new TrackRow("specCount", ChatColor.YELLOW + "Spectators: ", ChatColor.LIGHT_PURPLE + "" + ChatColor.GOLD, String.valueOf(0), 3);
             this.timeRemaining = new TrackRow("timeRemaining", ChatColor.YELLOW + "Time Remain", "ing: " + ChatColor.GOLD, String.valueOf(0), 2);
-            this.footer = new Row("footer", HEADERFOOTER, ChatColor.DARK_PURPLE.toString(), HEADERFOOTER, 1);
+            Row footer = new Row("footer", HEADERFOOTER, ChatColor.DARK_PURPLE.toString(), HEADERFOOTER, 1);
             super.init(ChatColor.GOLD + "RoD", header, playerCount, specCount, timeRemaining, footer);
         }
 

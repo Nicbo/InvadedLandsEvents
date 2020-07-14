@@ -35,12 +35,12 @@ import java.util.logging.Logger;
  */
 
 public abstract class InvadedEvent implements Listener {
-    protected static EventsMain plugin;
-    protected static Logger logger;
-    protected static ItemStack star;
+    protected final static EventsMain plugin;
+    protected final static Logger logger;
+    protected final static ItemStack star;
 
-    private CountdownSB countdownSB;
-    private EventOverSB eventOverSB;
+    private final CountdownSB countdownSB;
+    private final EventOverSB eventOverSB;
     private EventScoreboard spectatorSB;
 
     private BukkitRunnable refresher;
@@ -52,9 +52,10 @@ public abstract class InvadedEvent implements Listener {
     protected World eventWorld;
     protected String winCommand;
 
-    private String eventName;
+    private final String eventName;
     protected String configName;
     protected boolean started;
+    protected boolean ending;
     protected boolean enabled;
 
     protected ConfigurationSection eventConfig;
@@ -99,6 +100,7 @@ public abstract class InvadedEvent implements Listener {
         this.regionManager = EventsMain.getWorldGuardPlugin().getRegionManager(eventWorld);
 
         this.enabled = eventConfig.getBoolean("enabled");
+        this.ending = false;
         this.players = new ArrayList<>();
         this.spectators = new ArrayList<>();
         Bukkit.getPluginManager().registerEvents(this, plugin);
@@ -159,9 +161,8 @@ public abstract class InvadedEvent implements Listener {
         this.spectatorSB = spectatorSB;
     }
 
-    // Don't use this if you loop through players already in start()
     protected void giveAllScoreboard(Scoreboard sb) {
-        for (Player player : players) {
+        for (Player player : getParticipants()) {
             player.setScoreboard(sb);
         }
     }
@@ -210,13 +211,7 @@ public abstract class InvadedEvent implements Listener {
     }
 
     protected List<String> getEventMessages(String message) {
-        List<String> colouredMessages = new ArrayList<>();
-
-        for (String msg : EventsMain.getMessages().getConfig().getStringList(configName + "." + message)) {
-            colouredMessages.add(ChatColor.translateAlternateColorCodes('&', msg));
-        }
-
-        return colouredMessages;
+        return GeneralUtils.translateAlternateColorCodes(EventsMain.getMessages().getConfig().getStringList(configName + "." + message));
     }
 
     public boolean containsPlayer(Player player) {
@@ -272,9 +267,11 @@ public abstract class InvadedEvent implements Listener {
 
     public void forceEndEvent() {
         EventUtils.broadcastEventMessage(EventMessage.EVENT_FORCE_ENDED.replace("{event}", eventName));
-        over();
+        if (started) {
+            over();
+            stopRefreshing();
+        }
         giveAllScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
-        stopRefreshing();
         stop();
         EventsMain.getManagerHandler().getEventManager().setCurrentEvent(null);
     }
@@ -285,11 +282,20 @@ public abstract class InvadedEvent implements Listener {
         checkPlayerCount();
     }
 
+    protected void loseEvent(List<Player> players) {
+        for (Player player : players) {
+            this.players.remove(player);
+            specEvent(player);
+        }
+
+        checkPlayerCount();
+    }
+
     /**
      * Called when a player is removed or leaves event
      * Will call playerWon() if playerCount is under 2
      */
-    private void checkPlayerCount() {
+    protected void checkPlayerCount() {
         if (started) {
             int playerCount = players.size();
             if (playerCount < 2) {
@@ -380,7 +386,7 @@ public abstract class InvadedEvent implements Listener {
         private final TrackRow countDown;
 
         public CountdownSB(EventManager eventManager, Player player) {
-            super(player, "countdown");
+            super("countdown", player);
             this.eventManager = eventManager;
             Row header = new Row("header", HEADERFOOTER, ChatColor.RED.toString(), HEADERFOOTER, 5);
             this.playerCount = new TrackRow("playerCount", ChatColor.YELLOW + "Players: ", ChatColor.GRAY + "" + ChatColor.GOLD, String.valueOf(0), 4);

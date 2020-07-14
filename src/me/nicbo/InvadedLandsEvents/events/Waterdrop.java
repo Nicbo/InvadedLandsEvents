@@ -28,7 +28,7 @@ import java.util.List;
  */
 
 public final class Waterdrop extends InvadedEvent {
-    private WaterdropSB waterdropSB;
+    private final WaterdropSB waterdropSB;
 
     private ProtectedRegion region;
     private Location startLoc;
@@ -38,12 +38,12 @@ public final class Waterdrop extends InvadedEvent {
     private Material[][] mainCover;
     private Material[][] closedCover;
 
-    private List<Material[][]> easyCovers;
-    private List<Material[][]> mediumCovers;
-    private List<Material[][]> hardCovers;
+    private final List<Material[][]> easyCovers;
+    private final List<Material[][]> mediumCovers;
+    private final List<Material[][]> hardCovers;
 
-    private Material water;
-    private Material redstone;
+    private final Material water;
+    private final Material redstone;
 
     private int round;
     private int timer;
@@ -144,50 +144,37 @@ public final class Waterdrop extends InvadedEvent {
     public void over() {
         waterdropTimer.cancel();
         fallCheck.cancel();
-        jumped.clear();
     }
 
     @Override
     public void stop() {
         super.stop();
         eliminated.clear();
+        jumped.clear();
     }
 
     private void newRound() {
-        if (eliminatePlayers()) {
-            eliminated = new ArrayList<>(players);
-            EventUtils.broadcastEventMessage(ROUND_START.replace("{round}", String.valueOf(round)));
-            jumped.clear();
-            setMainCover();
-            buildMainCover();
-            tpPlayers();
-        }
+        eliminatePlayers();
+//        if (doNextRound()) {
+//            eliminated = new ArrayList<>(players);
+//            EventUtils.broadcastEventMessage(ROUND_START.replace("{round}", String.valueOf(round)));
+//            jumped.clear();
+//            setMainCover();
+//            buildMainCover();
+//            tpPlayers();
+//        }
     }
 
     private void tpPlayers() {
         players.forEach(player -> player.teleport(startLoc));
     }
 
-    /**
-     * Removes eliminated players and checks if new round should start
-     * @return true if new round should start
-     */
-
-    private boolean eliminatePlayers() {
+    private void eliminatePlayers() {
         for (Player player : eliminated) {
             EventUtils.broadcastEventMessage(ELIMINATED.replace("{player}", player.getName())
                     .replace("{remaining}", String.valueOf(players.size())));
-            loseEvent(player);
         }
-
-        if (players.size() == 0) {
-            playerWon(null);
-        } else if (players.size() == 1) {
-            playerWon(players.get(0));
-        } else {
-            return true;
-        }
-        return false;
+        loseEvent(eliminated);
     }
 
     private void setMainCover() {
@@ -214,7 +201,7 @@ public final class Waterdrop extends InvadedEvent {
      */
 
     private Material[][] getRandomCover(List<Material[][]> coverList) {
-        Material[][] cover = GeneralUtils.getRandom(coverList).clone();
+        Material[][] cover = GeneralUtils.getRandom(coverList);
 
         while (Arrays.deepEquals(mainCover, cover)) {
             cover = GeneralUtils.getRandom(coverList);

@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
  */
 
 public final class EventConfigCommand implements CommandExecutor, TabCompleter {
-    private final EventsMain plugin;
+    private static final EventsMain plugin;
     private final FileConfiguration config;
 
     private final List<String> args0;
@@ -38,8 +38,11 @@ public final class EventConfigCommand implements CommandExecutor, TabCompleter {
     private final String POSSIBLE_SUB_COMMANDS;
     private final String USAGE;
 
+    static {
+        plugin = EventsMain.getInstance();
+    }
+
     public EventConfigCommand() {
-        this.plugin = EventsMain.getInstance();
         this.config = plugin.getConfig();
         this.args0 = new ArrayList<>(Arrays.asList(EventManager.getEventNames()));
         this.args0.addAll(Arrays.asList(
@@ -74,7 +77,7 @@ public final class EventConfigCommand implements CommandExecutor, TabCompleter {
             Player player = (Player) sender;
             if (args.length == 0) { // No args, show possible args0
                 sender.sendMessage(ConfigUtils.getConfigMessage(config));
-                possibleArgs(player, null, true);
+                sendPossibleArgs(player);
             } else {
                 args[0] = args[0].toLowerCase();
                 if (args0.contains(args[0])) { // Is an existing arg[0]
@@ -128,7 +131,7 @@ public final class EventConfigCommand implements CommandExecutor, TabCompleter {
                             }
                         } else { // Not an arg1
                             player.sendMessage(DOES_NOT_EXIST);
-                            possibleArgs(player, args[0], false);
+                            sendPossibleArgs(player, args[0]);
                         }
                     } else { // Not configuring event
                         switch (args[0]) {
@@ -175,7 +178,7 @@ public final class EventConfigCommand implements CommandExecutor, TabCompleter {
                     }
                 } else { // not a possible args[0]
                     player.sendMessage(DOES_NOT_EXIST);
-                    possibleArgs(player, args[0], true);
+                    sendPossibleArgs(player);
                 }
             }
             plugin.saveConfig();
@@ -200,16 +203,16 @@ public final class EventConfigCommand implements CommandExecutor, TabCompleter {
         return USAGE + "/econfig " + eventSetting + " " + key + " <" + type + ">";
     }
 
-    /**
-     * Sends player list of possible sub commands
-     * @param player Player to send message to
-     * @param arg0 Used for getting args1 sub commands
-     * @param checkArgs0 Boolean that decides between sub commands for args0 or args1
-     */
-
-    private void possibleArgs(Player player, String arg0, boolean checkArgs0) {
+    private void sendPossibleArgs(Player player) {
         player.sendMessage(POSSIBLE_SUB_COMMANDS);
-        for (String subCommand : checkArgs0 ? args0 : args1.get(arg0)) {
+        for (String subCommand : args0) {
+            player.sendMessage(ChatColor.YELLOW + "- " + subCommand);
+        }
+    }
+
+    private void sendPossibleArgs(Player player, String arg0) {
+        player.sendMessage(POSSIBLE_SUB_COMMANDS);
+        for (String subCommand : args1.get(arg0)) {
             player.sendMessage(ChatColor.YELLOW + "- " + subCommand);
         }
     }
@@ -239,5 +242,6 @@ public final class EventConfigCommand implements CommandExecutor, TabCompleter {
     TODO:
         - Making econfigs look cleaner/easier to read
         - Permissions
+        - make /econfig reload and save more understandable idk the point of both
      */
 }

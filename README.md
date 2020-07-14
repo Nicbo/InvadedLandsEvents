@@ -4,9 +4,9 @@ It is no where near done and is in no way ready to be built for stable releases.
 
 ## Things that are in development
 - All the events
-- Party functionality (The commands for parties are done but they wont affect the events yet)
+- Party functionality (possibly in later release)
 - Event leaderboards / stats
-- Scoreboards (Currently being worked on)
+- Scoreboards
 - Multiple arenas (later release)
 - More coming soon
 

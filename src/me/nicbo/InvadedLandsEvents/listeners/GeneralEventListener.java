@@ -26,12 +26,14 @@ import org.bukkit.inventory.ItemStack;
  */
 
 public final class GeneralEventListener implements Listener {
-    private EventsMain plugin;
-    private EventManager eventManager;
+    private static final EventManager eventManager;
+
+    static {
+        eventManager = EventsMain.getManagerHandler().getEventManager();
+    }
 
     public GeneralEventListener() {
-        this.plugin = EventsMain.getInstance();
-        this.eventManager = EventsMain.getManagerHandler().getEventManager();
+
     }
 
     private boolean runEvent(Player player) {
