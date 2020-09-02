@@ -1,318 +1,332 @@
-# Don't touch me unless you know exactly what you are doing
-# All of this can be edited in game using commands
-# Command placeholders: {winner}
-
-event-world: world
-win-command: msg {winner} you win
-
-spawn-location:
-  world: world
-  x: 0
-  y: 0
-  z: 0
-  yaw: 0
-  pitch: 0
+# Don't touch me unless you know exactly what you are doing (whatever you do, don't change type or it will break)
+# All of this can be edited in game using /econfig
 
 events:
-  brackets:
-    enabled: false
-    spec-location:
-      x: 0
-      y: 0
-      z: 0
-      yaw: 0
-      pitch: 0
-    start-location-1:
-      x: 0
-      y: 0
-      z: 0
-      yaw: 0
-      pitch: 0
-    start-location-2:
-      x: 0
-      y: 0
-      z: 0
-      yaw: 0
-      pitch: 0
+  general:
+    host-seconds:
+      value: 60
+      type: INT
+    win-command:
+      value: msg {winner} You won the {event_name} event but the admins have not configured a win command.
+      type: STRING
+    event-world:
+      value: world
+      type: STRING
+    allowed-commands:
+      value:
+        - event
+        - message
+        - mute
+        - tempmute
+        - kick
+      type: STRING_LIST
+    spawn:
+      value: world;0;0;0;0;0
+      type: FULL_LOCATION
 
-  sumo:
-    enabled: false
-    spec-location:
-      x: 0
-      y: 0
-      z: 0
-      yaw: 0
-      pitch: 0
-    start-location-1:
-      x: 0
-      y: 0
-      z: 0
-      yaw: 0
-      pitch: 0
-    start-location-2:
-      x: 0
-      y: 0
-      z: 0
-      yaw: 0
-      pitch: 0
-    int-min-y: 0
+  sumo1v1:
+    enabled:
+      value: false
+      type: BOOLEAN
+    min-players:
+      value: 2
+      type: INT
+    spec:
+      value: 0;0;0;0;0
+      type: LOCATION
+    start-1:
+      value: 0;0;0;0;0
+      type: LOCATION
+    start-2:
+      value: 0;0;0;0;0
+      type: LOCATION
+    min-y:
+      value: 0
+      type: INT
+
+  sumo2v2:
+    enabled:
+      value: false
+      type: BOOLEAN
+    min-players:
+      value: 4
+      type: INT
+    spec:
+      value: 0;0;0;0;0
+      type: LOCATION
+    start-1:
+      value: 0;0;0;0;0
+      type: LOCATION
+    start-2:
+      value: 0;0;0;0;0
+      type: LOCATION
+    min-y:
+      value: 0
+      type: INT
+
+  sumo3v3:
+    enabled:
+      value: false
+      type: BOOLEAN
+    min-players:
+      value: 6
+      type: INT
+    spec:
+      value: 0;0;0;0;0
+      type: LOCATION
+    start-1:
+      value: 0;0;0;0;0
+      type: LOCATION
+    start-2:
+      value: 0;0;0;0;0
+      type: LOCATION
+    min-y:
+      value: 0
+      type: INT
+
+  brackets:
+    enabled:
+      value: false
+      type: BOOLEAN
+    min-players:
+      value: 2
+      type: INT
+    spec:
+      value: 0;0;0;0;0
+      type: LOCATION
+    start-1:
+      value: 0;0;0;0;0
+      type: LOCATION
+    start-2:
+      value: 0;0;0;0;0
+      type: LOCATION
 
   koth:
-    enabled: false
-    spec-location:
-      x: 0
-      y: 0
-      z: 0
-      yaw: 0
-      pitch: 0
-    start-location-1:
-      x: 0
-      y: 0
-      z: 0
-      yaw: 0
-      pitch: 0
-    start-location-2:
-      x: 0
-      y: 0
-      z: 0
-      yaw: 0
-      pitch: 0
-    start-location-3:
-      x: 0
-      y: 0
-      z: 0
-      yaw: 0
-      pitch: 0
-    start-location-4:
-      x: 0
-      y: 0
-      z: 0
-      yaw: 0
-      pitch: 0
-    cap-region: cap-koth
-    int-seconds-time-limit: 300
-    int-win-points: 60
+    enabled:
+      value: false
+      type: BOOLEAN
+    min-players:
+      value: 2
+      type: INT
+    spec:
+      value: 0;0;0;0;0
+      type: LOCATION
+    start-1:
+      value: 0;0;0;0;0
+      type: LOCATION
+    start-2:
+      value: 0;0;0;0;0
+      type: LOCATION
+    start-3:
+      value: 0;0;0;0;0
+      type: LOCATION
+    start-4:
+      value: 0;0;0;0;0
+      type: LOCATION
+    cap-region:
+      value: cap-koth
+      type: STRING
+    time-limit-seconds:
+      value: 300
+      type: INT
+    win-points:
+      value: 60
+      type: INT
 
   lms:
-    enabled: false
-    spec-location:
-      x: 0
-      y: 0
-      z: 0
-      yaw: 0
-      pitch: 0
-    start-location-1:
-      x: 0
-      y: 0
-      z: 0
-      yaw: 0
-      pitch: 0
-    start-location-2:
-      x: 0
-      y: 0
-      z: 0
-      yaw: 0
-      pitch: 0
-    int-seconds-time-limit: 300
+    enabled:
+      value: false
+      type: BOOLEAN
+    min-players:
+      value: 2
+      type: INT
+    spec:
+      value: 0;0;0;0;0
+      type: LOCATION
+    start-1:
+      value: 0;0;0;0;0
+      type: LOCATION
+    start-2:
+      value: 0;0;0;0;0
+      type: LOCATION
+    time-limit-seconds:
+      value: 300
+      type: INT
 
   oitc:
-    enabled: false
-    spec-location:
-      x: 0
-      y: 0
-      z: 0
-      yaw: 0
-      pitch: 0
-    start-location-1:
-      x: 0
-      y: 0
-      z: 0
-      yaw: 0
-      pitch: 0
-    start-location-2:
-      x: 0
-      y: 0
-      z: 0
-      yaw: 0
-      pitch: 0
-    start-location-3:
-      x: 0
-      y: 0
-      z: 0
-      yaw: 0
-      pitch: 0
-    start-location-4:
-      x: 0
-      y: 0
-      z: 0
-      yaw: 0
-      pitch: 0
-    start-location-5:
-      x: 0
-      y: 0
-      z: 0
-      yaw: 0
-      pitch: 0
-    start-location-6:
-      x: 0
-      y: 0
-      z: 0
-      yaw: 0
-      pitch: 0
-    start-location-7:
-      x: 0
-      y: 0
-      z: 0
-      yaw: 0
-      pitch: 0
-    start-location-8:
-      x: 0
-      y: 0
-      z: 0
-      yaw: 0
-      pitch: 0
-    int-win-points: 20
-    int-seconds-time-limit: 300
+    enabled:
+      value: false
+      type: BOOLEAN
+    min-players:
+      value: 2
+      type: INT
+    spec:
+      value: 0;0;0;0;0
+      type: LOCATION
+    start-1:
+      value: 0;0;0;0;0
+      type: LOCATION
+    start-2:
+      value: 0;0;0;0;0
+      type: LOCATION
+    start-3:
+      value: 0;0;0;0;0
+      type: LOCATION
+    start-4:
+      value: 0;0;0;0;0
+      type: LOCATION
+    start-5:
+      value: 0;0;0;0;0
+      type: LOCATION
+    start-6:
+      value: 0;0;0;0;0
+      type: LOCATION
+    start-7:
+      value: 0;0;0;0;0
+      type: LOCATION
+    start-8:
+      value: 0;0;0;0;0
+      type: LOCATION
+    time-limit-seconds:
+      value: 300
+      type: INT
+    win-points:
+      value: 20
+      type: INT
 
   redrover:
-    enabled: false
-    spec-location:
-      x: 0
-      y: 0
-      z: 0
-      yaw: 0
-      pitch: 0
-    start-location:
-      x: 0
-      y: 0
-      z: 0
-      yaw: 0
-      pitch: 0
-    blue-region: rr-blue
-    red-region: rr-red
+    enabled:
+      value: false
+      type: BOOLEAN
+    min-players:
+      value: 2
+      type: INT
+    spec:
+      value: 0;0;0;0;0
+      type: LOCATION
+    start:
+      value: 0;0;0;0;0
+      type: LOCATION
+    killer-start:
+      value: 0;0;0;0;0
+      type: LOCATION
+    blue-region:
+      value: rr-blue
+      type: STRING
+    red-region:
+      value: rr-red
+      type: STRING
 
   rod:
-    enabled: false
-    spec-location:
-      x: 0
-      y: 0
-      z: 0
-      yaw: 0
-      pitch: 0
-    start-location:
-      x: 0
-      y: 0
-      z: 0
-      yaw: 0
-      pitch: 0
-    win-region: rod-win
-    int-seconds-time-limit: 300
+    enabled:
+      value: false
+      type: BOOLEAN
+    min-players:
+      value: 2
+      type: INT
+    spec:
+      value: 0;0;0;0;0
+      type: LOCATION
+    start:
+      value: 0;0;0;0;0
+      type: LOCATION
+    win-region:
+      value: rod-win
+      type: STRING
+    time-limit-seconds:
+      value: 300
+      type: INT
 
   spleef:
-    enabled: false
-    spec-location:
-      x: 0
-      y: 0
-      z: 0
-      yaw: 0
-      pitch: 0
-    start-location-1:
-      x: 0
-      y: 0
-      z: 0
-      yaw: 0
-      pitch: 0
-    start-location-2:
-      x: 0
-      y: 0
-      z: 0
-      yaw: 0
-      pitch: 0
-    snow-position-1:
-      x: 0
-      y: 0
-      z: 0
-    snow-position-2:
-      x: 0
-      y: 0
-      z: 0
-    int-seconds-time-limit: 300
+    enabled:
+      value: false
+      type: BOOLEAN
+    min-players:
+      value: 2
+      type: INT
+    spec:
+      value: 0;0;0;0;0
+      type: LOCATION
+    start-1:
+      value: 0;0;0;0;0
+      type: LOCATION
+    start-2:
+      value: 0;0;0;0;0
+      type: LOCATION
+    snow-1:
+      value: 0;0;0
+      type: BLOCK_VECTOR
+    snow-2:
+      value: 0;0;0
+      type: BLOCK_VECTOR
+    time-limit-seconds:
+      value: 300
+      type: INT
 
   tdm:
-    enabled: false
-    spec-location:
-      x: 0
-      y: 0
-      z: 0
-      yaw: 0
-      pitch: 0
-    blue-start-location:
-      x: 0
-      y: 0
-      z: 0
-      yaw: 0
-      pitch: 0
-    red-start-location:
-      x: 0
-      y: 0
-      z: 0
-      yaw: 0
-      pitch: 0
+    enabled:
+      value: false
+      type: BOOLEAN
+    min-players:
+      value: 2
+      type: INT
+    spec:
+      value: 0;0;0;0;0
+      type: LOCATION
+    blue-start:
+      value: 0;0;0;0;0
+      type: LOCATION
+    red-start:
+      value: 0;0;0;0;0
+      type: LOCATION
 
   tnttag:
-    enabled: false
-    spec-location:
-      x: 0
-      y: 0
-      z: 0
-      yaw: 0
-      pitch: 0
-    start-location:
-      x: 0
-      y: 0
-      z: 0
-      yaw: 0
-      pitch: 0
+    enabled:
+      value: false
+      type: BOOLEAN
+    min-players:
+      value: 2
+      type: INT
+    spec:
+      value: 0;0;0;0;0
+      type: LOCATION
+    start:
+      value: 0;0;0;0;0
+      type: LOCATION
 
   waterdrop:
-    enabled: false
-    spec-location:
-      x: 0
-      y: 0
-      z: 0
-      yaw: 0
-      pitch: 0
-    start-location:
-      x: 0
-      y: 0
-      z: 0
-      yaw: 0
-      pitch: 0
-    water-position-1:
-      x: 0
-      y: 0
-      z: 0
-    water-position-2:
-      x: 0
-      y: 0
-      z: 0
-    safe-region: waterdrop-safe
+    enabled:
+      value: false
+      type: BOOLEAN
+    min-players:
+      value: 2
+      type: INT
+    spec:
+      value: 0;0;0;0;0
+      type: LOCATION
+    start:
+      value: 0;0;0;0;0
+      type: LOCATION
+    water-1:
+      value: 0;0;0
+      type: BLOCK_VECTOR
+    water-2:
+      value: 0;0;0
+      type: BLOCK_VECTOR
+    safe-region:
+      value: waterdrop-safe
+      type: STRING
 
   woolshuffle:
-    enabled: false
-    spec-location:
-      x: 0
-      y: 0
-      z: 0
-      yaw: 0
-      pitch: 0
-    start-location:
-      x: 0
-      y: 0
-      z: 0
-      yaw: 0
-      pitch: 0
-
-allowed-commands:
-  - e
-  - event
+    enabled:
+      value: false
+      type: BOOLEAN
+    min-players:
+      value: 2
+      type: INT
+    spec:
+      value: 0;0;0;0;0
+      type: LOCATION
+    start:
+      value: 0;0;0;0;0
+      type: LOCATION

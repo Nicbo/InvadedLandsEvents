@@ -1,14 +1,105 @@
+main: me.nicbo.invadedlandsevents.InvadedLandsEvents
 name: InvadedLandsEvents
+version: "1.0.0"
+description: Remake of the InvadedLands events
 authors: [nicbo, starzorrow]
-version: 1.0
-main: me.nicbo.InvadedLandsEvents.EventsMain
-description: Remake of the invadedlands events
 depend: [WorldGuard]
 
 commands:
   event:
     usage: /<command>
-    aliases: e
+    aliases: [e]
   eventconfig:
     usage: /<command>
-    aliases: econfig
+    aliases: [econfig]
+
+permissions:
+  ile.*:
+    description: Gives player every permission in InvadedLandsEvents
+    default: op
+    children:
+      ile.commandbypass: true
+      ile.eventconfig: true
+      ile.event.*: true
+  ile.commandbypass:
+    description: Allows the player to bypass command restrictions in event
+  ile.eventconfig:
+    description: Allows the player to config events
+  ile.event.*:
+    description: Gives the player all event permissions
+    children:
+      ile.event.forceend: true
+      ile.event.player: true
+      ile.event.host.*: true
+  ile.event.forceend:
+    description: Allows the player to forceend the event
+  ile.event.player:
+    description: Gives the player all event permissions that players need
+    children:
+      ile.event.join: true
+      ile.event.leave: true
+      ile.event.spectate: true
+      ile.event.info: true
+      ile.event.host: true
+  ile.event.join:
+    description: Allows the player to join the event
+  ile.event.leave:
+    description: Allows the player to leave the event
+  ile.event.spectate:
+    description: Allows the player to spectate the event
+  ile.event.info:
+    description: Allows the player to see the current events info
+  ile.event.host:
+    description: Allows the player to open the host gui or host an event (must be given specific permission for hosting that event)
+  ile.event.host.*:
+    description: Allows the player to host every event and bypass cooldowns
+    children:
+      ile.event.host.all: true
+      ile.event.host.bypass: true
+  ile.event.host.all:
+    description: Allows the player to host every event
+    children:
+      ile.event.host.sumo1v1: true
+      ile.event.host.sumo2v2: true
+      ile.event.host.sumo3v3: true
+      ile.event.host.brackets: true
+      ile.event.host.koth: true
+      ile.event.host.lms: true
+      ile.event.host.oitc: true
+      ile.event.host.redrover: true
+      ile.event.host.rod: true
+      ile.event.host.spleef: true
+      ile.event.host.tdm: true
+      ile.event.host.tnttag: true
+      ile.event.host.waterdrop: true
+      ile.event.host.woolshuffle: true
+  ile.event.host.bypass:
+    description: Allows the player to bypass event host cooldowns
+  ile.event.host.sumo1v1:
+    description: Allows the player to host 1v1 sumo
+  ile.event.host.sumo2v2:
+    description: Allows the player to host 2v2 sumo
+  ile.event.host.sumo3v3:
+    description: Allows the player to host 3v3
+  ile.event.host.brackets:
+    description: Allows the player to host brackets
+  ile.event.host.koth:
+    description: Allows the player to host koth
+  ile.event.host.lms:
+    description: Allows the player to host lms
+  ile.event.host.oitc:
+    description: Allows the player to host oitc
+  ile.event.host.redrover:
+    description: Allows the player to host redrover
+  ile.event.host.rod:
+    description: Allows the player to host rod
+  ile.event.host.spleef:
+    description: Allows the player to host spleef
+  ile.event.host.tdm:
+    description: Allows the player to host tdm
+  ile.event.host.tnttag:
+    description: Allows the player to host tnt tag
+  ile.event.host.waterdrop:
+    description: Allows the player to host waterdrop
+  ile.event.host.woolshuffle:
+    description: Allows the player to host wool shuffle
