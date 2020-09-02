@@ -1,6 +1,6 @@
 main: me.nicbo.invadedlandsevents.InvadedLandsEvents
 name: InvadedLandsEvents
-version: "1.0.0"
+version: "1.0.0-BETA"
 description: Remake of the InvadedLands events
 authors: [nicbo, starzorrow]
 depend: [WorldGuard]
