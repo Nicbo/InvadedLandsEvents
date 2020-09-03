@@ -33,6 +33,7 @@ public final class PlayerData {
         // Load old values from config
         ConfigurationSection timestampsSection = config.getConfigurationSection("timestamps");
 
+        // If there are timestamps saved
         if (timestampsSection != null) {
             for (String event : timestampsSection.getKeys(false)) {
                 this.eventTimestamps.put(event, timestampsSection.getLong(event));
@@ -45,10 +46,14 @@ public final class PlayerData {
 
         // Overwrite timestamps TODO: See if there is a better way to do this
         config.set("timestamps", null);
-        ConfigurationSection timestampsSection = config.createSection("timestamps");
 
-        for (String event : eventTimestamps.keySet()) {
-            timestampsSection.set(event, eventTimestamps.get(event));
+        // If the player actually has timestamps to save
+        if (!eventTimestamps.isEmpty()) {
+            ConfigurationSection timestampsSection = config.createSection("timestamps");
+
+            for (String event : eventTimestamps.keySet()) {
+                timestampsSection.set(event, eventTimestamps.get(event));
+            }
         }
 
         config.save(file);
@@ -85,4 +90,9 @@ public final class PlayerData {
     public UUID getUUID() {
         return uuid;
     }
+
+    /*
+    TODO:
+        - Allow for configuration of cooldown
+     */
 }
