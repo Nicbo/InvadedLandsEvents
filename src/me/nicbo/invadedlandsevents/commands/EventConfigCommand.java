@@ -101,7 +101,6 @@ public final class EventConfigCommand implements CommandExecutor, TabCompleter {
                 return true;
             }
 
-
             // Rest of commands should be in game
             if (!(sender instanceof Player)) {
                 sender.sendMessage(ChatColor.RED + "You can only use /econfig reload from here");
@@ -133,7 +132,6 @@ public final class EventConfigCommand implements CommandExecutor, TabCompleter {
 
                 // Is an existing first argument
                 if (arguments.containsKey(firstArgument)) {
-
                     // All non config sub commands here
                     if ("help".equals(firstArgument)) {
                         player.sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + "TUTORIAL VIDEO:");
