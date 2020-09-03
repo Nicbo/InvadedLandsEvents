@@ -2,6 +2,7 @@ package me.nicbo.invadedlandsevents.util;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.util.BlockVector;
 
 import java.util.ArrayList;
@@ -38,7 +39,8 @@ public final class StringUtils {
      * @return the string
      */
     public static String fullLocationToString(Location location) {
-        return "(" + location.getWorld().getName() + ": " +
+        World world = location.getWorld();
+        return "(" + (world == null ? "null" : world.getName()) + ": " +
                 String.format("%.2f", location.getX()) + ", " +
                 String.format("%.2f", location.getY()) + ", " +
                 String.format("%.2f", location.getZ()) + ")" + " [" +

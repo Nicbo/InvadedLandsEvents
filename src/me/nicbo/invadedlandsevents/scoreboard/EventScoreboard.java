@@ -21,7 +21,7 @@ import org.bukkit.scoreboard.Team;
 public abstract class EventScoreboard {
     private final String name;
     private final String title;
-    protected final Player player;
+    private final Player player;
 
     private final Scoreboard scoreboard;
     private Objective objective;
@@ -135,5 +135,9 @@ public abstract class EventScoreboard {
                 team.setSuffix(line.getSuffix());
             }
         }
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 }

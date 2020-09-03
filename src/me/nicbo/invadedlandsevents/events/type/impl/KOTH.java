@@ -255,10 +255,10 @@ public final class KOTH extends TimerEvent {
             playerCountTrack.setSuffix(String.valueOf(getPlayersSize()));
             specCountTrack.setSuffix(String.valueOf(getSpectatorsSize()));
             timeRemainingTrack.setSuffix(StringUtils.formatSeconds(getTimeLeft()));
-            pointsTrack.setSuffix(String.valueOf(points.getOrDefault(player, 0)));
+            pointsTrack.setSuffix(String.valueOf(points.getOrDefault(getPlayer(), 0)));
 
             String leaderName = leader.getName();
-            ChatColor colour = leader == player ? ChatColor.GREEN : ChatColor.RED;
+            ChatColor colour = leader == getPlayer() ? ChatColor.GREEN : ChatColor.RED;
 
             int leaderPoints = points.getOrDefault(leader, 0);
             if (leaderName.length() > 14) {

@@ -162,7 +162,7 @@ public final class TNTTag extends RoundEvent {
 
         @Override
         protected void refresh() {
-            boolean playerTagged = tagged.contains(player);
+            boolean playerTagged = tagged.contains(getPlayer());
 
             if (showHit && !playerTagged) {
                 this.showHit = false;

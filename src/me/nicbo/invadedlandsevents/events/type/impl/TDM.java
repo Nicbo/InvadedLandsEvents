@@ -209,7 +209,7 @@ public final class TDM extends InvadedEvent {
         protected void refresh() {
             redCountTrack.setSuffix(String.valueOf(red.getSize()));
             blueCountTrack.setSuffix(String.valueOf(blue.getSize()));
-            killTrack.setSuffix(String.valueOf(team.getKills(player)));
+            killTrack.setSuffix(String.valueOf(team.getKills(getPlayer())));
             playerCountTrack.setSuffix(String.valueOf(getPlayersSize()));
             specCountTrack.setSuffix(String.valueOf(getSpectatorsSize()));
         }

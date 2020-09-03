@@ -118,8 +118,9 @@ public abstract class Sumo extends DuelEvent {
 
     @Override
     protected Collection<Player> prepareRound() {
-        // Just in case
-        if (checkPlayerCount()) {
+        // Just in case, if the list size is one than the while loop while crash the server
+        checkPlayerCount();
+        if (isRunning()) {
             return null;
         }
 
@@ -152,12 +153,12 @@ public abstract class Sumo extends DuelEvent {
 
     @Override
     public void leaveEvent(Player player) {
-        removeFromTeam(player);
+        super.leaveEvent(player);
 
+        removeFromTeam(player);
         if (isRunning()) {
             checkRoundPlayerCount();
         }
-        super.leaveEvent(player);
     }
 
     private void removeFromTeam(Player player) {

@@ -19,6 +19,7 @@ events:
         - mute
         - tempmute
         - kick
+        - balance
       type: STRING_LIST
     spawn:
       value: world;0;0;0;0;0

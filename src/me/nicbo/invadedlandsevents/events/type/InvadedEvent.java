@@ -65,7 +65,7 @@ public abstract class InvadedEvent implements Listener {
 
     private final Set<String> allowedCommands;
 
-    protected final World eventWorld;
+    private final World eventWorld;
     private final RegionManager regionManager;
 
     private final ConfigurationSection eventConfig;
@@ -318,6 +318,10 @@ public abstract class InvadedEvent implements Listener {
      */
     protected Location getSpecLoc() {
         return specLoc;
+    }
+
+    protected World getEventWorld() {
+        return eventWorld;
     }
 
     /**

@@ -69,7 +69,7 @@ public final class RedRover extends RoundEvent {
     public void leaveEvent(Player player) {
         super.leaveEvent(player);
 
-        if (getPlayersSize() > 1 && player.equals(killer)) {
+        if (isRunning() && player.equals(killer)) {
             pickKiller();
         }
     }

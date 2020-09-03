@@ -199,10 +199,10 @@ public final class OITC extends TimerEvent {
             playerCountTrack.setSuffix(String.valueOf(getPlayersSize()));
             specCountTrack.setSuffix(String.valueOf(getSpectatorsSize()));
             timeRemainingTrack.setSuffix(StringUtils.formatSeconds(getTimeLeft()));
-            pointsTrack.setSuffix(String.valueOf(points.getOrDefault(player, 0)));
+            pointsTrack.setSuffix(String.valueOf(points.getOrDefault(getPlayer(), 0)));
 
             String leaderName = leader.getName();
-            ChatColor colour = leader.equals(player) ? ChatColor.GREEN : ChatColor.RED;
+            ChatColor colour = leader.equals(getPlayer()) ? ChatColor.GREEN : ChatColor.RED;
 
             int leaderPoints = points.getOrDefault(leader, 0);
             if (leaderName.length() > 14) {

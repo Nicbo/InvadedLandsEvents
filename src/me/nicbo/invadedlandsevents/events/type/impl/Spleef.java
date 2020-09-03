@@ -126,7 +126,7 @@ public final class Spleef extends TimerEvent {
         for (int x = minX; x <= maxX; x++) {
             for (int y = MIN_Y; y <= maxY; y++) {
                 for (int z = minZ; z <= maxZ; z++) {
-                    Block block = eventWorld.getBlockAt(x, y, z);
+                    Block block = getEventWorld().getBlockAt(x, y, z);
                     if (block.getType() != Material.SNOW_BLOCK) {
                         block.setType(Material.SNOW_BLOCK);
                     }

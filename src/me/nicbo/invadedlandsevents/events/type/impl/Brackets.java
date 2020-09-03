@@ -67,6 +67,23 @@ public final class Brackets extends DuelEvent {
         loseEvent(loser);
     }
 
+    private void loseRound(Player loser) {
+        if (loser.equals(fighters.getRight())) {
+            playerWonRound(fighters.getLeft(), fighters.getRight());
+        } else {
+            playerWonRound(fighters.getRight(), fighters.getLeft());
+        }
+    }
+
+    @Override
+    public void leaveEvent(Player player) {
+        super.leaveEvent(player);
+
+        if (isRunning()) {
+            loseEvent(player);
+        }
+    }
+
     @Override
     protected Function<Player, EventScoreboard> getScoreboardFactory() {
         return BracketsSB::new;
@@ -74,6 +91,12 @@ public final class Brackets extends DuelEvent {
 
     @Override
     protected Collection<Player> prepareRound() {
+        // Just in case, if the list size is one than the while loop while crash the server
+        checkPlayerCount();
+        if (isRunning()) {
+            return null;
+        }
+
         Player player1 = GeneralUtils.getRandom(getPlayersView());
 
         Player player2;
@@ -108,11 +131,7 @@ public final class Brackets extends DuelEvent {
                 plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
                     player.spigot().respawn();
 
-                    if (player.equals(fighters.getRight())) {
-                        playerWonRound(fighters.getLeft(), fighters.getRight());
-                    } else {
-                        playerWonRound(fighters.getRight(), fighters.getLeft());
-                    }
+                    loseRound(player);
                 }, 1);
             }
         }

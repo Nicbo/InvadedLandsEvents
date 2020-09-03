@@ -57,10 +57,10 @@ public final class Waterdrop extends RoundEvent {
     public Waterdrop(InvadedLandsEvents plugin) {
         super(plugin, "waterdrop", "Waterdrop", new int[]{20, 20, 19, 19, 18, 17, 17, 16, 15, 14, 14, 13, 12, 12, 10, 10, 10, 9, 8, 7, 7, 6});
 
-        water = Material.WATER;
+        this.water = Material.WATER;
         final Material redstone = Material.REDSTONE_BLOCK;
 
-        closedCover = new Material[][]{
+        this.closedCover = new Material[][]{
                 {redstone, redstone, redstone, redstone, redstone},
                 {redstone, redstone, redstone, redstone, redstone},
                 {redstone, redstone, redstone, redstone, redstone},
@@ -68,7 +68,7 @@ public final class Waterdrop extends RoundEvent {
                 {redstone, redstone, redstone, redstone, redstone}
         };
 
-        easyCovers = Arrays.asList(new Material[][]{ // Open
+        this.easyCovers = Arrays.asList(new Material[][]{ // Open
                 {water, water, water, water, water},
                 {water, water, water, water, water},
                 {water, water, water, water, water},
@@ -106,7 +106,7 @@ public final class Waterdrop extends RoundEvent {
                 {redstone, water, water, water, redstone}
         });
 
-        mediumCovers = Arrays.asList(new Material[][]{ // H
+        this.mediumCovers = Arrays.asList(new Material[][]{ // H
                 {water, redstone, redstone, redstone, water},
                 {water, redstone, redstone, redstone, water},
                 {water, water, water, water, water},
@@ -150,7 +150,7 @@ public final class Waterdrop extends RoundEvent {
                 {redstone, redstone, redstone, redstone, redstone}
         });
 
-        hardCovers = Arrays.asList(new Material[][]{ // 4 corners
+        this.hardCovers = Arrays.asList(new Material[][]{ // 4 corners
                 {water, redstone, redstone, redstone, water},
                 {redstone, redstone, redstone, redstone, redstone},
                 {redstone, redstone, redstone, redstone, redstone},
@@ -226,12 +226,6 @@ public final class Waterdrop extends RoundEvent {
     protected void over() {
         super.over();
         this.fallCheck.cancel();
-    }
-
-    @Override
-    protected boolean checkPlayerCount() {
-        // Let rounds eliminate, not player count
-        return false;
     }
 
     @Override
@@ -348,7 +342,7 @@ public final class Waterdrop extends RoundEvent {
 
         for (int x = minX; x <= maxX; x++) {
             for (int z = minZ; z <= maxZ; z++) {
-                eventWorld.getBlockAt(x, y, z).setType(mainCover[x - minX][z - minZ]);
+                getEventWorld().getBlockAt(x, y, z).setType(mainCover[x - minX][z - minZ]);
             }
         }
     }
@@ -384,4 +378,9 @@ public final class Waterdrop extends RoundEvent {
             playerCountTrack.setSuffix(String.valueOf(getPlayersSize()));
         }
     }
+
+    /*
+    TODO:
+        - Bug: If the last 2 players fail and someone leaves, the other player will win
+     */
 }

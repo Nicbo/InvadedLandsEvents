@@ -313,14 +313,12 @@ public final class EventConfigCommand implements CommandExecutor, TabCompleter {
                 switch (args.length) {
                     case 1:
                         StringUtil.copyPartialMatches(args[0], arguments.keySet(), completions);
-                        Collections.sort(completions);
                         break;
                     case 2:
                         Set<String> possibleArgs = arguments.get(args[0].toLowerCase());
                         if (possibleArgs != null) {
                             StringUtil.copyPartialMatches(args[1], possibleArgs, completions);
                         }
-                        Collections.sort(completions);
                         break;
                     case 3:
                         String sectionKey = args[0].toLowerCase();
