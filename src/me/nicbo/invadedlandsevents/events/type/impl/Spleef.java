@@ -30,6 +30,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.BlockIterator;
 import org.bukkit.util.BlockVector;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
@@ -69,16 +70,16 @@ public final class Spleef extends TimerEvent {
         this.heightCheck = new BukkitRunnable() {
             @Override
             public void run() {
-                List<Player> players = getPlayersView();
-                for (int i = players.size() - 1; i >= 0; i--) {
-                    Player player = players.get(i);
+                List<Player> toLose = new ArrayList<>();
+                for (Player player : getPlayersView()) {
                     if (player.getLocation().getY() < MIN_Y - 1) {
+                        toLose.add(player);
                         broadcastEventMessage(Message.SPLEEF_ELIMINATED.get()
                                 .replace("{player}", player.getName())
-                                .replace("{remaining}", String.valueOf(getPlayersSize() - 1)));
-                        loseEvent(player);
+                                .replace("{remaining}", String.valueOf(getPlayersSize() - toLose.size())));
                     }
                 }
+                loseEvent(toLose);
             }
         };
 
