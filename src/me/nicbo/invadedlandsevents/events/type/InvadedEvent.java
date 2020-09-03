@@ -509,10 +509,8 @@ public abstract class InvadedEvent implements Listener {
      * @param player the player that is leaving the event
      */
     public void leaveEvent(Player player) {
-        // Remove player after because the left message should be sent to the player who left
-        if (players.contains(player)) {
+        if (players.remove(player)) {
             broadcastEventMessage(Message.LEFT_EVENT_BROADCAST.get().replace("{player}", player.getName()));
-            players.remove(player);
         } else {
             spectators.remove(player);
         }
@@ -909,7 +907,9 @@ public abstract class InvadedEvent implements Listener {
         @Override
         protected void refresh() {
             playerCountTrack.setSuffix(String.valueOf(getPlayersSize()));
-            countDownTrack.setSuffix(countDown + "s");
+
+            // Add one because refresher is ahead of broadcast
+            countDownTrack.setSuffix((countDown + 1) + "s");
         }
     }
 
