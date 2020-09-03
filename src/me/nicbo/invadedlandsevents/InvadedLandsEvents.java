@@ -32,7 +32,6 @@ public final class InvadedLandsEvents extends JavaPlugin {
         this.getLogger().info("Enabling...");
 
         // Check for WorldGuard
-
         this.getLogger().info("Looking for WorldGuard");
         Plugin worldguard = getServer().getPluginManager().getPlugin("WorldGuard");
         if (worldguard instanceof WorldGuardPlugin) {
