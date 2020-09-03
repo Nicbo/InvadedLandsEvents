@@ -190,7 +190,7 @@ public final class OITC extends TimerEvent {
             this.pointsTrack = new TrackLine("ptOITC", "&eYour Points: ", "&0&6", "", 5);
             Line blank = new Line("bOITC", "", "&b", "", 4);
             Line lead = new Line("lOITC", "", "&eIn the Lead:", "", 3);
-            this.leadTrack = new TrackLine("ltOITC", "None", "&7", ": " + "", 2);
+            this.leadTrack = new TrackLine("ltOITC", "None", "&7", "", 2);
             this.initLines(playerCountTrack, specCountTrack, timeRemainingTrack, pointsTrack, blank, lead, leadTrack);
         }
 
