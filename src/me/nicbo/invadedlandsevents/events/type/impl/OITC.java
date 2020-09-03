@@ -156,7 +156,7 @@ public final class OITC extends TimerEvent {
 
                     // Killer wins
                     if (newKillerPoints >= WIN_POINTS) {
-                        event.setCancelled(true);
+                        event.setDamage(0);
                         winEvent(killer);
                     }
                 }
