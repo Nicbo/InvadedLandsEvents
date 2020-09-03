@@ -58,6 +58,8 @@ public final class PlayerDataManager implements Listener {
             UUID uuid = player.getUniqueId();
             playerDataMap.put(uuid, load(uuid));
         }
+
+        plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
     public PlayerData getData(UUID uuid) {
@@ -115,5 +117,10 @@ public final class PlayerDataManager implements Listener {
         save(uuid);
         playerDataMap.remove(uuid);
     }
+
+    /*
+    TODO:
+        - Better error handling, if anything is wrong with file it should give warning and overwrite?
+     */
 }
 

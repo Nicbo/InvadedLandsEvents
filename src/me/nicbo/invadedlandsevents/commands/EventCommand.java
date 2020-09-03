@@ -15,13 +15,13 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.util.StringUtil;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Handles all commands for /event or /e
@@ -37,8 +37,6 @@ public final class EventCommand implements CommandExecutor, TabCompleter, Listen
     private final List<String> firstArguments;
     private final List<String> hostArguments;
 
-    private final Map<UUID, Long> cooldowns;
-
     public EventCommand(InvadedLandsEvents plugin) {
         this.plugin = plugin;
         this.eventManager = plugin.getEventManager();
@@ -47,8 +45,6 @@ public final class EventCommand implements CommandExecutor, TabCompleter, Listen
 
         this.hostArguments = new ArrayList<>(EventManager.getEventNames());
         this.hostArguments.add("sumo");
-
-        this.cooldowns = new HashMap<>();
     }
 
     @Override
@@ -75,17 +71,9 @@ public final class EventCommand implements CommandExecutor, TabCompleter, Listen
             switch (command) {
                 case "j":
                 case "join":
-                    if (isPlayerOnCooldown(player)) {
-                        player.sendMessage(Message.JOIN_COOLDOWN.get());
-                    } else {
-                        String joinMsg = eventManager.joinEvent(player);
-
-                        // Player joined
-                        if (joinMsg == null) {
-                            cooldowns.put(player.getUniqueId(), System.currentTimeMillis());
-                        } else {
-                            player.sendMessage(joinMsg);
-                        }
+                    String joinMsg = eventManager.joinEvent(player);
+                    if (joinMsg != null) {
+                        player.sendMessage(joinMsg);
                     }
                     break;
                 case "l":
@@ -140,22 +128,6 @@ public final class EventCommand implements CommandExecutor, TabCompleter, Listen
         return true;
     }
 
-    private boolean isPlayerOnCooldown(Player player) {
-        UUID uuid = player.getUniqueId();
-        Long cooldown = cooldowns.get(uuid);
-
-        if (cooldown == null) {
-            return false;
-        }
-
-        if ((System.currentTimeMillis() - cooldown) / 1000 >= 5) {
-            cooldowns.remove(uuid);
-            return false;
-        } else {
-            return true;
-        }
-    }
-
     @Override
     public List<String> onTabComplete(CommandSender sender, Command cmd, String s, String[] args) {
         if (cmd.getName().equalsIgnoreCase("event")) {
@@ -174,10 +146,5 @@ public final class EventCommand implements CommandExecutor, TabCompleter, Listen
             }
         }
         return null;
-    }
-
-    @EventHandler(priority = EventPriority.MONITOR)
-    public void onQuit(PlayerQuitEvent event) {
-        cooldowns.remove(event.getPlayer().getUniqueId());
     }
 }

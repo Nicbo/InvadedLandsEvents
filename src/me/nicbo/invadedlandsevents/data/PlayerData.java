@@ -41,6 +41,10 @@ public final class PlayerData {
 
     public void save() throws IOException {
         // Save all data here
+
+        // Overwrite timestamps TODO: See if there is a better way to do this
+        config.set("timestamps", null);
+        config.createSection("timestamps");
         for (String event : eventTimestamps.keySet()) {
             config.set("timestamps." + event, eventTimestamps.get(event));
         }
@@ -52,8 +56,8 @@ public final class PlayerData {
         eventTimestamps.put(event, System.currentTimeMillis());
     }
 
-    public void clearTimestamps() {
-        eventTimestamps.clear();
+    public void removeTimestamp(String event) {
+        eventTimestamps.remove(event);
     }
 
     public long getSecondsUntilHost(String event) {

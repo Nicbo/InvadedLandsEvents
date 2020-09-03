@@ -19,9 +19,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerQuitEvent;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.function.Function;
 
 /**
@@ -37,6 +40,8 @@ public final class EventManager implements Listener {
     private final InvadedLandsEvents plugin;
     private InvadedEvent currentEvent;
     private final PlayerDataManager playerDataManager;
+
+    private final Map<UUID, Long> joinTimestamps;
 
     static {
         EVENTS = ImmutableMap.<String, Function<InvadedLandsEvents, InvadedEvent>>
@@ -61,6 +66,10 @@ public final class EventManager implements Listener {
     public EventManager(InvadedLandsEvents plugin) {
         this.plugin = plugin;
         this.playerDataManager = plugin.getPlayerDataManager();
+
+        this.joinTimestamps = new HashMap<>();
+
+
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
@@ -78,7 +87,10 @@ public final class EventManager implements Listener {
             return Message.DOES_NOT_EXIST.get().replace("{event}", event);
         } else if (!isEventEnabled(event)) {
             return Message.EVENT_DISABLED.get();
-        } else if (isEventRunning()) {
+        } else if (isEventActive()) {
+            if (currentEvent.isEnding()) {
+                return Message.EVENT_ENDING.get();
+            }
             return Message.HOST_ALREADY_STARTED.get();
         }
 
@@ -87,11 +99,12 @@ public final class EventManager implements Listener {
 
         long secondsLeft = playerData.getSecondsUntilHost(event);
         boolean canBypass = player.hasPermission(EventPermission.BYPASS_COOLDOWN);
-        if (secondsLeft > 0) {
-            if (canBypass) {
-                playerData.clearTimestamps();
-            } else {
+
+        if (!canBypass) {
+            if (secondsLeft > 0) {
                 return Message.HOST_COOLDOWN.get().replace("{time}", StringUtils.formatSeconds(secondsLeft));
+            } else {
+                playerData.removeTimestamp(event);
             }
         }
 
@@ -102,7 +115,7 @@ public final class EventManager implements Listener {
                 playerData.addTimestamp(event);
             }
         } else {
-            currentEvent.forceEndEvent();
+            currentEvent.forceEndEvent(true);
             return Message.INVALID_EVENT.get();
         }
         return null;
@@ -117,7 +130,7 @@ public final class EventManager implements Listener {
     public String joinEvent(Player player) {
         if (!player.hasPermission(EventPermission.JOIN_EVENT)) {
             return Message.NO_PERMISSION.get();
-        } else if (!isEventRunning()) {
+        } else if (!isEventActive()) {
             return Message.EVENT_NOT_RUNNING.get();
         } else if (currentEvent.isPlayerParticipating(player)) {
             return Message.ALREADY_IN_EVENT.get();
@@ -129,9 +142,29 @@ public final class EventManager implements Listener {
             return Message.INVENTORY_NOT_EMPTY.get();
         } else if (player.isDead()) {
             return Message.PLAYER_DEAD.get();
+        } else if (isPlayerOnJoinCooldown(player)) {
+            return Message.JOIN_COOLDOWN.get();
         }
+
+        joinTimestamps.put(player.getUniqueId(), System.currentTimeMillis());
         currentEvent.joinEvent(player);
         return null;
+    }
+
+    private boolean isPlayerOnJoinCooldown(Player player) {
+        UUID uuid = player.getUniqueId();
+        Long cooldown = joinTimestamps.get(uuid);
+
+        if (cooldown == null) {
+            return false;
+        }
+
+        if ((System.currentTimeMillis() - cooldown) / 1000 >= 5) {
+            joinTimestamps.remove(uuid);
+            return false;
+        } else {
+            return true;
+        }
     }
 
     /**
@@ -143,7 +176,7 @@ public final class EventManager implements Listener {
     public String leaveEvent(Player player) {
         if (!player.hasPermission(EventPermission.LEAVE_EVENT)) {
             return Message.NO_PERMISSION.get();
-        } else if (!isEventRunning()) {
+        } else if (!isEventActive()) {
             return Message.EVENT_NOT_RUNNING.get();
         } else if (!currentEvent.isPlayerParticipating(player)) {
             return Message.NOT_IN_EVENT.get();
@@ -161,7 +194,7 @@ public final class EventManager implements Listener {
     public String specEvent(Player player) {
         if (!player.hasPermission(EventPermission.SPECTATE_EVEMT)) {
             return Message.NO_PERMISSION.get();
-        } else if (!isEventRunning()) {
+        } else if (!isEventActive()) {
             return Message.EVENT_NOT_RUNNING.get();
         } else if (currentEvent.isPlayerParticipating(player)) {
             return Message.ALREADY_IN_EVENT.get();
@@ -185,12 +218,12 @@ public final class EventManager implements Listener {
     public String endEvent(CommandSender sender) {
         if (!sender.hasPermission(EventPermission.FORCEEND_EVENT)) {
             return Message.NO_PERMISSION.get();
-        } else if (!isEventRunning()) {
+        } else if (!isEventActive()) {
             return Message.EVENT_NOT_RUNNING.get();
         } else if (currentEvent.isEnding()) {
             return Message.EVENT_ENDING.get();
         }
-        currentEvent.forceEndEvent();
+        currentEvent.forceEndEvent(false);
         return Message.FORCEEND_EVENT.get();
     }
 
@@ -203,7 +236,7 @@ public final class EventManager implements Listener {
     public String eventInfo(Player player) {
         if (!player.hasPermission(EventPermission.INFO_EVENT)) {
             return Message.NO_PERMISSION.get();
-        } else if (!isEventRunning()) {
+        } else if (!isEventActive()) {
             return Message.EVENT_NOT_RUNNING.get();
         }
         currentEvent.sendEventInfo(player);
@@ -211,11 +244,11 @@ public final class EventManager implements Listener {
     }
 
     /**
-     * Check if an event is running
+     * Check if an event is active
      *
-     * @return true if an event is running
+     * @return true if an event is active
      */
-    public boolean isEventRunning() {
+    public boolean isEventActive() {
         return currentEvent != null;
     }
 
@@ -239,6 +272,11 @@ public final class EventManager implements Listener {
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
+    public void onQuit(PlayerQuitEvent event) {
+        joinTimestamps.remove(event.getPlayer().getUniqueId());
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onEventStop(EventStopEvent event) {
         if (event.getEvent().equals(currentEvent)) {
             this.currentEvent = null;
@@ -246,7 +284,7 @@ public final class EventManager implements Listener {
     }
 
     /**
-     * Check if the event is an event
+     * Check if the event is an existing event
      *
      * @param event the event config name
      * @return true if the event is an existing event
@@ -256,7 +294,7 @@ public final class EventManager implements Listener {
     }
 
     /**
-     * Gets all the event config names
+     * Gets all the event config names (immutable)
      *
      * @return the event config names
      */

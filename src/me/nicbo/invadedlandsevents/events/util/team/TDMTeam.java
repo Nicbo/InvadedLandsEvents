@@ -1,6 +1,5 @@
 package me.nicbo.invadedlandsevents.events.util.team;
 
-import me.nicbo.invadedlandsevents.events.util.team.EventTeam;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;

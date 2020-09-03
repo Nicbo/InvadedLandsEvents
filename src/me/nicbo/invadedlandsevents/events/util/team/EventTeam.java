@@ -5,7 +5,6 @@ import org.bukkit.entity.Player;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.function.Consumer;
 
 /**
  * Team of players in an event

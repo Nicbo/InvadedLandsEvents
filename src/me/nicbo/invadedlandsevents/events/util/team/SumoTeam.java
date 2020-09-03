@@ -1,6 +1,5 @@
 package me.nicbo.invadedlandsevents.events.util.team;
 
-import me.nicbo.invadedlandsevents.events.util.team.EventTeam;
 import me.nicbo.invadedlandsevents.messages.impl.Message;
 import org.bukkit.entity.Player;
 

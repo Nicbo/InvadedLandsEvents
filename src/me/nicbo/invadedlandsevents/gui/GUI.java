@@ -21,7 +21,7 @@ import java.util.Map;
 public class GUI {
     private static final Map<Player, GUI> openInventories;
 
-    protected final Player player;
+    private final Player player;
     private final Inventory inventory;
     protected final Map<Integer, Button> buttons;
 
@@ -142,9 +142,4 @@ public class GUI {
     public static Map<Player, GUI> getOpenInventories() {
         return openInventories;
     }
-
-    /*
-    TODO:
-        - Clean me up
-     */
 }

@@ -49,6 +49,8 @@ public abstract class HostGUI extends GUI {
      */
     private void updateLoreInfo(String event, List<String> lore) {
         String message = "&aLeft click to host.";
+
+        Player player = getPlayer();
         if (event.equals("sumo")) {
             if (!player.hasPermission(EventPermission.HOST_SUMO1v1) &&
                     !player.hasPermission(EventPermission.HOST_SUMO2v2) &&
@@ -57,7 +59,7 @@ public abstract class HostGUI extends GUI {
             }
         } else {
             long secondsLeft = plugin.getPlayerDataManager().getData(player.getUniqueId()).getSecondsUntilHost(event);
-            if (secondsLeft > 0) {
+            if (secondsLeft > 0 && !player.hasPermission(EventPermission.BYPASS_COOLDOWN)) {
                 message = "&cYou must wait &e" + StringUtils.formatSeconds(secondsLeft) + "&c to host this event.";
             } else if (!player.hasPermission(EventPermission.HOST_PREFIX + event)) {
                 message = "&c&lYou don't have permission to host this event.";
@@ -76,11 +78,11 @@ public abstract class HostGUI extends GUI {
      * @param event the event to host
      */
     void tryHost(String event) {
-        String hostMessage = plugin.getEventManager().hostEvent(player, event);
+        String hostMessage = plugin.getEventManager().hostEvent(getPlayer(), event);
         if (hostMessage == null) {
             this.close();
         } else {
-            player.sendMessage(hostMessage);
+            getPlayer().sendMessage(hostMessage);
         }
     }
 
@@ -105,4 +107,9 @@ public abstract class HostGUI extends GUI {
             }
         }
     }
+
+    /*
+    TODO:
+        - clean this up
+     */
 }

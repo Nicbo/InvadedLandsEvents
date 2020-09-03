@@ -7,8 +7,8 @@ import me.nicbo.invadedlandsevents.messages.impl.Message;
 import me.nicbo.invadedlandsevents.scoreboard.EventScoreboard;
 import me.nicbo.invadedlandsevents.scoreboard.line.Line;
 import me.nicbo.invadedlandsevents.scoreboard.line.TrackLine;
-import me.nicbo.invadedlandsevents.util.SpigotUtils;
 import me.nicbo.invadedlandsevents.util.GeneralUtils;
+import me.nicbo.invadedlandsevents.util.SpigotUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -41,7 +41,7 @@ public final class RedRover extends RoundEvent {
     private final Location start;
     private final Location killerStart;
 
-    private ItemStack[] killerArmour;
+    private final ItemStack[] killerArmour;
 
     private Player killer;
 
@@ -84,8 +84,6 @@ public final class RedRover extends RoundEvent {
 
     @Override
     protected void start() {
-        super.start();
-
         pickKiller();
 
         for (Player player : getPlayersView()) {
@@ -93,6 +91,8 @@ public final class RedRover extends RoundEvent {
                 player.teleport(start);
             }
         }
+
+        super.start();
     }
 
     @Override
@@ -241,9 +241,4 @@ public final class RedRover extends RoundEvent {
             this.specCountTrack.setSuffix(String.valueOf(getSpectatorsSize()));
         }
     }
-
-    /*
-    TODO:
-        - Check if killer leaving works
-     */
 }

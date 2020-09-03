@@ -88,15 +88,12 @@ public final class TDM extends InvadedEvent {
     }
 
     @Override
-    protected boolean checkPlayerCount() {
+    protected void checkPlayerCount() {
         if (red.isEmpty()) {
             winEvent(blue);
         } else if (blue.isEmpty()) {
             winEvent(red);
-        } else {
-            return false;
         }
-        return true;
     }
 
     @Override
@@ -214,4 +211,9 @@ public final class TDM extends InvadedEvent {
             specCountTrack.setSuffix(String.valueOf(getSpectatorsSize()));
         }
     }
+
+    /*
+    TODO:
+        - Keep kills on death
+     */
 }

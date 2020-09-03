@@ -13,15 +13,18 @@ import me.nicbo.invadedlandsevents.permission.EventPermission;
 import me.nicbo.invadedlandsevents.scoreboard.EventScoreboard;
 import me.nicbo.invadedlandsevents.scoreboard.line.Line;
 import me.nicbo.invadedlandsevents.scoreboard.line.TrackLine;
-import me.nicbo.invadedlandsevents.util.misc.CompositeUnmodifiableList;
 import me.nicbo.invadedlandsevents.util.ConfigUtils;
 import me.nicbo.invadedlandsevents.util.SpigotUtils;
 import me.nicbo.invadedlandsevents.util.StringUtils;
+import me.nicbo.invadedlandsevents.util.misc.CompositeUnmodifiableList;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -181,7 +184,7 @@ public abstract class InvadedEvent implements Listener {
                         start();
                     } else {
                         Bukkit.broadcastMessage(Message.NOT_ENOUGH_PEOPLE.get());
-                        forceEndEvent();
+                        forceEndEvent(true);
                     }
                     this.cancel();
                 }
@@ -580,8 +583,10 @@ public abstract class InvadedEvent implements Listener {
     /**
      * Force ends the event
      */
-    public void forceEndEvent() {
-        broadcastEventMessage(Message.EVENT_FORCE_ENDED.get().replace("{event}", eventName));
+    public void forceEndEvent(boolean silent) {
+        if (!silent) {
+            broadcastEventMessage(Message.EVENT_FORCE_ENDED.get().replace("{event}", eventName));
+        }
         if (running) {
             over();
         }
@@ -621,16 +626,12 @@ public abstract class InvadedEvent implements Listener {
     /**
      * Called when a player is removed or leaves event
      * Will call winEvent if playerCount is under 2
-     *
-     * @return true if the event was won
      */
-    protected boolean checkPlayerCount() {
+    protected void checkPlayerCount() {
         int playerCount = players.size();
         if (playerCount < 2) {
             winEvent(playerCount == 1 ? players.get(0) : null);
-            return true;
         }
-        return false;
     }
 
     protected final void winEvent(Player player) {

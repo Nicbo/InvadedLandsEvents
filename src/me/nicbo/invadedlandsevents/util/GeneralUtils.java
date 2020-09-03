@@ -2,7 +2,8 @@ package me.nicbo.invadedlandsevents.util;
 
 import org.bukkit.entity.Player;
 
-import java.util.*;
+import java.util.List;
+import java.util.Random;
 
 /**
  * Utility class for general purposes

@@ -29,9 +29,11 @@ public final class InvadedLandsEvents extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        this.getLogger().info("Starting...");
+        this.getLogger().info("Enabling...");
 
         // Check for WorldGuard
+
+        this.getLogger().info("Looking for WorldGuard");
         Plugin worldguard = getServer().getPluginManager().getPlugin("WorldGuard");
         if (worldguard instanceof WorldGuardPlugin) {
             this.getLogger().info("Found WorldGuard!");
@@ -52,7 +54,6 @@ public final class InvadedLandsEvents extends JavaPlugin {
 
         // Create instance of cooldown manager
         this.playerDataManager = new PlayerDataManager(this);
-        this.getServer().getPluginManager().registerEvents(playerDataManager, this);
         this.getLogger().info("Created instance of PlayerDataManager.");
 
         // Create instance of event manager
@@ -82,8 +83,8 @@ public final class InvadedLandsEvents extends JavaPlugin {
         this.getLogger().info("Disabling...");
 
         // Force end if event is running
-        if (eventManager.isEventRunning()) {
-            eventManager.getCurrentEvent().forceEndEvent();
+        if (eventManager.isEventActive()) {
+            eventManager.getCurrentEvent().forceEndEvent(true);
             this.getLogger().info("Force ended active event.");
         }
 
@@ -103,7 +104,6 @@ public final class InvadedLandsEvents extends JavaPlugin {
         EventCommand eventCommand = new EventCommand(this);
         getCommand("event").setExecutor(eventCommand);
         getCommand("event").setTabCompleter(eventCommand);
-        getServer().getPluginManager().registerEvents(eventCommand, this);
 
         getCommand("eventconfig").setExecutor(eventConfigCommand);
         getCommand("eventconfig").setTabCompleter(eventConfigCommand);
@@ -148,5 +148,6 @@ public final class InvadedLandsEvents extends JavaPlugin {
     /*
     TODO:
         - When invalid values are in event config it should set valid to false
+        - This whole project should be cleaned up it's a mess and was written in a rush
      */
 }

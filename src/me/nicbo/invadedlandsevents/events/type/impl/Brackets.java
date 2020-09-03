@@ -6,8 +6,8 @@ import me.nicbo.invadedlandsevents.messages.impl.Message;
 import me.nicbo.invadedlandsevents.scoreboard.EventScoreboard;
 import me.nicbo.invadedlandsevents.scoreboard.line.Line;
 import me.nicbo.invadedlandsevents.scoreboard.line.TrackLine;
-import me.nicbo.invadedlandsevents.util.SpigotUtils;
 import me.nicbo.invadedlandsevents.util.GeneralUtils;
+import me.nicbo.invadedlandsevents.util.SpigotUtils;
 import me.nicbo.invadedlandsevents.util.misc.Pair;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -93,7 +93,7 @@ public final class Brackets extends DuelEvent {
     protected Collection<Player> prepareRound() {
         // Just in case, if the list size is one than the while loop while crash the server
         checkPlayerCount();
-        if (isRunning()) {
+        if (!isRunning()) {
             return null;
         }
 

@@ -30,9 +30,6 @@ import java.util.function.Function;
 public abstract class Sumo extends DuelEvent {
     private final int teamSize;
 
-    private final Location start1;
-    private final Location start2;
-
     private final BukkitRunnable minYCheck;
     private final int MIN_Y;
 
@@ -45,8 +42,6 @@ public abstract class Sumo extends DuelEvent {
 
         this.teamSize = teamSize;
 
-        this.start1 = getEventLocation("start-1");
-        this.start2 = getEventLocation("start-2");
         this.MIN_Y = getEventInteger("min-y");
 
         this.minYCheck = new BukkitRunnable() {
@@ -72,21 +67,21 @@ public abstract class Sumo extends DuelEvent {
 
     private void checkRoundPlayerCount() {
         if (isFighting()) {
-            if (!isTeamStillFighting(fightingTeams.getLeft())) {
+            if (isTeamNotFighting(fightingTeams.getLeft())) {
                 teamWonRound(fightingTeams.getRight(), fightingTeams.getLeft());
-            } else if (!isTeamStillFighting(fightingTeams.getRight())) {
+            } else if (isTeamNotFighting(fightingTeams.getRight())) {
                 teamWonRound(fightingTeams.getLeft(), fightingTeams.getRight());
             }
         }
     }
 
-    private boolean isTeamStillFighting(SumoTeam team) {
+    private boolean isTeamNotFighting(SumoTeam team) {
         for (Player player : team.getPlayers()) {
             if (fightingPlayers.contains(player)) {
-                return true;
+                return false;
             }
         }
-        return false;
+        return true;
     }
 
     private void teamWonRound(SumoTeam winner, SumoTeam loser) {
@@ -120,7 +115,7 @@ public abstract class Sumo extends DuelEvent {
     protected Collection<Player> prepareRound() {
         // Just in case, if the list size is one than the while loop while crash the server
         checkPlayerCount();
-        if (isRunning()) {
+        if (!isRunning()) {
             return null;
         }
 
@@ -139,12 +134,12 @@ public abstract class Sumo extends DuelEvent {
         List<Player> players = new ArrayList<>();
 
         for (Player player : team1.getPlayers()) {
-            player.teleport(start1);
+            player.teleport(startLoc1);
             players.add(player);
         }
 
         for (Player player : team2.getPlayers()) {
-            player.teleport(start2);
+            player.teleport(startLoc2);
             players.add(player);
         }
 
@@ -202,13 +197,11 @@ public abstract class Sumo extends DuelEvent {
     }
 
     @Override
-    protected boolean checkPlayerCount() {
+    protected void checkPlayerCount() {
         int teamsCount = teams.size();
         if (teamsCount < 2) {
             winEvent(teamsCount == 1 ? teams.get(0) : null);
-            return true;
         }
-        return false;
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
