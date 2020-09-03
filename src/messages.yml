@@ -71,7 +71,7 @@ koth:
   LOST: '&6&l{player} &eis no longer controlling the point!'
 
 lms:
-  MATCH_STARTING: '&eThe Last Man Starting will begin in &65 seconds&e.'
+  MATCH_STARTING: '&eThe Last Man Standing will begin in &65 seconds&e.'
   MATCH_COUNTER: '&eThe game starts in &6{seconds} &esecond(s)...'
   MATCH_STARTED: '&eThe match has started!'
   ELIMINATED: '&6{player} &ewas eliminated. &e(&6{remaining}&e)'
