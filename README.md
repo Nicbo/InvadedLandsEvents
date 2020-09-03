@@ -1,6 +1,5 @@
 # InvadedLandsEvents
 This plugin is a remake of the InvadedLands events.
-It is almost done, however it is in no way ready to be built for stable releases.
 
 ## Things that are in development
 - All of InvadedLands' events (configurable)
@@ -11,6 +10,7 @@ It is almost done, however it is in no way ready to be built for stable releases
 - Event leaderboards and stats
 - Multiple arenas
 - Configurable scoreboards
+- More message placeholders
 
 ## Prerequisites
 - WorldGuard
