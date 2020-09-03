@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
  */
 
 public final class MainHostGUI extends HostGUI {
-    private static final short[] WOOL_IDS = { 1, 4, 5, 6, 9, 10, 11 };
+    private static final short[] WOOL_IDS = { 1, 4, 5, 6, 9, 10, 11, 14 };
 
     private int index;
 

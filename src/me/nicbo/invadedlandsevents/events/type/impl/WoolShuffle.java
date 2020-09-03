@@ -55,6 +55,7 @@ public final class WoolShuffle extends RoundEvent {
                 new Wool(DyeColor.CYAN),
                 new Wool(DyeColor.PURPLE),
                 new Wool(DyeColor.BLUE),
+                new Wool(DyeColor.RED)
         };
 
         this.woolNames = new String[]{
@@ -64,7 +65,8 @@ public final class WoolShuffle extends RoundEvent {
                 ChatColor.LIGHT_PURPLE + "Pink",
                 ChatColor.DARK_AQUA + "Cyan",
                 ChatColor.DARK_PURPLE + "Purple",
-                ChatColor.BLUE + "Blue"
+                ChatColor.BLUE + "Blue",
+                ChatColor.RED + "Red"
         };
 
         this.startLoc = getEventLocation("start");
