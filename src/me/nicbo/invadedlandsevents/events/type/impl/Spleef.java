@@ -1,5 +1,8 @@
 package me.nicbo.invadedlandsevents.events.type.impl;
 
+import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import com.sk89q.worldguard.protection.flags.StateFlag;
+import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import me.nicbo.invadedlandsevents.InvadedLandsEvents;
 import me.nicbo.invadedlandsevents.events.type.TimerEvent;
 import me.nicbo.invadedlandsevents.events.util.MatchCountdown;
@@ -48,6 +51,7 @@ public final class Spleef extends TimerEvent {
     private final Location start1;
     private final Location start2;
 
+    private final ProtectedRegion region;
 
     public Spleef(InvadedLandsEvents plugin) {
         super(plugin, "Spleef", "spleef");
@@ -59,8 +63,6 @@ public final class Spleef extends TimerEvent {
         BlockVector pos2 = getEventBlockVector("snow-2");
 
         this.MIN_Y = (int) Math.min(pos1.getY(), pos2.getY());
-
-        buildSnow(pos1, pos2);
 
         this.matchCountdown = new MatchCountdown(this::broadcastEventMessage, Message.SPLEEF_MATCH_COUNTER, Message.SPLEEF_MATCH_STARTED);
 
@@ -79,6 +81,17 @@ public final class Spleef extends TimerEvent {
                 }
             }
         };
+
+        this.region = getEventRegion("break-region");
+
+        // Just to avoid IDE errors, region can not be null if event is valid
+        if (isValid() && region != null) {
+            buildSnow(pos1, pos2);
+
+            // Allow players to break blocks
+            region.setFlag(DefaultFlag.BUILD, StateFlag.State.ALLOW);
+            region.setFlag(DefaultFlag.BLOCK_BREAK, StateFlag.State.ALLOW);
+        }
     }
 
     @Override
@@ -143,14 +156,9 @@ public final class Spleef extends TimerEvent {
             return;
         }
 
-        if (matchCountdown.isCounting()) {
-            event.setCancelled(true);
-            return;
-        }
-
         Block block = event.getBlock();
 
-        if (isRunning() && block.getType() == Material.SNOW_BLOCK) {
+        if (isRunning() && !matchCountdown.isCounting() && block.getType() == Material.SNOW_BLOCK && SpigotUtils.isLocInRegion(block.getLocation(), region)) {
             block.setType(Material.AIR);
             player.getInventory().addItem(new ItemStack(Material.SNOW_BALL, 4));
         } else {
@@ -173,7 +181,7 @@ public final class Spleef extends TimerEvent {
 
             while (iterator.hasNext()) {
                 Block block = iterator.next();
-                if (block.getType() == Material.SNOW_BLOCK) {
+                if (block.getType() == Material.SNOW_BLOCK && SpigotUtils.isLocInRegion(block.getLocation(), region)) {
                     block.setType(Material.AIR);
                     break;
                 }

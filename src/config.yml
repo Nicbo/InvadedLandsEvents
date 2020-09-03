@@ -260,6 +260,9 @@ events:
     snow-2:
       value: 0;0;0
       type: BLOCK_VECTOR
+    break-region:
+      value: spleef-break
+      type: STRING
     time-limit-seconds:
       value: 300
       type: INT
