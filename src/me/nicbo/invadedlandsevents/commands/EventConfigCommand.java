@@ -13,7 +13,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.util.BlockVector;
@@ -38,8 +37,6 @@ public final class EventConfigCommand implements CommandExecutor, TabCompleter {
 
     private final InvadedLandsEvents plugin;
 
-    private FileConfiguration config;
-
     private final Map<String, Set<String>> arguments;
 
     private final Set<String> stringListArguments;
@@ -59,12 +56,13 @@ public final class EventConfigCommand implements CommandExecutor, TabCompleter {
 
     public EventConfigCommand(InvadedLandsEvents plugin) {
         this.plugin = plugin;
-        this.config = plugin.getConfig();
 
         this.arguments = new LinkedHashMap<>();
 
-        for (String section : config.getConfigurationSection("events").getKeys(false)) {
-            this.arguments.put(section, config.getConfigurationSection("events." + section).getKeys(false));
+        ConfigurationSection mainSection = plugin.getConfig().getConfigurationSection("events");
+
+        for (String section : mainSection.getKeys(false)) {
+            this.arguments.put(section, mainSection.getConfigurationSection(section).getKeys(false));
         }
 
         this.arguments.put("reload", null);
@@ -94,7 +92,6 @@ public final class EventConfigCommand implements CommandExecutor, TabCompleter {
             // For when they edit from disk
             if (args.length > 0 && "reload".equalsIgnoreCase(args[0])) {
                 plugin.reloadConfig();
-                this.config = plugin.getConfig();
                 sender.sendMessage(CONFIG_RELOADED);
                 plugin.getMessageManager().reload();
                 sender.sendMessage(MESSAGES_RELOADED);
@@ -149,7 +146,7 @@ public final class EventConfigCommand implements CommandExecutor, TabCompleter {
                         player.sendMessage(ChatColor.GOLD + "dependencies: " + ChatColor.YELLOW + description.getDepend());
                         player.sendMessage(ChatColor.GOLD + "soft-dependencies " + ChatColor.YELLOW + description.getSoftDepend());
                     } else {
-                        ConfigurationSection section = config.getConfigurationSection("events." + firstArgument);
+                        ConfigurationSection section = plugin.getConfig().getConfigurationSection("events." + firstArgument);
 
                         // Preview config section by sending values
                         if (args.length == 1) {
@@ -325,7 +322,7 @@ public final class EventConfigCommand implements CommandExecutor, TabCompleter {
                         Set<String> secondArguments = arguments.get(sectionKey);
 
                         if (secondArguments != null && secondArguments.contains(sectionValue)) {
-                            String typeString = config.getString("events." + sectionKey + "." + sectionValue + ".type");
+                            String typeString = plugin.getConfig().getString("events." + sectionKey + "." + sectionValue + ".type");
 
                             if (typeString != null) {
                                 Iterable<String> values = null;
