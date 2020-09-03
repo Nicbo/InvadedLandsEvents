@@ -347,9 +347,10 @@ public final class Waterdrop extends RoundEvent {
         }
     }
 
+    @Override
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onPlayerHitWD(EntityDamageByEntityEvent event) {
-        if (event.getEntity() instanceof Player && !ignoreEvent((Player) event.getEntity())) {
+    public void onPlayerHit(EntityDamageByEntityEvent event) {
+        if (event.getEntity() instanceof Player && isPlayerParticipating((Player) event.getEntity())) {
             event.setCancelled(true);
         }
     }
