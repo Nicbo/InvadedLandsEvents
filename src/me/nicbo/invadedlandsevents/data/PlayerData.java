@@ -1,5 +1,6 @@
 package me.nicbo.invadedlandsevents.data;
 
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -23,19 +24,19 @@ public final class PlayerData {
     // Data
     private final Map<String, Long> eventTimestamps;
 
-    PlayerData(File file, UUID uuid, boolean existed) {
+    PlayerData(File file, UUID uuid) {
         this.file = file;
         this.config = YamlConfiguration.loadConfiguration(file);
         this.uuid = uuid;
         this.eventTimestamps = new HashMap<>();
 
         // Load old values from config
-        if (existed) {
-            for (String event : config.getConfigurationSection("timestamps").getKeys(false)) {
-                this.eventTimestamps.put(event, config.getLong("timestamps." + event));
+        ConfigurationSection timestampsSection = config.getConfigurationSection("timestamps");
+
+        if (timestampsSection != null) {
+            for (String event : timestampsSection.getKeys(false)) {
+                this.eventTimestamps.put(event, timestampsSection.getLong(event));
             }
-        } else {
-            config.createSection("timestamps");
         }
     }
 
@@ -44,9 +45,10 @@ public final class PlayerData {
 
         // Overwrite timestamps TODO: See if there is a better way to do this
         config.set("timestamps", null);
-        config.createSection("timestamps");
+        ConfigurationSection timestampsSection = config.createSection("timestamps");
+
         for (String event : eventTimestamps.keySet()) {
-            config.set("timestamps." + event, eventTimestamps.get(event));
+            timestampsSection.set(event, eventTimestamps.get(event));
         }
 
         config.save(file);

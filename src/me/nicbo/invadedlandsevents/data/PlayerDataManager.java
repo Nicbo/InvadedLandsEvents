@@ -90,9 +90,7 @@ public final class PlayerDataManager implements Listener {
     private PlayerData load(UUID uuid) {
         File file = new File(plugin.getDataFolder() + File.separator + "playerdata", uuid + ".yml");
 
-        boolean exists = file.exists();
-
-        if (!exists) {
+        if (!file.exists()) {
             try {
                 file.createNewFile();
             } catch (IOException e) {
@@ -101,7 +99,7 @@ public final class PlayerDataManager implements Listener {
             }
         }
 
-        return new PlayerData(file, uuid, exists);
+        return new PlayerData(file, uuid);
     }
 
 
