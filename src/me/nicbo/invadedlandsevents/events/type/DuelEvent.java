@@ -102,6 +102,10 @@ public abstract class DuelEvent extends InvadedEvent {
         return fighting;
     }
 
+    public boolean isFrozen() {
+        return frozen;
+    }
+
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onPlayerHitD(EntityDamageByEntityEvent event) {
         if (event.getEntity() instanceof Player) {

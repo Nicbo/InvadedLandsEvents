@@ -46,7 +46,7 @@ public abstract class Sumo extends DuelEvent {
         this.minYCheck = new BukkitRunnable() {
             @Override
             public void run() {
-                if (isFighting()) {
+                if (isFighting() && !isFrozen()) {
                     for (Iterator<Player> iterator = fightingPlayers.iterator(); iterator.hasNext(); ) {
                         Player player = iterator.next();
                         if (player.getLocation().getY() <= MIN_Y) {
