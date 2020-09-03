@@ -9,7 +9,6 @@ import me.nicbo.invadedlandsevents.scoreboard.line.Line;
 import me.nicbo.invadedlandsevents.scoreboard.line.TrackLine;
 import me.nicbo.invadedlandsevents.util.GeneralUtils;
 import me.nicbo.invadedlandsevents.util.misc.Pair;
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
