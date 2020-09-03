@@ -151,6 +151,14 @@ public final class EventManager implements Listener {
         return null;
     }
 
+    /**
+     * Checks if a player is on join cooldown
+     * It will remove them from the joinTimestamps if
+     * they are not on cooldown anymore
+     *
+     * @param player the player
+     * @return true if the player is not on join cooldown
+     */
     private boolean isPlayerOnJoinCooldown(Player player) {
         UUID uuid = player.getUniqueId();
         Long cooldown = joinTimestamps.get(uuid);
@@ -273,13 +281,16 @@ public final class EventManager implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onQuit(PlayerQuitEvent event) {
-        joinTimestamps.remove(event.getPlayer().getUniqueId());
+        if (isEventActive()) {
+            joinTimestamps.remove(event.getPlayer().getUniqueId());
+        }
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onEventStop(EventStopEvent event) {
         if (event.getEvent().equals(currentEvent)) {
             this.currentEvent = null;
+            this.joinTimestamps.clear();
         }
     }
 
