@@ -121,6 +121,8 @@ public final class EventConfigCommand implements CommandExecutor, TabCompleter {
                 player.sendMessage(ChatColor.YELLOW + "For some reason if you change any of these values from " + ChatColor.GOLD + "config.yml" + ChatColor.YELLOW + " manually (from disk), use " + ChatColor.GOLD + "/econfig reload" + ChatColor.YELLOW + ".");
                 player.sendMessage(ChatColor.YELLOW + "The same goes for any messages in " + ChatColor.GOLD + "messages.yml" + ChatColor.YELLOW + ".");
                 player.sendMessage("");
+                player.sendMessage(ChatColor.YELLOW + "If you have a scoreboard plugin then you will need to disable the scoreboards in the " + ChatColor.GOLD + "event-world" + ChatColor.YELLOW + ".");
+                player.sendMessage("");
                 sendPossibleSubCommands(player, arguments.keySet());
                 player.sendMessage("");
                 player.sendMessage(USAGE + "/econfig <sub-command>");
