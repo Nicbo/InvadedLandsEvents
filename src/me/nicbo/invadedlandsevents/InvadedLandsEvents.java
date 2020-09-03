@@ -44,7 +44,6 @@ public final class InvadedLandsEvents extends JavaPlugin {
         // Create config files
         this.saveDefaultConfig();
 
-
         // Create instance of message manager
         this.messageManager = new MessageManager(this);
         this.getLogger().info("Created instance of MessageManager.");
