@@ -54,9 +54,9 @@ public abstract class EventScoreboard {
         this.player.setScoreboard(scoreboard);
         this.lines = new Line[0];
 
-        Objective healthIndicator = scoreboard.registerNewObjective("health", "health");
-        healthIndicator.setDisplayName(ChatColor.RED + "❤");
-        healthIndicator.setDisplaySlot(DisplaySlot.BELOW_NAME);
+        Objective health = scoreboard.registerNewObjective("ile_health", "health");
+        health.setDisplayName(ChatColor.RED + "❤");
+        health.setDisplaySlot(DisplaySlot.BELOW_NAME);
     }
 
     /**
