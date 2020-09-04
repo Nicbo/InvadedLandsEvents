@@ -79,7 +79,7 @@ public final class Brackets extends DuelEvent {
     public void leaveEvent(Player player) {
         super.leaveEvent(player);
 
-        if (fightingPlayers.contains(player)) {
+        if (isRunning() && fightingPlayers.contains(player)) {
             loseEvent(player);
         }
     }

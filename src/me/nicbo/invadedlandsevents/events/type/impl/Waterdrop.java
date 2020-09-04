@@ -262,7 +262,10 @@ public final class Waterdrop extends RoundEvent {
     @Override
     public void leaveEvent(Player player) {
         super.leaveEvent(player);
-        eliminated.remove(player);
+
+        if (isRunning()) {
+            eliminated.remove(player);
+        }
     }
 
     private void setMainCover() {

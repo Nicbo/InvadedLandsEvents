@@ -82,7 +82,10 @@ public final class TNTTag extends RoundEvent {
     @Override
     public void leaveEvent(Player player) {
         super.leaveEvent(player);
-        tagged.remove(player);
+
+        if (isRunning()) {
+            tagged.remove(player);
+        }
     }
 
     @Override
