@@ -239,7 +239,10 @@ public final class Waterdrop extends RoundEvent {
         eliminated.addAll(getPlayersView());
         setMainCover();
         buildMainCover();
-        tpPlayers();
+
+        for (Player player : getPlayersView()) {
+            player.teleport(startLoc);
+        }
     }
 
     @Override
@@ -256,12 +259,11 @@ public final class Waterdrop extends RoundEvent {
         eliminated.clear();
     }
 
-    private void tpPlayers() {
-        for (Player player : getPlayersView()) {
-            player.teleport(startLoc);
-        }
+    @Override
+    public void leaveEvent(Player player) {
+        super.leaveEvent(player);
+        eliminated.remove(player);
     }
-
 
     private void setMainCover() {
         List<Material[][]> coverList;
