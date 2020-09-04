@@ -55,8 +55,8 @@ public final class GeneralListener implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
-    public void invClose(InventoryCloseEvent event) {
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onInventoryClose(InventoryCloseEvent event) {
         if (event.getPlayer() instanceof Player) {
             Player player = (Player) event.getPlayer();
             GUI gui = GUI.getOpenInventories().get(player);
