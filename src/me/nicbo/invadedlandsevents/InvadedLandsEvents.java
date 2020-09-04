@@ -90,6 +90,11 @@ public final class InvadedLandsEvents extends JavaPlugin {
         this.playerDataManager.saveAll();
         this.getLogger().info("Saved all player data");
 
+        // Close all open GUIs in case of reload
+        for (GUI gui : GUI.getOpenInventories().values()) {
+            gui.close();
+        }
+
         this.getLogger().info("Done disabling!");
     }
 
