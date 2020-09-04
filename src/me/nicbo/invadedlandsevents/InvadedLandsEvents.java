@@ -29,11 +29,9 @@ public final class InvadedLandsEvents extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        this.getLogger().info("Enabling...");
-
         // Check for WorldGuard
         this.getLogger().info("Looking for WorldGuard...");
-        Plugin worldguard = getServer().getPluginManager().getPlugin("WorldGuard");
+        Plugin worldguard = this.getServer().getPluginManager().getPlugin("WorldGuard");
         if (worldguard instanceof WorldGuardPlugin) {
             this.getLogger().info("Found WorldGuard!");
         } else {
@@ -78,8 +76,6 @@ public final class InvadedLandsEvents extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        this.getLogger().info("Disabling...");
-
         // Force end if event is running
         if (eventManager.isEventActive()) {
             eventManager.getCurrentEvent().forceEndEvent(true);
