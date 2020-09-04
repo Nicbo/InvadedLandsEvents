@@ -80,6 +80,12 @@ public final class TNTTag extends RoundEvent {
     }
 
     @Override
+    public void leaveEvent(Player player) {
+        super.leaveEvent(player);
+        tagged.remove(player);
+    }
+
+    @Override
     protected Function<Player, EventScoreboard> getScoreboardFactory() {
         return TNTTagSB::new;
     }
