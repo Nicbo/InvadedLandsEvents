@@ -32,7 +32,7 @@ public final class InvadedLandsEvents extends JavaPlugin {
         this.getLogger().info("Enabling...");
 
         // Check for WorldGuard
-        this.getLogger().info("Looking for WorldGuard");
+        this.getLogger().info("Looking for WorldGuard...");
         Plugin worldguard = getServer().getPluginManager().getPlugin("WorldGuard");
         if (worldguard instanceof WorldGuardPlugin) {
             this.getLogger().info("Found WorldGuard!");
@@ -71,7 +71,7 @@ public final class InvadedLandsEvents extends JavaPlugin {
                 }
             }
         }, 0, 20);
-        this.getLogger().info("Scheduled task to update all open host guis");
+        this.getLogger().info("Scheduled task to update all open host guis.");
 
         this.getLogger().info("Done enabling!");
     }
@@ -88,12 +88,13 @@ public final class InvadedLandsEvents extends JavaPlugin {
 
         // Save all cooldowns to config
         this.playerDataManager.saveAll();
-        this.getLogger().info("Saved all player data");
+        this.getLogger().info("Saved all player data.");
 
         // Close all open GUIs in case of reload
         for (GUI gui : GUI.getOpenInventories().values()) {
             gui.close();
         }
+        this.getLogger().info("Closed all open GUIs.");
 
         this.getLogger().info("Done disabling!");
     }
