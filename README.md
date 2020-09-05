@@ -6,6 +6,7 @@ This plugin is a remake of the InvadedLands events.
 - Event leaderboards and stats
 - Multiple arenas
 - Configurable scoreboards
+- Configurable GUI
 - More message placeholders
 
 ## Dependencies
