@@ -56,8 +56,9 @@ public class GUI {
      * Close the gui
      */
     public void close() {
-        openInventories.remove(player);
         player.closeInventory();
+
+        // Will remove from openInventories in GeneralListener
     }
 
     /**
