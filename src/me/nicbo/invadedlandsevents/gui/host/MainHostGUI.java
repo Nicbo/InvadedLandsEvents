@@ -28,8 +28,8 @@ public final class MainHostGUI extends HostGUI {
                 .build(), () -> tryHost("brackets"), "brackets"));
 
         this.setButton(11, new Button(new ItemBuilder(Material.GOLD_BLOCK)
-                .setName("&e&lKing of The Hill")
-                .setLore(createLore("&7The longer you capture the hill", "&7the more points you will collect.", "&7You require " + plugin.getConfig().getInt("events.koth.int-win-points.value") + " in-order to win the event."))
+                .setName("&e&lKing of the Hill")
+                .setLore(createLore("&7The longer you capture the hill", "&7the more points you will collect.", "&7You require " + plugin.getConfig().getInt("events.koth.int-win-points.value") + " in order to win the event."))
                 .setHideAttributes(true)
                 .build(), () -> tryHost("koth"), "koth"));
 
@@ -40,7 +40,7 @@ public final class MainHostGUI extends HostGUI {
                 .build(), () -> tryHost("lms"), "lms"));
 
         this.setButton(13, new Button(new ItemBuilder(Material.BOW)
-                .setName("&e&lOne in The Chamber")
+                .setName("&e&lOne in the Chamber")
                 .setLore(createLore("&7The first person to obtain " + plugin.getConfig().getInt("events.oitc.int-win-points.value") + " points", "&7in this free-for-all match, will win."))
                 .setHideAttributes(true)
                 .build(), () -> tryHost("oitc"), "oitc"));
@@ -65,7 +65,7 @@ public final class MainHostGUI extends HostGUI {
 
         this.setButton(20, new Button(new ItemBuilder(Material.LEASH)
                 .setName("&e&lSumo")
-                .setLore(createLore("&7Knock your opponent off the platform"))
+                .setLore(createLore("&7Knock your opponent off the platform."))
                 .setHideAttributes(true)
                 .build(), () -> {
             close();
@@ -75,7 +75,7 @@ public final class MainHostGUI extends HostGUI {
 
         this.setButton(21, new Button(new ItemBuilder(Material.GOLD_SWORD)
                 .setName("&e&lTeam Deathmatch")
-                .setLore(createLore("&cRed &7vs &9Blue&7", "", "&7Classic Team Deathmatch where two teams", "&7face against each other, and which ever", "&7team is last standing wins!", "&7The top 5 killers on the winning team obtain event keys"))
+                .setLore(createLore("&cRed &7vs &9Blue&7!", "", "&7Classic Team Deathmatch where two teams", "&7face against each other, and which ever", "&7team is last standing wins!", "&7The top 5 killers on the winning team obtain event keys."))
                 .setHideAttributes(true)
                 .build(), () -> tryHost("tdm"), "tdm"));
 
