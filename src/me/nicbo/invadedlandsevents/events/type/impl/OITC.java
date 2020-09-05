@@ -2,6 +2,7 @@ package me.nicbo.invadedlandsevents.events.type.impl;
 
 import me.nicbo.invadedlandsevents.InvadedLandsEvents;
 import me.nicbo.invadedlandsevents.events.type.TimerEvent;
+import me.nicbo.invadedlandsevents.messages.impl.ListMessage;
 import me.nicbo.invadedlandsevents.messages.impl.Message;
 import me.nicbo.invadedlandsevents.scoreboard.EventScoreboard;
 import me.nicbo.invadedlandsevents.scoreboard.line.Line;
@@ -44,6 +45,8 @@ public final class OITC extends TimerEvent {
 
     private final int WIN_POINTS;
 
+    private final List<String> description;
+
     public OITC(InvadedLandsEvents plugin) {
         super(plugin, "One in the Chamber", "oitc");
 
@@ -63,6 +66,12 @@ public final class OITC extends TimerEvent {
         this.respawningPlayers = new HashSet<>();
 
         this.WIN_POINTS = getEventInteger("win-points");
+
+        this.description = new ArrayList<>();
+
+        for (String message : ListMessage.OITC_DESCRIPTION.get()) {
+            this.description.add(message.replace("{points}", String.valueOf(WIN_POINTS)));
+        }
     }
 
     @Override
@@ -90,6 +99,11 @@ public final class OITC extends TimerEvent {
     @Override
     protected Function<Player, EventScoreboard> getScoreboardFactory() {
         return OITCSB::new;
+    }
+
+    @Override
+    protected List<String> getDescriptionMessage() {
+        return description;
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

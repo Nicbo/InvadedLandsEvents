@@ -6,6 +6,7 @@ import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import me.nicbo.invadedlandsevents.InvadedLandsEvents;
 import me.nicbo.invadedlandsevents.events.type.TimerEvent;
 import me.nicbo.invadedlandsevents.events.util.MatchCountdown;
+import me.nicbo.invadedlandsevents.messages.impl.ListMessage;
 import me.nicbo.invadedlandsevents.messages.impl.Message;
 import me.nicbo.invadedlandsevents.scoreboard.EventScoreboard;
 import me.nicbo.invadedlandsevents.scoreboard.line.TrackLine;
@@ -128,6 +129,11 @@ public final class Spleef extends TimerEvent {
     @Override
     protected Function<Player, EventScoreboard> getScoreboardFactory() {
         return SpleefSB::new;
+    }
+
+    @Override
+    protected List<String> getDescriptionMessage() {
+        return ListMessage.SPLEEF_DESCRIPTION.get();
     }
 
     private void buildSnow(BlockVector pos1, BlockVector pos2) {

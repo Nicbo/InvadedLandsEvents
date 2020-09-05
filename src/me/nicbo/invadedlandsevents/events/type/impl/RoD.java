@@ -3,6 +3,7 @@ package me.nicbo.invadedlandsevents.events.type.impl;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import me.nicbo.invadedlandsevents.InvadedLandsEvents;
 import me.nicbo.invadedlandsevents.events.type.TimerEvent;
+import me.nicbo.invadedlandsevents.messages.impl.ListMessage;
 import me.nicbo.invadedlandsevents.scoreboard.EventScoreboard;
 import me.nicbo.invadedlandsevents.scoreboard.line.TrackLine;
 import me.nicbo.invadedlandsevents.util.SpigotUtils;
@@ -18,6 +19,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.List;
 import java.util.function.Function;
 
 /**
@@ -75,6 +77,11 @@ public final class RoD extends TimerEvent {
     @Override
     protected Function<Player, EventScoreboard> getScoreboardFactory() {
         return RoDSB::new;
+    }
+
+    @Override
+    protected List<String> getDescriptionMessage() {
+        return ListMessage.ROD_DESCRIPTION.get();
     }
 
     @Override

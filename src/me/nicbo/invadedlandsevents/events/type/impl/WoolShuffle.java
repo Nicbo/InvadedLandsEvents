@@ -2,6 +2,7 @@ package me.nicbo.invadedlandsevents.events.type.impl;
 
 import me.nicbo.invadedlandsevents.InvadedLandsEvents;
 import me.nicbo.invadedlandsevents.events.type.RoundEvent;
+import me.nicbo.invadedlandsevents.messages.impl.ListMessage;
 import me.nicbo.invadedlandsevents.messages.impl.Message;
 import me.nicbo.invadedlandsevents.scoreboard.EventScoreboard;
 import me.nicbo.invadedlandsevents.scoreboard.line.Line;
@@ -84,6 +85,11 @@ public final class WoolShuffle extends RoundEvent {
     @Override
     protected Function<Player, EventScoreboard> getScoreboardFactory() {
         return WoolShuffleSB::new;
+    }
+
+    @Override
+    protected List<String> getDescriptionMessage() {
+        return ListMessage.WOOLSHUFFLE.get();
     }
 
     @Override

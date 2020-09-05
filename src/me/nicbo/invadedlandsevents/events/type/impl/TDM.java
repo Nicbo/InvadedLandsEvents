@@ -4,6 +4,7 @@ import me.nicbo.invadedlandsevents.InvadedLandsEvents;
 import me.nicbo.invadedlandsevents.events.type.InvadedEvent;
 import me.nicbo.invadedlandsevents.events.util.MatchCountdown;
 import me.nicbo.invadedlandsevents.events.util.team.TDMTeam;
+import me.nicbo.invadedlandsevents.messages.impl.ListMessage;
 import me.nicbo.invadedlandsevents.messages.impl.Message;
 import me.nicbo.invadedlandsevents.scoreboard.EventScoreboard;
 import me.nicbo.invadedlandsevents.scoreboard.line.Line;
@@ -85,6 +86,11 @@ public final class TDM extends InvadedEvent {
     @Override
     protected Function<Player, EventScoreboard> getScoreboardFactory() {
         return TDMSB::new;
+    }
+
+    @Override
+    protected List<String> getDescriptionMessage() {
+        return ListMessage.TDM_DESCRIPTION.get();
     }
 
     @Override

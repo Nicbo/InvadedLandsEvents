@@ -3,6 +3,7 @@ package me.nicbo.invadedlandsevents.events.type.impl;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import me.nicbo.invadedlandsevents.InvadedLandsEvents;
 import me.nicbo.invadedlandsevents.events.type.RoundEvent;
+import me.nicbo.invadedlandsevents.messages.impl.ListMessage;
 import me.nicbo.invadedlandsevents.messages.impl.Message;
 import me.nicbo.invadedlandsevents.scoreboard.EventScoreboard;
 import me.nicbo.invadedlandsevents.scoreboard.line.Line;
@@ -98,6 +99,11 @@ public final class RedRover extends RoundEvent {
     @Override
     protected Function<Player, EventScoreboard> getScoreboardFactory() {
         return RedRoverSB::new;
+    }
+
+    @Override
+    protected List<String> getDescriptionMessage() {
+        return ListMessage.REDROVER_DESCRIPTION.get();
     }
 
     @Override

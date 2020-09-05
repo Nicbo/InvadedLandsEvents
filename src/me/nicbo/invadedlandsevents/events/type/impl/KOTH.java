@@ -3,6 +3,7 @@ package me.nicbo.invadedlandsevents.events.type.impl;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import me.nicbo.invadedlandsevents.InvadedLandsEvents;
 import me.nicbo.invadedlandsevents.events.type.TimerEvent;
+import me.nicbo.invadedlandsevents.messages.impl.ListMessage;
 import me.nicbo.invadedlandsevents.messages.impl.Message;
 import me.nicbo.invadedlandsevents.scoreboard.EventScoreboard;
 import me.nicbo.invadedlandsevents.scoreboard.line.Line;
@@ -55,8 +56,10 @@ public final class KOTH extends TimerEvent {
 
     private final int WIN_POINTS;
 
+    private final List<String> description;
+
     public KOTH(InvadedLandsEvents plugin) {
-        super(plugin, "King Of The Hill", "koth");
+        super(plugin, "King of the Hill", "koth");
 
         this.armour = new ItemStack[]{
                 new ItemBuilder(Material.IRON_BOOTS).setEnchants(new Enchant(Enchantment.PROTECTION_ENVIRONMENTAL, 2)).build(),
@@ -134,6 +137,12 @@ public final class KOTH extends TimerEvent {
                 }
             }
         };
+
+        this.description = new ArrayList<>();
+
+        for (String message : ListMessage.KOTH_DESCRIPTION.get()) {
+            this.description.add(message.replace("{points}", String.valueOf(WIN_POINTS)));
+        }
     }
 
     @Override
@@ -165,6 +174,11 @@ public final class KOTH extends TimerEvent {
     @Override
     protected Function<Player, EventScoreboard> getScoreboardFactory() {
         return KOTHSB::new;
+    }
+
+    @Override
+    protected List<String> getDescriptionMessage() {
+        return description;
     }
 
     @Override

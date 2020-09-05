@@ -2,6 +2,7 @@ package me.nicbo.invadedlandsevents.events.type.impl;
 
 import me.nicbo.invadedlandsevents.InvadedLandsEvents;
 import me.nicbo.invadedlandsevents.events.type.DuelEvent;
+import me.nicbo.invadedlandsevents.messages.impl.ListMessage;
 import me.nicbo.invadedlandsevents.messages.impl.Message;
 import me.nicbo.invadedlandsevents.scoreboard.EventScoreboard;
 import me.nicbo.invadedlandsevents.scoreboard.line.Line;
@@ -18,6 +19,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.function.Function;
 
 /**
@@ -87,6 +89,11 @@ public final class Brackets extends DuelEvent {
     @Override
     protected Function<Player, EventScoreboard> getScoreboardFactory() {
         return BracketsSB::new;
+    }
+
+    @Override
+    protected List<String> getDescriptionMessage() {
+        return ListMessage.BRACKETS_DESCRIPTION.get();
     }
 
     @Override

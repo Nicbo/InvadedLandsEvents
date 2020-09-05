@@ -3,6 +3,7 @@ package me.nicbo.invadedlandsevents.events.type.impl;
 import me.nicbo.invadedlandsevents.InvadedLandsEvents;
 import me.nicbo.invadedlandsevents.events.type.TimerEvent;
 import me.nicbo.invadedlandsevents.events.util.MatchCountdown;
+import me.nicbo.invadedlandsevents.messages.impl.ListMessage;
 import me.nicbo.invadedlandsevents.messages.impl.Message;
 import me.nicbo.invadedlandsevents.scoreboard.EventScoreboard;
 import me.nicbo.invadedlandsevents.scoreboard.line.TrackLine;
@@ -88,6 +89,11 @@ public final class LMS extends TimerEvent {
     @Override
     protected Function<Player, EventScoreboard> getScoreboardFactory() {
         return LMSSB::new;
+    }
+
+    @Override
+    protected List<String> getDescriptionMessage() {
+        return ListMessage.LMS_DESCRIPTION.get();
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

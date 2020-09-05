@@ -14,6 +14,7 @@ import me.nicbo.invadedlandsevents.scoreboard.EventScoreboard;
 import me.nicbo.invadedlandsevents.scoreboard.line.Line;
 import me.nicbo.invadedlandsevents.scoreboard.line.TrackLine;
 import me.nicbo.invadedlandsevents.util.ConfigUtils;
+import me.nicbo.invadedlandsevents.util.GeneralUtils;
 import me.nicbo.invadedlandsevents.util.SpigotUtils;
 import me.nicbo.invadedlandsevents.util.StringUtils;
 import me.nicbo.invadedlandsevents.util.misc.CompositeUnmodifiableList;
@@ -483,6 +484,8 @@ public abstract class InvadedEvent implements Listener {
      * @param player the player that is joining the event
      */
     public void joinEvent(Player player) {
+        GeneralUtils.sendMessages(player, getDescriptionMessage());
+
         Bukkit.broadcastMessage(Message.JOINED_EVENT_BROADCAST.get().replace("{player}", player.getName()));
 
         players.add(player);
@@ -494,6 +497,8 @@ public abstract class InvadedEvent implements Listener {
             eventScoreboardManager.giveCountdownSB(player);
         }
     }
+
+    protected abstract List<String> getDescriptionMessage();
 
     /**
      * Removes player from the event

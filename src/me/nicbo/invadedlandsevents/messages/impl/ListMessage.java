@@ -16,7 +16,22 @@ public enum ListMessage implements IMessage<List<String>> {
     INFO_MESSAGES("event.INFO_MESSAGES"),
     USAGE_MESSAGES("event.USAGE_MESSAGES"),
     WIN_MESSAGES("event.WIN_MESSAGES"),
-    TDM_WINNERS("tdm.WINNERS");
+    TDM_WINNERS("tdm.WINNERS"),
+
+    SUMO1V1_DESCRIPTION("description.SUMO1V1"),
+    SUMO2V2_DESCRIPTION("description.SUMO2V2"),
+    SUMO3V3_DESCRIPTION("description.SUMO3V3"),
+    BRACKETS_DESCRIPTION("description.BRACKETS"),
+    KOTH_DESCRIPTION("description.KOTH"),
+    LMS_DESCRIPTION("description.LMS"),
+    OITC_DESCRIPTION("description.OITC"),
+    REDROVER_DESCRIPTION("description.REDROVER"),
+    ROD_DESCRIPTION("description.ROD"),
+    SPLEEF_DESCRIPTION("description.SPLEEF"),
+    TDM_DESCRIPTION("description.TDM"),
+    TNTTAG_DESCRIPTION("description.TNTTAG"),
+    WATERDROP_DESCRIPTION("description.WATERDROP"),
+    WOOLSHUFFLE("description.WOOLSHUFFLE");
 
     private final String path;
     private List<String> messages;
