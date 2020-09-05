@@ -48,21 +48,13 @@ public final class GeneralListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onLeave(PlayerQuitEvent event) {
-        Player player = event.getPlayer();
-        GUI gui = GUI.getOpenInventories().get(player);
-        if (gui != null) {
-            GUI.getOpenInventories().remove(player);
-        }
+        GUI.getOpenInventories().remove(event.getPlayer());
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onInventoryClose(InventoryCloseEvent event) {
         if (event.getPlayer() instanceof Player) {
-            Player player = (Player) event.getPlayer();
-            GUI gui = GUI.getOpenInventories().get(player);
-            if (gui != null) {
-                GUI.getOpenInventories().remove(player);
-            }
+            GUI.getOpenInventories().remove((Player) event.getPlayer());
         }
     }
 
