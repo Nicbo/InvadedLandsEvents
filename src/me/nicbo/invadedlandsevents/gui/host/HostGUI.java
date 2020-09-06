@@ -58,7 +58,7 @@ public abstract class HostGUI extends GUI {
                 message = "&c&lYou don't have permission to host this event.";
             }
         } else {
-            long secondsLeft = plugin.getPlayerDataManager().getData(player.getUniqueId()).getSecondsUntilHost(event);
+            long secondsLeft = plugin.getPlayerDataManager().getSecondsUntilHost(player.getUniqueId(), event);
             if (secondsLeft > 0 && !player.hasPermission(EventPermission.BYPASS_COOLDOWN)) {
                 message = "&cYou must wait &e" + StringUtils.formatSeconds(secondsLeft) + "&c to host this event.";
             } else if (!player.hasPermission(EventPermission.HOST_PREFIX + event)) {

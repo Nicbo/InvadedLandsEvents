@@ -116,6 +116,28 @@ public final class PlayerDataManager implements Listener {
         playerDataMap.remove(uuid);
     }
 
+    public long getSecondsUntilHost(UUID uuid, String event) {
+        PlayerData playerData = getData(uuid);
+        Long timestamp = playerData.getMillisecondsSinceHost(event);
+        int cooldown = plugin.getConfig().getInt("events.general.cooldown-seconds.value");
+
+        if (timestamp == null) {
+            return 0;
+        }
+
+        // Configurable cooldown time
+        final int MILLISECONDS_IN_DAY = 1000 * cooldown;
+
+        // Milliseconds in a day - how many milliseconds it's been since hosted
+        long millisecondsLeft = MILLISECONDS_IN_DAY - (System.currentTimeMillis() - timestamp);
+
+        if (millisecondsLeft <= 0) {
+            playerData.removeTimestamp(event);
+            return 0;
+        } else {
+            return millisecondsLeft / 1000; // Seconds
+        }
+    }
     /*
     TODO:
         - Better error handling, if anything is wrong with file it should give warning and overwrite?

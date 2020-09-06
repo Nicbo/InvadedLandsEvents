@@ -1,5 +1,6 @@
 package me.nicbo.invadedlandsevents.data;
 
+import me.nicbo.invadedlandsevents.InvadedLandsEvents;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -24,15 +25,11 @@ public final class PlayerData {
     // Data
     private final Map<String, Long> eventTimestamps;
 
-    private int cooldown;
-
     PlayerData(File file, UUID uuid) {
         this.file = file;
         this.config = YamlConfiguration.loadConfiguration(file);
         this.uuid = uuid;
         this.eventTimestamps = new HashMap<>();
-
-        ConfigurationSection generalConfig = config.getConfigurationSection("events.general");
 
         // Load old values from config
         ConfigurationSection timestampsSection = config.getConfigurationSection("timestamps");
@@ -43,8 +40,6 @@ public final class PlayerData {
                 this.eventTimestamps.put(event, timestampsSection.getLong(event));
             }
         }
-
-        this.cooldown = generalConfig.getInt("host-seconds.value");
     }
 
     public void save() throws IOException {
@@ -73,25 +68,8 @@ public final class PlayerData {
         eventTimestamps.remove(event);
     }
 
-    public long getSecondsUntilHost(String event) {
-        Long timestamp = eventTimestamps.get(event);
-
-        if (timestamp == null) {
-            return 0;
-        }
-
-        // Configurable cooldown time
-        final int MILLISECONDS_IN_DAY = 1000 * cooldown;
-
-        // Milliseconds in a day - how many milliseconds it's been since hosted
-        long millisecondsLeft = MILLISECONDS_IN_DAY - (System.currentTimeMillis() - timestamp);
-
-        if (millisecondsLeft <= 0) {
-            eventTimestamps.remove(event);
-            return 0;
-        } else {
-            return millisecondsLeft / 1000; // Seconds
-        }
+    public long getMillisecondsSinceHost(String event) {
+        return eventTimestamps.getOrDefault(event, 0L);
     }
 
     public UUID getUUID() {
