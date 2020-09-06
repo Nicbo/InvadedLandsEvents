@@ -67,24 +67,8 @@ public final class PlayerData {
         eventTimestamps.remove(event);
     }
 
-    public long getSecondsUntilHost(String event) {
-        Long timestamp = eventTimestamps.get(event);
-
-        if (timestamp == null) {
-            return 0;
-        }
-
-        final int MILLISECONDS_IN_DAY = 1000 * 60 * 60 * 24;
-
-        // Milliseconds in a day - how many milliseconds it's been since hosted
-        long millisecondsLeft = MILLISECONDS_IN_DAY - (System.currentTimeMillis() - timestamp);
-
-        if (millisecondsLeft <= 0) {
-            eventTimestamps.remove(event);
-            return 0;
-        } else {
-            return millisecondsLeft / 1000; // Seconds
-        }
+    public long getTimestamp(String event) {
+        return eventTimestamps.getOrDefault(event, 0L);
     }
 
     public UUID getUUID() {

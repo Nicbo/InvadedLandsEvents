@@ -6,6 +6,9 @@ events:
     host-seconds:
       value: 60
       type: INT
+    cooldown-seconds:
+      value: 86400
+      type: INT
     win-command:
       value: msg {winner} You won the {event_name} event but the admins have not configured a win command.
       type: STRING

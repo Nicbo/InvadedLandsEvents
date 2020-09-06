@@ -95,10 +95,10 @@ public final class EventManager implements Listener {
         }
 
         // Cooldown check
-        PlayerData playerData = playerDataManager.getData(player.getUniqueId());
-
-        long secondsLeft = playerData.getSecondsUntilHost(event);
+        UUID uuid = player.getUniqueId();
         boolean canBypass = player.hasPermission(EventPermission.BYPASS_COOLDOWN);
+        PlayerData playerData = playerDataManager.getData(uuid);
+        long secondsLeft = playerDataManager.getSecondsUntilHost(uuid, event);
 
         if (!canBypass) {
             if (secondsLeft > 0) {

@@ -116,9 +116,25 @@ public final class PlayerDataManager implements Listener {
         playerDataMap.remove(uuid);
     }
 
-    /*
-    TODO:
-        - Better error handling, if anything is wrong with file it should give warning and overwrite?
-     */
+    public long getSecondsUntilHost(UUID uuid, String event) {
+        PlayerData playerData = getData(uuid);
+        long timestamp = playerData.getTimestamp(event);
+
+        if (timestamp == 0) {
+            return timestamp;
+        }
+
+        final long COOLDOWN_MILLISECONDS = 1000L * plugin.getConfig().getInt("events.general.cooldown-seconds.value");
+
+        // Milliseconds in a day - how many milliseconds it's been since hosted
+        long millisecondsLeft = COOLDOWN_MILLISECONDS - (System.currentTimeMillis() - timestamp);
+
+        if (millisecondsLeft <= 0) {
+            playerData.removeTimestamp(event);
+            return 0;
+        } else {
+            return millisecondsLeft / 1000; // Seconds
+        }
+    }
 }
 
