@@ -118,7 +118,7 @@ public final class PlayerDataManager implements Listener {
 
     public long getSecondsUntilHost(UUID uuid, String event) {
         PlayerData playerData = getData(uuid);
-        Long timestamp = playerData.getMillisecondsSinceHost(event);
+        Long timestamp = playerData.getTimestamp(event);
         int cooldown = plugin.getConfig().getInt("events.general.cooldown-seconds.value");
 
         if (timestamp == null) {

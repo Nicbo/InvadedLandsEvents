@@ -67,7 +67,7 @@ public final class PlayerData {
         eventTimestamps.remove(event);
     }
 
-    public long getMillisecondsSinceHost(String event) {
+    public long getTimestamp(String event) {
         return eventTimestamps.getOrDefault(event, 0L);
     }
 
