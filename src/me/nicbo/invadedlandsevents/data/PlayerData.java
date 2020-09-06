@@ -24,11 +24,15 @@ public final class PlayerData {
     // Data
     private final Map<String, Long> eventTimestamps;
 
+    private int cooldown;
+
     PlayerData(File file, UUID uuid) {
         this.file = file;
         this.config = YamlConfiguration.loadConfiguration(file);
         this.uuid = uuid;
         this.eventTimestamps = new HashMap<>();
+
+        ConfigurationSection generalConfig = config.getConfigurationSection("events.general");
 
         // Load old values from config
         ConfigurationSection timestampsSection = config.getConfigurationSection("timestamps");
@@ -39,6 +43,8 @@ public final class PlayerData {
                 this.eventTimestamps.put(event, timestampsSection.getLong(event));
             }
         }
+
+        this.cooldown = generalConfig.getInt("host-seconds.value");
     }
 
     public void save() throws IOException {
@@ -74,7 +80,8 @@ public final class PlayerData {
             return 0;
         }
 
-        final int MILLISECONDS_IN_DAY = 1000 * 60 * 60 * 24;
+        // Configurable cooldown time
+        final int MILLISECONDS_IN_DAY = 1000 * cooldown;
 
         // Milliseconds in a day - how many milliseconds it's been since hosted
         long millisecondsLeft = MILLISECONDS_IN_DAY - (System.currentTimeMillis() - timestamp);
@@ -90,9 +97,4 @@ public final class PlayerData {
     public UUID getUUID() {
         return uuid;
     }
-
-    /*
-    TODO:
-        - Allow for configuration of cooldown
-     */
 }
