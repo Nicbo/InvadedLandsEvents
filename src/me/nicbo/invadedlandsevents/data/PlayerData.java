@@ -1,6 +1,5 @@
 package me.nicbo.invadedlandsevents.data;
 
-import me.nicbo.invadedlandsevents.InvadedLandsEvents;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;

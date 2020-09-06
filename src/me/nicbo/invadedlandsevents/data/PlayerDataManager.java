@@ -126,10 +126,10 @@ public final class PlayerDataManager implements Listener {
         }
 
         // Configurable cooldown time
-        final int MILLISECONDS_IN_DAY = 1000 * cooldown;
+        final int COOLDOWN_MILLISECONDS = 1000 * cooldown;
 
         // Milliseconds in a day - how many milliseconds it's been since hosted
-        long millisecondsLeft = MILLISECONDS_IN_DAY - (System.currentTimeMillis() - timestamp);
+        long millisecondsLeft = COOLDOWN_MILLISECONDS - (System.currentTimeMillis() - timestamp);
 
         if (millisecondsLeft <= 0) {
             playerData.removeTimestamp(event);
