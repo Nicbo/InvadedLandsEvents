@@ -112,7 +112,7 @@ public abstract class Sumo extends DuelEvent {
 
     @Override
     protected Collection<Player> prepareRound() {
-        // Just in case, if the list size is one than the while loop while crash the server
+        // Just in case, if the list size is one than the while loop will crash the server
         checkPlayerCount();
         if (!isRunning()) {
             return null;

@@ -15,7 +15,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
 import org.bukkit.util.StringUtil;
 
 import java.util.ArrayList;
@@ -30,7 +29,7 @@ import java.util.List;
  * @author StarZorrow
  */
 
-public final class EventCommand implements CommandExecutor, TabCompleter, Listener {
+public final class EventCommand implements CommandExecutor, TabCompleter {
     private final InvadedLandsEvents plugin;
     private final EventManager eventManager;
 

@@ -2,7 +2,7 @@ main: me.nicbo.invadedlandsevents.InvadedLandsEvents
 name: InvadedLandsEvents
 version: "1.0.0-BETA.2"
 description: Remake of the InvadedLands events
-authors: [nicbo, starzorrow]
+author: Nicbo
 depend: [WorldGuard]
 
 commands:

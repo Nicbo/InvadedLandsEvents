@@ -282,7 +282,7 @@ public final class EventManager implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onQuit(PlayerQuitEvent event) {
         if (isEventActive()) {
-            joinTimestamps.remove(event.getPlayer().getUniqueId());
+            this.joinTimestamps.remove(event.getPlayer().getUniqueId());
         }
     }
 

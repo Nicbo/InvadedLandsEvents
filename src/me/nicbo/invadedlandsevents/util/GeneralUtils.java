@@ -52,7 +52,7 @@ public final class GeneralUtils {
      */
     public static <T> T getRandom(List<T> list) {
         if (list.isEmpty()) {
-            throw new IllegalArgumentException("Can't get random element from empty list");
+            throw new IllegalArgumentException("Can't get random element from an empty list");
         }
         return list.get(random.nextInt(list.size()));
     }

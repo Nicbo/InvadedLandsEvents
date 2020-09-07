@@ -19,7 +19,6 @@ public class SumoTeam extends EventTeam {
      * Creates an instance of SumoTeam
      *
      * @param initialPlayers the initial players of the team
-     * @throws IllegalArgumentException if the size of initial players is not between 1 and 3 (inclusive)
      */
     public SumoTeam(Set<Player> initialPlayers) {
         super(prepareName(initialPlayers), initialPlayers);

@@ -67,10 +67,10 @@ public final class SpigotUtils {
      *
      * @param loc    the location
      * @param region the region
-     * @return true if the location if in the region
+     * @return true if the location is in the region
      */
     public static boolean isLocInRegion(Location loc, ProtectedRegion region) {
-        return region.contains(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
+        return region != null && region.contains(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
     }
 
     /**
