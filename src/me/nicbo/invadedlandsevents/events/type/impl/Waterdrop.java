@@ -12,7 +12,6 @@ import me.nicbo.invadedlandsevents.util.GeneralUtils;
 import me.nicbo.invadedlandsevents.util.SpigotUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -195,8 +194,7 @@ public final class Waterdrop extends RoundEvent {
             @Override
             public void run() {
                 for (Player player : getPlayersView()) {
-                    // TODO: Change isOnGround() check as it is calculated client side (can be spoofed)
-                    if (startLoc.getBlockY() - player.getLocation().getBlockY() > 2 && ((LivingEntity) player).isOnGround() && !jumped.contains(player)) {
+                    if (startLoc.getBlockY() - player.getLocation().getBlockY() > 2 && isPlayerOnGround(player) && !jumped.contains(player)) {
                         if (SpigotUtils.isLocInRegion(player.getLocation(), region)) { // Player is in safe zone
                             broadcastEventMessage(Message.WATERDROP_SUCCESS_JUMP.get().replace("{player}", player.getName()));
                             eliminated.remove(player);
@@ -215,6 +213,17 @@ public final class Waterdrop extends RoundEvent {
         }
 
         this.jumped = new HashSet<>();
+    }
+
+    /**
+     * Checks if a player is on the ground
+     *
+     * @param player the player
+     * @return true if the player is standing on the ground
+     */
+    private static boolean isPlayerOnGround(Player player) {
+        Material type = player.getLocation().subtract(0, 0.1, 0).getBlock().getType();
+        return type != Material.WALL_SIGN && type != Material.SIGN_POST && type.isSolid();
     }
 
     @Override
