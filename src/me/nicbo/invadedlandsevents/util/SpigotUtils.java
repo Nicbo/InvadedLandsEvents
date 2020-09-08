@@ -49,6 +49,8 @@ public final class SpigotUtils {
         player.setHealth(20);
         player.setFireTicks(0);
         player.setFallDistance(0.0f);
+        player.setAllowFlight(false);
+        player.setFlying(false);
         clearInventory(player);
     }
 
