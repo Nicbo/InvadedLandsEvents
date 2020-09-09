@@ -3,6 +3,7 @@ package me.nicbo.invadedlandsevents.util;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -27,6 +28,12 @@ public final class SpigotUtils {
     public static boolean isInventoryEmpty(Player player) {
         for (ItemStack item : player.getInventory().getContents()) {
             if (item != null) {
+                return false;
+            }
+        }
+
+        for (ItemStack armor : player.getInventory().getArmorContents()) {
+            if (armor.getType() != Material.AIR) {
                 return false;
             }
         }
