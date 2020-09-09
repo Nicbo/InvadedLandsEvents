@@ -100,12 +100,7 @@ public final class EventCommand implements CommandExecutor, TabCompleter {
                     boolean oneArg = args.length == 1;
                     if (oneArg || "sumo".equalsIgnoreCase(args[1])) {
                         if (player.hasPermission(EventPermission.HOST_EVENT)) {
-                            HostGUI gui;
-                            if (oneArg) {
-                                gui = new MainHostGUI(plugin, player);
-                            } else {
-                                gui = new SumoHostGUI(plugin, player);
-                            }
+                            HostGUI gui = oneArg ? new MainHostGUI(plugin, player) : new SumoHostGUI(plugin, player);
                             gui.open();
                         } else {
                             player.sendMessage(Message.NO_PERMISSION.get());

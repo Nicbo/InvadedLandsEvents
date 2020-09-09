@@ -74,9 +74,4 @@ public final class PlayerData {
     public UUID getUUID() {
         return uuid;
     }
-
-    /*
-    TODO:
-        - Allow for configuration of cooldown
-     */
 }

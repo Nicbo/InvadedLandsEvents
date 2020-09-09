@@ -15,16 +15,16 @@ commands:
 
 permissions:
   ile.*:
-    description: Gives player every permission in InvadedLandsEvents
+    description: Gives the player every permission in InvadedLandsEvents
     default: op
     children:
       ile.commandbypass: true
       ile.eventconfig: true
       ile.event.*: true
   ile.commandbypass:
-    description: Allows the player to bypass command restrictions in event
+    description: Allows the player to bypass command restrictions in events
   ile.eventconfig:
-    description: Allows the player to config events
+    description: Allows the player to configure events
   ile.event.*:
     description: Gives the player all event permissions
     children:
@@ -42,17 +42,17 @@ permissions:
       ile.event.info: true
       ile.event.host: true
   ile.event.join:
-    description: Allows the player to join the event
+    description: Allows the player to join events
   ile.event.leave:
-    description: Allows the player to leave the event
+    description: Allows the player to leave events
   ile.event.spectate:
-    description: Allows the player to spectate the event
+    description: Allows the player to spectate events
   ile.event.info:
     description: Allows the player to see the current events info
   ile.event.host:
-    description: Allows the player to open the host gui or host an event (must be given specific permission for hosting that event)
+    description: Allows the player to open the host gui and host events (must be given specific permission for hosting that event)
   ile.event.host.*:
-    description: Allows the player to host every event and bypass cooldowns
+    description: Allows the player to host every event and bypass host cooldowns
     children:
       ile.event.host.all: true
       ile.event.host.bypass: true
@@ -80,7 +80,7 @@ permissions:
   ile.event.host.sumo2v2:
     description: Allows the player to host 2v2 sumo
   ile.event.host.sumo3v3:
-    description: Allows the player to host 3v3
+    description: Allows the player to host 3v3 sumo
   ile.event.host.brackets:
     description: Allows the player to host brackets
   ile.event.host.koth:

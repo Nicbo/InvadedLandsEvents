@@ -35,7 +35,7 @@ public class EventStopEvent extends Event {
     }
 
     /**
-     * Get the event that was stopped
+     * Returns the event that was stopped
      * @return the event
      */
     public InvadedEvent getEvent() {

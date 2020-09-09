@@ -24,11 +24,11 @@ public class MatchCountdown extends BukkitRunnable {
      * Creates instance of a match countdown
      *
      * @param broadcaster the consumer that broadcasts the countdown
-     * @param COUNTER     the message to send when counting down
-     * @param STARTED     the message to send when the count down ends
+     * @param counter     the message to send when counting down
+     * @param started     the message to send when the count down ends
      */
-    public MatchCountdown(Consumer<String> broadcaster, Message COUNTER, Message STARTED) {
-        this(broadcaster, null, COUNTER, STARTED);
+    public MatchCountdown(Consumer<String> broadcaster, Message counter, Message started) {
+        this(broadcaster, null, counter, started);
     }
 
     /**
@@ -36,14 +36,14 @@ public class MatchCountdown extends BukkitRunnable {
      *
      * @param broadcaster the consumer that broadcasts the countdown
      * @param runnable    the runnable that runs when the countdown ends
-     * @param COUNTER     the message to send when counting down
-     * @param STARTED     the message to send when the count down ends
+     * @param counter     the message to send when counting down
+     * @param started     the message to send when the count down ends
      */
-    public MatchCountdown(Consumer<String> broadcaster, Runnable runnable, Message COUNTER, Message STARTED) {
+    public MatchCountdown(Consumer<String> broadcaster, Runnable runnable, Message counter, Message started) {
         this.broadcaster = broadcaster;
         this.runnable = runnable;
-        this.COUNTER = COUNTER;
-        this.STARTED = STARTED;
+        this.COUNTER = counter;
+        this.STARTED = started;
         this.timer = 6;
     }
 
