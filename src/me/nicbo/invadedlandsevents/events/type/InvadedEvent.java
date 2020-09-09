@@ -4,6 +4,7 @@ import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import me.nicbo.invadedlandsevents.InvadedLandsEvents;
 import me.nicbo.invadedlandsevents.event.EventStopEvent;
+import me.nicbo.invadedlandsevents.events.EventScoreboardManager;
 import me.nicbo.invadedlandsevents.events.util.team.EventTeam;
 import me.nicbo.invadedlandsevents.events.util.team.SumoTeam;
 import me.nicbo.invadedlandsevents.events.util.team.TDMTeam;
@@ -115,7 +116,7 @@ public abstract class InvadedEvent implements Listener {
         this.valid = true;
         this.running = false;
 
-        this.eventScoreboardManager = new EventScoreboardManager();
+        this.eventScoreboardManager = new EventScoreboardManager(CountdownSB::new, EventEndedSB::new, getScoreboardFactory());
 
         FileConfiguration config = plugin.getConfig();
 
@@ -157,17 +158,16 @@ public abstract class InvadedEvent implements Listener {
      * Starts the count down runnable
      */
     public void startCountDown(String host) {
-        this.eventScoreboardManager.startRefreshing();
+        this.eventScoreboardManager.startRefreshing(plugin);
 
         final int MIN_PLAYERS = getEventInteger("min-players");
 
         this.countDownRunnable = new BukkitRunnable() {
-            private final int INITIAL_COUNTDOWN = countDown;
-            private int LAST_BROADCAST = countDown;
+            private int i = 15;
 
             @Override
             public void run() {
-                if (countDown == INITIAL_COUNTDOWN || LAST_BROADCAST - 15 == countDown || (countDown <= 5 && countDown >= 1)) {
+                if (i++ == 15 || (countDown <= 5 && countDown >= 1)) {
                     TextComponent join = new TextComponent(Message.STARTING_IN.get().replace("{seconds}", String.valueOf(countDown)));
                     join.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(Message.CLICK_TO_JOIN.get().replace("{event}", eventName)).create()));
                     join.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/event join"));
@@ -179,7 +179,7 @@ public abstract class InvadedEvent implements Listener {
                         player.spigot().sendMessage(join);
                     }
 
-                    LAST_BROADCAST = countDown;
+                    i = 0;
                 } else if (countDown <= 0) {
                     if (getPlayersSize() >= MIN_PLAYERS) {
                         start();
@@ -930,130 +930,6 @@ public abstract class InvadedEvent implements Listener {
 
         @Override
         protected void refresh() {
-        }
-    }
-
-    private final class EventScoreboardManager {
-        private final Function<Player, EventScoreboard> scoreboardFactory;
-        private final Map<Player, EventScoreboard> scoreboards;
-        private final BukkitRunnable refresher;
-
-        /**
-         * Creates instance of the event scoreboard manager
-         */
-        private EventScoreboardManager() {
-            this.scoreboardFactory = getScoreboardFactory();
-            this.scoreboards = new HashMap<>();
-            this.refresher = new BukkitRunnable() {
-                @Override
-                public void run() {
-                    for (EventScoreboard scoreboard : scoreboards.values()) {
-                        scoreboard.updateScoreboard();
-                    }
-                }
-            };
-        }
-
-        /**
-         * Give the player a fresh scoreboard
-         *
-         * @param player the player to give the scoreboard to
-         */
-        public void giveNewScoreboard(Player player) {
-            player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
-        }
-
-        /**
-         * Gives the players a fresh scoreboard
-         *
-         * @param players the players to give the scoreboard to
-         */
-        public void giveNewScoreboard(Iterable<Player> players) {
-            for (Player player : players) {
-                giveNewScoreboard(player);
-            }
-        }
-
-        /**
-         * Gives the player the current events scoreboard
-         *
-         * @param player the player to give the scoreboard to
-         */
-        public void giveEventScoreboard(Player player) {
-            scoreboards.put(player, scoreboardFactory.apply(player));
-        }
-
-        /**
-         * Gives the players the current events scoreboard
-         *
-         * @param players the players to give the scoreboard to
-         */
-        public void giveEventScoreboard(Iterable<Player> players) {
-            for (Player player : players) {
-                giveEventScoreboard(player);
-            }
-        }
-
-        /**
-         * Gives the player a countdown scoreboard
-         *
-         * @param player the player to give the scoreboard to
-         */
-        public void giveCountdownSB(Player player) {
-            scoreboards.put(player, new CountdownSB(player));
-        }
-
-        /**
-         * Gives the player an event over scoreboard
-         *
-         * @param player the player to give the scoreboard to
-         */
-        public void giveEventOverSB(Player player) {
-            scoreboards.put(player, new EventEndedSB(player));
-        }
-
-        /**
-         * Gives the players an event over scoreboard
-         *
-         * @param players the players to give the scoreboard to
-         */
-        public void giveEventOverSB(Iterable<Player> players) {
-            for (Player player : players) {
-                giveEventOverSB(player);
-            }
-        }
-
-        /**
-         * Removes a players scoreboard and gives them a fresh one
-         *
-         * @param player the player to remove the scoreboard from
-         */
-        public void removeScoreboard(Player player) {
-            giveNewScoreboard(player);
-            scoreboards.remove(player);
-        }
-
-        /**
-         * Removes all players scoreboards and gives them all a fresh one
-         */
-        public void removeAllScoreboards() {
-            for (Iterator<Player> iterator = scoreboards.keySet().iterator(); iterator.hasNext(); iterator.remove()) {
-                giveNewScoreboard(iterator.next());
-            }
-        }
-
-        /**
-         * Start refreshing the scoreboards
-         */
-        public void startRefreshing() {
-            refresher.runTaskTimer(plugin, 0, 5);
-        }
-
-        /**
-         * Stop refreshing the scoreboards
-         */
-        public void stopRefreshing() {
-            refresher.cancel();
         }
     }
 
