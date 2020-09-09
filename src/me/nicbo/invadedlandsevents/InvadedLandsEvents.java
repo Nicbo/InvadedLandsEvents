@@ -68,7 +68,7 @@ public final class InvadedLandsEvents extends JavaPlugin {
                     ((HostGUI) gui).update();
                 }
             }
-        }, 0, 5);
+        }, 0, 10);
         this.getLogger().info("Scheduled task to update all open host guis.");
 
         this.getLogger().info("Done enabling!");
