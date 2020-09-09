@@ -163,11 +163,11 @@ public abstract class InvadedEvent implements Listener {
         final int MIN_PLAYERS = getEventInteger("min-players");
 
         this.countDownRunnable = new BukkitRunnable() {
-            private int i = 15;
+            private int i = 14;
 
             @Override
             public void run() {
-                if (i++ == 15 || (countDown <= 5 && countDown >= 1)) {
+                if (++i == 15 || (countDown <= 5 && countDown >= 1)) {
                     TextComponent join = new TextComponent(Message.STARTING_IN.get().replace("{seconds}", String.valueOf(countDown)));
                     join.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(Message.CLICK_TO_JOIN.get().replace("{event}", eventName)).create()));
                     join.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/event join"));
