@@ -163,8 +163,8 @@ public final class Spleef extends TimerEvent {
 
         if (getSpectatorsView().contains(player)) {
             event.setCancelled(true);
-        } else if (!ignoreEvent(player)) {
-            if (!matchCountdown.isCounting() && block.getType() == Material.SNOW_BLOCK && SpigotUtils.isLocInRegion(block.getLocation(), region)) {
+        } else if (getPlayersView().contains(player)) {
+            if (isRunning() && !matchCountdown.isCounting() && block.getType() == Material.SNOW_BLOCK && SpigotUtils.isLocInRegion(block.getLocation(), region)) {
                 block.setType(Material.AIR);
                 player.getInventory().addItem(new ItemStack(Material.SNOW_BALL, 4));
             } else {
