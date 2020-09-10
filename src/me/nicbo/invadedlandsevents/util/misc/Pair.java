@@ -7,6 +7,7 @@ package me.nicbo.invadedlandsevents.util.misc;
  * @param <L> the type of the left object
  * @param <R> the type of the right object
  */
+
 public class Pair<L, R> {
     private final L left;
     private final R right;

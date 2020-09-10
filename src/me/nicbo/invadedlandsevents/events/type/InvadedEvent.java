@@ -263,8 +263,7 @@ public abstract class InvadedEvent implements Listener {
     }
 
     /**
-     * Called when the event starts
-     * EventManager will call this method after countdown is over
+     * Starts the event
      */
     protected void start() {
         running = true;
@@ -277,22 +276,21 @@ public abstract class InvadedEvent implements Listener {
     }
 
     /**
-     * Called when the event ends
+     * Ends the event
      */
     protected void over() {
         running = false;
         ending = true;
         eventScoreboardManager.stopRefreshing();
-        eventScoreboardManager.giveEventOverSB(players);
-        eventScoreboardManager.giveEventOverSB(spectators);
+        eventScoreboardManager.giveEventEndedSB(players);
+        eventScoreboardManager.giveEventEndedSB(spectators);
 
         // Prepare spawn
         spawnLoc.getChunk().load();
     }
 
     /**
-     * Called when event fully ends
-     * 5 seconds after over is called
+     * Stops the event 5 seconds after it has ended
      */
     private void stop() {
         eventScoreboardManager.removeAllScoreboards();
@@ -315,11 +313,6 @@ public abstract class InvadedEvent implements Listener {
      */
     protected abstract Function<Player, EventScoreboard> getScoreboardFactory();
 
-    /**
-     * Gets the events spectate location
-     *
-     * @return the spectate location
-     */
     protected Location getSpecLoc() {
         return specLoc;
     }
@@ -401,7 +394,7 @@ public abstract class InvadedEvent implements Listener {
     }
 
     /**
-     * Get count of all players in the event
+     * Returns a count of all the players in the event
      *
      * @return the size of players
      */
@@ -427,11 +420,6 @@ public abstract class InvadedEvent implements Listener {
         return spectatorsView;
     }
 
-    /**
-     * Get the current count down time
-     *
-     * @return the count down time
-     */
     public int getCountDown() {
         return countDown;
     }
@@ -460,15 +448,6 @@ public abstract class InvadedEvent implements Listener {
      */
     public boolean isPlayerParticipating(Player player) {
         return players.contains(player) || spectators.contains(player);
-    }
-
-    /**
-     * Get the instance of the events scoreboard manager
-     *
-     * @return the event scoreboard manager
-     */
-    public EventScoreboardManager getEventScoreboardManager() {
-        return eventScoreboardManager;
     }
 
     /**
@@ -628,7 +607,7 @@ public abstract class InvadedEvent implements Listener {
 
     /**
      * Called when a player is removed or leaves event
-     * Will call winEvent if playerCount is under 2
+     * Will call winEvent if there are less than 2 players
      */
     protected void checkPlayerCount() {
         int playerCount = players.size();
@@ -739,7 +718,7 @@ public abstract class InvadedEvent implements Listener {
     }
 
     /**
-     * Check if event should be ignored
+     * Check if an event should be ignored
      *
      * @param player the player that the event is fired on
      * @return true if the event should be ignored

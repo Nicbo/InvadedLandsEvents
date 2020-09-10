@@ -35,26 +35,15 @@ public class GUI {
         this.buttons = new HashMap<>();
     }
 
-    /**
-     * Get the player that owns the gui
-     *
-     * @return the player
-     */
     public Player getPlayer() {
         return player;
     }
 
-    /**
-     * Open the gui
-     */
     public void open() {
         openInventories.put(player, this);
         player.openInventory(inventory);
     }
 
-    /**
-     * Close the gui
-     */
     public void close() {
         player.closeInventory();
 
@@ -83,8 +72,7 @@ public class GUI {
     }
 
     /**
-     * Updates a button by setting the inventory item to the
-     * buttons item
+     * Updates a button by setting the inventory item to the buttons item
      *
      * @param slot the slot number
      */
@@ -136,12 +124,7 @@ public class GUI {
         return inventory;
     }
 
-    /**
-     * Get the open inventories
-     *
-     * @return the open inventories
-     */
-    public static Map<Player, GUI> getOpenInventories() {
+    public static Map<Player, GUI> getOpenGUIs() {
         return openInventories;
     }
 }

@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.function.Function;
 
 /**
+ * Every round a random wool is picked and fills a players hotbar
  * Players must stand on the chosen wool
  * All players who are on the wrong block are eliminated
  * Last player standing wins

@@ -36,10 +36,10 @@ import java.util.List;
 import java.util.function.Function;
 
 /**
- * All players are teleported to 2 start locations with shovels
+ * All players start with shovels
  * Thrown snowballs break whatever block is hit
  * If a player falls under the snow they are eliminated
- * Last player alive wins
+ * Last player standing wins the event
  *
  * @author Nicbo
  * @author StarZorrow
@@ -86,7 +86,7 @@ public final class Spleef extends TimerEvent {
 
         this.region = getEventRegion("break-region");
 
-        // Just to avoid IDE errors, region can not be null if event is valid
+        // Just to avoid IDE warnings, region can not be null if event is valid
         if (isValid() && region != null) {
             buildSnow(pos1, pos2);
 
@@ -156,24 +156,24 @@ public final class Spleef extends TimerEvent {
     }
 
     @Override
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onBlockBreak(BlockBreakEvent event) {
         Player player = event.getPlayer();
-        if (!isPlayerParticipating(player)) {
-            return;
-        }
-
         Block block = event.getBlock();
 
-        if (isRunning() && !matchCountdown.isCounting() && block.getType() == Material.SNOW_BLOCK && SpigotUtils.isLocInRegion(block.getLocation(), region)) {
-            block.setType(Material.AIR);
-            player.getInventory().addItem(new ItemStack(Material.SNOW_BALL, 4));
-        } else {
+        if (getSpectatorsView().contains(player)) {
             event.setCancelled(true);
+        } else if (!ignoreEvent(player)) {
+            if (!matchCountdown.isCounting() && block.getType() == Material.SNOW_BLOCK && SpigotUtils.isLocInRegion(block.getLocation(), region)) {
+                block.setType(Material.AIR);
+                player.getInventory().addItem(new ItemStack(Material.SNOW_BALL, 4));
+            } else {
+                event.setCancelled(true);
+            }
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onSnowballHitSnowSpleef(ProjectileHitEvent event) {
         ProjectileSource shooter = event.getEntity().getShooter();
         if (!(shooter instanceof Player) || ignoreEvent((Player) shooter)) {

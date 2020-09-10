@@ -29,9 +29,10 @@ import java.util.*;
 import java.util.function.Function;
 
 /**
- * All players get a kit
- * One player can be capturing the zone at a time
- * Once a player reaches the max points they win
+ * All players spawn in with a kit
+ * The player that stands the capture region gets points
+ * Only one player can be capturing the point at a time
+ * The first player to reach the set amount of points wins the event
  *
  * @author Nicbo
  */
@@ -192,7 +193,7 @@ public final class KOTH extends TimerEvent {
     }
 
     private void setRandomCapturing() {
-        capturing = playersInRegion.isEmpty() ? null : GeneralUtils.getRandom(playersInRegion);
+        this.capturing = playersInRegion.isEmpty() ? null : GeneralUtils.getRandom(playersInRegion);
 
         if (capturing != null) {
             broadcastEventMessage(Message.KOTH_CAPTURING.get().replace("{player}", capturing.getName()));

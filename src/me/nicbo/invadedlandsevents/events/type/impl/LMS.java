@@ -24,8 +24,9 @@ import java.util.List;
 import java.util.function.Function;
 
 /**
- * All players are teleported to 2 start locations with a kit
- * The last player alive wins
+ * All players start with a kit
+ * When a player dies they are eliminated
+ * The last player standing wins the event
  *
  * @author Nicbo
  * @author StarZorrow

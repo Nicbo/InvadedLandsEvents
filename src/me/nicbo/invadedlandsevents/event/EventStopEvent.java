@@ -6,8 +6,6 @@ import org.bukkit.event.HandlerList;
 
 /**
  * Called when an event is stopped
- * Created so I could avoid cyclic dependency
- * between EventManager and InvadedEvent
  *
  * @author Nicbo
  */
@@ -36,6 +34,7 @@ public class EventStopEvent extends Event {
 
     /**
      * Returns the event that was stopped
+     *
      * @return the event
      */
     public InvadedEvent getEvent() {

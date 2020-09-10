@@ -28,7 +28,7 @@ import java.util.UUID;
 import java.util.function.Function;
 
 /**
- * Event manager handles all events and the countdown
+ * Manages all events and the countdown
  *
  * @author Nicbo
  * @author StarZorrow
@@ -251,20 +251,10 @@ public final class EventManager implements Listener {
         return null;
     }
 
-    /**
-     * Check if an event is active
-     *
-     * @return true if an event is active
-     */
     public boolean isEventActive() {
         return currentEvent != null;
     }
 
-    /**
-     * Get the current event
-     *
-     * @return the current event
-     */
     public InvadedEvent getCurrentEvent() {
         return currentEvent;
     }
@@ -305,7 +295,7 @@ public final class EventManager implements Listener {
     }
 
     /**
-     * Gets all the event config names (immutable)
+     * Returns an immutable set of the event config names
      *
      * @return the event config names
      */

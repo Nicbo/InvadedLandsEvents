@@ -27,10 +27,10 @@ import java.util.function.Function;
 
 
 /**
- * One player is selected as the killer
- * The rest of the players are teleported to a side
- * Each round the players must run to the other side
- * Last player alive wins
+ * All players are teleported to one side
+ * Every round the side switches and players who are not on the correct side are eliminated
+ * There is also a killer that is in the middle that can eliminate players
+ * The last player standing wins the event
  *
  * @author Nicbo
  */

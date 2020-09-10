@@ -23,9 +23,9 @@ import java.util.List;
 import java.util.function.Function;
 
 /**
- * Two players are teleported each round
- * Whoever wins the duel moves on, the other player is eliminated
- * Last player standing wins
+ * Two random players are picked each round to fight
+ * Whoever dies first is eliminated from the event
+ * The last player standing wins the event
  *
  * @author Nicbo
  */

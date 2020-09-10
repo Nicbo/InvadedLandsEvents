@@ -363,7 +363,7 @@ public final class EventConfigCommand implements CommandExecutor, TabCompleter {
      */
     private static String stringFromArgs(String[] args, int skip) {
         if (skip < 0 || args.length <= skip) {
-            throw new IllegalArgumentException("Illegal skip amount provided");
+            throw new IllegalArgumentException("Illegal skip amount provided: " + skip);
         }
 
         StringBuilder builder = new StringBuilder();
@@ -408,7 +408,7 @@ public final class EventConfigCommand implements CommandExecutor, TabCompleter {
      * @param section the configuration section used
      * @return the list of strings containing event section values
      */
-    private List<String> parseSectionToStrings(ConfigurationSection section) {
+    private static List<String> parseSectionToStrings(ConfigurationSection section) {
         List<String> messages = new ArrayList<>();
         messages.add(ChatColor.GOLD + "" + ChatColor.BOLD + section.getName().toUpperCase() + " CONFIG:");
         messages.add("");

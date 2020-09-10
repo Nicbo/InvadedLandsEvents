@@ -63,20 +63,10 @@ public class MatchCountdown extends BukkitRunnable {
         }
     }
 
-    /**
-     * Check if the count down is still counting
-     *
-     * @return true if the count down is still running
-     */
     public boolean isCounting() {
         return counting;
     }
 
-    /**
-     * Start the countdown
-     *
-     * @param plugin the instance of main class
-     */
     public void start(InvadedLandsEvents plugin) {
         this.counting = true;
         super.runTaskTimer(plugin, 0, 20);

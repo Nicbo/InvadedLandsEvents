@@ -43,7 +43,7 @@ public abstract class TimerEvent extends InvadedEvent {
     }
 
     /**
-     * Determines who should win when timer runs out
+     * Returns who should win when timer runs out
      * Override if winner should not be null
      *
      * @return the winner of the event when the time runs out

@@ -27,11 +27,6 @@ public final class GeneralListener implements Listener {
     private final UUID nicboUUID;
     private final UUID starUUID;
 
-    /**
-     * Constructor for GeneralListener
-     *
-     * @param plugin the main class instance
-     */
     public GeneralListener(InvadedLandsEvents plugin) {
         this.plugin = plugin;
         this.nicboUUID = UUID.fromString("05b3c28a-a532-41bd-8b5e-f3ca452d3876");
@@ -48,20 +43,20 @@ public final class GeneralListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onLeave(PlayerQuitEvent event) {
-        GUI.getOpenInventories().remove(event.getPlayer());
+        GUI.getOpenGUIs().remove(event.getPlayer());
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onInventoryClose(InventoryCloseEvent event) {
         if (event.getPlayer() instanceof Player) {
-            GUI.getOpenInventories().remove((Player) event.getPlayer());
+            GUI.getOpenGUIs().remove((Player) event.getPlayer());
         }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onInventoryClick(InventoryClickEvent event) {
         if (event.getWhoClicked() instanceof Player) {
-            GUI gui = GUI.getOpenInventories().get((Player) event.getWhoClicked());
+            GUI gui = GUI.getOpenGUIs().get((Player) event.getWhoClicked());
             if (gui != null && event.getClickedInventory() != null && event.getClickedInventory().equals(gui.getInventory())) {
                 event.setCancelled(true);
                 Button button = gui.getButton(event.getSlot());

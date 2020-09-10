@@ -19,9 +19,9 @@ import java.util.*;
 import java.util.function.Function;
 
 /**
- * Two sumo teams are teleported each round
- * First team to have all their players hit the min y value get eliminated
- * Last team standing wins
+ * Two random teams are picked to fight each round
+ * The first team to have all their players fall of the platform loses the round
+ * Last team standing wins the event
  *
  * @author Nicbo
  */
@@ -47,7 +47,7 @@ public abstract class Sumo extends DuelEvent {
             @Override
             public void run() {
                 if (isFighting() && !isFrozen()) {
-                    for (Iterator<Player> iterator = fightingPlayers.iterator(); iterator.hasNext(); ) {
+                    for (Iterator<Player> iterator = fightingPlayers.iterator(); iterator.hasNext();) {
                         Player player = iterator.next();
                         if (player.getLocation().getY() <= MIN_Y) {
                             broadcastEventMessage(Message.SUMO_ELIMINATED.get().replace("{player}", player.getName()));

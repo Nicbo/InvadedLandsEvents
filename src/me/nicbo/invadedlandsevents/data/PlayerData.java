@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * Class that holds all data for an individual player
+ * Holds all data for an individual player
  *
  * @author Nicbo
  */

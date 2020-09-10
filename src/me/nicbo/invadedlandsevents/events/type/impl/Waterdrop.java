@@ -27,8 +27,8 @@ import java.util.function.Function;
 
 /**
  * All players are teleported to a start location every round
- * Once player enters safe region they pass the round
- * Last player to fail wins
+ * The players must fall through the redstone gap into the water
+ * Last player eliminated wins the event
  *
  * @author Nicbo
  */

@@ -13,8 +13,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
- * InvadedLandsEvents main class
- * This holds all instances of managers
+ * Main class that holds all instances of managers
  *
  * @author Nicbo
  * @author StarZorrow
@@ -63,7 +62,7 @@ public final class InvadedLandsEvents extends JavaPlugin {
 
         // Schedule task to update all open host guis
         this.getServer().getScheduler().runTaskTimer(this, () -> {
-            for (GUI gui : GUI.getOpenInventories().values()) {
+            for (GUI gui : GUI.getOpenGUIs().values()) {
                 if (gui instanceof HostGUI) {
                     ((HostGUI) gui).update();
                 }
@@ -87,7 +86,7 @@ public final class InvadedLandsEvents extends JavaPlugin {
         this.getLogger().info("Saved all player data.");
 
         // Close all open GUIs in case of reload
-        for (GUI gui : GUI.getOpenInventories().values()) {
+        for (GUI gui : GUI.getOpenGUIs().values()) {
             gui.close();
         }
         this.getLogger().info("Closed all open GUIs.");
@@ -96,8 +95,7 @@ public final class InvadedLandsEvents extends JavaPlugin {
     }
 
     /**
-     * Creates instances of commands and
-     * sets their executors and tab completers
+     * Creates instances of commands and sets their executors and tab completers
      */
     private void registerCommands() {
         EventConfigCommand eventConfigCommand = new EventConfigCommand(this);
@@ -109,38 +107,18 @@ public final class InvadedLandsEvents extends JavaPlugin {
         getCommand("eventconfig").setTabCompleter(eventConfigCommand);
     }
 
-    /**
-     * Get the instance of message manager
-     *
-     * @return the message manager instance
-     */
     public MessageManager getMessageManager() {
         return messageManager;
     }
 
-    /**
-     * Get the instance of player data manager
-     *
-     * @return the player data manager instance
-     */
     public PlayerDataManager getPlayerDataManager() {
         return playerDataManager;
     }
 
-    /**
-     * Get the instance of event manager
-     *
-     * @return the event manager instance
-     */
     public EventManager getEventManager() {
         return eventManager;
     }
 
-    /**
-     * Get the instance of worldguard
-     *
-     * @return the worldguard instance
-     */
     public WorldGuardPlugin getWorldGuardPlugin() {
         return worldGuardPlugin;
     }
@@ -148,6 +126,6 @@ public final class InvadedLandsEvents extends JavaPlugin {
     /*
     TODO:
         - When invalid values are in event config it should set valid to false
-        - This whole project should be cleaned up it's a mess and was written in a rush
+        - This whole project should be cleaned up
      */
 }

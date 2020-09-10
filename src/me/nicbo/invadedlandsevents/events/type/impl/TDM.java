@@ -23,8 +23,9 @@ import java.util.List;
 import java.util.function.Function;
 
 /**
- * There are 2 teams with kits
- * The 5 players with top kills from the winning team get rewards
+ * There are two teams with kits
+ * The first team to have all players eliminated loses the event
+ * The winning team's top 5 killers are rewarded
  *
  * @author Nicbo
  */
@@ -141,11 +142,6 @@ public final class TDM extends InvadedEvent {
         return spec;
     }
 
-    /**
-     * Removes player from their team
-     *
-     * @param player the player to be removed
-     */
     private void removeFromTeam(Player player) {
         TDMTeam team = getPlayersTeam(player);
         team.removePlayer(player);
@@ -220,6 +216,6 @@ public final class TDM extends InvadedEvent {
 
     /*
     TODO:
-        - Keep kills on death
+        - Keep kills on death (when they are added to spectators)
      */
 }

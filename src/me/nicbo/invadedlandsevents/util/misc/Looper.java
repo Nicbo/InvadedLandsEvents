@@ -44,6 +44,7 @@ public final class Looper<E> {
 
     /**
      * Get the next element
+     *
      * @return the next element
      */
     public E next() {

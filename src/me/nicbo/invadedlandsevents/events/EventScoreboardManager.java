@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 /**
- * Manages the current events scoreboards
+ * Manages the current event's scoreboards
  *
  * @author Nicbo
  */
@@ -99,22 +99,22 @@ public final class EventScoreboardManager {
     }
 
     /**
-     * Gives the player an event over scoreboard
+     * Gives the player an event ended scoreboard
      *
      * @param player the player to give the scoreboard to
      */
-    public void giveEventOverSB(Player player) {
+    public void giveEventEndedSB(Player player) {
         scoreboards.put(player, eventEndedFactory.apply(player));
     }
 
     /**
-     * Gives the players an event over scoreboard
+     * Gives the players an event ended scoreboard
      *
      * @param players the players to give the scoreboard to
      */
-    public void giveEventOverSB(Iterable<Player> players) {
+    public void giveEventEndedSB(Iterable<Player> players) {
         for (Player player : players) {
-            giveEventOverSB(player);
+            giveEventEndedSB(player);
         }
     }
 

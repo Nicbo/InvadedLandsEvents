@@ -25,9 +25,10 @@ import java.util.Set;
 import java.util.function.Function;
 
 /**
- * Half of the players are tagged
+ * Every round half of the players are tagged
  * Each round every player who is tagged gets eliminated
- * Hitting a player when you are tagged tags that player
+ * If a player1 is tagged and hits player2 - player1 will be
+ * untagged and player2 will be tagged
  *
  * @author Nicbo
  */
@@ -40,7 +41,6 @@ public final class TNTTag extends RoundEvent {
     public TNTTag(InvadedLandsEvents plugin) {
         super(plugin, "tnttag", "TNT Tag", new int[]{30});
         this.tagged = new HashSet<>();
-
         this.start = getEventLocation("start");
     }
 
@@ -63,7 +63,7 @@ public final class TNTTag extends RoundEvent {
             if (i < players.size() / 2) {
                 tagPlayer(player);
             } else {
-                unTagPlayer(player);
+                untagPlayer(player);
             }
         }
     }
@@ -113,7 +113,7 @@ public final class TNTTag extends RoundEvent {
             if (event.getDamager() instanceof Player) {
                 Player damager = (Player) event.getDamager();
                 if (tagged.contains(damager) && !tagged.contains(player)) {
-                    unTagPlayer(damager);
+                    untagPlayer(damager);
                     tagPlayer(player);
                 }
             }
@@ -140,7 +140,7 @@ public final class TNTTag extends RoundEvent {
         player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 1, true, false));
     }
 
-    private void unTagPlayer(Player player) {
+    private void untagPlayer(Player player) {
         tagged.remove(player);
         SpigotUtils.clearInventory(player);
         player.removePotionEffect(PotionEffectType.SPEED);

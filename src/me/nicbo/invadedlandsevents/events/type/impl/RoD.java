@@ -23,8 +23,9 @@ import java.util.List;
 import java.util.function.Function;
 
 /**
- * All players are teleported to a start location
- * Once player enters win region they win event
+ * All players are teleported to the start location
+ * The first player to finish the parkour and reach
+ * the win region wins the event
  *
  * @author Nicbo
  */

@@ -35,26 +35,16 @@ public class Button {
         this.value = value;
     }
 
-    /**
-     * Get the buttons item
-     *
-     * @return the item
-     */
     public ItemStack getItem() {
         return item;
     }
 
-    /**
-     * Set the buttons item
-     *
-     * @param item the item
-     */
     public void setItem(ItemStack item) {
         this.item = item;
     }
 
     /**
-     * Get the runnable to run when the button is pressed
+     * Returns the runnable that runs when the button is pressed
      *
      * @return the action
      */

@@ -57,8 +57,7 @@ public final class MessageManager {
 
     /**
      * Loads messages into the message enums from config
-     * If the message is missing it will attempt to get
-     * its default
+     * If the message is missing it will attempt to get it's default
      *
      * @see Message
      * @see ListMessage

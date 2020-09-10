@@ -23,7 +23,7 @@ public final class GeneralUtils {
     }
 
     /**
-     * Gets a random number between min and max (inclusive)
+     * Returns a random number between two numbers (inclusive)
      *
      * @param min the minimum number
      * @param max the maximum number
@@ -43,11 +43,11 @@ public final class GeneralUtils {
     }
 
     /**
-     * Gets a random value in a list
+     * Returns a random element in a list
      *
      * @param list the list to pick the value from
      * @param <T>  the type that is returned
-     * @return the random value
+     * @return the random element
      * @throws IllegalArgumentException if the list is empty
      */
     public static <T> T getRandom(List<T> list) {

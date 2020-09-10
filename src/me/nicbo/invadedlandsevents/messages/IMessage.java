@@ -8,24 +8,9 @@ package me.nicbo.invadedlandsevents.messages;
  */
 
 public interface IMessage<T> {
-    /**
-     * Gets the message
-     *
-     * @return the message
-     */
     T get();
 
-    /**
-     * Set the message
-     *
-     * @param message the message
-     */
     void set(T message);
 
-    /**
-     * Gets the path of the message
-     *
-     * @return the path
-     */
     String getPath();
 }

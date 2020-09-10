@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * Manages all player data and saves it
+ * Manages all player data and loads/saves it
  *
  * @author Nicbo
  */
@@ -63,13 +63,7 @@ public final class PlayerDataManager implements Listener {
     }
 
     public PlayerData getData(UUID uuid) {
-        PlayerData playerData = playerDataMap.get(uuid);
-
-        if (playerData != null) {
-            return playerData;
-        } else {
-            return load(uuid);
-        }
+        return playerDataMap.getOrDefault(uuid, load(uuid));
     }
 
     private void save(UUID uuid) {

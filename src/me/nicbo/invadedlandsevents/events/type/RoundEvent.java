@@ -60,12 +60,12 @@ public abstract class RoundEvent extends InvadedEvent {
     }
 
     /**
-     * What to do when a new round starts
+     * Starts a new round
      */
     protected abstract void newRound();
 
     /**
-     * How to eliminate the players at the end of the round
+     * Eliminates the players at the end of the round
      */
     protected abstract void eliminatePlayers();
 

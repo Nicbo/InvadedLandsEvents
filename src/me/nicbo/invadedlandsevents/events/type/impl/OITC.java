@@ -27,8 +27,9 @@ import java.util.function.Function;
 
 
 /**
- * All players have a wooden sword, a bow, and 1 arrow
- * Arrows one shot and when you get a kill you receive an arrow
+ * All players spawn in with a kit
+ * Arrows one shot and when a player gets a kill they are given an arrow
+ * The first player to reach the set amount of points wins the event
  *
  * @author Nicbo
  * @author StarZorrow
