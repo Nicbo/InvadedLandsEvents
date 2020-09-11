@@ -14,7 +14,7 @@ event:
   ALREADY_IN_EVENT: '&cYou''re already in the event.'
   DOES_NOT_EXIST: '&cThere is no event named &e{event}&c.'
   EVENT_DISABLED: '&cThat event is currently disabled!'
-  NOT_IN_EVENT: '&cYou aren''t in an event.'
+  NOT_IN_EVENT: '&cYou must be in an event to leave one.'
   INVENTORY_NOT_EMPTY: '&cYour inventory must be empty to join an event!'
   PLAYER_DEAD: '&cYou can not join the event if you are dead!'
   CRAFT_IN_EVENT: '&cYou''re unable to craft in an event.'
