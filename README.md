@@ -1,6 +1,9 @@
 # InvadedLandsEvents
 This plugin is a remake of the InvadedLands events.
 
+## Spigot Page
+- https://www.spigotmc.org/resources/invadedlandsevents.83772/
+
 ## Dependencies
 - WorldGuard
 - WorldEdit (for WorldGuard)
