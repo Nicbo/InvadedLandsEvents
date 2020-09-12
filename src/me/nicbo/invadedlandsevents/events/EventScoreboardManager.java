@@ -1,10 +1,12 @@
 package me.nicbo.invadedlandsevents.events;
 
 import me.nicbo.invadedlandsevents.InvadedLandsEvents;
+import me.nicbo.invadedlandsevents.events.util.ScoreboardHolder;
 import me.nicbo.invadedlandsevents.scoreboard.EventScoreboard;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -22,7 +24,8 @@ public final class EventScoreboardManager {
     private final Function<Player, EventScoreboard> eventEndedFactory;
     private final Function<Player, EventScoreboard> eventScoreboardFactory;
 
-    private final Map<Player, EventScoreboard> scoreboards;
+    private final Map<Player, ScoreboardHolder> scoreboards;
+
     private final BukkitRunnable refresher;
 
     /**
@@ -42,30 +45,43 @@ public final class EventScoreboardManager {
         this.refresher = new BukkitRunnable() {
             @Override
             public void run() {
-                for (EventScoreboard scoreboard : scoreboards.values()) {
-                    scoreboard.updateScoreboard();
+                for (ScoreboardHolder holder : scoreboards.values()) {
+                    holder.getCurrentScoreboard().updateScoreboard();
                 }
             }
         };
     }
 
     /**
-     * Give the player a fresh scoreboard
+     * Give the player their old scoreboard back
      *
      * @param player the player to give the scoreboard to
      */
-    public void giveNewScoreboard(Player player) {
-        player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+    private void givePreviousScoreboard(Player player) {
+        ScoreboardHolder holder = scoreboards.get(player);
+        Scoreboard scoreboard = holder == null ? Bukkit.getScoreboardManager().getNewScoreboard() : holder.getPreviousScoreboard();
+        player.setScoreboard(scoreboard);
     }
 
     /**
-     * Gives the players a fresh scoreboard
+     * Gives the players their old scoreboards back
      *
      * @param players the players to give the scoreboard to
      */
-    public void giveNewScoreboard(Iterable<Player> players) {
+    private void givePreviousScoreboard(Iterable<Player> players) {
         for (Player player : players) {
-            giveNewScoreboard(player);
+            givePreviousScoreboard(player);
+        }
+    }
+
+    private void giveScoreboard(Player player, Function<Player, EventScoreboard> scoreboardFactory) {
+        ScoreboardHolder holder = scoreboards.get(player);
+
+        if (holder == null) {
+            holder = new ScoreboardHolder(player.getScoreboard(), scoreboardFactory.apply(player));
+            scoreboards.put(player, holder);
+        } else {
+            holder.setCurrentScoreboard(scoreboardFactory.apply(player));
         }
     }
 
@@ -75,7 +91,7 @@ public final class EventScoreboardManager {
      * @param player the player to give the scoreboard to
      */
     public void giveEventScoreboard(Player player) {
-        scoreboards.put(player, eventScoreboardFactory.apply(player));
+        giveScoreboard(player, eventScoreboardFactory);
     }
 
     /**
@@ -95,7 +111,7 @@ public final class EventScoreboardManager {
      * @param player the player to give the scoreboard to
      */
     public void giveCountdownSB(Player player) {
-        scoreboards.put(player, countdownFactory.apply(player));
+        giveScoreboard(player, countdownFactory);
     }
 
     /**
@@ -104,7 +120,7 @@ public final class EventScoreboardManager {
      * @param player the player to give the scoreboard to
      */
     public void giveEventEndedSB(Player player) {
-        scoreboards.put(player, eventEndedFactory.apply(player));
+        giveScoreboard(player, eventEndedFactory);
     }
 
     /**
@@ -119,21 +135,21 @@ public final class EventScoreboardManager {
     }
 
     /**
-     * Removes a players scoreboard and gives them a fresh one
+     * Removes a players scoreboard and gives them their previous one
      *
      * @param player the player to remove the scoreboard from
      */
     public void removeScoreboard(Player player) {
-        giveNewScoreboard(player);
+        givePreviousScoreboard(player);
         scoreboards.remove(player);
     }
 
     /**
-     * Removes all players scoreboards and gives them all a fresh one
+     * Removes all players scoreboards and gives them all their previous ones
      */
     public void removeAllScoreboards() {
         for (Iterator<Player> iterator = scoreboards.keySet().iterator(); iterator.hasNext(); iterator.remove()) {
-            giveNewScoreboard(iterator.next());
+            givePreviousScoreboard(iterator.next());
         }
     }
 
