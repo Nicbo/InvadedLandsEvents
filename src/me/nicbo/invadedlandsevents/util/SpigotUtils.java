@@ -33,8 +33,10 @@ public final class SpigotUtils {
         }
 
         for (ItemStack armor : player.getInventory().getArmorContents()) {
-            if (armor.getType() != Material.AIR) {
-                return false;
+            if(armor!=null) {
+                if (armor.getType() != Material.AIR) {
+                    return false;
+                }
             }
         }
         return true;
