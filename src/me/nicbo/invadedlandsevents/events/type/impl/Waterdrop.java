@@ -223,7 +223,7 @@ public final class Waterdrop extends RoundEvent {
      */
     private static boolean isPlayerOnGround(Player player) {
         //Material type = player.getLocation().subtract(0, 0.1, 0).getBlock().getType();
-        return (player.getLocation().getY() % 64) == 0; /* && (type != Material.WALL_SIGN && type != Material.SIGN_POST && type.isSolid())*/
+        return (player.getLocation().getY() % 0.015625) == 0; /* && (type != Material.WALL_SIGN && type != Material.SIGN_POST && type.isSolid())*/
     }
 
     @Override
