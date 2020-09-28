@@ -194,7 +194,7 @@ public final class Waterdrop extends RoundEvent {
             @Override
             public void run() {
                 for (Player player : getPlayersView()) {
-                    if (startLoc.getBlockY() - player.getLocation().getBlockY() > 2 && isPlayerOnGround(player) && !jumped.contains(player)) {
+                    if (Math.abs(startLoc.getBlockY() - player.getLocation().getBlockY()) > 2 && isPlayerOnGround(player) && !jumped.contains(player)) {
                         if (SpigotUtils.isLocInRegion(player.getLocation(), region)) { // Player is in safe zone
                             broadcastEventMessage(Message.WATERDROP_SUCCESS_JUMP.get().replace("{player}", player.getName()));
                             eliminated.remove(player);
@@ -222,8 +222,8 @@ public final class Waterdrop extends RoundEvent {
      * @return true if the player is standing on the ground
      */
     private static boolean isPlayerOnGround(Player player) {
-        Material type = player.getLocation().subtract(0, 0.1, 0).getBlock().getType();
-        return type != Material.WALL_SIGN && type != Material.SIGN_POST && type.isSolid();
+        //Material type = player.getLocation().subtract(0, 0.1, 0).getBlock().getType();
+        return (player.getLocation.getY() % 64) == 0; /* && (type != Material.WALL_SIGN && type != Material.SIGN_POST && type.isSolid())*/
     }
 
     @Override
