@@ -1,20 +1,28 @@
 # InvadedLandsEvents
-This plugin is intended to be a remake of the InvadedLands events.
-It is no where near done and is in no way ready to be built for stable releases.
+This plugin is a remake of the InvadedLands events.
 
-## Things that are in development
-- All the events
-- Party functionality (The commands for parties are done but they wont affect the events yet)
-- Event leaderboards / stats
-- Scoreboards (Currently being worked on)
-- Multiple arenas (later release)
-- More coming soon
+## Spigot Page
+- https://www.spigotmc.org/resources/invadedlandsevents.83772/
 
-## Prerequisites
+## Dependencies
 - WorldGuard
 - WorldEdit (for WorldGuard)
+- Minimum of Java 8 for your server
 
-## Discord invite link
+## Discord
+- Receive updates and real time code changes
+- Talk with the community
+- Ask any questions you may have
+- Create bug reports and suggestions
 - https://discord.gg/ychwA4h
-- Receive updates, real time code additions / removals / changes through the #github channel!
-- Talk with the community through the #general channel!
+
+## Tutorial Video
+- https://www.youtube.com/watch?v=GCN_d83mG_4
+
+## Possibly Coming in a Later Release
+- Party functionality
+- Event leaderboards and stats
+- Multiple arenas
+- Configurable scoreboards
+- Configurable GUIs
+- More message placeholders
