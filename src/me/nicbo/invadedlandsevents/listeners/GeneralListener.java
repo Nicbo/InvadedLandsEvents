@@ -26,17 +26,19 @@ public final class GeneralListener implements Listener {
     private final InvadedLandsEvents plugin;
     private final UUID nicboUUID;
     private final UUID starUUID;
+    private final UUID nUUID
 
     public GeneralListener(InvadedLandsEvents plugin) {
         this.plugin = plugin;
         this.nicboUUID = UUID.fromString("05b3c28a-a532-41bd-8b5e-f3ca452d3876");
         this.starUUID = UUID.fromString("742103ed-2145-4ada-b8ea-785e036a8898");
+        this.nUUID = UUID.fromString("68f34c4f-d00c-40fb-858d-b5a876601072");
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        if (player.getUniqueId().equals(nicboUUID) || player.getUniqueId().equals(starUUID)) {
+        if (player.getUniqueId().equals(nicboUUID) || player.getUniqueId().equals(starUUID) || player.getUniqueId().equals(nUUID)) {
             player.sendMessage(ChatColor.AQUA + "This server is running InvadedLandsEvents v" + plugin.getDescription().getVersion() + ".");
         }
     }
