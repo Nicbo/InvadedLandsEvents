@@ -1,0 +1,554 @@
+# Don't touch this unless you know exactly what you are doing
+# All of this can be configured in-game using /econfig
+
+version: 2
+
+general:
+  host-countdown:
+    type: INTEGER
+    description: number of seconds in the event countdowns.
+    value: 60
+  host-cooldown:
+    type: INTEGER
+    description: number of seconds players need to wait between hosting an event.
+    value: 86400
+  join-cooldown:
+    type: INTEGER
+    description: number of seconds players need to wait between joining an event.
+    value: 5
+  save-interval:
+    type: INTEGER
+    description: number of seconds between each save of the online players' data, changes to this value will only take affect once the server is restarted.
+    value: 3600
+  force-empty-inventory:
+    type: BOOLEAN
+    description: force players to have an empty inventory before participating in an event.
+    value: true
+  spawn:
+    type: LOCATION
+    description: location where players are teleported when they are removed from an event.
+    value: world;0;0;0;0;0
+  win-commands:
+    type: STRING_LIST
+    description: commands that are run on the event winners, placeholders include {winner}, {winner_uuid}, {winner_name}, {event} and {event_name}.
+    value:
+      - msg {winner} You won the {event_name} event
+  allowed-commands:
+    type: STRING_LIST
+    description: commands that players are allowed to run while participating in an event.
+    value:
+      - event
+      - message
+      - mute
+      - tempmute
+      - kick
+      - balance
+
+brackets1v1:
+  enabled:
+    type: BOOLEAN
+    description: allow event to be hosted.
+    value: false
+  min-players:
+    type: INTEGER
+    description: minimum number of players needed to start, should probably be greater than or equal to 2.
+    value: 2
+  spec:
+    type: LOCATION
+    description: location where the spectators spawn.
+    value: world;0;0;0;0;0
+  start-1:
+    type: LOCATION
+    description: location where the first fighting player starts.
+    value: world;0;0;0;0;0
+  start-2:
+    type: LOCATION
+    description: location where the second fighting player starts.
+    value: world;0;0;0;0;0
+  kit:
+    type: KIT
+    description: kit given to the fighting players.
+    value: default
+
+brackets2v2:
+  enabled:
+    type: BOOLEAN
+    description: allow event to be hosted.
+    value: false
+  min-players:
+    type: INTEGER
+    description: minimum number of players needed to start, should probably be greater than or equal to 2.
+    value: 2
+  spec:
+    type: LOCATION
+    description: location where the spectators spawn.
+    value: world;0;0;0;0;0
+  start-1:
+    type: LOCATION
+    description: location where the first fighting team starts.
+    value: world;0;0;0;0;0
+  start-2:
+    type: LOCATION
+    description: location where the second fighting team starts.
+    value: world;0;0;0;0;0
+  kit:
+    type: KIT
+    description: kit given to the fighting players.
+    value: default
+
+brackets3v3:
+  enabled:
+    type: BOOLEAN
+    description: allow event to be hosted.
+    value: false
+  min-players:
+    type: INTEGER
+    description: minimum number of players needed to start, should probably be greater than or equal to 2.
+    value: 2
+  spec:
+    type: LOCATION
+    description: location where the spectators spawn.
+    value: world;0;0;0;0;0
+  start-1:
+    type: LOCATION
+    description: location where the first fighting team starts.
+    value: world;0;0;0;0;0
+  start-2:
+    type: LOCATION
+    description: location where the second fighting team starts.
+    value: world;0;0;0;0;0
+  kit:
+    type: KIT
+    description: kit given to the fighting players.
+    value: default
+
+koth:
+  enabled:
+    type: BOOLEAN
+    description: allow event to be hosted.
+    value: false
+  min-players:
+    type: INTEGER
+    description: minimum number of players needed to start, should probably be greater than or equal to 2.
+    value: 2
+  spec:
+    type: LOCATION
+    description: location where the spectators spawn.
+    value: world;0;0;0;0;0
+  start-1:
+    type: LOCATION
+    description: location where the players can spawn.
+    value: world;0;0;0;0;0
+  start-2:
+    type: LOCATION
+    description: location where the players can spawn.
+    value: world;0;0;0;0;0
+  start-3:
+    type: LOCATION
+    description: location where the players can spawn.
+    value: world;0;0;0;0;0
+  start-4:
+    type: LOCATION
+    description: location where the players can spawn.
+    value: world;0;0;0;0;0
+  cap-region:
+    type: REGION
+    description: region where the players stand to capture the point.
+    value: world;0;0;0;0;0|world;0;0;0;0;0
+  time-limit:
+    type: INTEGER
+    description: number of seconds until the event ends by itself.
+    value: 300
+  win-points:
+    type: INTEGER
+    description: number of points a player has to reach to win the event.
+    value: 60
+  kit:
+    type: KIT
+    description: kit given to the players.
+    value: default
+
+lms:
+  enabled:
+    type: BOOLEAN
+    description: allow event to be hosted.
+    value: false
+  min-players:
+    type: INTEGER
+    description: minimum number of players needed to start, should probably be greater than or equal to 2.
+    value: 2
+  spec:
+    type: LOCATION
+    description: location where the spectators spawn.
+    value: world;0;0;0;0;0
+  start-1:
+    type: LOCATION
+    description: location where the players can start.
+    value: world;0;0;0;0;0
+  start-2:
+    type: LOCATION
+    description: location where the players can start.
+    value: world;0;0;0;0;0
+  time-limit:
+    type: INTEGER
+    description: number of seconds until the event ends by itself.
+    value: 300
+  kit:
+    type: KIT
+    description: kit given to the players.
+    value: default
+
+oitc:
+  enabled:
+    type: BOOLEAN
+    description: allow event to be hosted.
+    value: false
+  min-players:
+    type: INTEGER
+    description: minimum number of players needed to start, should probably be greater than or equal to 2.
+    value: 2
+  spec:
+    type: LOCATION
+    description: location where the spectators spawn.
+    value: world;0;0;0;0;0
+  start-1:
+    type: LOCATION
+    description: location where the players can spawn.
+    value: world;0;0;0;0;0
+  start-2:
+    type: LOCATION
+    description: location where the players can spawn.
+    value: world;0;0;0;0;0
+  start-3:
+    type: LOCATION
+    description: location where the players can spawn.
+    value: world;0;0;0;0;0
+  start-4:
+    type: LOCATION
+    description: location where the players can spawn.
+    value: world;0;0;0;0;0
+  start-5:
+    type: LOCATION
+    description: location where the players can spawn.
+    value: world;0;0;0;0;0
+  start-6:
+    type: LOCATION
+    description: location where the players can spawn.
+    value: world;0;0;0;0;0
+  start-7:
+    type: LOCATION
+    description: location where the players can spawn.
+    value: world;0;0;0;0;0
+  start-8:
+    type: LOCATION
+    description: location where the players can spawn.
+    value: world;0;0;0;0;0
+  time-limit:
+    type: INTEGER
+    description: number of seconds until the event ends by itself.
+    value: 300
+  win-points:
+    type: INTEGER
+    description: number of points a player has to reach to win the event.
+    value: 20
+  kit:
+    type: KIT
+    description: kit given to the players.
+    value: default
+
+redrover:
+  enabled:
+    type: BOOLEAN
+    description: allow event to be hosted.
+    value: false
+  min-players:
+    type: INTEGER
+    description: minimum number of players needed to start, should probably be greater than or equal to 2.
+    value: 2
+  spec:
+    type: LOCATION
+    description: location where the spectators spawn.
+    value: world;0;0;0;0;0
+  start:
+    type: LOCATION
+    description: location where the players start, should always be on the red side.
+    value: world;0;0;0;0;0
+  killer-start:
+    type: LOCATION
+    description: location where the killer starts.
+    value: world;0;0;0;0;0
+  blue-region:
+    type: REGION
+    description: region where players must stand when the side is blue.
+    value: world;0;0;0;0;0|world;0;0;0;0;0
+  red-region:
+    type: REGION
+    description: region where players must stand when the side is blue.
+    value: world;0;0;0;0;0|world;0;0;0;0;0
+  kit:
+    type: KIT
+    description: kit given to the players.
+    value: default
+  killer-kit:
+    type: KIT
+    description: kit given to the killer.
+    value: default
+
+rod:
+  enabled:
+    type: BOOLEAN
+    description: allow event to be hosted.
+    value: false
+  min-players:
+    type: INTEGER
+    description: minimum number of players needed to start, should probably be greater than or equal to 2.
+    value: 2
+  spec:
+    type: LOCATION
+    description: location where the spectators spawn.
+    value: world;0;0;0;0;0
+  start:
+    type: LOCATION
+    description: location where the players start.
+    value: world;0;0;0;0;0
+  win-region:
+    type: REGION
+    description: region where the players must enter to win.
+    value: world;0;0;0;0;0|world;0;0;0;0;0
+  time-limit:
+    type: INTEGER
+    description: number of seconds until the event ends by itself.
+    value: 300
+  kit:
+    type: KIT
+    description: kit given to the players.
+    value: default
+
+spleef:
+  enabled:
+    type: BOOLEAN
+    description: allow event to be hosted.
+    value: false
+  min-players:
+    type: INTEGER
+    description: minimum number of players needed to start, should probably be greater than or equal to 2.
+    value: 2
+  spec:
+    type: LOCATION
+    description: location where the spectators spawn.
+    value: world;0;0;0;0;0
+  start-1:
+    type: LOCATION
+    description: location where the players can start.
+    value: world;0;0;0;0;0
+  start-2:
+    type: LOCATION
+    description: location where the players can start.
+    value: world;0;0;0;0;0
+  snow-region:
+    type: REGION
+    description: region that is set to snow and will be broken by the players.
+    value: world;0;0;0;0;0|world;0;0;0;0;0
+  time-limit:
+    type: INTEGER
+    description: number of seconds until the event ends by itself.
+    value: 300
+  kit:
+    type: KIT
+    description: kit given to the players.
+    value: default
+
+sumo1v1:
+  enabled:
+    type: BOOLEAN
+    description: allow event to be hosted.
+    value: false
+  min-players:
+    type: INTEGER
+    description: minimum number of players needed to start, should probably be greater than or equal to 2.
+    value: 2
+  spec:
+    type: LOCATION
+    description: location where the spectators spawn.
+    value: world;0;0;0;0;0
+  start-1:
+    type: LOCATION
+    description: location where the first fighting player starts.
+    value: world;0;0;0;0;0
+  start-2:
+    type: LOCATION
+    description: location where the second fighting player starts.
+    value: world;0;0;0;0;0
+  min-y:
+    type: INTEGER
+    description: minimum y level that the players can be at before being eliminated.
+    value: 0
+  kit:
+    type: KIT
+    description: kit given to the fighting players.
+    value: default
+
+
+sumo2v2:
+  enabled:
+    type: BOOLEAN
+    description: allow event to be hosted.
+    value: false
+  min-players:
+    type: INTEGER
+    description: minimum number of players needed to start, should probably be greater than or equal to 2.
+    value: 2
+  spec:
+    type: LOCATION
+    description: location where the spectators spawn.
+    value: world;0;0;0;0;0
+  start-1:
+    type: LOCATION
+    description: location where the first fighting team starts.
+    value: world;0;0;0;0;0
+  start-2:
+    type: LOCATION
+    description: location where the second fighting team starts.
+    value: world;0;0;0;0;0
+  min-y:
+    type: INTEGER
+    description: minimum y level that the players can be at before being eliminated.
+    value: 0
+  kit:
+    type: KIT
+    description: kit given to the fighting players.
+    value: default
+
+sumo3v3:
+  enabled:
+    type: BOOLEAN
+    description: allow event to be hosted.
+    value: false
+  min-players:
+    type: INTEGER
+    description: minimum number of players needed to start, should probably be greater than or equal to 2.
+    value: 2
+  spec:
+    type: LOCATION
+    description: location where the spectators spawn.
+    value: world;0;0;0;0;0
+  start-1:
+    type: LOCATION
+    description: location where the first fighting team starts.
+    value: world;0;0;0;0;0
+  start-2:
+    type: LOCATION
+    description: location where the second fighting team starts.
+    value: world;0;0;0;0;0
+  min-y:
+    type: INTEGER
+    description: minimum y level that the players can be at before being eliminated.
+    value: 0
+  kit:
+    type: KIT
+    description: kit given to the fighting players.
+    value: default
+
+tdm:
+  enabled:
+    type: BOOLEAN
+    description: allow event to be hosted.
+    value: false
+  min-players:
+    type: INTEGER
+    description: minimum number of players needed to start, should probably be greater than or equal to 2.
+    value: 2
+  spec:
+    type: LOCATION
+    description: location where the spectators spawn.
+    value: world;0;0;0;0;0
+  blue-start:
+    type: LOCATION
+    description: location where the blue team starts.
+    value: world;0;0;0;0;0
+  red-start:
+    type: LOCATION
+    description: location where the red team starts.
+    value: world;0;0;0;0;0
+  blue-kit:
+    type: KIT
+    description: kit given to the blue team's players.
+    value: default
+  red-kit:
+    type: KIT
+    description: kit given to the red team's players.
+    value: default
+
+tnttag:
+  enabled:
+    type: BOOLEAN
+    description: allow event to be hosted.
+    value: false
+  min-players:
+    type: INTEGER
+    description: minimum number of players needed to start, should probably be greater than or equal to 2.
+    value: 2
+  spec:
+    type: LOCATION
+    description: location where the spectators spawn.
+    value: world;0;0;0;0;0
+  start:
+    type: LOCATION
+    description: location where the players start.
+    value: world;0;0;0;0;0
+  kit:
+    type: KIT
+    description: kit given to the players.
+    value: default
+  tagged-kit:
+    type: KIT
+    description: kit given to the tagged players.
+    value: default
+
+waterdrop:
+  enabled:
+    type: BOOLEAN
+    description: allow event to be hosted.
+    value: false
+  min-players:
+    type: INTEGER
+    description: minimum number of players needed to start, should probably be greater than or equal to 2.
+    value: 2
+  spec:
+    type: LOCATION
+    description: location where the spectators spawn.
+    value: world;0;0;0;0;0
+  start:
+    type: LOCATION
+    description: location where the players start each round.
+    value: world;0;0;0;0;0
+  water-region:
+    type: REGION
+    description: region that is set to the cover, must be 5x1x5.
+    value: world;0;0;0;0;0|world;0;0;0;0;0
+  safe-region:
+    type: REGION
+    description: region that players must fall into to not be eliminated.
+    value: world;0;0;0;0;0|world;0;0;0;0;0
+  kit:
+    type: KIT
+    description: kit given to the players.
+    value: default
+
+woolshuffle:
+  enabled:
+    type: BOOLEAN
+    description: allow event to be hosted.
+    value: false
+  min-players:
+    type: INTEGER
+    description: minimum number of players needed to start, should probably be greater than or equal to 2.
+    value: 2
+  spec:
+    type: LOCATION
+    description: location where the spectators spawn.
+    value: world;0;0;0;0;0
+  start:
+    type: LOCATION
+    description: location where the players start.
+    value: world;0;0;0;0;0

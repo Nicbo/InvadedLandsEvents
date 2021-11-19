@@ -1,0 +1,124 @@
+main: ca.nicbo.invadedlandsevents.InvadedLandsEventsPlugin
+name: InvadedLandsEvents
+version: ${project.version}
+description: A replica of the invadedlands.net event plugin
+author: Nicbo
+website: https://www.spigotmc.org/resources/invadedlandsevents.83772/
+api-version: 1.13
+
+commands:
+  event:
+    description: Handles event commands
+    usage: /<command>
+    aliases: [ e ]
+  eventconfig:
+    description: Handles event config commands
+    usage: /<command>
+    aliases: [ econfig ]
+
+permissions:
+  ile.*:
+    description: Gives the player every permission in InvadedLandsEvents
+    default: op
+    children:
+      ile.eventconfig: true
+      ile.event.*: true
+  ile.eventconfig:
+    description: Allows the player to configure events
+  ile.event.*:
+    description: Gives the player all event permissions
+    children:
+      ile.event.commandbypass: true
+      ile.event.forceend: true
+      ile.event.player: true
+      ile.event.host.*: true
+  ile.event.commandbypass:
+    description: Allows the player to bypass command restrictions in events
+  ile.event.forceend:
+    description: Allows the player to force end the event
+  ile.event.player:
+    description: Gives the player all event permissions that players need
+    children:
+      ile.event.join: true
+      ile.event.leave: true
+      ile.event.spectate: true
+      ile.event.info: true
+      ile.event.stats.*: true
+      ile.event.host: true
+  ile.event.join:
+    description: Allows the player to join events
+  ile.event.leave:
+    description: Allows the player to leave events
+  ile.event.spectate:
+    description: Allows the player to spectate events
+  ile.event.info:
+    description: Allows the player to see the current events info
+  ile.event.stats.*:
+    description: Allows the player to see players' event stats
+    children:
+      ile.event.stats: true
+      ile.event.stats.other: true
+  ile.event.stats:
+    description: Allows the player to see their event stats
+  ile.event.stats.other:
+    description: Allows the player to see other players' event stats
+  ile.event.host.*:
+    description: Allows the player to host every event and bypass host cooldowns
+    children:
+      ile.event.host.all: true
+      ile.event.host.cooldownbypass: true
+  ile.event.host:
+    description: Allows the player to host events
+  ile.event.host.all:
+    description: Allows the player to host every event
+    children:
+      ile.event.host.brackets1v1: true
+      ile.event.host.brackets2v2: true
+      ile.event.host.brackets3v3: true
+      ile.event.host.koth: true
+      ile.event.host.lms: true
+      ile.event.host.oitc: true
+      ile.event.host.redrover: true
+      ile.event.host.rod: true
+      ile.event.host.spleef: true
+      ile.event.host.sumo1v1: true
+      ile.event.host.sumo2v2: true
+      ile.event.host.sumo3v3: true
+      ile.event.host.tdm: true
+      ile.event.host.tnttag: true
+      ile.event.host.waterdrop: true
+      ile.event.host.woolshuffle: true
+  ile.event.host.cooldownbypass:
+    description: Allows the player to bypass event host cooldowns
+  ile.event.host.brackets1v1:
+    description: Allows the player to host 1v1 brackets
+  ile.event.host.brackets2v2:
+    description: Allows the player to host 2v2 brackets
+  ile.event.host.brackets3v3:
+    description: Allows the player to host 3v3 brackets
+  ile.event.host.koth:
+    description: Allows the player to host koth
+  ile.event.host.lms:
+    description: Allows the player to host lms
+  ile.event.host.oitc:
+    description: Allows the player to host oitc
+  ile.event.host.redrover:
+    description: Allows the player to host redrover
+  ile.event.host.rod:
+    description: Allows the player to host rod
+  ile.event.host.spleef:
+    description: Allows the player to host spleef
+  ile.event.host.sumo1v1:
+    description: Allows the player to host 1v1 sumo
+  ile.event.host.sumo2v2:
+    description: Allows the player to host 2v2 sumo
+  ile.event.host.sumo3v3:
+    description: Allows the player to host 3v3 sumo
+  ile.event.host.tdm:
+    description: Allows the player to host tdm
+  ile.event.host.tnttag:
+    description: Allows the player to host tnt tag
+  ile.event.host.waterdrop:
+    description: Allows the player to host waterdrop
+  ile.event.host.woolshuffle:
+    description: Allows the player to host wool shuffle

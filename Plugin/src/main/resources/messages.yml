@@ -1,0 +1,289 @@
+# After changing these values do /econfig reload
+
+version: 2
+
+general:
+  EVENT_NOT_RUNNING: '&cThere currently isn''t any event active right now.'
+  JOIN_ALREADY_STARTED: '&cYou cannot join the event as it has already started!'
+  HOST_ALREADY_STARTED: '&cYou cannot host an event as one is already in progress.'
+  FORCEEND_EVENT: '&cYou stopped the active event.'
+  SPECTATE_EVENT: '&eYou are now &6spectating &ethe event &6{event}&e.'
+  JOINED_EVENT: '&a&l{player} has joined the event.'
+  LEFT_EVENT: '&c&l{player} has left the event.'
+  EVENT_FORCE_ENDED: '&eThe &6{event} &eevent has been stopped manually.'
+  EVENT_ENDING: '&cThe event currently active is ending, please wait...'
+  ALREADY_IN_EVENT: '&cYou''re already in the event.'
+  DOES_NOT_EXIST: '&cThere is no event named &e{event}&c.'
+  EVENT_DISABLED: '&cThat event is currently disabled!'
+  NOT_IN_EVENT: '&cYou must be in an event to leave one.'
+  INVENTORY_NOT_EMPTY: '&cYour inventory must be empty to join an event!'
+  PLAYER_DEAD: '&cYou can not join the event if you are dead!'
+  CRAFT_IN_EVENT: '&cYou''re unable to craft in an event.'
+  NO_PERMISSION: '&cI''m sorry, but you do not have permission to perform this command.'
+  HOST_COOLDOWN: '&cYou cannot host this event for another &e{time}&c.'
+  NOT_ENOUGH_PEOPLE: '&cThe event could not start because there were not enough people.'
+  ERROR: '&cUh oh, something went wrong ({error}).'
+  BLOCKED_COMMAND: '&cYou''re not allowed to use that command while in an event.'
+  JOIN_COOLDOWN: '&cYou must wait a moment before joining an event again.'
+  HOSTING_EVENT: '&c&l{player} is hosting a {event} event!'
+  STARTING_IN: '&c&lStarting in {seconds} seconds &a&l[Click to Join]'
+  CLICK_TO_JOIN: '&aClick to join {event}'
+  PLAYER_NOT_FOUND: '&cNo player matching &e{player} &cis connected to this server.'
+  INFO_MESSAGES:
+    - '&6&lActive Event:'
+    - ' &eType: &6{event}'
+    - ' &ePlayers: &6{players}'
+    - ' &eSpectators: &6{spectators}'
+  STATS_MESSAGES:
+    - '&6&l{player}''s Event Stats:'
+    - ' &eBrackets:'
+    - '  &e1v1: &6{brackets1v1_wins}'
+    - '  &e2v2: &6{brackets2v2_wins}'
+    - '  &e3v3: &6{brackets3v3_wins}'
+    - ' &eKing of the Hill: &6{koth_wins}'
+    - ' &eLast Man Standing: &6{lms_wins}'
+    - ' &eOne in the Chamber: &6{oitc_wins}'
+    - ' &eRedrover: &6{redrover_wins}'
+    - ' &eRace of Death: &6{rod_wins}'
+    - ' &eSpleef: &6{spleef_wins}'
+    - ' &eSumo:'
+    - '  &e1v1: &6{sumo1v1_wins}'
+    - '  &e2v2: &6{sumo2v2_wins}'
+    - '  &e3v3: &6{sumo3v3_wins}'
+    - ' &eTeam Deathmatch: &6{tdm_wins}'
+    - ' &eTNT Tag: &6{tnttag_wins}'
+    - ' &eWaterdrop: &6{waterdrop_wins}'
+    - ' &eWool Shuffle: &6{woolshuffle_wins}'
+  USAGE_MESSAGES:
+    - '&e&m-------------------------------------------------'
+    - '&6Event command usage:'
+    - '&6 - &e/event join &6- &eJoins the current event'
+    - '&6 - &e/event leave &6- &eLeaves the current event'
+    - '&6 - &e/event spectate &6- &eSpectates the current event'
+    - '&6 - &e/event info &6- &eShows info about the current event'
+    - '&6 - &e/event forceend &6- &eForce ends the current event'
+    - '&6 - &e/event host (event) &6- &eHosts an event'
+    - '&6 - &e/event stats (player) &6- &eShows a player''s event stats'
+    - '&e&m-------------------------------------------------'
+  WIN_MESSAGES:
+    - '&6{winner} &ewon the &6{event} &eevent!'
+    - '&6{winner} &ewon the &6{event} &eevent!'
+    - '&6{winner} &ewon the &6{event} &eevent!'
+    - '&6{winner} &ewon the &6{event} &eevent!'
+
+brackets:
+  MATCH_STARTING: '&eStarting a brackets match: &6{team1} &evs. &6{team2}&e.'
+  MATCH_COUNTER: '&eThe match starts in &6{seconds} &esecond(s)...'
+  MATCH_STARTED: '&eThe match has started!'
+  ELIMINATED: '&6{player} &ewas killed!'
+  TEAM_ELIMINATED: '&6{loser} &ewas eliminated by &6{winner}&e. (&6{remaining}&e)'
+  TEAM_OF_ONE: '&6{player1}'
+  TEAM_OF_TWO: '&6{player1} &eand &6{player2}'
+  TEAM_OF_THREE: '&6{player1}&e, &6{player2} &eand &6{player3}'
+
+koth:
+  START: '&eCapture the Hill!'
+  CAPTURING: '&6&l{player} &eis now controlling the point!'
+  CAPTURING_POINTS: '&6&l{player} &eis capturing the point and has &6{points} points&e!'
+  LOST: '&6&l{player} &eis no longer controlling the point!'
+
+lms:
+  MATCH_STARTING: '&eThe Last Man Standing will begin in &65 seconds&e.'
+  MATCH_COUNTER: '&eThe game starts in &6{seconds} &esecond(s)...'
+  MATCH_STARTED: '&eThe match has started!'
+  ELIMINATED: '&6{player} &ewas eliminated. &e(&6{remaining}&e)'
+
+oitc:
+  ELIMINATED_BY: '&6{killer} &7[&c{killer_points}&7] &ehas killed &6{player} &7[&c{player_points}&7]'
+
+redrover:
+  ROUND_STARTING: '&eStarting round &6{round}&e.'
+  ELIMINATED: '&6{player} &ewas eliminated. (&6{remaining}&e)'
+  ELIMINATED_BY: '&6{player} &ewas eliminated by &6{killer}&e. (&6{remaining}&e)'
+  RUN_TO: '&eYou must run to the {side} &eside!'
+  SELECTED: '&cYou have been selected as the killer!'
+
+rod:
+  START: '&eRUN!'
+
+spleef:
+  MATCH_COUNTER: '&eBlock breaking commences in &6{seconds} seconds&e.'
+  MATCH_STARTED: '&a&lYOU MAY NOW BREAK BLOCKS!'
+  ELIMINATED: '&6{player} &ewas eliminated. (&6{remaining}&e)'
+
+sumo:
+  MATCH_STARTING: '&eStarting a sumo match: &6{team1} &evs. &6{team2}&e.'
+  MATCH_COUNTER: '&eThe match starts in &6{seconds} &esecond(s)...'
+  MATCH_STARTED: '&eThe match has started!'
+  ELIMINATED: '&6{player} &ewas killed!'
+  TEAM_ELIMINATED: '&6{loser} &ewas eliminated by &6{winner}&e. (&6{remaining}&e)'
+  TEAM_OF_ONE: '&6{player1}'
+  TEAM_OF_TWO: '&6{player1} &eand &6{player2}'
+  TEAM_OF_THREE: '&6{player1}&e, &6{player2} &eand &6{player3}'
+
+tdm:
+  MATCH_STARTING: '&eThe Team Deathmatch will begin in &65 seconds&e.'
+  MATCH_COUNTER: '&eThe game starts in &6{seconds} &esecond(s)...'
+  MATCH_STARTED: '&eThe match has started'
+  ELIMINATED: '&6{player} &ewas eliminated by &6{killer}&e. (&6{remaining}&e)'
+  WINNERS:
+    - '&e&lTop {winners} Killers on the Winning Team:'
+    - '{winners_list}'
+  # Only have 5 messages here
+  WINNERS_LIST:
+    - '&e&l1) &r&6{winner1}&e: &6{kills1}'
+    - '&e&l2) &r&6{winner2}&e: &6{kills2}'
+    - '&e&l3) &r&6{winner3}&e: &6{kills3}'
+    - '&e&l4) &r&6{winner4}&e: &6{kills4}'
+    - '&e&l5) &r&6{winner5}&e: &6{kills5}'
+
+tnttag:
+  ROUND_STARTING: '&eTNT Tag round &6{round} &ehas started!'
+  TAG: '&c&lYOU''RE TAGGED!!!!'
+  ELIMINATED: '&6{player} &ewas eliminated. (&6{remaining}&e)'
+
+waterdrop:
+  ROUND_STARTING: '&eStarting round &6{round}&e.'
+  SUCCESS_JUMP: '&f{player} &ehas successfully jumped.'
+  FAIL_JUMP: '&f{player} &c&lhas failed!'
+  ELIMINATED: '&6{player} &ewas eliminated. (&6{remaining}&e)'
+
+woolshuffle:
+  ROUND_STARTING: '&eStarting round &6{round}&e.'
+  FAILED: '&6{player} &c&lhas failed!'
+  ELIMINATED: '&6{player} &ewas eliminated. (&6{remaining}&e)'
+  COLOR: '&eYou must get onto the {color} &ewool side!'
+  PVP_ENABLED: '&c&lPvp is enabled this round!'
+  PVP_DISABLED: '&c&lPvp is disabled this round!'
+
+# Max length is 32 characters
+scoreboard:
+  EVENT_STARTING: '&6&lStarting'
+  EVENT_ENDING: '&6&lEnding'
+  BRACKETS1V1: '&6&lBrackets 1v1'
+  BRACKETS2V2: '&6&lBrackets 2v2'
+  BRACKETS3V3: '&6&lBrackets 3v3'
+  KOTH: '&6&lKing of the Hill'
+  LMS: '&6&lLast Man Standing'
+  OITC: '&6&lOne in the Chamber'
+  REDROVER: '&6&lRedrover'
+  ROD: '&6&lRace of Death'
+  SPLEEF: '&6&lSpleef'
+  SUMO1V1: '&6&l1v1 Sumo'
+  SUMO2V2: '&6&l2v2 Sumo'
+  SUMO3V3: '&6&l3v3 Sumo'
+  TDM: '&6&lTeam Deathmatch'
+  TNTTAG: '&6&lTNT Tag'
+  WATERDROP: '&6&lWaterdrop'
+  WOOLSHUFFLE: '&6&lWool Shuffle'
+
+description:
+  BRACKETS1V1:
+    - ''
+    - '&e&l&nBrackets Event'
+    - ''
+    - '&6Beat your opponents in a head to head battle!'
+    - ''
+  BRACKETS2V2:
+    - ''
+    - '&e&l&nBrackets Event'
+    - ''
+    - '&6Beat your opponents in a head to head battle!'
+    - ''
+  BRACKETS3V3:
+    - ''
+    - '&e&l&nBrackets Event'
+    - ''
+    - '&6Beat your opponents in a head to head battle!'
+    - ''
+  KOTH:
+    - ''
+    - '&e&l&nKing of the Hill Event'
+    - ''
+    - '&6The longer you capture the hill'
+    - '&6the more points you will collect.'
+    - '&6You require {points} in order to win the event.'
+    - ''
+  LMS:
+    - ''
+    - '&e&l&nLast Man Standing Event'
+    - ''
+    - '&6Be the last man standing! Kill all your opponents!'
+    - ''
+  OITC:
+    - ''
+    - '&e&l&nOne in the Chamber Event'
+    - ''
+    - '&6The first person to obtain {points} points'
+    - '&6in this free-for-all match, will win.'
+    - ''
+  REDROVER:
+    - ''
+    - '&e&l&nRedrover Event'
+    - ''
+    - '&6Try to cross the middle without dying!'
+    - ''
+  ROD:
+    - ''
+    - '&e&l&nRace of Death Event'
+    - ''
+    - '&6The first player to make it to the end of the parkour wins!'
+    - ''
+  SPLEEF:
+    - ''
+    - '&e&l&nSpleef Event'
+    - ''
+    - '&6Try and break the blocks under other players!'
+    - ''
+  SUMO1V1:
+    - ''
+    - '&e&l&nSumo Event'
+    - ''
+    - '&6Knock your opponent off the platform.'
+    - ''
+  SUMO2V2:
+    - ''
+    - '&e&l&nSumo Event'
+    - ''
+    - '&6Knock your opponent off the platform.'
+    - ''
+  SUMO3V3:
+    - ''
+    - '&e&l&nSumo Event'
+    - ''
+    - '&6Knock your opponent off the platform.'
+    - ''
+  TDM:
+    - ''
+    - '&e&l&nTeam Deathmatch Event'
+    - ''
+    - '&cRed &7vs &9Blue&7!'
+    - ''
+    - '&6Classic Team Deathmatch where two teams'
+    - '&6face against each other, and which ever'
+    - '&6team is last standing wins!'
+    - '&6The top 5 killers on the winning team obtain event keys.'
+    - ''
+  TNTTAG:
+    - ''
+    - '&e&l&nTNT Tag Event'
+    - ''
+    - '&6Don''t get stuck with the TNT!'
+    - ''
+  WATERDROP:
+    - ''
+    - '&e&l&nWaterdrop Event'
+    - ''
+    - '&6The goal of this game is to jump into the water!'
+    - '&6It will get progressively harder,'
+    - '&6and the hole will get smaller.'
+    - ''
+  WOOLSHUFFLE:
+    - ''
+    - '&e&l&nWool Shuffle Event'
+    - ''
+    - '&6Your hotbar will fill up with a color of wool'
+    - '&6each round and you must run around the arena'
+    - '&6and stand on the color of wool which'
+    - '&6fills your hotbar!'
+    - ''
