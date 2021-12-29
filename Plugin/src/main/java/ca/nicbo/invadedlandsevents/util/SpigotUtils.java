@@ -42,6 +42,7 @@ public final class SpigotUtils {
 
     public static void clearInventory(Player player) {
         Validate.checkArgumentNotNull(player, "player");
+        player.setItemOnCursor(null);
         player.getInventory().clear();
         player.getInventory().setArmorContents(null);
     }
