@@ -22,21 +22,21 @@ public abstract class SyncedTask {
         this.period = period;
     }
 
-    public void start(InvadedLandsEventsPlugin plugin) {
+    public final void start(InvadedLandsEventsPlugin plugin) {
         Validate.checkArgumentNotNull(plugin, "plugin");
         Validate.checkState(!isRunning(), "task is already running");
-        onStart();
         this.bukkitTask = plugin.getServer().getScheduler().runTaskTimer(plugin, this::run, delay, period);
+        onStart();
     }
 
     protected void onStart() {
     }
 
-    public void stop() {
+    public final void stop() {
         Validate.checkState(isRunning(), "task is not running");
-        onStop();
         this.bukkitTask.cancel();
         this.bukkitTask = null;
+        onStop();
     }
 
     protected void onStop() {
