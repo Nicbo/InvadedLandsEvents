@@ -1,6 +1,7 @@
 package ca.nicbo.invadedlandsevents.util;
 
 import ca.nicbo.invadedlandsevents.api.util.Validate;
+
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;

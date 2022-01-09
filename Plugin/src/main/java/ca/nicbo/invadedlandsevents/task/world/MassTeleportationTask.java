@@ -1,11 +1,12 @@
 package ca.nicbo.invadedlandsevents.task.world;
 
 import ca.nicbo.invadedlandsevents.task.SyncedTask;
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
+
 import java.util.ArrayDeque;
 import java.util.Collection;
 import java.util.Queue;
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
 
 /**
  * Mass teleports players, {@value PERIOD} tick(s) at a time.

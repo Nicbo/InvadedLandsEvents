@@ -39,13 +39,6 @@ import ca.nicbo.invadedlandsevents.util.CollectionUtils;
 import ca.nicbo.invadedlandsevents.util.CompositeImmutableList;
 import ca.nicbo.invadedlandsevents.util.ItemStackBuilder;
 import ca.nicbo.invadedlandsevents.util.SpigotUtils;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -75,6 +68,14 @@ import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Partial implementation of {@link Event}.
