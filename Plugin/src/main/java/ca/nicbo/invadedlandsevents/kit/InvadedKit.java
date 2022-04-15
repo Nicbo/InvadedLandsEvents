@@ -63,6 +63,8 @@ public class InvadedKit implements Kit {
             contents.add(offhand);
             inventory.setContents(contents.toArray(EMPTY_ITEM_STACK_ARRAY));
         }
+
+        player.updateInventory();
     }
 
     @Override
