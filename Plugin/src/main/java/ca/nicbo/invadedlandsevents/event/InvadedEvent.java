@@ -34,9 +34,7 @@ import ca.nicbo.invadedlandsevents.scoreboard.EventScoreboard;
 import ca.nicbo.invadedlandsevents.scoreboard.EventScoreboardLine;
 import ca.nicbo.invadedlandsevents.scoreboard.EventScoreboardManager;
 import ca.nicbo.invadedlandsevents.task.SyncedTask;
-import ca.nicbo.invadedlandsevents.task.world.MassTeleportationTask;
 import ca.nicbo.invadedlandsevents.util.CollectionUtils;
-import ca.nicbo.invadedlandsevents.util.CompositeImmutableList;
 import ca.nicbo.invadedlandsevents.util.ItemStackBuilder;
 import ca.nicbo.invadedlandsevents.util.SpigotUtils;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -420,14 +418,10 @@ public abstract class InvadedEvent implements Event, Listener {
         // Clear scoreboards
         eventScoreboardManager.removeAllScoreboards();
 
-        // Teleport everyone out of the event
-        // Note that CompositeImmutableList creates local copies of these lists, we can clear them below
-        SyncedTask teleportTask = new MassTeleportationTask(new CompositeImmutableList<>(players, spectators), spawn);
-        teleportTask.start(plugin);
-
         // Remove players
         for (Iterator<Player> iterator = players.iterator(); iterator.hasNext(); iterator.remove()) {
             Player player = iterator.next();
+            player.teleport(spawn);
             player.closeInventory();
             SpigotUtils.clear(player);
         }
@@ -435,6 +429,7 @@ public abstract class InvadedEvent implements Event, Listener {
         // Remove spectators
         for (Iterator<Player> iterator = spectators.iterator(); iterator.hasNext(); iterator.remove()) {
             Player spectator = iterator.next();
+            spectator.teleport(spawn);
             spectator.closeInventory();
             SpigotUtils.clear(spectator);
         }
